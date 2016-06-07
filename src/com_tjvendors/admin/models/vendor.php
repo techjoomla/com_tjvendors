@@ -251,7 +251,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		if (!$table->checkDuplicateUser())
 		{
-			$app->enqueueMessage(JText::_('COM_TJFIELDS_CITY_EXISTS_IN_REGION_COUNTRY'), 'warning');
+			$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
 
 			return false;
 		}

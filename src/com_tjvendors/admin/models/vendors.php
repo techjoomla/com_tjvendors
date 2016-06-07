@@ -178,7 +178,7 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function deleteVendor($tj_vendors_id)
 	{
-		$tjvendorsid = implode(',',$tj_vendors_id);
+		$tjvendorsid = implode(',', $tj_vendors_id);
 
 		if ($tjvendorsid)
 		{

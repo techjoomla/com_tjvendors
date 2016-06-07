@@ -118,7 +118,7 @@ class TjvendorsControllerVendors extends JControllerAdmin
 		$model      = $this->getModel('vendors');
 		$post       = JRequest::get('post');
 
-		$tj_vendors_id = $post['cid'][0];
+		$tj_vendors_id = $post['cid'];
 
 		$result = $model->deleteVendor($tj_vendors_id);
 

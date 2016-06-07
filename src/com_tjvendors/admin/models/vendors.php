@@ -178,11 +178,13 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function deleteVendor($tj_vendors_id)
 	{
-		if ($tj_vendors_id)
+		$tjvendorsid = implode(',',$tj_vendors_id);
+
+		if ($tjvendorsid)
 		{
 			$db = JFactory::getDBO();
+			$query = "DELETE FROM #__tj_vendors where id IN (" . $tjvendorsid . ")";
 
-			$query = "DELETE FROM #__tj_vendors where id =" . $tj_vendors_id;
 			$this->_db->setQuery($query);
 
 			if (!$this->_db->execute())

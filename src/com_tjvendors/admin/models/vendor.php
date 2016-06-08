@@ -249,11 +249,14 @@ class TjvendorsModelVendor extends JModelAdmin
 			return false;
 		}
 
-		if (!$table->checkDuplicateUser())
+		if ($data['id'] == 0)
 		{
-			$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
+			if (!$table->checkDuplicateUser())
+			{
+				$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
 
-			return false;
+				return false;
+			}
 		}
 
 		// Attempt to save data

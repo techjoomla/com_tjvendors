@@ -86,36 +86,6 @@ class com_tjvendorsInstallerScript
 			// Lets create the table
 			$this->runSQL($parent, 'install.mysql.utf8.sql');
 		}
-		//~ else
-		//~ {
-			//~ $newColumns = array('id', 'country', 'country_3_code', 'country_code', 'country_jtext', 'ordering');
-			//~ $oldColumns = $this->getColumns('#__tj_country');
-//~
-			//~ $dropTableFlag = 0;
-//~
-			//~ foreach ($newColumns as $column)
-			//~ {
-				//~ if (! in_array($column, $oldColumns))
-				//~ {
-					//~ $dropTableFlag = 1;
-					//~ break;
-				//~ }
-			//~ }
-//~
-			//~ if ($dropTableFlag)
-			//~ {
-				//~ // Backup old table
-				//~ $backup = $this->renameTable('#__tj_country', '#__tj_country_backup');
-//~
-				//~ if ($backup)
-				//~ {
-					//~ // Lets create the table with new structure
-					//~ $this->runSQL($parent, 'country.sql');
-				//~ }
-			//~ }
-		//~ }
-
-
 	}
 
 	function checkTableExists($table)

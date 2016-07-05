@@ -219,58 +219,52 @@ class TjvendorsModelVendor extends JModelAdmin
 	/**
 	 * Method for save user specific %commission, flat commission, client
 	 *
-	 * @param   Array   $post    Post Data
-	 * @param   String  $client  Client
+	 * @param   Array  $data  Data
 	 *
 	 * @return id
 	 */
-	public function save_option($post, $client)
+	public function save($data)
 	{
 		$table = $this->getTable();
 		$db = JFactory::getDBO();
+		$input  = JFactory::getApplication()->input;
+		$app  = JFactory::getApplication();
+		$client = $input->get('client', '', 'STRING');
 
-		// Added to fetch data of content request form form
-		$input = JFactory::getApplication()->input;
-		$formData = new JRegistry($input->get('jform', '', 'array'));
+		$data['client'] = $client;
 
-		// Fetch all existed records
-		$query = $db->getQuery(true);
-		$query->select($db->qn(array('id')))
-			->from($db->qn('#__tj_vendors'))
-			->where($db->qn('user_id') . ' = ' . $db->quote($formData['user_id']))
-			->where($db->qn('client') . ' = ' . $db->quote($client));
-
-		$db->setQuery($query);
-		$userexist = $this->_db->loadResult();
-
-		$data = array();
-
-		$data['id']                 = $formData['id'];
-		$data['user_id']            = $formData['user_id'];
-		$data['email_id']           = $formData['email_id'];
-		$data['client']             = $client;
-		$data['percent_commission'] = $formData['percent_commission'];
-		$data['flat_commission']    = $formData['flat_commission'];
-
-		// Adding New user record
-		if (!$userexist)
+		// Bind data
+		if (!$table->bind($data))
 		{
-			if ($table->save($data) === true)
-			{
-				$id = $table->id;
+			$this->setError($table->getError());
 
-				return $id;
+			return false;
+		}
+
+		// Validate
+		if (!$table->check())
+		{
+			$this->setError($table->getError());
+
+			return false;
+		}
+
+		if ($data['id'] == 0)
+		{
+			if (!$table->checkDuplicateUser())
+			{
+				$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
+
+				return false;
 			}
 		}
-		// Update existed record
-		else
-		{
-			if ($table->save($data) === true)
-			{
-				$id = $table->id;
 
-				return $id;
-			}
+		// Attempt to save data
+		if (parent::save($data))
+		{
+			return true;
 		}
+
+		return false;
 	}
 }

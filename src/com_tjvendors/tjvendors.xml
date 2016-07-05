@@ -24,6 +24,7 @@
             <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
         </sql>
     </uninstall>
+    <scriptfile>script.tjvendors.php</scriptfile>
     <files folder="site">
         <filename>index.html</filename>
         <filename>tjvendors.php</filename>

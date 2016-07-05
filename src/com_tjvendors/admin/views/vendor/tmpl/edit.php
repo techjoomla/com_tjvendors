@@ -27,22 +27,6 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 
 	Joomla.submitbutton = function (task)
 	{
-		//~ if (task == 'vendor.cancel')
-		//~ {
-			//~ Joomla.submitform(task, document.getElementById('vendor-form'));
-		//~ }
-		//~ else
-		//~ {
-			//~ if (task != 'vendor.cancel' && document.formvalidator.isValid(document.id('vendor-form')))
-			//~ {
-				//~ Joomla.submitform(task, document.getElementById('vendor-form'));
-			//~ }
-			//~ else
-			//~ {
-				//~ alert('<?php echo $this->escape(JText::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-			//~ }
-		//~ }
-
 		if(task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new' || task == 'vendor.save2copy')
 		{
 			var username = document.getElementById("jform_user_id").value;

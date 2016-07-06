@@ -259,10 +259,19 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 		}
 
-		// Attempt to save data
-		if (parent::save($data))
+		if ($data['user_id'] != 0)
 		{
-			return true;
+			// Attempt to save data
+			if (parent::save($data))
+			{
+				return true;
+			}
+		}
+		else
+		{
+			$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER'), 'warning');
+
+			return false;
 		}
 
 		return false;

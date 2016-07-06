@@ -259,7 +259,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 		}
 
-		if($data['user_id'] != 0)
+		if ($data['user_id'] != 0)
 		{
 			// Attempt to save data
 			if (parent::save($data))
@@ -270,6 +270,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		else
 		{
 			$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER'), 'warning');
+
 			return false;
 		}
 

@@ -7,7 +7,7 @@
 			default="0"
 			label="COM_TJVENDORS_FORM_LBL_VENDOR_ID"
 			readonly="true"
-			class="readonly"
+			class="readonly required"
 			description="JGLOBAL_FIELD_ID_DESC"
 		/>
 
@@ -56,7 +56,7 @@
 		/>
 
  <field name="percent_commission"
-			type="text"
+			type="number"
 			size="40"
 			class="inputbox validate-numeric"
 			label="COM_TJVENDORS_FORM_LBL_VENDOR_PERCENT_COMMISSION"
@@ -66,7 +66,7 @@
 		/>
 
  <field name="flat_commission"
-			type="text"
+			type="number"
 			size="40"
 			class="inputbox validate-numeric"
 			label="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION"

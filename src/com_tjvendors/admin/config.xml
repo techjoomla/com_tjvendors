@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
+<!--
     <fieldset label="COM_TJVENDORS" name="tjvendors">
-        
+
     </fieldset>
+-->
 
     <fieldset name="permissions"
               description="JCONFIG_PERMISSIONS_DESC"

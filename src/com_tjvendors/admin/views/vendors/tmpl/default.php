@@ -193,7 +193,7 @@ else
 		{?>
 			<div class="clearfix">&nbsp;</div>
 				<div class="alert alert-no-items">
-					<?php echo JText::_('COM_JTICKETING_NO_MATCHING_RESULTS'); ?>
+					<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 				</div>
 		<?php
 		}

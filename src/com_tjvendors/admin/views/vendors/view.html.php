@@ -70,7 +70,16 @@ class TjvendorsViewVendors extends JViewLegacy
 		$state = $this->get('State');
 		$canDo = TjvendorsHelpersTjvendors::getActions();
 
-		JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
+		if (JVERSION >= '3.0')
+		{
+			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'book');
+		}
+		else
+		{
+			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
+		}
+
+
 
 		// Check if the form exists before showing the add/edit buttons
 		$formPath = JPATH_COMPONENT_ADMINISTRATOR . '/views/vendor';

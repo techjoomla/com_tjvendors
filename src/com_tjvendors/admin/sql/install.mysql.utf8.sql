@@ -1,12 +1,15 @@
 CREATE TABLE IF NOT EXISTS `#__tj_vendors` (
-`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-
-`user_id` INT(11)  NOT NULL ,
-`email_id` VARCHAR(255)  NOT NULL ,
-`client` VARCHAR(255)  NOT NULL ,
-`percent_commission` FLOAT(10,2)  NOT NULL ,
-`flat_commission` FLOAT(10,2)  NOT NULL ,
-PRIMARY KEY (`id`)
+  `vendor_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `vendor_title` varchar(255) NOT NULL,
+  `vendor_description` text NOT NULL,
+  `vendor_logo` varchar(255) NOT NULL,
+  `vendor_client` varchar(255) NOT NULL,
+  `state` tinyint(1) NOT NULL,
+  `checked_out` int(11) NOT NULL,
+  `checked_out_time` datetime NOT NULL,
+  `params` varchar(255) NOT NULL,
+  PRIMARY KEY (`vendor_id`)
 ) DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 

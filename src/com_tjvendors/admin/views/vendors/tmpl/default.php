@@ -21,7 +21,7 @@ $document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/
 $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/list.css');
 
 $user      = JFactory::getUser();
-$userId    = $user->get('id');
+$userId    = $user->id;
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
@@ -222,22 +222,6 @@ else
 					<th class='left'>
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_USER_ID', 'a.`user_id`', $listDirn, $listOrder); ?>
 					</th>
-<!--
-					<th class='left'>
-						<?php //echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_EMAIL_ID', 'a.`email_id`', $listDirn, $listOrder); ?>
-					</th>
--->
-<!--
-					<th class='left'>
-						<?php //echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_CLIENT', 'a.`client`', $listDirn, $listOrder); ?>
-					</th>
--->
-					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'a.`percent_commission`', $listDirn, $listOrder); ?>
-					</th>
-					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_FLAT_COMMISSION', 'a.`flat_commission`', $listDirn, $listOrder); ?>
-					</th>
 				</tr>
 			</thead>
 			<tfoot>
@@ -292,51 +276,17 @@ else
 						}?>
 
 							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
+								<?php echo JHtml::_('grid.id', $i, $item->vendor_id); ?>
 							</td>
 							<?php if (isset($this->items[0]->state)){}?>
 
 							<td>
-								<?php echo $item->id; ?>
+								<?php echo $item->vendor_id; ?>
 							</td>
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&id=' . (int) $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>">
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $item->vendor_id. '&client=' . $this->input->get('client', '', 'STRING'));?>">
 									<?php echo $this->escape($item->user_id); ?>
 								</a>
-							</td>
-<!--
-							<td>
-								<?php //echo $item->email_id; ?>
-							</td>
--->
-<!--
-							<td>
-								<?php
-									//if (isset($item->checked_out) && $item->checked_out && ($canEdit || $canChange))
-									//{?>
-									<?php //echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'vendors.', $canCheckin); ?>
-									<?php
-									//}?>
-
-								<?php
-									//if ($canEdit)
-									//{?>
-										<a href="<?php //echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&id='.(int) $item->id); ?>">
-										<?php //echo $this->escape($item->client); ?></a>
-									<?php
-									//}
-									//else
-									//{?>
-										<?php //echo $this->escape($item->client); ?>
-									<?php
-									//}?>
-							</td>
--->
-							<td>
-								<?php echo $item->percent_commission; ?>
-							</td>
-							<td>
-								<?php echo $item->flat_commission; ?>
 							</td>
 						</tr>
 				<?php

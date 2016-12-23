@@ -47,9 +47,9 @@ class TjvendorsControllerVendor extends JControllerForm
 	 *
 	 * @since   1.6
 	 */
-	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
-		$append = parent::getRedirectToItemAppend($recordId);
+		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
 		$append .= '&client=' . $this->client;
 
 		return $append;

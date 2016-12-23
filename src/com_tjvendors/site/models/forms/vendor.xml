@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+        <field name="vendor_id"
+			type="hidden"
+		/>
+		<field name="user_id"
+			type="hidden"
+		/>
+		<field name="vendor_client"
+			type="hidden"
+		/>
+
+		 <field name="vendor_title"
+			type="text"
+			size="40"
+			class="inputbox"
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE"
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_TITLE"
+			hint="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE"
+			required="true"
+		/>
+
+		<field name="vendor_description"
+			type="textarea"
+			class="inputbox"
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_DESCRIPTION"
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_PROFILE_DESCRIPTION"
+			hint="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_DESCRIPTION"
+			required="true"
+			rows="10"
+			cols="5"
+		/>
+
+		<field name="vendor_logo"
+			type="file"
+			accept="image/*"
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR"
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_PROFILE_AVATAR"
+			hint="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR"
+			filter="raw"
+		/>
+
+	</fieldset>
+
+</form>

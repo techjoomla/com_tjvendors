@@ -8,7 +8,7 @@
  */
 
 // No direct access.
-defined('_JEXEC') or die;
+defined('_JEXEC') or die();
 
 jimport('joomla.application.component.modeladmin');
 
@@ -19,6 +19,13 @@ jimport('joomla.application.component.modeladmin');
  */
 class TjvendorsModelVendor extends JModelAdmin
 {
+
+	/**
+	 * @var    string  client data
+	 * @since  1.6
+	 */
+	private $vendor_client = '';
+
 	/**
 	 * @var      string    The prefix to use with controller messages.
 	 * @since    1.6
@@ -67,20 +74,17 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication();
-
+		
 		// Get the form.
-		$form = $this->loadForm(
-			'com_tjvendors.vendor', 'vendor',
-			array('control' => 'jform',
-				'load_data' => $loadData
-			)
-		);
-
+		$form = $this->loadForm('com_tjvendors.vendor', 'vendor', array(
+			'control' => 'jform', 'load_data' => $loadData
+		));
+		
 		if (empty($form))
 		{
 			return false;
 		}
-
+		
 		return $form;
 	}
 
@@ -95,17 +99,17 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		// Check the session for previously entered form data.
 		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
-
+		
 		if (empty($data))
 		{
 			if ($this->item === null)
 			{
 				$this->item = $this->getItem();
 			}
-
+			
 			$data = $this->item;
 		}
-
+		
 		return $data;
 	}
 
@@ -124,7 +128,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		{
 			// Do any procesing on fields here if needed
 		}
-
+		
 		return $item;
 	}
 
@@ -140,53 +144,57 @@ class TjvendorsModelVendor extends JModelAdmin
 	public function duplicate(&$pks)
 	{
 		$user = JFactory::getUser();
-
+		
 		// Access checks.
-		if (!$user->authorise('core.create', 'com_tjvendors'))
+		if (! $user->authorise('core.create', 'com_tjvendors'))
 		{
 			throw new Exception(JText::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
 		}
-
+		
 		$dispatcher = JEventDispatcher::getInstance();
-		$context    = $this->option . '.' . $this->name;
-
+		$context = $this->option . '.' . $this->name;
+		
 		// Include the plugins for the save events.
 		JPluginHelper::importPlugin($this->events_map['save']);
-
+		
 		$table = $this->getTable();
-
+		
 		foreach ($pks as $pk)
 		{
 			if ($table->load($pk, true))
 			{
 				// Reset the id to create a new record.
 				$table->vendor_id = 0;
-
-				if (!$table->check())
+				
+				if (! $table->check())
 				{
 					throw new Exception($table->getError());
 				}
-
+				
 				// Trigger the before save event.
-				$result = $dispatcher->trigger($this->event_before_save, array($context, &$table, true));
-
-				if (in_array(false, $result, true) || !$table->store())
+				$result = $dispatcher->trigger($this->event_before_save, array(
+					$context, &$table, true
+				));
+				
+				if (in_array(false, $result, true) || ! $table->store())
 				{
 					throw new Exception($table->getError());
 				}
-
+				
 				// Trigger the after save event.
-				$dispatcher->trigger($this->event_after_save, array($context, &$table, true));
+				$dispatcher->trigger($this->event_after_save, array(
+					$context, &$table, true
+				));
 			}
 			else
 			{
 				throw new Exception($table->getError());
 			}
 		}
-
+		
 		// Clean cache
 		$this->cleanCache();
-
+		
 		return true;
 	}
 
@@ -202,7 +210,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	protected function prepareTable($table)
 	{
 		jimport('joomla.filter.output');
-
+		
 		if (empty($table->vendor_id))
 		{
 			// Set ordering to the last item if not set
@@ -210,7 +218,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$db = JFactory::getDbo();
 				$db->setQuery('SELECT MAX(ordering) FROM #__tj_vendors');
-				$max             = $db->loadResult();
+				$max = $db->loadResult();
 				$table->ordering = $max + 1;
 			}
 		}
@@ -227,39 +235,39 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$table = $this->getTable();
 		$db = JFactory::getDBO();
-		$input  = JFactory::getApplication()->input;
-		$app  = JFactory::getApplication();
+		$input = JFactory::getApplication()->input;
+		$app = JFactory::getApplication();
 		$client = $input->get('client', '', 'STRING');
-
-		$data['vendor_client'] = !empty($client)? $client:$data['vendor_client'];
-
+		
+		$data['vendor_client'] = ! empty($client) ? $client : $data['vendor_client'];
+		
 		// Bind data
-		if (!$table->bind($data))
+		if (! $table->bind($data))
 		{
 			$this->setError($table->getError());
-
+			
 			return false;
 		}
-
+		
 		// Validate
-		if (!$table->check())
+		if (! $table->check())
 		{
 			$this->setError($table->getError());
-
+			
 			return false;
 		}
-
+		
 		if ($data['vendor_id'] == 0)
 		{
-			if (!$table->checkDuplicateUser())
+			if (! $table->checkDuplicateUser())
 			{
 				$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
-
+				
 				return false;
 			}
 		}
-
-		if ($data['user_id'] != 0)
+		
+		if ($data['user_vendor_id'] != 0)
 		{
 			// Attempt to save data
 			if (parent::save($data))
@@ -270,10 +278,81 @@ class TjvendorsModelVendor extends JModelAdmin
 		else
 		{
 			$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER'), 'warning');
-
+			
 			return false;
 		}
-
+		
 		return false;
+	}
+
+	/**
+	 * Set the onject values
+	 *
+	 * @param   string  $client  client value
+	 *
+	 * @return mixed
+	 */
+	public function setClient($client)
+	{
+		$this->vendor_client = $client;
+	}
+
+	/**
+	 * Get an client value
+	 *
+	 * @return mixed
+	 */
+	public function getClient()
+	{
+		return $this->vendor_client;
+	}
+
+	/**
+	 * This function will return the vendor details based on current user and client.
+	 *
+	 * @param   JTable  $table  Table Object
+	 *
+	 * @return void
+	 *
+	 * @since    1.6
+	 */
+	public function getVendorDetails($user = "", $client = "")
+	{
+		$result = array();
+		$user = empty($user) ? JFactory::getUser() : JFactory::getUser($user);
+		
+		if ($user->id)
+		{
+			// Load vendor details based on client
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+			
+			$query->select("*");
+			$query->from($db->qn("#__tj_vendors"));
+			$query->where($db->qn("user_id") . " = " . $user->id);
+			
+			if (! empty($client))
+			{
+				$query->where($db->qn("vendor_client") . " = " . $db->q($client));
+			}
+			
+			$db->setQuery($query);
+			$result = $db->loadAssoc();
+			
+			// Load default entry if available
+			if (empty($result) && !empty($client))
+			{
+				$query = $db->getQuery(true);
+				$query->select("*");
+				$query->from($db->qn("#__tj_vendors"));
+				$query->where($db->qn("user_id") . " = " . $user->id);
+				$query->where($db->qn("vendor_client") . "  = ''");
+				
+				$db->setQuery($query);
+				$result = $db->loadAssoc();
+			}
+		}
+		
+		return $result;
 	}
 }

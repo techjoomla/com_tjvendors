@@ -79,8 +79,6 @@ class TjvendorsViewVendors extends JViewLegacy
 			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
 		}
 
-
-
 		// Check if the form exists before showing the add/edit buttons
 		$formPath = JPATH_COMPONENT_ADMINISTRATOR . '/views/vendor';
 

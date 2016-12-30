@@ -40,7 +40,7 @@
 		<language tag="en-GB">en-GB/en-GB.com_tjvendors.sys.ini</language>
     </languages>
     <administration>
-
+        <menu>COM_TJVENDORS</menu>
         <files folder="admin">
             <filename>access.xml</filename>
             <filename>config.xml</filename>

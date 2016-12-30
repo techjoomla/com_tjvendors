@@ -158,12 +158,9 @@ class TjvendorsViewVendors extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'a.`id`' => JText::_('JGRID_HEADING_ID'),
+			'a.`vendor_id`' => JText::_('JGRID_HEADING_ID'),
 			'a.`user_id`' => JText::_('COM_TJVENDORS_VENDORS_USER_ID'),
-			'a.`email_id`' => JText::_('COM_TJVENDORS_VENDORS_EMAIL_ID'),
-			'a.`client`' => JText::_('COM_TJVENDORS_VENDORS_CLIENT'),
-			'a.`percent_commission`' => JText::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),
-			'a.`flat_commission`' => JText::_('COM_TJVENDORS_VENDORS_FLAT_COMMISSION'),
+			'a.`vendor_client`' => JText::_('COM_TJVENDORS_VENDORS_CLIENT'),
 		);
 	}
 }

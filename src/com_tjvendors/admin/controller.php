@@ -29,7 +29,7 @@ class TjvendorsController extends JControllerLegacy
 	 */
 	public function display($cachable = false, $urlparams = false)
 	{
-		$view = JFactory::getApplication()->input->getCmd('view', 'vendors');
+		$view = JFactory::getApplication()->input->getCmd('view', 'vendorfees');
 		JFactory::getApplication()->input->set('view', $view);
 
 		parent::display($cachable, $urlparams);

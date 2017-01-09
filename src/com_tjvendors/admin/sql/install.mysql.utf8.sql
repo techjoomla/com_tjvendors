@@ -9,6 +9,21 @@ CREATE TABLE IF NOT EXISTS `#__tj_vendors` (
 PRIMARY KEY (`id`)
 ) DEFAULT COLLATE=utf8mb4_unicode_ci;
 
+CREATE TABLE IF NOT EXISTS `#__tjvendors_passbook` (
+`payout_id` INT(11) UNSIGNED NOT NULL  AUTO_INCREMENT,
+`vendor_id` INT(11)  NOT NULL ,
+`currency` VARCHAR(255)  NOT NULL ,
+`total` INT(11)  NOT NULL ,
+`credit` INT(11)  NOT NULL ,
+`debit` INT(11)  NOT NULL ,
+`reference_order_id` INT(11)  NOT NULL ,
+`transaction_time` datetime NOT NULL DEFAULT NOW(),
+`client` VARCHAR(255)  NOT NULL ,
+`transaction_id` VARCHAR(255)  NOT NULL ,
+PRIMARY KEY (`payout_id`)
+) DEFAULT COLLATE=utf8mb4_unicode_ci;
+
+
 
 INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `content_history_options`)
 SELECT * FROM ( SELECT 'Vendor','com_tjvendors.vendor','{"special":{"dbtable":"#__tj_vendors","key":"id","type":"Vendor","prefix":"TjTable"}}', '{"formFile":"administrator\/components\/com_tjvendors\/models\/forms\/vendor.xml", "hideFields":["checked_out","checked_out_time","params","language"], "ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time"], "convertToInt":["publish_up", "publish_down"], "displayLookup":[{"sourceColumn":"catid","targetTable":"#__categories","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"group_id","targetTable":"#__usergroups","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"}]}') AS tmp

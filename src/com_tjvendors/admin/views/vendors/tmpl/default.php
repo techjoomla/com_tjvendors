@@ -220,7 +220,10 @@ else
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_USER_ID', 'a.`user_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_TITLE_VENDORS', 'a.`vendor_id`', $listDirn, $listOrder); ?>
+					</th>
+						<th class='left'>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ACTION_MENU', 'a.`user_id`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
@@ -285,8 +288,11 @@ else
 							</td>
 							<td>
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $item->vendor_id. '&client=' . $this->input->get('client', '', 'STRING'));?>">
-									<?php echo $this->escape($item->user_id); ?>
+									<?php echo $this->escape($item->vendor_title); ?>
 								</a>
+							</td>
+							<td>
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor_fee&client=' . $this->input->get('client', '', 'STRING')); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a>
 							</td>
 						</tr>
 				<?php

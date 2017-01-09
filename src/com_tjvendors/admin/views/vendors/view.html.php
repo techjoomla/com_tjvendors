@@ -98,13 +98,14 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		if ($canDo->get('core.edit.state'))
 		{
-			if (isset($this->items[0]->state))
+			/*if (isset($this->items[0]->state))
 			{
 				JToolBarHelper::divider();
 				JToolBarHelper::custom('vendors.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
 				JToolBarHelper::custom('vendors.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
 			}
-			elseif (isset($this->items[0]))
+			else*/
+			if (isset($this->items[0]))
 			{
 				// If this component does not use state then show a direct delete button as we can not trash
 				JToolBarHelper::deleteList('', 'vendors.delete', 'JTOOLBAR_DELETE');
@@ -112,13 +113,13 @@ class TjvendorsViewVendors extends JViewLegacy
 
 			if (isset($this->items[0]->state))
 			{
-				JToolBarHelper::divider();
-				JToolBarHelper::archiveList('vendors.archive', 'JTOOLBAR_ARCHIVE');
+				// JToolBarHelper::divider();
+				// JToolBarHelper::archiveList('vendors.archive', 'JTOOLBAR_ARCHIVE');
 			}
 
 			if (isset($this->items[0]->checked_out))
 			{
-				JToolBarHelper::custom('vendors.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
+				// JToolBarHelper::custom('vendors.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
 			}
 		}
 
@@ -127,13 +128,13 @@ class TjvendorsViewVendors extends JViewLegacy
 		{
 			if ($state->get('filter.state') == -2 && $canDo->get('core.delete'))
 			{
-				JToolBarHelper::deleteList('', 'vendors.delete', 'JTOOLBAR_EMPTY_TRASH');
-				JToolBarHelper::divider();
+				// JToolBarHelper::deleteList('', 'vendors.delete', 'JTOOLBAR_EMPTY_TRASH');
+				// JToolBarHelper::divider();
 			}
 			elseif ($canDo->get('core.edit.state'))
 			{
-				JToolBarHelper::trash('vendors.trash', 'JTOOLBAR_TRASH');
-				JToolBarHelper::divider();
+				// JToolBarHelper::trash('vendors.trash', 'JTOOLBAR_TRASH');
+				// JToolBarHelper::divider();
 			}
 		}
 
@@ -157,7 +158,7 @@ class TjvendorsViewVendors extends JViewLegacy
 	{
 		return array(
 			'a.`vendor_id`' => JText::_('JGRID_HEADING_ID'),
-			'a.`user_id`' => JText::_('COM_TJVENDORS_VENDORS_USER_ID'),
+			'a.`user_id`' => JText::_('COM_TJVENDORS_TITLE_VENDORS'),
 			'a.`vendor_client`' => JText::_('COM_TJVENDORS_VENDORS_CLIENT'),
 		);
 	}

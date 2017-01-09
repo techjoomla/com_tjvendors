@@ -233,6 +233,8 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		$data['vendor_client'] = !empty($client)? $client:$data['vendor_client'];
 
+		// $data['checked_out_time'] = JFactory::getDate();
+		//print_r($data);die();
 		// Bind data
 		if (!$table->bind($data))
 		{

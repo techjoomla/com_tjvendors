@@ -137,8 +137,7 @@ class TjvendorsModelVendors extends JModelList
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(user_id.name LIKE ' . $search .
-							'OR a.percent_commission LIKE' . $search .
-							'OR a.flat_commission LIKE' . $search . ')');
+							'OR a.vendor_id LIKE' . $search . 'OR a.vendor_title LIKE' . $search . ')');
 			}
 		}
 

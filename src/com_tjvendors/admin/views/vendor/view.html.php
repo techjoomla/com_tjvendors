@@ -63,7 +63,7 @@ class TjvendorsViewVendor extends JViewLegacy
 		JFactory::getApplication()->input->set('hidemainmenu', true);
 
 		$user  = JFactory::getUser();
-		$isNew = ($this->item->id == 0);
+		$isNew = ($this->item->vendor_id == 0);
 
 		$input = JFactory::getApplication()->input;
 		$this->full_client = $input->get('client', '', 'STRING');
@@ -83,7 +83,7 @@ class TjvendorsViewVendor extends JViewLegacy
 
 		if (isset($this->item->checked_out))
 		{
-			$checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $user->get('id'));
+			$checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $user->id);
 		}
 		else
 		{
@@ -100,7 +100,6 @@ class TjvendorsViewVendor extends JViewLegacy
 		{
 			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle, 'course.png');
 		}
-
 
 		// If not checked out, can save the item.
 		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create'))))
@@ -123,10 +122,10 @@ class TjvendorsViewVendor extends JViewLegacy
 		// Button for version control
 		if ($this->state->params->get('save_history', 1) && $user->authorise('core.edit'))
 		{
-			JToolbarHelper::versions('com_tjvendors.vendor', $this->item->id);
+			JToolbarHelper::versions('com_tjvendors.vendor', $this->item->vendor_id);
 		}
 
-		if (empty($this->item->id))
+		if (empty($this->item->vendor_id))
 		{
 			JToolBarHelper::cancel('vendor.cancel', 'JTOOLBAR_CANCEL');
 		}

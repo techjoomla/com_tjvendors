@@ -30,12 +30,9 @@ class TjvendorsModelVendors extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'id', 'a.`id`',
+				'vendor_id', 'a.`vendor_id`',
 				'user_id', 'a.`user_id`',
-				'email_id', 'a.`email_id`',
-				'client', 'a.`client`',
-				'percent_commission', 'a.`percent_commission`',
-				'flat_commission', 'a.`flat_commission`',
+				'vendor_client', 'a.`vendor_client`',
 			);
 		}
 
@@ -64,7 +61,7 @@ class TjvendorsModelVendors extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'a.id';
+			$orderCol = 'a.vendor_id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
@@ -81,7 +78,7 @@ class TjvendorsModelVendors extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('a.id', 'asc');
+		parent::populateState('a.vendor_id', 'asc');
 	}
 
 	/**
@@ -134,7 +131,7 @@ class TjvendorsModelVendors extends JModelList
 		{
 			if (stripos($search, 'id:') === 0)
 			{
-				$query->where('a.id = ' . (int) substr($search, 3));
+				$query->where('a.vendor_id = ' . (int) substr($search, 3));
 			}
 			else
 			{
@@ -183,7 +180,7 @@ class TjvendorsModelVendors extends JModelList
 		if ($tjvendorsid)
 		{
 			$db = JFactory::getDBO();
-			$query = "DELETE FROM #__tj_vendors where id IN (" . $tjvendorsid . ")";
+			$query = "DELETE FROM #__tj_vendors where vendor_id IN (" . $tjvendorsid . ")";
 			$this->_db->setQuery($query);
 
 			if (!$this->_db->execute())

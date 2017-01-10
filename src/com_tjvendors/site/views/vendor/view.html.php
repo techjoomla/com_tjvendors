@@ -44,8 +44,8 @@ class TjvendorsViewVendor extends JViewLegacy
 		$app = JFactory::getApplication();
 		$input = $app->input;
 		$this->vendor->vendor_client = $input->get('client', '', 'STRING');
-		
-		// Check for errors.
+
+		// Check for errors
 		if (count($errors = $this->get('Errors')))
 		{
 			throw new Exception(implode("\n", $errors));

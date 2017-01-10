@@ -180,9 +180,13 @@ else
 				</select>
 			</div>
 			<div class="btn-group pull-right">
-				<label for="sortTable" class="element-invisible"><?php echo JText::_('JGLOBAL_SORT_BY'); ?></label>
+				<label for="sortTable" class="element-invisible">
+					<?php echo JText::_('JGLOBAL_SORT_BY'); ?>
+				</label>
 				<select name="sortTable" id="sortTable" class="input-medium" onchange="Joomla.orderTable()">
-					<option value=""><?php echo JText::_('JGLOBAL_SORT_BY'); ?></option>
+					<option value="">
+						<?php echo JText::_('JGLOBAL_SORT_BY'); ?>
+					</option>
 					<?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $listOrder); ?>
 				</select>
 			</div>
@@ -284,7 +288,6 @@ else
 							</td>
 						<?php
 						}?>
-
 							<td class="hidden-phone">
 								<?php echo JHtml::_('grid.id', $i, $item->payout_id); ?>
 							</td>
@@ -293,21 +296,20 @@ else
 							<td>
 								<?php echo $item->payout_id; ?>
 							</td>
+
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=payout.edit&payout_id=' .$item->payout_id. '&client=' . $this->input->get('client', '', 'STRING'));?>">
-									
 									<?php echo $this->escape($item->user_id); ?>
-								</a>
 							</td>
 
 							<td>
 								<?php echo $item->currency; ?>
 							</td>
+
 							<td>
 								<?php echo $item->total; ?>
 							</td>
 							<td>
-									
+
 									<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&payout_id=' .$item->payout_id.'&client=' . $this->input->get('client', '', 'STRING'));?>"
 									<button class="validate btn btn-primary">PAY</button>
 							</td>

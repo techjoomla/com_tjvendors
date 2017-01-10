@@ -2,7 +2,7 @@
 <form>
 	<fieldset>
 
-        <field name="payout_id"
+		<field name="payout_id"
 			type="text"
 			default="0"
 			label="COM_TJVENDORS_FORM_LBL_PAYOUT_ID"
@@ -10,7 +10,6 @@
 			class="readonly required"
 			description="JGLOBAL_FIELD_ID_DESC"
 		/>
-
 
 		<field name="vendor_id"
 			type="user"
@@ -28,14 +27,12 @@
 			toggle_default_value="0"
 		/>
 
-
 		<field name="currency"
 			type="text"
 			label="COM_TJVENDORS_FORM_LBL_PAYOUT_CURRENCY"
 			class="readonly required"
 			readonly="true"
 		/>
-
 
 		<field name="total"
 			type="number"
@@ -44,5 +41,4 @@
 		/>
 
 	</fieldset>
-
 </form>

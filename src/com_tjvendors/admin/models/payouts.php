@@ -83,28 +83,6 @@ class TjvendorsModelPayouts extends JModelList
 	}
 
 	/**
-	 * Method to get a store id based on model configuration state.
-	 *
-	 * This is necessary because the model is used by the component and
-	 * different modules that might need different sets of data or different
-	 * ordering requirements.
-	 *
-	 * @param   string  $id  A prefix for the store id.
-	 *
-	 * @return   string A store id.
-	 *
-	 * @since    1.6
-	 */
-	protected function getStoreId($id = '')
-	{
-		// Compile the store id.
-		$id .= ':' . $this->getState('filter.search');
-		$id .= ':' . $this->getState('filter.state');
-
-		return parent::getStoreId($id);
-	}
-
-	/**
 	 * Build an SQL query to load the list data.
 	 *
 	 * @return   JDatabaseQuery
@@ -119,7 +97,6 @@ class TjvendorsModelPayouts extends JModelList
 		$subQuery = $db->getQuery(true);
 
 		// Sub query
-
 		$subQuery->select('max(payout_id)')
 				->from($db->quoteName('#__tjvendors_passbook'))
 				->group($db->quoteName('vendor_id'));
@@ -148,7 +125,7 @@ class TjvendorsModelPayouts extends JModelList
 				$query->where('(user_id.name LIKE ' . $search .
 							'OR a.currency LIKE' . $search .
 							'OR a.total LIKE' . $search .
-							'OR a.payout_id LIKE' . $search .')');
+							'OR a.payout_id LIKE' . $search . ')');
 			}
 		}
 

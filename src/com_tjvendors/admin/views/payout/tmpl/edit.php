@@ -37,24 +37,23 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			Joomla.submitform(task, document.getElementById('payout-form'));
 		}
 	}
-function Popup()
-{
-	var txt;
-	var r = confirm("Do you want to procees with the selected payable Amount");
-	
-	if (r == true) 
+	function Popup()
 	{
-		// Do nothing
-	} 
-	else 
-    {
-		return false;
+		var txt;
+		var r = confirm("<?php echo JText::_('CONFIRM_MESSAGE_YES_NO'); ?>");
+		
+		if (r == true) 
+		{
+			// Do nothing
+		} 
+		else 
+		{
+			return false;
+		}
 	}
-}
 
 </script>
-<form action="<?php //echo JRoute::_('index.php?option=com_tjvendors&layout=edit&payout_id=' . (int) $this->item->payout_id ); ?>"
-	method="post" enctype="multipart/form-data" name="adminForm" id="payout-form" class="form-validate">
+<form method="post" enctype="multipart/form-data" name="adminForm" id="payout-form" class="form-validate">
 
 	<div class="form-horizontal">
 		<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
@@ -88,4 +87,3 @@ function Popup()
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
-

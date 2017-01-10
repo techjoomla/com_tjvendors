@@ -86,12 +86,12 @@ class TjvendorsViewPayouts extends JViewLegacy
 			if ($canDo->get('core.create'))
 			{
 				// JToolBarHelper::addNew('payout.add', 'JTOOLBAR_NEW');
-				/*JToolbarHelper::custom('vendors.duplicate', 'copy.png', 'copy_f2.png', 'JTOOLBAR_DUPLICATE', true);*/
+				// JToolbarHelper::custom('vendors.duplicate', 'copy.png', 'copy_f2.png', 'JTOOLBAR_DUPLICATE', true);
 			}
 
 			if ($canDo->get('core.edit') && isset($this->items[0]))
 			{
-				//JToolBarHelper::editList('payout.edit', 'JTOOLBAR_EDIT');
+				// JToolBarHelper::editList('payout.edit', 'JTOOLBAR_EDIT');
 			}
 		}
 

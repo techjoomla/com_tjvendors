@@ -94,7 +94,7 @@ class TjvendorsModelPayout extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-	$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.payout.data', array());
+		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.payout.data', array());
 
 		if (empty($data))
 		{
@@ -148,7 +148,10 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		// Create a new query object.
 		$query = $db->getQuery(true);
+
+		// Create a new subquery object.
 		$subQuery = $db->getQuery(true);
+
 		$subQuery->select('max(payout_id)')
 			->from($db->quoteName('#__tjvendors_passbook'))
 			->where($db->quoteName('vendor_id') . '=' . $data['vendor_id']);
@@ -165,7 +168,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		// Generating the transaction id
 		$data['transaction_id'] = $data['vendor_id'] . $data['client'] . $data['currency'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
-		// Insert columns
+
 		if (parent::save($data))
 		{
 			$this->fetchingData($data);
@@ -189,14 +192,13 @@ class TjvendorsModelPayout extends JModelAdmin
 		$pending_amount = $input->get('pendingamount', '', 'INTEGER');
 		$data['total'] = $pending_amount - $data['debit'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
-		$items = parent::getItem($pk=null);
+		$items = parent::getItem($pk = null);
 		$items = $this->getItem($data['payout_id']);
 		$data['reference_order_id'] = $items->reference_order_id;
 		$data['client'] = $items->client;
 		$data['transaction_id'] = $items->vendor_id . $items->client . $items->currency;
 		$data['payout_id'] = '';
-//print_r($data);die;
-		// Get a db connection.
+
 		if (parent::save($data))
 		{
 			$payout_id = (int) $this->getState($this->getName() . '.id');

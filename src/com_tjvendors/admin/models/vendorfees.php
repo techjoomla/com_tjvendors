@@ -121,7 +121,7 @@ class TjvendorsModelVendorFees extends JModelList
 
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tj_vendors` AS a');
+		$query->from('`#__tjvendors_fee` AS a');
 
 		// Join over the user field 'vendor_id'
 		$query->select('b.vendor_name AS `vendor_name`');
@@ -185,7 +185,7 @@ class TjvendorsModelVendorFees extends JModelList
 		if ($tjvendorsid)
 		{
 			$db = JFactory::getDBO();
-			$query = "DELETE FROM #__tj_vendors where id IN (" . $tjvendorsid . ")";
+			$query = "DELETE FROM #__tjvendors_fee where id IN (" . $tjvendorsid . ")";
 			$this->_db->setQuery($query);
 
 			if (!$this->_db->execute())

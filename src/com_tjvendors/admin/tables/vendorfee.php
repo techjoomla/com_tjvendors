@@ -26,7 +26,7 @@ class TjvendorsTablevendorfee extends JTable
 	public function __construct(&$db)
 	{
 	JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendorfee', array('typeAlias' => 'com_tjvendors.vendorfee'));
-	parent::__construct('#__tj_vendors', 'id', $db);
+	parent::__construct('#__tjvendors_fee', 'id', $db);
 	}
 
 	/**
@@ -137,7 +137,7 @@ class TjvendorsTablevendorfee extends JTable
 		// Fetch all existed records
 		$query = $db->getQuery(true);
 		$query->select($db->qn(array('vendor_id')))
-			->from($db->qn('#__tj_vendors'))
+			->from($db->qn('#__tjvendors_fee'))
 			->where($db->qn('vendor_id') . ' = ' . $this->vendor_id)
 			->where($db->qn('client') . " =  '$this->client'");
 		$db->setQuery($query);

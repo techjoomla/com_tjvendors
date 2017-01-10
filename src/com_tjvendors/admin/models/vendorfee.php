@@ -148,7 +148,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 			if (@$table->ordering === '')
 			{
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__tj_vendors');
+				$db->setQuery('SELECT MAX(ordering) FROM #__tjvendors_fee');
 				$max             = $db->loadResult();
 				$table->ordering = $max + 1;
 			}

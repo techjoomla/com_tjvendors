@@ -155,7 +155,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	{
 		return array(
 			'a.`id`' => JText::_('JGRID_HEADING_ID'),
-			'a.`vendor_id`' => JText::_('COM_TJVENDORS_VENDORS_VENDOR_ID'),
+			'a.`vendor_id`' => JText::_('COM_TJVENDORS_VENDORS_TITLE'),
 			'a.`currency`' => JText::_('COM_TJVENDORS_VENDORS_CURRENCY'),
 			'a.`client`' => JText::_('COM_TJVENDORS_VENDORS_CLIENT'),
 			'a.`percent_commission`' => JText::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),

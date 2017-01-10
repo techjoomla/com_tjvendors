@@ -50,8 +50,9 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 */
 	public function getTable($type = 'Vendorfee', $prefix = 'TjvendorsTable', $config = array())
 	{
-		$db = JFactory::getDbo(); 
+		$db = JFactory::getDbo();
 		$tables = $db->getTableList();
+
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
@@ -69,6 +70,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	{
 		// Initialise variables.
 		$app = JFactory::getApplication();
+
 		// Get the form.
 		$form = $this->loadForm(
 			'com_tjvendors.vendorfee', 'vendorfee',
@@ -129,6 +131,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 
 		return $item;
 	}
+
 	/**
 	 * Prepare and sanitise the table prior to saving.
 	 *
@@ -164,7 +167,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		
 		$currency = $data['currency'];
 		$table = $this->getTable();
 		$db = JFactory::getDBO();

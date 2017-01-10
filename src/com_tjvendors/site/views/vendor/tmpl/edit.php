@@ -38,12 +38,13 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	}
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->vendor->id  . '&client=' . $this->vendor->vendor_client); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->vendor->vendor_id  . '&client=' . $this->vendor->vendor_client); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 	<div class="form-horizontal">
 		<div class="row-fluid">
 			<div class="form-horizontal">
 				<fieldset class="adminform">
+					<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor->vendor_id; ?>" />
 						<?php echo $this->form->renderField('vendor_title'); ?>
 						<?php echo $this->form->renderField('vendor_description'); ?>
 						<?php echo $this->form->renderField('vendor_logo'); ?>
@@ -70,7 +71,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		<?php echo $this->form->renderField('vendor_client'); ?>
 		<?php echo $this->form->renderField('user_id'); ?>
 		<?php echo $this->form->renderField('vendor_id'); ?>
-		<input type="hidden" name="task" value=""/>
+		<input type="hidden" name="task" value="vendor.save"/>
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

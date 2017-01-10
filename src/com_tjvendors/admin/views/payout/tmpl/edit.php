@@ -37,29 +37,14 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			Joomla.submitform(task, document.getElementById('payout-form'));
 		}
 	}
-	/*$(document).ready(function(){
-    $("#pay-confirmation").click(function(e){
-		var txt ="yes or no";
-	
-		if(confirm(txt)==true){
-			alert("yes");
-			return true;
-		}
-		alert("here");
-		e.preventDefault();
-		return false;
-        
-    });
-}); 
-*/
 function Popup()
 {
 	var txt;
-	var r = confirm("Press a button!");
+	var r = confirm("Do you want to procees with the selected payable Amount");
 	
 	if (r == true) 
 	{
-		txt = "You pressed OK!";
+		// Do nothing
 	} 
 	else 
     {

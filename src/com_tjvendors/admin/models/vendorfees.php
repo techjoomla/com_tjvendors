@@ -141,6 +141,7 @@ class TjvendorsModelVendorFees extends JModelList
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(a.vendor_id LIKE ' . $search .
 							'OR a.currency LIKE' . $search .
+							'OR b.vendor_name LIKE' . $search .
 							'OR a.percent_commission LIKE' . $search .
 							'OR a.flat_commission LIKE' . $search . ')');
 			}

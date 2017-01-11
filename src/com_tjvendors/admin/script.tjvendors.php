@@ -8,6 +8,7 @@
  */
 
 // No access
+
 defined('_JEXEC') or die();
 
 jimport('joomla.filesystem.folder');
@@ -19,35 +20,48 @@ if (!defined('DS'))
 	define('DS', DIRECTORY_SEPARATOR);
 }
 
-class com_tjvendorsInstallerScript
+/**
+ * Tjvendors script.
+ *
+ * @since  1.6
+ */
+class Com_JvendorsInstallerScript
 {
 	// Used to identify new install or update
 	private $componentStatus = "install";
 
 	/**
-	* method to run before an install/update/uninstall method
-	*
-	* @return void
-	*/
-	function preflight($type, $parent)
+	 * method to run before an install/update/uninstall method
+	 *
+	 * @param   string  $type    Type of process [install | update]
+	 * @param   mixed   $parent  Object who called this method.
+	 *
+	 * @return void
+	 */
+	public function preflight($type, $parent)
 	{
 	}
 
 	/**
-	* Runs after install, update or discover_update
-	* @param string $type install, update or discover_update
-	* @param JInstaller $parent
-	*/
-	function postflight( $type, $parent )
+	 * Runs after install, update or discover_update
+	 *
+	 * @param   string      $type    install, update or discover_update
+	 * @param   JInstaller  $parent  Object who called this method.
+	 *
+	 * @return void
+	 */
+	public function postflight( $type, $parent )
 	{
 	}
 
 	/**
-	* method to install the component
-	*
-	* @return void
-	*/
-	function install($parent)
+	 * method to install the component
+	 *
+	 * @param   JInstaller  $parent  Object who called this method.
+	 *
+	 * @return void
+	 */
+	public function install($parent)
 	{
 		$this->installSqlFiles($parent);
 	}
@@ -55,20 +69,29 @@ class com_tjvendorsInstallerScript
 	/**
 	 * method to update the component
 	 *
+	 * @param   mixed  $parent  Object who called the install/update method
+	 *
 	 * @return void
 	 */
-	function update($parent)
+	public function update($parent)
 	{
 		$this->componentStatus = "update";
 		$this->installSqlFiles($parent);
 	}
 
-	function installSqlFiles($parent)
+	/**
+	 * Method to install sql files sql
+	 *
+	 * @param   mixed  $parent  Object who called the install/update method
+	 *
+	 * @return  void
+	 */
+	public function installSqlFiles($parent)
 	{
 		$db = JFactory::getDBO();
 
 		// Install country table(#__tj_country) if it does not exists
-		$check = $this->checkTableExists('tjvendors_passbook');
+		$check = $this->checkTableExists('tj_vendors');
 
 		if (!$check)
 		{
@@ -77,7 +100,14 @@ class com_tjvendorsInstallerScript
 		}
 	}
 
-	function checkTableExists($table)
+	/**
+	 * Method to check table exist
+	 *
+	 * @param   SimpleXMLElement  $table  Table information.
+	 *
+	 * @return  void
+	 */
+	public function checkTableExists($table)
 	{
 		$db = JFactory::getDBO();
 		$config = JFactory::getConfig();
@@ -94,9 +124,9 @@ class com_tjvendorsInstallerScript
 		}
 
 		$query = " SELECT table_name
-		FROM information_schema.tables
-		WHERE table_schema = '" . $dbname . "'
-		AND table_name ='" . $dbprefix . $table . "'";
+		 FROM information_schema.tables
+		 WHERE table_schema='" . $dbname . "'
+		 AND table_name='" . $dbprefix . $table . "'";
 
 		$db->setQuery($query);
 		$check = $db->loadResult();
@@ -111,8 +141,15 @@ class com_tjvendorsInstallerScript
 		}
 	}
 
-
-	function runSQL($parent,$sqlfile)
+	/**
+	 * Method to run sql
+	 *
+	 * @param   mixed   $parent   Object who called the install/update method
+	 * @param   string  $sqlfile  path of sql file
+	 *
+	 * @return  void
+	 */
+	public function runSQL($parent,$sqlfile)
 	{
 		$db = JFactory::getDBO();
 

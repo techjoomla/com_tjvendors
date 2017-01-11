@@ -1,11 +1,12 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
+// No direct access
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
@@ -118,7 +119,7 @@ class TjvendorsModelVendors extends JModelList
 
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tj_vendors` AS a');
+		$query->from('`#__tjvendors_vendors` AS a');
 
 		// Join over the user field 'user_id'
 		$query->select('`user_id`.name AS `user_id`');
@@ -137,8 +138,7 @@ class TjvendorsModelVendors extends JModelList
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(user_id.name LIKE ' . $search .
-							'OR a.percent_commission LIKE' . $search .
-							'OR a.flat_commission LIKE' . $search . ')');
+							'OR a.vendor_id LIKE' . $search . 'OR a.vendor_title LIKE' . $search . ')');
 			}
 		}
 
@@ -179,8 +179,8 @@ class TjvendorsModelVendors extends JModelList
 
 		if ($tjvendorsid)
 		{
-			$db = JFactory::getDBO();
-			$query = "DELETE FROM #__tj_vendors where vendor_id IN (" . $tjvendorsid . ")";
+			$db = JFactory::getDbo();
+			$query = "DELETE FROM #__tjvendors_vendors where vendor_id IN (" . $tjvendorsid . ")";
 			$this->_db->setQuery($query);
 
 			if (!$this->_db->execute())

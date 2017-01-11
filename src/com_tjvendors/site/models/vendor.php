@@ -125,7 +125,24 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		if ($item = parent::getItem($pk))
 		{
-			// Do any procesing on fields here if needed
+			// Create a new query object.
+			$db    = $this->getDbo();
+			$query = $db->getQuery(true);
+
+			$app = JFactory::getApplication();
+			$input = $app->input;
+			$client = $input->get('client', '', 'STRING');
+
+			$user = JFactory::getUser()->id;
+
+			// Select the required field from the table.
+			$query->select('*')
+				->from($db->quoteName('#__tj_vendors'))
+				->where('user_id=' . $db->quote($user))
+				->where('vendor_client=' . $db->quote($client));
+
+			$db->setQuery($query);
+			$item = $db->loadObject();
 		}
 
 		return $item;
@@ -230,10 +247,13 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$table = $this->getTable();
 		$db = JFactory::getDBO();
-		$input = JFactory::getApplication()->input;
+
 		$app = JFactory::getApplication();
+		$input = $app->input;
+
 		$client = $input->get('client', '', 'STRING');
 
+		$data['user_id'] = JFactory::getUser()->id;
 		$data['vendor_client'] = ! empty($client) ? $client : $data['vendor_client'];
 
 		// Bind data
@@ -262,7 +282,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 		}
 
-		if ($data['user_vendor_id'] != 0)
+		if ($data['user_id'] != 0)
 		{
 			// Attempt to save data
 			if (parent::save($data))

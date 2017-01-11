@@ -167,7 +167,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		
 		$table = $this->getTable();
 		$db = JFactory::getDBO();
 		$input  = JFactory::getApplication()->input;

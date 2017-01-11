@@ -41,7 +41,6 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
-		
 		$this->input = JFactory::getApplication()->input;
 
 		// Check for errors.
@@ -67,7 +66,6 @@ class TjvendorsViewVendorFee extends JViewLegacy
 
 		$user  = JFactory::getUser();
 		$isNew = ($this->item->id == 0);
-		
 
 		$input = JFactory::getApplication()->input;
 		$this->full_client = $input->get('client', '', 'STRING');

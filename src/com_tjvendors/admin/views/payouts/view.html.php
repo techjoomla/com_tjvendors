@@ -155,9 +155,9 @@ class TjvendorsViewPayouts extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'a.`payout_id`' => JText::_('COM_TJVENDORS_VENDORS_PAYOUT_ID'),
-			'a.`total`' => JText::_('COM_TJVENDORS_VENDORS_TOTAL'),
-			'a.`currency`' => JText::_('COM_TJVENDORS_VENDORS_CURRENCY'),
+			'a.`payout_id`' => JText::_('COM_TJVENDORS_PAYOUTS_PAYOUT_ID'),
+			'a.`total`' => JText::_('COM_TJVENDORS_PAYOUTS_TOTAL'),
+			'a.`currency`' => JText::_('COM_TJVENDORS_PAYOUTS_CURRENCY'),
 		);
 	}
 }

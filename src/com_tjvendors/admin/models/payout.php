@@ -108,6 +108,7 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		return $data;
 	}
+
 	/**
 	 * Method for saving the pending payable amount
 	 *

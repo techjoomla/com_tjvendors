@@ -1,23 +1,13 @@
 <?php
 /**
- * @package   AdminTools
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
- * @license   GNU General Public License version 3, or later
- * @version   $Id$
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * @version    SVN:
+ * @package    Com_Tjvendors
+ * @author     Techjoomla  <contact@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
+
+// No access
 
 defined('_JEXEC') or die();
 
@@ -27,10 +17,15 @@ jimport('joomla.application.component.controller');
 
 if (!defined('DS'))
 {
-	define('DS',DIRECTORY_SEPARATOR);
+	define('DS', DIRECTORY_SEPARATOR);
 }
 
-class com_tjvendorsInstallerScript
+/**
+ * Tjvendors script.
+ *
+ * @since  1.6
+ */
+class Com_JvendorsInstallerScript
 {
 	// Used to identify new install or update
 	private $componentStatus = "install";
@@ -38,27 +33,35 @@ class com_tjvendorsInstallerScript
 	/**
 	 * method to run before an install/update/uninstall method
 	 *
+	 * @param   string  $type    Type of process [install | update]
+	 * @param   mixed   $parent  Object who called this method.
+	 *
 	 * @return void
 	 */
-	function preflight($type, $parent)
+	public function preflight($type, $parent)
 	{
 	}
 
 	/**
 	 * Runs after install, update or discover_update
-	 * @param string $type install, update or discover_update
-	 * @param JInstaller $parent
+	 *
+	 * @param   string      $type    install, update or discover_update
+	 * @param   JInstaller  $parent  Object who called this method.
+	 *
+	 * @return void
 	 */
-	function postflight( $type, $parent )
+	public function postflight( $type, $parent )
 	{
 	}
 
 	/**
 	 * method to install the component
 	 *
+	 * @param   JInstaller  $parent  Object who called this method.
+	 *
 	 * @return void
 	 */
-	function install($parent)
+	public function install($parent)
 	{
 		$this->installSqlFiles($parent);
 	}
@@ -66,15 +69,24 @@ class com_tjvendorsInstallerScript
 	/**
 	 * method to update the component
 	 *
+	 * @param   mixed  $parent  Object who called the install/update method
+	 *
 	 * @return void
 	 */
-	function update($parent)
+	public function update($parent)
 	{
 		$this->componentStatus = "update";
 		$this->installSqlFiles($parent);
 	}
 
-	function installSqlFiles($parent)
+	/**
+	 * Method to install sql files sql
+	 *
+	 * @param   mixed  $parent  Object who called the install/update method
+	 *
+	 * @return  void
+	 */
+	public function installSqlFiles($parent)
 	{
 		$db = JFactory::getDBO();
 
@@ -88,7 +100,14 @@ class com_tjvendorsInstallerScript
 		}
 	}
 
-	function checkTableExists($table)
+	/**
+	 * Method to check table exist
+	 *
+	 * @param   SimpleXMLElement  $table  Table information.
+	 *
+	 * @return  void
+	 */
+	public function checkTableExists($table)
 	{
 		$db = JFactory::getDBO();
 		$config = JFactory::getConfig();
@@ -104,7 +123,7 @@ class com_tjvendorsInstallerScript
 			$dbprefix = $config->getvalue('config.dbprefix');
 		}
 
-		$query =" SELECT table_name
+		$query = " SELECT table_name
 		 FROM information_schema.tables
 		 WHERE table_schema='" . $dbname . "'
 		 AND table_name='" . $dbprefix . $table . "'";
@@ -122,8 +141,15 @@ class com_tjvendorsInstallerScript
 		}
 	}
 
-
-	function runSQL($parent,$sqlfile)
+	/**
+	 * Method to run sql
+	 *
+	 * @param   mixed   $parent   Object who called the install/update method
+	 * @param   string  $sqlfile  path of sql file
+	 *
+	 * @return  void
+	 */
+	public function runSQL($parent,$sqlfile)
 	{
 		$db = JFactory::getDBO();
 

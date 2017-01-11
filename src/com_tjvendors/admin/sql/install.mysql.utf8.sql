@@ -1,3 +1,16 @@
+CREATE TABLE IF NOT EXISTS `#__tjvendors_passbook` (
+`payout_id` INT(11) UNSIGNED NOT NULL  AUTO_INCREMENT,
+`vendor_id` INT(11)  NOT NULL ,
+`currency` VARCHAR(255)  NOT NULL ,
+`total` INT(11)  NOT NULL ,
+`credit` INT(11)  NOT NULL ,
+`debit` INT(11)  NOT NULL ,
+`reference_order_id` INT(11)  NOT NULL ,
+`transaction_time` datetime NOT NULL DEFAULT NOW(),
+`client` VARCHAR(255)  NOT NULL ,
+`transaction_id` VARCHAR(255)  NOT NULL ,
+PRIMARY KEY (`payout_id`)
+
 CREATE TABLE IF NOT EXISTS `#__tjvendors_fee` (
 `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
 
@@ -7,9 +20,10 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_fee` (
 `percent_commission` FLOAT(10,2)  NOT NULL ,
 `flat_commission` FLOAT(10,2)  NOT NULL ,
 PRIMARY KEY (`id`)
+
 ) DEFAULT COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
+CREATE TABLE IF NOT EXISTS `#__tj_vendors` (
   `vendor_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `vendor_title` varchar(255) NOT NULL,

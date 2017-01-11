@@ -308,7 +308,6 @@ else
 							<td>
 								<?php echo $item->total; ?>
 							</td>
-							<td>
 
 							<td>
 								<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&payout_id=' .$item->payout_id.'&client=' . $this->input->get('client', '', 'STRING'));?>"

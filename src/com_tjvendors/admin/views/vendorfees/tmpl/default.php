@@ -1,11 +1,12 @@
 <?php
 /**
- * @version    SVN:
+ * @version    SVN: 
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
+
 // No direct access
 defined('_JEXEC') or die;
 
@@ -20,7 +21,7 @@ $document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/
 $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/list.css');
 
 $user      = JFactory::getUser();
-$userId    = $user->id;
+$userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
@@ -28,11 +29,12 @@ $saveOrder = $listOrder == 'a.`ordering`';
 
 if ($saveOrder)
 {
-	$saveOrderingUrl = 'index.php?option=com_tjvendors&task=vendors.saveOrderAjax&tmpl=component';
+	$saveOrderingUrl = 'index.php?option=com_tjvendors&task=vendorfees.saveOrderAjax&tmpl=component';
 	JHtml::_('sortablelist.sortable', 'vendorList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 
 $sortFields = $this->getSortFields();
+
 ?>
 <script type="text/javascript">
 	Joomla.orderTable = function ()
@@ -94,7 +96,7 @@ $sortFields = $this->getSortFields();
 
 	Joomla.submitbutton = function (task)
 	{
-		if(task == 'vendors.delete')
+		if(task == 'vendorfees.delete')
 		{
 			var msg = "<?php echo JText::_('COM_TJVENDORS_CONFIRM_TO_DELETE_RECORD'); ?>";
 
@@ -115,7 +117,7 @@ $sortFields = $this->getSortFields();
 
 </script>
 
-<?php
+<?php 
 
 // Joomla Component Creator code to allow adding non select list filters
 if (!empty($this->extra_sidebar))
@@ -125,7 +127,8 @@ if (!empty($this->extra_sidebar))
 
 ?>
 <form
-action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
+action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $this->input->get('client', '', 'STRING')); ?>" 
+method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
 {?>
@@ -138,7 +141,7 @@ if (!empty($this->sidebar))
 else
 {?>
 	<div id="j-main-container">
-<?php
+<?php 
 }?>
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="filter-search btn-group pull-left">
@@ -146,6 +149,7 @@ else
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</label>
 				<input type="text" name="filter_search" id="filter_search"
+					
 					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_USERNAME'); ?>"
 					value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
 					title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
@@ -202,7 +206,8 @@ else
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
-					<?php if (isset($this->items[0]->ordering))
+					<?php 
+					if (isset($this->items[0]->ordering))
 					{?>
 					<th width="1%" class="nowrap center hidden-phone">
 						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
@@ -216,13 +221,26 @@ else
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_TITLE_VENDORS', 'a.`vendor_title`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_TITLE', 'a.`vendor_id`', $listDirn, $listOrder); ?>
+					</th>
+
+					<th class='left'>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_CURRENCY', 'a.`currency`', $listDirn, $listOrder); ?>
+					</th>
+
+
+					<th class='left'>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_CLIENT', 'a.`client`', $listDirn, $listOrder); ?>
+					</th>
+
+					<th class='left'>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'a.`percent_commission`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ACTION_MENU', 'a.`user_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_FLAT_COMMISSION', 'a.`flat_commission`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
@@ -278,20 +296,28 @@ else
 						}?>
 
 							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->vendor_id); ?>
+								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 							</td>
 							<?php if (isset($this->items[0]->state)){}?>
 
 							<td>
-								<?php echo $item->vendor_id; ?>
+								<?php echo $item->id; ?>
 							</td>
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $item->vendor_id. '&client=' . $this->input->get('client', '', 'STRING'));?>">
-									<?php echo $this->escape($item->vendor_title); ?>
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&id=' . (int) $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>">	
+									<?php echo $this->escape($item->vendor_name); ?>
 								</a>
 							</td>
+
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor_fee&client=' . $this->input->get('client', '', 'STRING')); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a>
+								<?php echo $item->currency; ?>
+							</td>
+							<td><?php echo $this->escape($item->client); ?></td>
+							<td>
+								<?php echo $item->percent_commission; ?>
+							</td>
+							<td>
+								<?php echo $item->flat_commission; ?>
 							</td>
 						</tr>
 				<?php

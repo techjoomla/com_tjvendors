@@ -1,11 +1,10 @@
 <?php
-
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 // No direct access
 defined('_JEXEC') or die;
@@ -87,7 +86,6 @@ class TjvendorsViewVendors extends JViewLegacy
 			if ($canDo->get('core.create'))
 			{
 				JToolBarHelper::addNew('vendor.add', 'JTOOLBAR_NEW');
-				/*JToolbarHelper::custom('vendors.duplicate', 'copy.png', 'copy_f2.png', 'JTOOLBAR_DUPLICATE', true);*/
 			}
 
 			if ($canDo->get('core.edit') && isset($this->items[0]))
@@ -98,43 +96,10 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		if ($canDo->get('core.edit.state'))
 		{
-			/*if (isset($this->items[0]->state))
-			{
-				JToolBarHelper::divider();
-				JToolBarHelper::custom('vendors.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
-				JToolBarHelper::custom('vendors.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
-			}
-			else*/
 			if (isset($this->items[0]))
 			{
 				// If this component does not use state then show a direct delete button as we can not trash
 				JToolBarHelper::deleteList('', 'vendors.delete', 'JTOOLBAR_DELETE');
-			}
-
-			if (isset($this->items[0]->state))
-			{
-				// JToolBarHelper::divider();
-				// JToolBarHelper::archiveList('vendors.archive', 'JTOOLBAR_ARCHIVE');
-			}
-
-			if (isset($this->items[0]->checked_out))
-			{
-				// JToolBarHelper::custom('vendors.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
-			}
-		}
-
-		// Show trash and delete for components that uses the state field
-		if (isset($this->items[0]->state))
-		{
-			if ($state->get('filter.state') == -2 && $canDo->get('core.delete'))
-			{
-				// JToolBarHelper::deleteList('', 'vendors.delete', 'JTOOLBAR_EMPTY_TRASH');
-				// JToolBarHelper::divider();
-			}
-			elseif ($canDo->get('core.edit.state'))
-			{
-				// JToolBarHelper::trash('vendors.trash', 'JTOOLBAR_TRASH');
-				// JToolBarHelper::divider();
 			}
 		}
 

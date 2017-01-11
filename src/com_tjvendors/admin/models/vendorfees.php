@@ -1,12 +1,11 @@
 <?php
 /**
- * @version    SVN:
+ * @version    SVN: 
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
-// No direct access
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
@@ -16,7 +15,7 @@ jimport('joomla.application.component.modellist');
  *
  * @since  1.6
  */
-class TjvendorsModelVendors extends JModelList
+class TjvendorsModelVendorFees extends JModelList
 {
 /**
 	* Constructor.
@@ -31,9 +30,12 @@ class TjvendorsModelVendors extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
+				'id', 'a.`id`',
 				'vendor_id', 'a.`vendor_id`',
-				'user_id', 'a.`user_id`',
-				'vendor_client', 'a.`vendor_client`',
+				'currency', 'a.`currency`',
+				'client', 'a.`client`',
+				'percent_commission', 'a.`percent_commission`',
+				'flat_commission', 'a.`flat_commission`',
 			);
 		}
 
@@ -62,7 +64,7 @@ class TjvendorsModelVendors extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'a.vendor_id';
+			$orderCol = 'a.id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
@@ -79,7 +81,7 @@ class TjvendorsModelVendors extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('a.vendor_id', 'asc');
+		parent::populateState('a.id', 'asc');
 	}
 
 	/**
@@ -119,11 +121,11 @@ class TjvendorsModelVendors extends JModelList
 
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tjvendors_vendors` AS a');
+		$query->from('`#__tjvendors_fee` AS a');
 
-		// Join over the user field 'user_id'
-		$query->select('`user_id`.name AS `user_id`');
-		$query->join('LEFT', '#__users AS `user_id` ON `user_id`.id = a.`user_id`');
+		// Join over the user field 'vendor_id'
+		$query->select('b.vendor_name AS `vendor_name`');
+		$query->join('LEFT', '#__vendor_information AS b ON a.vendor_id = b.vendor_id');
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
@@ -132,13 +134,16 @@ class TjvendorsModelVendors extends JModelList
 		{
 			if (stripos($search, 'id:') === 0)
 			{
-				$query->where('a.vendor_id = ' . (int) substr($search, 3));
+				$query->where('a.id = ' . (int) substr($search, 3));
 			}
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(user_id.name LIKE ' . $search .
-							'OR a.vendor_id LIKE' . $search . 'OR a.vendor_title LIKE' . $search . ')');
+				$query->where('(a.vendor_id LIKE ' . $search .
+							'OR a.currency LIKE' . $search .
+							'OR b.vendor_name LIKE' . $search .
+							'OR a.percent_commission LIKE' . $search .
+							'OR a.flat_commission LIKE' . $search . ')');
 			}
 		}
 
@@ -173,14 +178,14 @@ class TjvendorsModelVendors extends JModelList
 	 *
 	 * @return flag
 	 */
-	public function deleteVendor($tj_vendors_id)
+	public function deleteVendorfee($tj_vendors_id)
 	{
 		$tjvendorsid = implode(',', $tj_vendors_id);
 
 		if ($tjvendorsid)
 		{
-			$db = JFactory::getDbo();
-			$query = "DELETE FROM #__tjvendors_vendors where vendor_id IN (" . $tjvendorsid . ")";
+			$db = JFactory::getDBO();
+			$query = "DELETE FROM #__tjvendors_fee where id IN (" . $tjvendorsid . ")";
 			$this->_db->setQuery($query);
 
 			if (!$this->_db->execute())

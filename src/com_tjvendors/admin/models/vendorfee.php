@@ -1,11 +1,12 @@
 <?php
 /**
- * @version    SVN:
+ * @version    SVN: 
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
+
 // No direct access.
 defined('_JEXEC') or die;
 
@@ -16,7 +17,7 @@ jimport('joomla.application.component.modeladmin');
  *
  * @since  1.6
  */
-class TjvendorsModelVendor extends JModelAdmin
+class TjvendorsModelVendorFee extends JModelAdmin
 {
 	/**
 	 * @var      string    The prefix to use with controller messages.
@@ -28,7 +29,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * @var   	string  	Alias to manage history control
 	 * @since   3.2
 	 */
-	public $typeAlias = 'com_tjvendors.vendor';
+	public $typeAlias = 'com_tjvendors.vendorfee';
 
 	/**
 	 * @var null  Item data
@@ -47,8 +48,11 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @since    1.6
 	 */
-	public function getTable($type = 'Vendor', $prefix = 'TjvendorsTable', $config = array())
+	public function getTable($type = 'Vendorfee', $prefix = 'TjvendorsTable', $config = array())
 	{
+		$db = JFactory::getDbo();
+		$tables = $db->getTableList();
+
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
@@ -69,7 +73,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		// Get the form.
 		$form = $this->loadForm(
-			'com_tjvendors.vendor', 'vendor',
+			'com_tjvendors.vendorfee', 'vendorfee',
 			array('control' => 'jform',
 				'load_data' => $loadData
 			)
@@ -93,7 +97,8 @@ class TjvendorsModelVendor extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
+		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.vendorfee.data', array());
+		$input = JFactory::getApplication()->input;
 
 		if (empty($data))
 		{
@@ -128,68 +133,6 @@ class TjvendorsModelVendor extends JModelAdmin
 	}
 
 	/**
-	 * Method to duplicate an Vendor
-	 *
-	 * @param   array  &$pks  An array of primary key IDs.
-	 *
-	 * @return  boolean  True if successful.
-	 *
-	 * @throws  Exception
-	 */
-	public function duplicate(&$pks)
-	{
-		$user = JFactory::getUser();
-
-		// Access checks.
-		if (!$user->authorise('core.create', 'com_tjvendors'))
-		{
-			throw new Exception(JText::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
-		}
-
-		$dispatcher = JEventDispatcher::getInstance();
-		$context    = $this->option . '.' . $this->name;
-
-		// Include the plugins for the save events.
-		JPluginHelper::importPlugin($this->events_map['save']);
-
-		$table = $this->getTable();
-
-		foreach ($pks as $pk)
-		{
-			if ($table->load($pk, true))
-			{
-				// Reset the id to create a new record.
-				$table->vendor_id = 0;
-
-				if (!$table->check())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the before save event.
-				$result = $dispatcher->trigger($this->event_before_save, array($context, &$table, true));
-
-				if (in_array(false, $result, true) || !$table->store())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the after save event.
-				$dispatcher->trigger($this->event_after_save, array($context, &$table, true));
-			}
-			else
-			{
-				throw new Exception($table->getError());
-			}
-		}
-
-		// Clean cache
-		$this->cleanCache();
-
-		return true;
-	}
-
-	/**
 	 * Prepare and sanitise the table prior to saving.
 	 *
 	 * @param   JTable  $table  Table Object
@@ -202,13 +145,13 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		jimport('joomla.filter.output');
 
-		if (empty($table->vendor_id))
+		if (empty($table->id))
 		{
 			// Set ordering to the last item if not set
 			if (@$table->ordering === '')
 			{
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__tjvendors_vendors');
+				$db->setQuery('SELECT MAX(ordering) FROM #__tjvendors_fee');
 				$max             = $db->loadResult();
 				$table->ordering = $max + 1;
 			}
@@ -225,40 +168,13 @@ class TjvendorsModelVendor extends JModelAdmin
 	public function save($data)
 	{
 		$table = $this->getTable();
-		$db = JFactory::getDbo();
+		$db = JFactory::getDBO();
 		$input  = JFactory::getApplication()->input;
 		$app  = JFactory::getApplication();
 		$client = $input->get('client', '', 'STRING');
+		$data['client'] = $client;
 
-		$data['vendor_client'] = !empty($client)? $client:$data['vendor_client'];
-
-		// Bind data
-		if (!$table->bind($data))
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		// Validate
-		if (!$table->check())
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		if ($data['vendor_id'] == 0)
-		{
-			if (!$table->checkDuplicateUser())
-			{
-				$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
-
-				return false;
-			}
-		}
-
-		if ($data['user_id'] != 0)
+		if ($data['vendor_id'] != 0)
 		{
 			// Attempt to save data
 			if (parent::save($data))

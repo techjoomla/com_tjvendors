@@ -1,22 +1,22 @@
 <?php
+
 /**
- * @version    SVN:
+ * @version    SVN: 
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
 // No direct access
-defined('_JEXEC') or die();
+defined('_JEXEC') or die;
 
 use Joomla\Utilities\ArrayHelper;
-
 /**
  * vendor Table class
  *
  * @since  1.6
  */
-class TjvendorsTablevendor extends JTable
+class TjvendorsTablevendorfee extends JTable
 {
 	/**
 	 * Constructor
@@ -25,11 +25,8 @@ class TjvendorsTablevendor extends JTable
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendor',
-				array('typeAlias' => 'com_tjvendors.vendor')
-				);
-
-		parent::__construct('#__tjvendors_vendors', 'vendor_id', $db);
+	JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendorfee', array('typeAlias' => 'com_tjvendors.vendorfee'));
+	parent::__construct('#__tjvendors_fee', 'id', $db);
 	}
 
 	/**
@@ -59,11 +56,14 @@ class TjvendorsTablevendor extends JTable
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (! JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
+		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendorfee.' . $array['id']))
 		{
-			$actions = JAccess::getActionsFromFile(JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml', "/access/section[@name='vendor']/");
-			$default_actions = JAccess::getAssetRules('com_tjvendors.vendor.' . $array['vendor_id'])->getData();
-			$array_jaccess = array();
+			$actions = JAccess::getActionsFromFile(
+				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',
+				"/access/section[@name='vendor']/"
+			);
+			$default_actions = JAccess::getAssetRules('com_tjvendors.vendorfee.' . $array['id'])->getData();
+			$array_jaccess   = array();
 
 			foreach ($actions as $action)
 			{
@@ -115,87 +115,10 @@ class TjvendorsTablevendor extends JTable
 	 */
 	public function check()
 	{
-		jimport('joomla.filesystem.file');
-
 		// If there is an ordering column and this is a new row then get the next ordering value
-		if (property_exists($this, 'ordering') && $this->vendor_id == 0)
+		if (property_exists($this, 'ordering') && $this->id == 0)
 		{
 			$this->ordering = self::getNextOrder();
-		}
-
-		$app = JFactory::getApplication();
-		$files = $app->input->files->get('jform', array(), 'raw');
-		$array = $app->input->get('jform', array(), 'ARRAY');
-
-		if (! empty($files['vendor_logo']))
-		{
-			$this->vendor_logo = "";
-			$singleFile = $files['vendor_logo'];
-
-			// Check if the server found any error.
-			$fileError = $singleFile['error'];
-			$message = '';
-
-			if ($fileError > 0 && $fileError != 4)
-			{
-				switch ($fileError)
-				{
-					case 1:
-						$message = JText::_('COM_TJVENDOR_FILE_SIZE_EXCEEDS');
-						break;
-					case 2:
-						$message = JText::_('COM_TJVENDOR_FILE_SIZE_EXCEEDS_FORM');
-						break;
-					case 3:
-						$message = JText::_('COM_TJVENDOR_FILE_PARTIAL_UPLOAD_ERROR');
-						break;
-				}
-
-				if ($message != '')
-				{
-					$app->enqueueMessage($message, 'warning');
-
-					return false;
-				}
-			}
-			elseif ($fileError == 4)
-			{
-				if (isset($array['vendor_logo']))
-				{
-					$this->vendor_logo = $array['vendor_logo'];
-				}
-			}
-			else
-			{
-				// Check for filesize
-				$fileSize = $singleFile['size'];
-
-				if ($fileSize > 26214400)
-				{
-					$app->enqueueMessage('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR', 'warning');
-
-					return false;
-				}
-
-				$filename = JFile::stripExt($singleFile['name']);
-				$extension = JFile::getExt($singleFile['name']);
-				$filename = md5(time()) . $filename;
-				$filepath = '/media/com_tjvendor/vendor/' . $filename . '.' . $extension;
-				$uploadPath = JPATH_ROOT . $filepath;
-				$fileTemp = $singleFile['tmp_name'];
-
-				if (! JFile::exists($uploadPath))
-				{
-					if (! JFile::upload($fileTemp, $uploadPath))
-					{
-						$app->enqueueMessage('COM_TJVENDOR_FILE_MOVING_ERROR', 'warning');
-
-						return false;
-					}
-				}
-
-				$this->vendor_logo = $filepath;
-			}
 		}
 
 		return parent::check();
@@ -213,10 +136,10 @@ class TjvendorsTablevendor extends JTable
 
 		// Fetch all existed records
 		$query = $db->getQuery(true);
-		$query->select($db->qn(array('user_id')))
-			->from($db->qn('#__tjvendors_vendors'))
-			->where($db->qn('user_id') . ' = ' . $this->user_id)
-			->where($db->qn('vendor_client') . " =  '$this->vendor_client'");
+		$query->select($db->qn(array('vendor_id')))
+			->from($db->qn('#__tjvendors_fee'))
+			->where($db->qn('vendor_id') . ' = ' . $this->vendor_id)
+			->where($db->qn('client') . " =  '$this->client'");
 		$db->setQuery($query);
 
 		$userexist = $this->_db->loadResult();
@@ -255,16 +178,14 @@ class TjvendorsTablevendor extends JTable
 		// Sanitize input.
 		ArrayHelper::toInteger($pks);
 		$userId = (int) $userId;
-		$state = (int) $state;
+		$state  = (int) $state;
 
 		// If there are no primary keys set check to see if the instance key is set.
 		if (empty($pks))
 		{
 			if ($this->$k)
 			{
-				$pks = array(
-					$this->$k
-				);
+				$pks = array($this->$k);
 			}
 			// Nothing to set publishing state on, return false.
 			else
@@ -277,7 +198,7 @@ class TjvendorsTablevendor extends JTable
 		$where = $k . '=' . implode(' OR ' . $k . '=', $pks);
 
 		// Determine if there is checkin support for the table.
-		if (! property_exists($this, 'checked_out') || ! property_exists($this, 'checked_out_time'))
+		if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time'))
 		{
 			$checkin = '';
 		}
@@ -287,7 +208,12 @@ class TjvendorsTablevendor extends JTable
 		}
 
 		// Update the publishing state for rows with the given primary keys.
-		$this->_db->setQuery('UPDATE `' . $this->_tbl . '`' . ' SET `state` = ' . (int) $state . ' WHERE (' . $where . ')' . $checkin);
+		$this->_db->setQuery(
+			'UPDATE `' . $this->_tbl . '`' .
+			' SET `state` = ' . (int) $state .
+			' WHERE (' . $where . ')' .
+			$checkin
+		);
 		$this->_db->execute();
 
 		// If checkin is supported and all rows were adjusted, check them in.
@@ -320,7 +246,7 @@ class TjvendorsTablevendor extends JTable
 	{
 		$k = $this->_tbl_key;
 
-		return 'com_tjvendors.vendor.' . (int) $this->$k;
+		return 'com_tjvendors.vendorfee.' . (int) $this->$k;
 	}
 
 	/**

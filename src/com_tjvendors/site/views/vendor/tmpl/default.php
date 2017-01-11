@@ -14,9 +14,7 @@ defined('_JEXEC') or die();
 	<img alt="" src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>">
 	</div>
 	<div class="span9">
-		<div><h3><?php echo $this->vendor->vendor_title; ?></h3>
-
-		</div>
+		<div><h3><?php echo $this->vendor->vendor_title; ?></h3></div>
 		<div><?php echo $this->vendor->vendor_description; ?></div>
 		<div>
 		<?php if ($this->vendor->user_id == JFactory::getUser()->id || JFactory::getUser()->authorise('core.admin')){?>

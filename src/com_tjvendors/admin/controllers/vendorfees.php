@@ -1,11 +1,12 @@
 <?php
 /**
- * @version    SVN:
+ * @version    SVN: 
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
+
 // No direct access.
 defined('_JEXEC') or die;
 
@@ -18,7 +19,7 @@ use Joomla\Utilities\ArrayHelper;
  *
  * @since  1.6
  */
-class TjvendorsControllerVendors extends JControllerAdmin
+class TjvendorsControllerVendorFees extends JControllerAdmin
 {
 	/**
 	 * Method to clone existing Vendors
@@ -50,7 +51,7 @@ class TjvendorsControllerVendors extends JControllerAdmin
 			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 		}
 
-		$this->setRedirect('index.php?option=com_tjvendors&view=vendors');
+		$this->setRedirect('index.php?option=com_tjvendors&view=vendorfees');
 	}
 
 	/**
@@ -64,7 +65,7 @@ class TjvendorsControllerVendors extends JControllerAdmin
 	 *
 	 * @since    1.6
 	 */
-	public function getModel($name = 'vendor', $prefix = 'TjvendorsModel', $config = array())
+	public function getModel($name = 'vendorfee', $prefix = 'TjvendorsModel', $config = array())
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 
@@ -114,21 +115,21 @@ class TjvendorsControllerVendors extends JControllerAdmin
 		$input  = JFactory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
 
-		$model      = $this->getModel('vendors');
+		$model      = $this->getModel('vendorfees');
 		$post       = JRequest::get('post');
 
 		$tj_vendors_id = $post['cid'];
 
-		$result = $model->deleteVendor($tj_vendors_id);
+		$result = $model->deleteVendorfee($tj_vendors_id);
 
 		if ($result)
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&client=' . $client;
 			$msg = JText::_('COM_TJVENDORS_RECORD_DELETED');
 		}
 		else
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&client=' . $client;
 			$msg = JText::_('COM_TJVENDORS_ERR_DELETED');
 		}
 

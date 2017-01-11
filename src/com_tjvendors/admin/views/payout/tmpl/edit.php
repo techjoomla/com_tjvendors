@@ -20,9 +20,9 @@ $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 ?>
 <script type="text/javascript">
-		
+	var techjoomla = {};
 	techjoomla.jQuery = jQuery.noConflict();
-	techjoomla.jQuer(document).ready(function ()
+	techjoomla.jQuery(document).ready(function ()
 	{
 	});
 

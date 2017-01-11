@@ -1,10 +1,11 @@
 <?php
+
 /**
- * @version    SVN:
+ * @version    CVS: 1.0.0
  * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @author     Parth Lawate <contact@techjoomla.com>
+ * @copyright  2016 Parth Lawate
+ * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 // No direct access
 defined('_JEXEC') or die();
@@ -29,7 +30,7 @@ class TjvendorsTablevendor extends JTable
 				array('typeAlias' => 'com_tjvendors.vendor')
 				);
 
-		parent::__construct('#__tjvendors_vendors', 'vendor_id', $db);
+		parent::__construct('#__tj_vendors', 'vendor_id', $db);
 	}
 
 	/**
@@ -214,7 +215,7 @@ class TjvendorsTablevendor extends JTable
 		// Fetch all existed records
 		$query = $db->getQuery(true);
 		$query->select($db->qn(array('user_id')))
-			->from($db->qn('#__tjvendors_vendors'))
+			->from($db->qn('#__tj_vendors'))
 			->where($db->qn('user_id') . ' = ' . $this->user_id)
 			->where($db->qn('vendor_client') . " =  '$this->vendor_client'");
 		$db->setQuery($query);

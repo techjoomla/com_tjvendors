@@ -1,12 +1,11 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
-
 // No direct access
 defined('_JEXEC') or die;
 
@@ -217,10 +216,13 @@ else
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_USER_ID', 'a.`user_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_TITLE_VENDORS', 'a.`vendor_title`', $listDirn, $listOrder); ?>
+					</th>
+					<th class='left'>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ACTION_MENU', 'a.`user_id`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
@@ -285,8 +287,11 @@ else
 							</td>
 							<td>
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $item->vendor_id. '&client=' . $this->input->get('client', '', 'STRING'));?>">
-									<?php echo $this->escape($item->user_id); ?>
+									<?php echo $this->escape($item->vendor_title); ?>
 								</a>
+							</td>
+							<td>
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor_fee&client=' . $this->input->get('client', '', 'STRING')); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a>
 							</td>
 						</tr>
 				<?php

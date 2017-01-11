@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_fee` (
 PRIMARY KEY (`id`)
 ) DEFAULT COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS `#__tj_vendors` (
+CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
   `vendor_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `vendor_title` varchar(255) NOT NULL,

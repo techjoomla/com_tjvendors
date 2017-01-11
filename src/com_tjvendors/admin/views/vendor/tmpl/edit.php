@@ -1,10 +1,10 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 // No direct access
 defined('_JEXEC') or die;
@@ -55,7 +55,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->item->vendor_id  . '&client=' . $this->input->get('client', '', 'STRING')); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
-
+	<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 	<div class="form-horizontal">
 		<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'personal')); ?>
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'personal', JText::_('COM_TJVENDORS_TITLE_PERSONAL', true)); ?>
@@ -63,9 +63,13 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
 					<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->item->vendor_id; ?>" />
-						<?php echo $this->form->renderField('user_id'); 
-						
-						if (empty($this->item->vendor_id))
+					<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->item->checked_out_time; ?>" />
+					<input type="hidden" name="jform[checked_ou]" value="<?php echo $this->item->checked_out; ?>" />
+					<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
+
+						<?php echo $this->form->renderField('user_id');
+
+						if (empty($this->input->get('client', '', 'STRING')))
 						{
 							echo $this->form->renderField('vendor_client');
 						}
@@ -74,18 +78,17 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 						<?php echo $this->form->renderField('vendor_description'); ?>
 						<?php echo $this->form->renderField('vendor_logo'); ?>
 						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
-
 						<?php if (!empty($this->item->vendor_logo)) : ?>
 							<div class="control-group">
 								<div class="controls "><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>"></div>
 							</div>
 						<?php endif; ?>
+
 				</fieldset>
 			</div>
 		</div>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
 		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
-
 		<input type="hidden" name="task" value=""/>
 		<?php echo JHtml::_('form.token'); ?>
 	</div>

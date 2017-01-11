@@ -1,12 +1,11 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
-
 // No direct access.
 defined('_JEXEC') or die;
 
@@ -209,7 +208,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			if (@$table->ordering === '')
 			{
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__tj_vendors');
+				$db->setQuery('SELECT MAX(ordering) FROM #__tjvendors_vendors');
 				$max             = $db->loadResult();
 				$table->ordering = $max + 1;
 			}
@@ -226,7 +225,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	public function save($data)
 	{
 		$table = $this->getTable();
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$input  = JFactory::getApplication()->input;
 		$app  = JFactory::getApplication();
 		$client = $input->get('client', '', 'STRING');

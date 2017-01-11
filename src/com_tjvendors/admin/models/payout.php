@@ -1,10 +1,10 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla  <contact@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 
 // No direct access.
@@ -108,73 +108,6 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		return $data;
 	}
-
-	/**
-	 * Method to get the data that should be injected in the form.
-	 * 
-	 * @param   array  $data  An optional array of data for the form to interogate.
-	 * 
-	 * @return   mixed  The data for the form.
-	 *
-	 * @since    1.6
-	 */
-	public function fetchingData($data)
-	{
-		$payout_id = (int) $this->getState($this->getName() . '.id');
-		$object = new stdClass;
-
-		// Must be a valid primary key value.
-		$object->payout_id = $payout_id;
-		$object->transaction_id = $data['transaction_id'] . $object->payout_id;
-
-		// Update their details in the users table using id as the primary key.
-		$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'payout_id');
-	}
-
-	/**
-	 * Method to add the amount when a product is purchased.
-	 *
-	 * @return   void.
-	 *
-	 * @since    1.6
-	 */
-	public function addCreditEntry()
-	{
-		$data = array('credit' => '450','debit_amount' => '0','vendor_id' => '839','currency' => 'Dollar','client' => 'Q2C','payout_id' => '');
-
-		// To get the total pending amount of the particular vendor
-		// Get a db connection.
-		$db = JFactory::getDbo();
-
-		// Create a new query object.
-		$query = $db->getQuery(true);
-
-		// Create a new subquery object.
-		$subQuery = $db->getQuery(true);
-
-		$subQuery->select('max(payout_id)')
-			->from($db->quoteName('#__tjvendors_passbook'))
-			->where($db->quoteName('vendor_id') . '=' . $data['vendor_id']);
-		$query->select('*')
-			->from($db->quoteName('#__tjvendors_passbook'))
-			->where($db->quoteName('payout_id') . ' IN (' . $subQuery . ')');
-		$db->setQuery($query);
-		$row = $db->loadAssoc();
-		$data['reference_order_id'] = rand();
-
-		// Addition of credit amount to the pending amount
-		$data['total'] = $row['total'] + $data['credit'];
-
-		// Generating the transaction id
-		$data['transaction_id'] = $data['vendor_id'] . $data['client'] . $data['currency'];
-		$data['transaction_time'] = JFactory::getDate()->toSql();
-
-		if (parent::save($data))
-		{
-			$this->fetchingData($data);
-		}
-	}
-
 	/**
 	 * Method for saving the pending payable amount
 	 *
@@ -187,8 +120,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		$table = $this->getTable();
 		$db = JFactory::getDBO();
 		$input  = JFactory::getApplication()->input;
-		$formData = new JRegistry($input->get('jform', '', 'array'));
-		$data['debit'] = $formData->get('total');
+		$data['debit'] = $data['total'];
 		$pending_amount = $input->get('pendingamount', '', 'INTEGER');
 		$data['total'] = $pending_amount - $data['debit'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
@@ -202,14 +134,14 @@ class TjvendorsModelPayout extends JModelAdmin
 		if (parent::save($data))
 		{
 			$payout_id = (int) $this->getState($this->getName() . '.id');
-			$object = new stdClass;
+			$payout_update = new stdClass;
 
 			// Must be a valid primary key value.
-			$object->payout_id = $payout_id;
-			$object->transaction_id = $data['transaction_id'] . $object->payout_id;
+			$payout_update->payout_id = $payout_id;
+			$payout_update->transaction_id = $data['transaction_id'] . $payout_update->payout_id;
 
 			// Update their details in the users table using id as the primary key.
-			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'payout_id');
+			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'payout_id');
 
 			return true;
 		}

@@ -1,11 +1,10 @@
 <?php
-
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla  <contact@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 // No direct access
 defined('_JEXEC') or die;
@@ -40,11 +39,13 @@ class TjvendorsViewPayout extends JViewLegacy
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
 			throw new Exception(implode("\n", $errors));
 		}
+
 		$this->addToolbar();
 		parent::display($tpl);
 	}
@@ -99,25 +100,6 @@ class TjvendorsViewPayout extends JViewLegacy
 			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS') . $viewTitle, 'course.png');
 		}
 
-		/* Not needed while editing the payout form
-		 If not checked out, can save the item.
-		 if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create'))))
-		{
-			JToolBarHelper::apply('payout.apply', 'JTOOLBAR_APPLY');
-			JToolBarHelper::save('payout.save', 'JTOOLBAR_SAVE');
-		}
-
-		if (!$checkedOut && ($canDo->get('core.create')))
-		{
-			JToolBarHelper::custom('payout.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-		}
-
-		 If an existing item, can save to a copy.
-		if (!$isNew && $canDo->get('core.create'))
-		{
-			JToolBarHelper::custom('payout.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
-		}
-		*/
 		// Button for version control
 		if ($this->state->params->get('save_history', 1) && $user->authorise('core.edit'))
 		{

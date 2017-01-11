@@ -1,10 +1,10 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla  <contact@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 
 // No direct access
@@ -224,17 +224,17 @@ else
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_ID', 'a.`payout_id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_PAYOUT_TITLE', 'a.`payout_title`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'a.`payout_title`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_CURRENCY', 'a.`currency`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'a.`currency`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_PAYABLE_AMOUNT', 'a.`payable_amount`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'a.`payable_amount`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ACTION', 'a.`action`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_ACTION', 'a.`action`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
@@ -310,9 +310,11 @@ else
 							</td>
 							<td>
 
-									<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&payout_id=' .$item->payout_id.'&client=' . $this->input->get('client', '', 'STRING'));?>"
-									<button class="validate btn btn-primary">PAY</button>
+							<td>
+								<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&payout_id=' .$item->payout_id.'&client=' . $this->input->get('client', '', 'STRING'));?>"
+								<button class="validate btn btn-primary">PAY</button>
 							</td>
+
 						</tr>
 				<?php
 				}?>

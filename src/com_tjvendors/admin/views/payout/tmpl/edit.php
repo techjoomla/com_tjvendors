@@ -21,8 +21,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 ?>
 <script type="text/javascript">
 		
-	js = jQuery.noConflict();
-	js(document).ready(function ()
+	techjoomla.jQuery = jQuery.noConflict();
+	techjoomla.jQuer(document).ready(function ()
 	{
 	});
 
@@ -37,7 +37,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			Joomla.submitform(task, document.getElementById('payout-form'));
 		}
 	}
-	function Popup()
+	function confirmationMsg()
 	{
 		var txt;
 		var r = confirm("<?php echo JText::_('CONFIRM_MESSAGE_YES_NO'); ?>");
@@ -54,7 +54,6 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 
 </script>
 <form method="post" enctype="multipart/form-data" name="adminForm" id="payout-form" class="form-validate">
-
 	<div class="form-horizontal">
 		<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_TJVENDORS_TITLE_PAYOUT', true)); ?>
@@ -62,12 +61,10 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
 					<input type="hidden" name="jform[id]" value="<?php echo $this->item->payout_id; ?>" />
-						
-					
 						<?php echo $this->form->renderField('vendor_id'); ?>
 						<?php echo $this->form->renderField('currency'); ?>
 						<?php echo $this->form->renderField('total'); ?>
-						<button class="validate btn btn-primary" id="pay-confirmation" onclick="return Popup()" >PAY</button>
+						<button class="validate btn btn-primary" id="pay-confirmation" onclick="return confirmationMsg()" >PAY</button>
 						<?php 
 						if ($this->state->params->get('save_history', 1))
 						{?>

@@ -1,11 +1,11 @@
 <?php
 /**
- * @version    CVS: 1.0.0
- * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
- */
+* @version    SVN: 
+* @package    Com_Tjvendors
+* @author     Techjoomla <contact@techjoomla.com>
+* @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+* @license    GNU General Public License version 2 or later.
+*/
 // No direct access
 defined('_JEXEC') or die;
 
@@ -75,7 +75,7 @@ method="post" enctype="multipart/form-data" name="adminForm" id="vendorfee-form"
 						
 						</div>
 						<?php
-						
+
 						$default = $this->item->currency;
 						$options = array();
 
@@ -93,7 +93,7 @@ method="post" enctype="multipart/form-data" name="adminForm" id="vendorfee-form"
 						<div class = "controls">
 						
 						<?php
-						if ($this->item->id == 0)
+						if (empty($this->item->id))
 						{
 						echo 
 						$this->dropdown = JHtml::_('select.genericlist', $options, 'jform[currency]', 'required="required" aria-invalid="false" size="1"', 'value', 'text', $default, 'jform_currency');

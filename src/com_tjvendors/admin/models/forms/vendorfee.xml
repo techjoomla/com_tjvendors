@@ -1,69 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset>
-
-        <field name="id"
-			type="text"
-			default="0"
-			label="COM_TJVENDORS_FORM_LBL_VENDOR_ID"
-			readonly="true"
-			
-			description="JGLOBAL_FIELD_ID_DESC"
-			
-		/>
-
-
-		<field name="vendor_id" type="sql"
-			label="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID"
-			description="COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_ID"
-			hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID"
-			query="select vendor_id,vendor_name from #__vendor_information"
-			key_field="vendor_id" value_field="vendor_name"
-			required="required" >
-			<option value=""></option>
-		</field>
-
-
-		<field name="currency"
-		id="currency"		
-			type="text"
-			label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY"
-			description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY"					
-		/>
-
-		
-
-
- <field name="percent_commission"
-			type="number"
-			size="40"
-			class="inputbox validate-numeric"
-			label="COM_TJVENDORS_FORM_LBL_VENDOR_PERCENT_COMMISSION"
-			description="COM_TJVENDORS_FORM_DESC_VENDOR_PERCENT_COMMISSION"
-			hint="COM_TJVENDORS_FORM_LBL_VENDOR_PERCENT_COMMISSION"
-			filter="safehtml"
-		/>
-
- <field name="flat_commission"
-			type="number"
-			size="40"
-			class="inputbox validate-numeric"
-			label="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION"
-			description="COM_TJVENDORS_FORM_DESC_VENDOR_FLAT_COMMISSION"
-			hint="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION"
-			filter="safehtml"
-		/>
-
-
-		<field name="version_note"
-			type="text"
-			label="JGLOBAL_FIELD_VERSION_NOTE_LABEL"
-			description="JGLOBAL_FIELD_VERSION_NOTE_DESC"
-			class="inputbox"
-			size="45"
-			labelclass="control-label"
-		/>
-
-	</fieldset>
-
+  <fieldset>
+    <field name="id" type="text" default="0" label="COM_TJVENDORS_FORM_LBL_VENDOR_ID" readonly="true" description="JGLOBAL_FIELD_ID_DESC" />
+    <field name="vendor_id" type="sql" label="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID" description="COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_ID" hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID" query="select vendor_id,vendor_name from #__vendor_information" key_field="vendor_id" value_field="vendor_name" required="required">
+      <option value="" />
+    </field>
+    <field name="currency" id="currency" type="text" label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY" description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY" />
+    <field name="percent_commission" type="number" size="40" class="inputbox validate-numeric" label="COM_TJVENDORS_FORM_LBL_VENDOR_PERCENT_COMMISSION" description="COM_TJVENDORS_FORM_DESC_VENDOR_PERCENT_COMMISSION" hint="COM_TJVENDORS_FORM_LBL_VENDOR_PERCENT_COMMISSION" filter="safehtml" />
+    <field name="flat_commission" type="number" size="40" class="inputbox validate-numeric" label="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION" description="COM_TJVENDORS_FORM_DESC_VENDOR_FLAT_COMMISSION" hint="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION" filter="safehtml" />
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label" />
+  </fieldset>
 </form>

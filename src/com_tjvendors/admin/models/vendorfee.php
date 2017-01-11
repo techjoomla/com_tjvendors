@@ -1,10 +1,10 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN: 
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 
 // No direct access.
@@ -167,7 +167,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$currency = $data['currency'];
+		
 		$table = $this->getTable();
 		$db = JFactory::getDBO();
 		$input  = JFactory::getApplication()->input;

@@ -137,7 +137,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 			// Select the required field from the table.
 			$query->select('*')
-				->from($db->quoteName('#__tj_vendors'))
+				->from($db->quoteName('#__tjvendors_vendors'))
 				->where('user_id=' . $db->quote($user))
 				->where('vendor_client=' . $db->quote($client));
 
@@ -229,7 +229,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			if (@$table->ordering === '')
 			{
 				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__tj_vendors');
+				$db->setQuery('SELECT MAX(ordering) FROM #__tjvendors_vendors');
 				$max = $db->loadResult();
 				$table->ordering = $max + 1;
 			}
@@ -344,7 +344,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			$query = $db->getQuery(true);
 
 			$query->select("*");
-			$query->from($db->qn("#__tj_vendors"));
+			$query->from($db->qn("#__tjvendors_vendors"));
 			$query->where($db->qn("user_id") . " = " . $user->id);
 
 			if (! empty($client))
@@ -360,7 +360,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$query = $db->getQuery(true);
 				$query->select("*");
-				$query->from($db->qn("#__tj_vendors"));
+				$query->from($db->qn("#__tjvendors_vendors"));
 				$query->where($db->qn("user_id") . " = " . $user->id);
 				$query->where($db->qn("vendor_client") . "  = ''");
 

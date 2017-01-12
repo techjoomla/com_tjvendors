@@ -30,7 +30,7 @@ class TjvendorsTablevendor extends JTable
 				array('typeAlias' => 'com_tjvendors.vendor')
 				);
 
-		parent::__construct('#__tj_vendors', 'vendor_id', $db);
+		parent::__construct('#__tjvendors_vendors', 'vendor_id', $db);
 	}
 
 	/**
@@ -215,7 +215,7 @@ class TjvendorsTablevendor extends JTable
 		// Fetch all existed records
 		$query = $db->getQuery(true);
 		$query->select($db->qn(array('user_id')))
-			->from($db->qn('#__tj_vendors'))
+			->from($db->qn('#__tjvendors_vendors'))
 			->where($db->qn('user_id') . ' = ' . $this->user_id)
 			->where($db->qn('vendor_client') . " =  '$this->vendor_client'");
 		$db->setQuery($query);

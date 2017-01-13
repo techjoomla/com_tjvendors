@@ -127,11 +127,15 @@ if (!empty($this->extra_sidebar))
 
 ?>
 <form
-action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&id='. (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING')); ?>" 
+action="<?php
+echo
+JRoute::_('index.php?option=com_tjvendors&view=vendorfees&id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING'));
+?>"
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
-{?>
+{
+	?>
 	<div id="j-sidebar-container" class="span2">
 		<?php echo $this->sidebar; ?>
 	</div>
@@ -139,7 +143,8 @@ if (!empty($this->sidebar))
 <?php
 }
 else
-{?>
+{
+	?>
 	<div id="j-main-container">
 <?php 
 }?>
@@ -192,8 +197,9 @@ else
 		</div>
 		<div class="clearfix"></div>
 		<?php
-		if(empty($this->items))
-		{?>
+		if (empty($this->items))
+		{
+			?>
 			<div class="clearfix">&nbsp;</div>
 				<div class="alert alert-no-items">
 					<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
@@ -201,24 +207,31 @@ else
 		<?php
 		}
 		else
-		{?>
+		{
+			?>
 
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
 					<?php 
 					if (isset($this->items[0]->ordering))
-					{?>
+					{
+						?>
 					<th width="1%" class="nowrap center hidden-phone">
-						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+						<?php
+						echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 					</th>
 					<?php
-					}?>
+					}
+					?>
 					<th width="1%" class="hidden-phone">
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 
-					<?php if (isset($this->items[0]->state)){} ?>
+					<?php if (isset($this->items[0]->state))
+					{
+}
+						?>
 
 					<th class='left'>
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
@@ -264,7 +277,8 @@ else
 					<tr class="row<?php echo $i % 2; ?>">
 					<?php
 						if (isset($this->items[0]->ordering))
-						{?>
+						{
+							?>
 							<td class="order nowrap center hidden-phone">
 								<?php
 								if ($canChange)
@@ -285,7 +299,8 @@ else
 								<?php
 								}
 								else
-								{?>
+								{
+									?>
 									<span class="sortable-handler inactive">
 										<i class="icon-menu"></i>
 									</span>
@@ -298,7 +313,10 @@ else
 							<td class="hidden-phone">
 								<?php echo JHtml::_('grid.id', $i, $item->vendor_id); ?>
 							</td>
-							<?php if (isset($this->items[0]->state)){}?>
+							<?php if (isset($this->items[0]->state))
+							{
+}
+								?>
 
 							<td>
 								<?php echo $item->vendor_id; ?>
@@ -308,50 +326,55 @@ else
 							</td>
 
 
-							<td><a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . trim($item->vendor_id)
-							. '&currency=' . $currency);?>">
+<td>
+	<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . trim($item->vendor_id) . '&currency=' . $currency);
+							?>
+							">
 								<?php echo $currency; ?>
 								</a>
 							</td>
 
-
 							<?php 
-							if(empty($item->percent_commission))
+							if (empty($item->percent_commission))
 								{
 								?>
 							<td>
 								<?php echo "0"; ?>
 							</td>
 							<?php
-								}
+							}
 							else
-								{	?>
+								{
+									?>
 							<td>
 								<?php echo $item->percent_commission; ?>
 							</td>
 							<?php
-								} 
+							}
 
-							if(empty($item->flat_commission))
+							if (empty($item->flat_commission))
 								{
 								?>
 							<td>
 								<?php echo "0"; ?>
 							</td>
 							<?php
-								}
+							}
 							else
-								{?> 
+								{
+									?> 
 
 							<td>
 								<?php echo $item->flat_commission; ?>
 							</td>
-							<?php } ?>
+							<?php
+							}
+							?>
 
 						</tr>
 				<?php
 				}
-				}?>
+		}?>
 			</tbody>
 		</table>
 		<?php

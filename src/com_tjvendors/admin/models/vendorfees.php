@@ -30,7 +30,6 @@ class TjvendorsModelVendorFees extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'id', 'a.`id`',
 				'vendor_id', 'a.`vendor_id`',
 				'currency', 'a.`currency`',
 				'client', 'a.`client`',
@@ -64,7 +63,7 @@ class TjvendorsModelVendorFees extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'a.id';
+			$orderCol = 'a.vendor_id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
@@ -81,7 +80,7 @@ class TjvendorsModelVendorFees extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('a.id', 'asc');
+		parent::populateState('a.vendor_id', 'asc');
 	}
 
 	/**
@@ -115,17 +114,21 @@ class TjvendorsModelVendorFees extends JModelList
 	 */
 	protected function getListQuery()
 	{
+		$input = JFactory::getApplication()->input;
+		$vendor_id = $input->get('vendor_id', '', 'INT');
+
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tjvendors_fee` AS a');
+		$query->from('`#__tjvendors_vendors` AS a');
+		$query->where('a.vendor_id=' . $vendor_id);
 
-		// Join over the user field 'vendor_id'
-		$query->select('b.vendor_name AS `vendor_name`');
-		$query->join('LEFT', '#__vendor_information AS b ON a.vendor_id = b.vendor_id');
+		/*Join over the user field 'vendor_id'
+		// $query->select('b.vendor_title AS `vendor_title`');
+		// $query->join('LEFT', '#__tjvendors_vendors AS b ON a.vendor_id = b.vendor_id');*/
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
@@ -141,7 +144,7 @@ class TjvendorsModelVendorFees extends JModelList
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(a.vendor_id LIKE ' . $search .
 							'OR a.currency LIKE' . $search .
-							'OR b.vendor_name LIKE' . $search .
+							// 'OR b.vendor_title LIKE' . $search .
 							'OR a.percent_commission LIKE' . $search .
 							'OR a.flat_commission LIKE' . $search . ')');
 			}

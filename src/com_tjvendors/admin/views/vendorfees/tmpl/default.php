@@ -21,7 +21,7 @@ $document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/
 $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/list.css');
 
 $user      = JFactory::getUser();
-$userId    = $user->get('id');
+$userId    = $user->get('vendor_id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
@@ -127,7 +127,7 @@ if (!empty($this->extra_sidebar))
 
 ?>
 <form
-action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $this->input->get('client', '', 'STRING')); ?>" 
+action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&id='. (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING')); ?>" 
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
@@ -150,7 +150,7 @@ else
 				</label>
 				<input type="text" name="filter_search" id="filter_search"
 					
-					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_USERNAME'); ?>"
+					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_VENDOR'); ?>"
 					value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
 					title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
 			</div>
@@ -221,7 +221,7 @@ else
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_TITLE', 'a.`vendor_id`', $listDirn, $listOrder); ?>
@@ -296,31 +296,61 @@ else
 						}?>
 
 							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
+								<?php echo JHtml::_('grid.id', $i, $item->vendor_id); ?>
 							</td>
 							<?php if (isset($this->items[0]->state)){}?>
 
 							<td>
-								<?php echo $item->id; ?>
+								<?php echo $item->vendor_id; ?>
 							</td>
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&id=' . (int) $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>">	
-									<?php echo $this->escape($item->vendor_name); ?>
+								<?php echo $this->escape($item->vendor_title); ?>
+							</td>
+
+
+							<td><a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . trim($item->vendor_id)
+							. '&currency=' . $currency);?>">
+								<?php echo $currency; ?>
 								</a>
 							</td>
 
+
+							<?php 
+							if(empty($item->percent_commission))
+								{
+								?>
 							<td>
-								<?php echo $item->currency; ?>
+								<?php echo "0"; ?>
 							</td>
-							<td><?php echo $this->escape($item->client); ?></td>
+							<?php
+								}
+							else
+								{	?>
 							<td>
 								<?php echo $item->percent_commission; ?>
 							</td>
+							<?php
+								} 
+
+							if(empty($item->flat_commission))
+								{
+								?>
+							<td>
+								<?php echo "0"; ?>
+							</td>
+							<?php
+								}
+							else
+								{?> 
+
 							<td>
 								<?php echo $item->flat_commission; ?>
 							</td>
+							<?php } ?>
+
 						</tr>
 				<?php
+				}
 				}?>
 			</tbody>
 		</table>

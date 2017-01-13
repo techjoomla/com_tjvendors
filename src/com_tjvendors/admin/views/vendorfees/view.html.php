@@ -35,6 +35,8 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+		$input = JFactory::getApplication()->input;
+		$this->curr = $input->get('curr', '', 'ARRAY');
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');

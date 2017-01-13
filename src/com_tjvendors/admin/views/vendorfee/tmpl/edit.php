@@ -58,7 +58,7 @@ action="
 <?php 
 echo
 JRoute::_('index.php?option=com_tjvendors&layout=edit&id='
-. (int) $this->item->id . '&client=' . $this->input->get('client', '', 'STRING') . '&curr[]=INR&curr[]=USD'); ?>"
+. (int) $this->item->vendor_id . '&currency='); ?>"
 method="post" enctype="multipart/form-data" name="adminForm" id="vendorfee-form" class="form-validate">
 
 	<div class="form-horizontal">
@@ -67,24 +67,12 @@ method="post" enctype="multipart/form-data" name="adminForm" id="vendorfee-form"
 		<div class="row-fluid">
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
-					<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
+					<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->item->vendor_id; ?>" />
 						
 						<div class="control-group">
 						<div class="control-label"><?php echo $this->form->getLabel('vendor_id');?></div>
-						<div class="controls"><?php echo $this->form->getInput('vendor_id');?></div>
-						
+						<div class="controls"><?php echo $this->item->vendor_title;?></div>
 						</div>
-						<?php
-
-						$default = $this->item->currency;
-						$options = array();
-
-						foreach ($this->foo as $key => $value)
-						{
-							$options[] = JHtml::_('select.option', $value);
-						}
-						
-						?>
 						
 						<div class = "control-group" >
 							<div class = "control-label">
@@ -93,15 +81,9 @@ method="post" enctype="multipart/form-data" name="adminForm" id="vendorfee-form"
 						<div class = "controls">
 						
 						<?php
-						if (empty($this->item->id))
-						{
-						echo 
-						$this->dropdown = JHtml::_('select.genericlist', $options, 'jform[currency]', 'required="required" aria-invalid="false" size="1"', 'value', 'text', $default, 'jform_currency');
-						}
-						else
-						{
-						echo JHTML::_('string.truncate', ($this->item->currency));
-						}
+
+						echo JHTML::_('string.truncate', $this->curr);
+
 						?>
 						</div>
 						</div>
@@ -124,6 +106,8 @@ method="post" enctype="multipart/form-data" name="adminForm" id="vendorfee-form"
 		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
         
 		<input type="hidden" name="task" value="" />
+		<input type="hidden" name="vendor_id" value="<?php echo $this->vendor_id; ?>">
+		<input type="hidden" name="currency" value="<?php echo $this->curr; ?>">
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

@@ -113,6 +113,10 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	protected function getListQuery()
 	{
+		// Get client
+		$input  = JFactory::getApplication()->input;
+		$client = $input->get('client', '', 'STRING');
+
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
@@ -120,6 +124,11 @@ class TjvendorsModelVendors extends JModelList
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'DISTINCT a.*'));
 		$query->from('`#__tjvendors_vendors` AS a');
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('vendor_client') . " = " . $db->quote($client));
+		}
 
 		// Join over the user field 'user_id'
 		$query->select('`user_id`.name AS `user_id`');

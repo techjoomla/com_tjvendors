@@ -113,6 +113,14 @@ class TjvendorsControllerVendors extends JControllerAdmin
 	{
 		$input  = JFactory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
+		$currencies = $input->get('currency', '', 'ARRAY');
+
+		$currUrl = "";
+
+		foreach ($currencies as $currency)
+		{
+			$currUrl .= "&currency[]=" . $currency;
+		}
 
 		$model      = $this->getModel('vendors');
 		$post       = JRequest::get('post');
@@ -123,12 +131,12 @@ class TjvendorsControllerVendors extends JControllerAdmin
 
 		if ($result)
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client;
+			$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client . $currUrl;
 			$msg = JText::_('COM_TJVENDORS_RECORD_DELETED');
 		}
 		else
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client;
+			$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client . $currUrl;
 			$msg = JText::_('COM_TJVENDORS_ERR_DELETED');
 		}
 

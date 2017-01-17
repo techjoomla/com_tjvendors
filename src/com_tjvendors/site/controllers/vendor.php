@@ -166,7 +166,9 @@ class TjvendorsControllerVendor extends JControllerForm
 		$this->setMessage(JText::_('COM_TJVENDORS_ITEM_SAVED_SUCCESSFULLY'));
 		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 		$this->setRedirect(
-				JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $data['vendor_id'] . '&client=' . $data['vendor_client'] . $currUrl, false)
+				JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' .
+				$data['vendor_id'] . '&client=' . $data['vendor_client'] . $currUrl, false
+				)
 				);
 
 		// Flush the data from the session.

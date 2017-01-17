@@ -125,6 +125,7 @@ if (!empty($this->extra_sidebar))
 }
 
 ?>
+
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&client=' . $this->input->get('client', '', 'STRING')); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
@@ -207,13 +208,13 @@ else
 		<table class="table table-striped" id="payoutList">
 			<thead>
 				<tr>
-					<?php if (isset($this->items[0]->ordering))
-					{?>
-					<th width="1%" class="nowrap center hidden-phone">
-						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
-					</th>
-					<?php
-}?>
+					<?php if (isset($this->items[0]->ordering)): ?>
+				<th width="1%" class="nowrap center hidden-phone">
+					<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+				</th>
+			<?php endif; ?>
+					
+					
 					<th width="1%" class="hidden-phone">
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
@@ -221,7 +222,7 @@ else
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_ID', 'a.`payout_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_VENDOR_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'a.`payout_title`', $listDirn, $listOrder); ?>
@@ -234,7 +235,7 @@ else
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'a.`payable_amount`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_ACTION', 'a.`action`', $listDirn, $listOrder); ?>
+						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_ACTION'); ?>
 					</th>
 				</tr>
 			</thead>
@@ -294,11 +295,11 @@ else
 							<?php if (isset($this->items[0]->state)){}?>
 
 							<td>
-								<?php echo $item->payout_id; ?>
+								<?php echo $item->vendor_id; ?>
 							</td>
 
 							<td>
-									<?php echo $this->escape($item->user_id); ?>
+									<?php echo $this->escape($item->vendor_title); ?>
 							</td>
 
 							<td>
@@ -310,7 +311,7 @@ else
 							</td>
 
 							<td>
-								<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&payout_id=' .$item->payout_id.'&client=' . $this->input->get('client', '', 'STRING'));?>"
+								<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&payout_id=' .$item->payout_id.'&client=' . $this->input->get('client', '', 'STRING'));?>"
 								<button class="validate btn btn-primary">PAY</button>
 							</td>
 

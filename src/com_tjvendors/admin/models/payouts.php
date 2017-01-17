@@ -30,10 +30,10 @@ class TjvendorsModelPayouts extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'payout_id', 'a.`payout_id`',
-				'vendor_id', 'a.`vendor_id`',
-				'total', 'a.`total`',
-				'currency', 'a.`currency`',
+				'payout_id', 'pass.`payout_id`',
+				'vendor_id', 'vendors.`vendor_id`',
+				'total', 'pass.`total`',
+				'currency', 'fees.`currency`',
 			);
 		}
 
@@ -62,7 +62,7 @@ class TjvendorsModelPayouts extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'a.payout_id';
+			$orderCol = 'pass.payout_id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
@@ -79,7 +79,7 @@ class TjvendorsModelPayouts extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('a.payout_id', 'asc');
+		parent::populateState('pass.payout_id', 'asc');
 	}
 
 	/**
@@ -89,26 +89,24 @@ class TjvendorsModelPayouts extends JModelList
 	 *
 	 * @since    1.6
 	 */
+
 	protected function getListQuery()
 	{
-		// Create a new query object.
-		$db    = $this->getDbo();
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$subQuery = $db->getQuery(true);
+		$input = JFactory::getApplication()->input;
+		$client = $input->get('client', '', 'STRING');
 
-		// Sub query
-		$subQuery->select('max(payout_id)')
-				->from($db->quoteName('#__tjvendors_passbook'))
-				->group($db->quoteName('vendor_id'));
-
-		// Select the required fields from the table.
-		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tjvendors_passbook` AS a');
-		$query->where($db->quoteName('a.payout_id') . ' IN (' . $subQuery . ')');
-
-		// Join over the user field 'user_id'
-		$query->select('`user_id`.name AS `user_id`');
-		$query->join('LEFT', '#__users AS `user_id` ON `user_id`.id = a.`vendor_id`');
+		$query->select($db->quoteName(array('vendors.vendor_id','pass.payout_id','fees.currency','vendors.vendor_title','pass.total')))
+			->from($db->quoteName('#__tjvendors_vendors', 'vendors'))
+			->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
+			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('fees.vendor_id') . ')')
+			->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
+			' ON (' . $db->quoteName('fees.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') .
+			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')')
+			->where($db->quoteName('vendors.vendor_client') . ' = ' . "'$client'" . 'AND' . $db->quoteName('pass.payout_id') . ' is not null');
+		$db->setQuery($query);
+		$rows = $db->loadAssocList();
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
@@ -117,15 +115,15 @@ class TjvendorsModelPayouts extends JModelList
 		{
 			if (stripos($search, 'payout_id:') === 0)
 			{
-				$query->where('a.payout_id = ' . (int) substr($search, 3));
+				$query->where('pass.payout_id = ' . (int) substr($search, 3));
 			}
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(user_id.name LIKE ' . $search .
-							'OR a.currency LIKE' . $search .
-							'OR a.total LIKE' . $search .
-							'OR a.payout_id LIKE' . $search . ')');
+				$query->where('(vendors.vendor_title LIKE ' . $search .
+							'OR fees.currency LIKE' . $search .
+							'OR pass.total LIKE' . $search .
+							'OR pass.payout_id LIKE' . $search . ')');
 			}
 		}
 
@@ -139,5 +137,35 @@ class TjvendorsModelPayouts extends JModelList
 		}
 
 		return $query;
+	}
+
+	/**
+	 * get the list items
+	 *
+	 * @return   items
+	 *
+	 * @since    1.6
+	 */
+
+	public function getItems()
+	{
+		$items = parent::getItems();
+
+		// Get latest payout amount for provided vendor and currency
+		foreach ($items as $i => $item)
+		{
+			foreach ($items as $j => $tempItem)
+			{
+				if (($item->vendor_id == $tempItem->vendor_id) && ($item->currency == $tempItem->currency))
+				{
+					if ($item->payout_id > $tempItem->payout_id)
+					{
+						unset($items[$j]);
+					}
+				}
+			}
+		}
+
+		return $items;
 	}
 }

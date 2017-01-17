@@ -123,9 +123,16 @@ if (!empty($this->extra_sidebar))
 	$this->sidebar .= $this->extra_sidebar;
 }
 
+$currencys = $this->input->get('currency','','ARRAY');
+$currUrl = "";
+
+foreach($currencys as $currency)
+{
+	$currUrl .= "&currency[]=" . $currency;
+}
 ?>
 <form
-action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
+action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING') . $currUrl); ?>" method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
 {?>
@@ -291,7 +298,7 @@ else
 								</a>
 							</td>
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id.'client=' . $this->input->get('client', '', 'STRING') . '&curr[]=INR&curr[]=USD'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a>
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . $currUrl ); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a>
 							</td>
 						</tr>
 				<?php

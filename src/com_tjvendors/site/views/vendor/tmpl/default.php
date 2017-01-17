@@ -8,6 +8,7 @@
  */
 // No direct access
 defined('_JEXEC') or die();
+$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 ?>
 <div class="vendor-cover row-fluid">
 	<div class="span3">
@@ -18,7 +19,7 @@ defined('_JEXEC') or die();
 		<div><?php echo $this->vendor->vendor_description; ?></div>
 		<div>
 		<?php if ($this->vendor->user_id == JFactory::getUser()->id || JFactory::getUser()->authorise('core.admin')){?>
-		<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $vendor->vendor_id. '&client=' . $this->input->get('client', '', 'STRING'));?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
+		<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $vendor->vendor_id. '&client=' . $this->input->get('client', '', 'STRING') . $currUrl);?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
 		<?php } ?>
 		</div>
 	</div>

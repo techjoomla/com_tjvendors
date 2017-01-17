@@ -228,8 +228,12 @@ class TjvendorsModelVendor extends JModelAdmin
 		$db = JFactory::getDbo();
 		$input  = JFactory::getApplication()->input;
 		$app  = JFactory::getApplication();
-		$client = $input->get('client', '', 'STRING');
 
+		$client = $input->get('client', '', 'STRING');
+		$currencies = $input->get('currency', '', 'ARRAY');
+
+		// Convert currency into json
+		$data['currency'] = json_encode($currencies);
 		$data['vendor_client'] = !empty($client)? $client:$data['vendor_client'];
 
 		// Bind data

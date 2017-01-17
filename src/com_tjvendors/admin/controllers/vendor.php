@@ -48,8 +48,16 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
+		$currencies = $this->input->get('currency', '', 'ARRAY');
+		$currUrl = "";
+
+		foreach ($currencies as $currency)
+		{
+			$currUrl .= "&currency[]=" . $currency;
+		}
+
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
-		$append .= '&client=' . $this->client;
+		$append .= '&client=' . $this->client . $currUrl;
 
 		return $append;
 	}
@@ -63,8 +71,16 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToListAppend()
 	{
+		$currencies = $this->input->get('currency', '', 'ARRAY');
+		$currUrl = "";
+
+		foreach ($currencies as $currency)
+		{
+			$currUrl .= "&currency[]=" . $currency;
+		}
+
 		$append = parent::getRedirectToListAppend();
-		$append .= '&client=' . $this->client;
+		$append .= '&client=' . $this->client . $currUrl;
 
 		return $append;
 	}

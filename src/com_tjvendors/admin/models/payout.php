@@ -127,11 +127,12 @@ class TjvendorsModelPayout extends JModelAdmin
 		$items = $this->getItem($data['id']);
 		$data['debit'] = $data['total'];
 		$pending_amount = $input->get('pendingamount', '', 'INTEGER');
+		$client = $input->get('client', '', 'STRING');
 		$data['total'] = $pending_amount - $data['debit'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
 		$data['reference_order_id'] = $items->reference_order_id;
-		$data['client'] = $items->client;
-		$data['transaction_id'] = $items->vendor_id . $items->client . $items->currency;
+		$data['client'] = $client;
+		$data['transaction_id'] = $items->vendor_id . $client . $items->currency;
 		$data['id'] = '';
 		$data['vendor_id'] = $items->vendor_id;
 

@@ -160,14 +160,14 @@ class TjvendorsControllerVendor extends JControllerForm
 		}
 
 		// Clear the profile id from the session.
-		$app->setUserState('com_tjvendors.edit.vendor.vendor_id', null);
+		// $app->setUserState('com_tjvendors.edit.vendor.vendor_id', null);
 
 		// Redirect to the list screen.
 		$this->setMessage(JText::_('COM_TJVENDORS_ITEM_SAVED_SUCCESSFULLY'));
 		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 		$this->setRedirect(
-				JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' .
-				$data['vendor_id'] . '&client=' . $data['vendor_client'] . $currUrl, false
+				JRoute::_(
+				'index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $data['vendor_id'] . '&client=' . $data['vendor_client'] . $currUrl, false
 				)
 				);
 

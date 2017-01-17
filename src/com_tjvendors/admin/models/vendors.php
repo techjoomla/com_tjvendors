@@ -188,8 +188,13 @@ class TjvendorsModelVendors extends JModelList
 
 		if ($tjvendorsid)
 		{
+			// Create a new query object.
 			$db = JFactory::getDbo();
-			$query = "DELETE FROM #__tjvendors_vendors where vendor_id IN (" . $tjvendorsid . ")";
+			$query = $db->getQuery(true);
+
+			$query->delete($db->quoteName('#__tjvendors_vendors'));
+			$query->where($db->quoteName('vendor_id') . ' IN (' . $tjvendorsid . ')');
+
 			$this->_db->setQuery($query);
 
 			if (!$this->_db->execute())

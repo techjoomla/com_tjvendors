@@ -85,4 +85,22 @@ class TjvendorsHelpersTjvendors
 
 		return $result;
 	}
+
+	/**
+	 * Get array of currency
+	 *
+	 * @return null|object
+	 */
+	public static function getCurrency()
+	{
+		$currencies = JFactory::getApplication()->input->get('currency', '', 'ARRAY');
+		$currUrl = "";
+
+		foreach ($currencies as $currency)
+		{
+			$currUrl .= "&currency[]=" . $currency;
+		}
+
+		return $currUrl;
+	}
 }

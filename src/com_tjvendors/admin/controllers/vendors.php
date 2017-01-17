@@ -113,14 +113,7 @@ class TjvendorsControllerVendors extends JControllerAdmin
 	{
 		$input  = JFactory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
-		$currencies = $input->get('currency', '', 'ARRAY');
-
-		$currUrl = "";
-
-		foreach ($currencies as $currency)
-		{
-			$currUrl .= "&currency[]=" . $currency;
-		}
+		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 
 		$model      = $this->getModel('vendors');
 		$post       = JRequest::get('post');

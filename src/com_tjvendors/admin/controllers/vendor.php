@@ -10,6 +10,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.controllerform');
+JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
 
 /**
  * Vendor controller class.
@@ -48,13 +49,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
-		$currencies = $this->input->get('currency', '', 'ARRAY');
-		$currUrl = "";
-
-		foreach ($currencies as $currency)
-		{
-			$currUrl .= "&currency[]=" . $currency;
-		}
+		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
 		$append .= '&client=' . $this->client . $currUrl;
@@ -71,13 +66,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToListAppend()
 	{
-		$currencies = $this->input->get('currency', '', 'ARRAY');
-		$currUrl = "";
-
-		foreach ($currencies as $currency)
-		{
-			$currUrl .= "&currency[]=" . $currency;
-		}
+		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 
 		$append = parent::getRedirectToListAppend();
 		$append .= '&client=' . $this->client . $currUrl;

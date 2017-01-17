@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-    <layout title="vendor" option="View">
-        <message>
-                        <![CDATA[Show single vendor form]]>
-        </message>
-    </layout>
+	<layout title="vendor" option="View">
+		<message><![CDATA[Show single vendor form]]></message>
+	</layout>
 </metadata>

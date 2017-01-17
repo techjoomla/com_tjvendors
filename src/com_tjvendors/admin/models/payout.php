@@ -124,7 +124,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		$db = JFactory::getDbo();
 		$input  = JFactory::getApplication()->input;
 		$items = parent::getItem($pk = null);
-		$items = $this->getItem($data['payout_id']);
+		$items = $this->getItem($data['id']);
 		$data['debit'] = $data['total'];
 		$pending_amount = $input->get('pendingamount', '', 'INTEGER');
 		$data['total'] = $pending_amount - $data['debit'];
@@ -132,20 +132,20 @@ class TjvendorsModelPayout extends JModelAdmin
 		$data['reference_order_id'] = $items->reference_order_id;
 		$data['client'] = $items->client;
 		$data['transaction_id'] = $items->vendor_id . $items->client . $items->currency;
-		$data['payout_id'] = '';
+		$data['id'] = '';
 		$data['vendor_id'] = $items->vendor_id;
 
 		if (parent::save($data))
 		{
-			$payout_id = (int) $this->getState($this->getName() . '.id');
+			$id = (int) $this->getState($this->getName() . '.id');
 			$payout_update = new stdClass;
 
 			// Must be a valid primary key value.
-			$payout_update->payout_id = $payout_id;
-			$payout_update->transaction_id = $data['transaction_id'] . $payout_update->payout_id;
+			$payout_update->id = $id;
+			$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
 
 			// Update their details in the users table using id as the primary key.
-			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'payout_id');
+			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
 
 			return true;
 		}

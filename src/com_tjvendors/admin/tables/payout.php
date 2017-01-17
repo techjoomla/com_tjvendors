@@ -25,7 +25,7 @@ class TjvendorsTablePayout extends JTable
 	public function __construct(&$db)
 	{
 		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjpayoutsTablepayout', array('typeAlias' => 'com_tjvendors.payout'));
-		parent::__construct('#__tjvendors_passbook', 'payout_id', $db);
+		parent::__construct('#__tjvendors_passbook', 'id', $db);
 	}
 
 	/**
@@ -55,13 +55,13 @@ class TjvendorsTablePayout extends JTable
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.payout.' . $array['payout_id']))
+		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.payout.' . $array['id']))
 		{
 			$actions = JAccess::getActionsFromFile(
 				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',
 				"/access/section[@name='payout']/"
 			);
-			$default_actions = JAccess::getAssetRules('com_tjvendors.payout.' . $array['payout_id'])->getData();
+			$default_actions = JAccess::getAssetRules('com_tjvendors.payout.' . $array['id'])->getData();
 			$array_jaccess   = array();
 
 			foreach ($actions as $action)
@@ -115,7 +115,7 @@ class TjvendorsTablePayout extends JTable
 	public function check()
 	{
 		// If there is an ordering column and this is a new row then get the next ordering value
-		if (property_exists($this, 'ordering') && $this->payout_id == 0)
+		if (property_exists($this, 'ordering') && $this->id == 0)
 		{
 			$this->ordering = self::getNextOrder();
 		}

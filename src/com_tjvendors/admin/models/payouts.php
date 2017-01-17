@@ -30,7 +30,7 @@ class TjvendorsModelPayouts extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'payout_id', 'pass.`payout_id`',
+				'id', 'pass.`id`',
 				'vendor_id', 'vendors.`vendor_id`',
 				'total', 'pass.`total`',
 				'currency', 'fees.`currency`',
@@ -62,7 +62,7 @@ class TjvendorsModelPayouts extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'pass.payout_id';
+			$orderCol = 'pass.id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
@@ -79,7 +79,7 @@ class TjvendorsModelPayouts extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('pass.payout_id', 'asc');
+		parent::populateState('pass.id', 'asc');
 	}
 
 	/**
@@ -97,14 +97,14 @@ class TjvendorsModelPayouts extends JModelList
 		$input = JFactory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
 
-		$query->select($db->quoteName(array('vendors.vendor_id','pass.payout_id','fees.currency','vendors.vendor_title','pass.total')))
+		$query->select($db->quoteName(array('vendors.vendor_id','pass.id','fees.currency','vendors.vendor_title','pass.total')))
 			->from($db->quoteName('#__tjvendors_vendors', 'vendors'))
 			->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
 			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('fees.vendor_id') . ')')
 			->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
 			' ON (' . $db->quoteName('fees.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') .
 			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')')
-			->where($db->quoteName('vendors.vendor_client') . ' = ' . "'$client'" . 'AND' . $db->quoteName('pass.payout_id') . ' is not null');
+			->where($db->quoteName('vendors.vendor_client') . ' = ' . "'$client'" . 'AND' . $db->quoteName('pass.id') . ' is not null');
 		$db->setQuery($query);
 		$rows = $db->loadAssocList();
 
@@ -113,9 +113,9 @@ class TjvendorsModelPayouts extends JModelList
 
 		if (!empty($search))
 		{
-			if (stripos($search, 'payout_id:') === 0)
+			if (stripos($search, 'id:') === 0)
 			{
-				$query->where('pass.payout_id = ' . (int) substr($search, 3));
+				$query->where('pass.id = ' . (int) substr($search, 3));
 			}
 			else
 			{
@@ -123,7 +123,7 @@ class TjvendorsModelPayouts extends JModelList
 				$query->where('(vendors.vendor_title LIKE ' . $search .
 							'OR fees.currency LIKE' . $search .
 							'OR pass.total LIKE' . $search .
-							'OR pass.payout_id LIKE' . $search . ')');
+							'OR pass.id LIKE' . $search . ')');
 			}
 		}
 
@@ -158,7 +158,7 @@ class TjvendorsModelPayouts extends JModelList
 			{
 				if (($item->vendor_id == $tempItem->vendor_id) && ($item->currency == $tempItem->currency))
 				{
-					if ($item->payout_id > $tempItem->payout_id)
+					if ($item->id > $tempItem->id)
 					{
 						unset($items[$j]);
 					}

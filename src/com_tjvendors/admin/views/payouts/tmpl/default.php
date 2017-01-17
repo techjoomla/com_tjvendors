@@ -21,7 +21,7 @@ $document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/
 $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/list.css');
 
 $user      = JFactory::getUser();
-$userId    = $user->get('payout_id');
+$userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
@@ -290,7 +290,7 @@ else
 						<?php
 						}?>
 							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->payout_id); ?>
+								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 							</td>
 							<?php if (isset($this->items[0]->state)){}?>
 
@@ -311,7 +311,7 @@ else
 							</td>
 
 							<td>
-								<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&payout_id=' .$item->payout_id.'&client=' . $this->input->get('client', '', 'STRING'));?>"
+								<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&id=' .$item->id.'&client=' . $this->input->get('client', '', 'STRING'));?>"
 								<button class="validate btn btn-primary">PAY</button>
 							</td>
 

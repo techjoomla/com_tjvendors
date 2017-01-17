@@ -62,7 +62,7 @@ class TjvendorsViewPayout extends JViewLegacy
 		JFactory::getApplication()->input->set('hidemainmenu', true);
 
 		$user  = JFactory::getUser();
-		$isNew = ($this->item->payout_id == 0);
+		$isNew = ($this->item->id == 0);
 
 		$input = JFactory::getApplication()->input;
 		$this->full_client = $input->get('client', '', 'STRING');
@@ -82,7 +82,7 @@ class TjvendorsViewPayout extends JViewLegacy
 
 		if (isset($this->item->checked_out))
 		{
-			$checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $user->get('payout_id'));
+			$checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $user->get('id'));
 		}
 		else
 		{
@@ -103,10 +103,10 @@ class TjvendorsViewPayout extends JViewLegacy
 		// Button for version control
 		if ($this->state->params->get('save_history', 1) && $user->authorise('core.edit'))
 		{
-			JToolbarHelper::versions('com_tjvendors.payout', $this->item->payout_id);
+			JToolbarHelper::versions('com_tjvendors.payout', $this->item->id);
 		}
 
-		if (empty($this->item->payout_id))
+		if (empty($this->item->id))
 		{
 			JToolBarHelper::cancel('payout.cancel', 'JTOOLBAR_CANCEL');
 		}

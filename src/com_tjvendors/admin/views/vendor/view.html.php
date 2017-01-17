@@ -73,11 +73,11 @@ class TjvendorsViewVendor extends JViewLegacy
 
 		if ($isNew)
 		{
-			$viewTitle = JText::_('COM_TJVENDOR_ADD_USER_SPECIFIC_COMM');
+			$viewTitle = JText::_('COM_TJVENDOR_VENDORS_ADD_USER_SPECIFIC_COMM');
 		}
 		else
 		{
-			$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMM');
+			$viewTitle = JText::_('COM_TJVENDOR_VENDORS_EDIT_USER_SPECIFIC_COMM');
 		}
 
 		if (isset($this->item->checked_out))

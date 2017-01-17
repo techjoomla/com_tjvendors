@@ -37,8 +37,10 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		}
 	}
 </script>
-
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->vendor->vendor_id  . '&client=' . $this->vendor->vendor_client); ?>"
+<?php
+$currUrl = TjvendorsHelpersTjvendors::getCurrency();
+?>
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->vendor->vendor_id  . '&client=' . $this->vendor->vendor_client . $currUrl); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 	<div class="form-horizontal">
 		<div class="row-fluid">
@@ -49,7 +51,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 						<?php echo $this->form->renderField('vendor_description'); ?>
 						<?php echo $this->form->renderField('vendor_logo'); ?>
 						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
-
+						<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 						<?php if (!empty($this->vendor->vendor_logo)) : ?>
 							<div class="control-group">
 								<div class="controls "><img src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
@@ -70,6 +72,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 
 		<?php echo $this->form->renderField('vendor_client'); ?>
 		<?php echo $this->form->renderField('user_id'); ?>
+		<?php echo $this->form->renderField('currency'); ?>
 		<?php echo $this->form->renderField('vendor_id'); ?>
 		<input type="hidden" name="task" value="vendor.save"/>
 		<?php echo JHtml::_('form.token'); ?>

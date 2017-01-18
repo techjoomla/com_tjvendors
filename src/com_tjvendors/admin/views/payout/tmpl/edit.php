@@ -60,8 +60,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		<div class="row-fluid">
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
-					<input type="hidden" name="jform[id]" value="<?php echo $this->item->payout_id; ?>" />
-						<?php echo $this->form->renderField('vendor_id'); ?>
+					<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
+						<?php echo $this->form->renderField('vendor_title'); ?>
 						<?php echo $this->form->renderField('currency'); ?>
 						<?php echo $this->form->renderField('total'); ?>
 						<button class="validate btn btn-primary" id="pay-confirmation" onclick="return confirmationMsg()" >PAY</button>

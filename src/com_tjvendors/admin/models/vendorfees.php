@@ -9,6 +9,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
+jimport('joomla.application.component.model');
 
 /**
  * Methods supporting a list of Tjvendors records.
@@ -30,11 +31,12 @@ class TjvendorsModelVendorFees extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
+				'id', 'b.`id`',
 				'vendor_id', 'a.`vendor_id`',
-				'currency', 'a.`currency`',
+				'currency', 'b.`currency`',
 				'client', 'a.`client`',
-				'percent_commission', 'a.`percent_commission`',
-				'flat_commission', 'a.`flat_commission`',
+				'percent_commission', 'b.`percent_commission`',
+				'flat_commission', 'b.`flat_commission`',
 			);
 		}
 
@@ -63,7 +65,7 @@ class TjvendorsModelVendorFees extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'a.vendor_id';
+			$orderCol = 'a.id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
@@ -80,7 +82,7 @@ class TjvendorsModelVendorFees extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('a.vendor_id', 'asc');
+		parent::populateState('b.id', 'asc');
 	}
 
 	/**
@@ -115,20 +117,21 @@ class TjvendorsModelVendorFees extends JModelList
 	protected function getListQuery()
 	{
 		$input = JFactory::getApplication()->input;
-		$vendor_id = $input->get('vendor_id', '', 'INT');
+		$this->vendor_id = $input->get('vendor_id', '', 'INT');
+		$vendor_id = $this->vendor_id;
 
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
-		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tjvendors_vendors` AS a');
-		$query->where('a.vendor_id=' . $vendor_id);
+		$query->select($db->quoteName(array('a.vendor_id','a.vendor_title','b.percent_commission','b.flat_commission','b.id','b.currency')));
 
-		/*Join over the user field 'vendor_id'
-		// $query->select('b.vendor_title AS `vendor_title`');
-		// $query->join('LEFT', '#__tjvendors_vendors AS b ON a.vendor_id = b.vendor_id');*/
+		$query->from($db->quoteName('#__tjvendors_fee', 'b'));
+
+	$query->join('LEFT', ($db->quoteName('#__tjvendors_vendors', 'a') . 'ON ' . $db->quoteName('b.vendor_id') . ' = ' . $db->quoteName('a.vendor_id') ));
+
+		$query->where($db->quoteName('a.vendor_id') . ' = ' . $vendor_id);
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
@@ -137,16 +140,15 @@ class TjvendorsModelVendorFees extends JModelList
 		{
 			if (stripos($search, 'id:') === 0)
 			{
-				$query->where('a.id = ' . (int) substr($search, 3));
+				$query->where($db->quoteName('a.id') . ' = ' . (int) substr($search, 3));
 			}
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(a.vendor_id LIKE ' . $search .
-							'OR a.currency LIKE' . $search .
-							// 'OR b.vendor_title LIKE' . $search .
-							'OR a.percent_commission LIKE' . $search .
-							'OR a.flat_commission LIKE' . $search . ')');
+							'OR b.currency LIKE' . $search .
+							'OR b.percent_commission LIKE' . $search .
+							'OR b.flat_commission LIKE' . $search . ')');
 			}
 		}
 
@@ -170,6 +172,42 @@ class TjvendorsModelVendorFees extends JModelList
 	public function getItems()
 	{
 		$items = parent::getItems();
+
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$vendorDetail = $TjvendorsModelVendor->getItem();
+		$vendorTitle = $vendorDetail->vendor_title;
+
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models');
+		$VendorFeeModel = JModelLegacy::getInstance('VendorFee', 'TjvendorsModel');
+
+		$input = JFactory::getApplication()->input;
+		$curr = $input->get('curr', '', 'ARRAY');
+		$currency = array();
+		$i = 0;
+
+		foreach ($items as $item)
+		{
+			if (empty($item->id))
+			{
+				$item->id = $VendorFeeModel->getVendorFeeId($item->vendor_id, $item->currency);
+			}
+
+			$currency[] = $item->currency;
+			$this->vendor_title = $item->vendor_title;
+			$items[$i++] = $item;
+		}
+
+		$resultCurrency = array_diff($curr, $currency);
+
+		foreach ($resultCurrency as $result)
+		{
+			$items[$i]->vendor_id = $this->vendor_id;
+			$items[$i]->vendor_title = $vendorTitle;
+			$items[$i]->currency = $result;
+			$items[$i]->percent_commission = 0.0;
+			$items[$i++]->flat_commission = 0.0;
+		}
 
 		return $items;
 	}

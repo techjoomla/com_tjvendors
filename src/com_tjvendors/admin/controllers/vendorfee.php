@@ -47,10 +47,15 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	 *
 	 * @since   1.6
 	 */
-	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
 	{
+		$input = JFactory::getApplication()->input;
+		$cid      = $input->post->get('cid', array(), 'array');
+		$formData = new JRegistry($input->get('jform', '', 'array'));
+		$currency = $formData->get('currency');
+		$vendor_id = (int) $formData->get('vendor_id');
 		$append = parent::getRedirectToItemAppend($recordId);
-		$append .= '&client=' . $this->client . '&curr[]=INR&curr[]=USD';
+		$append .= '&vendor_id=' . $vendor_id . '&currency=' . $currency;
 
 		return $append;
 	}
@@ -95,8 +100,11 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	public function cancel($key = null)
 	{
 		$input = JFactory::getApplication()->input;
-		$link = JRoute::_('index.php?option=com_tjvendors&view=vendorfees&id=' . (int) $item->vendor_id . '&client=' . $input->get('client', '', 'STRING')
-		. '&extension=' . $input->get('extension', '', 'STRING'), false
+
+		$cid      = $input->post->get('cid', array(), 'array');
+		$formData = new JRegistry($input->get('jform', '', 'array'));
+		$recordId = (int) $formData->get('vendor_id');
+		$link = JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $recordId . '&curr[]=INR&curr[]=USD', false
 		);
 		$this->setRedirect($link);
 	}
@@ -104,21 +112,21 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	/**
 	 * Function to edit field data
 	 *
-	 * @param   integer  $key     The primary key id for the item.
-	 * @param   string   $urlVar  The name of the URL variable for the id.
+	 * @param   integer  $key  The primary key id for the item.
 	 * 
 	 * @return  void
 	 */
-	public function edit($key = null,$urlVar = null)
+	public function edit($key = null)
 	{
 		$input    = JFactory::getApplication()->input;
 		$cid      = $input->post->get('cid', array(), 'array');
-		$recordId = (int) $input->getInt('vendor_id');
-
+		$recordId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
 		$currency = (STRING) (count($cid) ? $cid[0] : $input->get('currency'));
+		$id = (int) (count($cid) ? $cid[0] : $input->getInt('id'));
 
 		$link = JRoute::_(
-		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&vendor_id= ' . $recordId . '&currency=' . $currency, false
+		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&vendor_id=' . $recordId .
+		'&currency=' . $currency . '&id=' . $id, false
 		);
 		$this->setRedirect($link);
 	}

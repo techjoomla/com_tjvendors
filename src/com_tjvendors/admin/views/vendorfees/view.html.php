@@ -37,6 +37,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	{
 		$input = JFactory::getApplication()->input;
 		$this->curr = $input->get('curr', '', 'ARRAY');
+		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
@@ -77,22 +78,6 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		else
 		{
 			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
-		}
-		// Check if the form exists before showing the add/edit buttons
-		$formPath = JPATH_COMPONENT_ADMINISTRATOR . '/views/vendorfee';
-
-		if (file_exists($formPath))
-		{
-			if ($canDo->get('core.create'))
-			{
-				JToolBarHelper::addNew('vendorfee.add', 'JTOOLBAR_NEW');
-				/*JToolbarHelper::custom('vendors.duplicate', 'copy.png', 'copy_f2.png', 'JTOOLBAR_DUPLICATE', true);*/
-			}
-
-			if ($canDo->get('core.edit') && isset($this->items[0]))
-			{
-				JToolBarHelper::editList('vendorfee.edit', 'JTOOLBAR_EDIT');
-			}
 		}
 
 		if ($canDo->get('core.edit.state'))
@@ -157,8 +142,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		return array(
 			'a.`id`' => JText::_('JGRID_HEADING_ID'),
 			'a.`vendor_id`' => JText::_('COM_TJVENDORS_VENDORS_TITLE'),
-			'a.`currency`' => JText::_('COM_TJVENDORS_VENDORS_CURRENCY'),
-			'a.`client`' => JText::_('COM_TJVENDORS_VENDORS_CLIENT'),
+			'a.`currency`' => JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY'),
 			'a.`percent_commission`' => JText::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),
 			'a.`flat_commission`' => JText::_('COM_TJVENDORS_VENDORS_FLAT_COMMISSION'),
 		);

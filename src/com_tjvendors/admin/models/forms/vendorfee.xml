@@ -2,21 +2,23 @@
 <form>
   <fieldset>
 	  
-    <field name="id" type="text" 
-    default="0" 
+    <field name="id" type="int" 
+    default="1" 
     label="COM_TJVENDORS_FORM_LBL_VENDOR_ID" 
     readonly="true" 
     description="JGLOBAL_FIELD_ID_DESC" />
     
-    <field name="vendor_id" type="sql" 
+    <field name="vendor_id" type="int" 
     label="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID" 
     description="COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_ID" 
-    hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID" 
-    query="select vendor_id,vendor_name from #__vendor_information" 
-    key_field="vendor_id" 
-    value_field="vendor_name" 
-    required="required">
-      <option value=""/>
+    hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID">
+    </field>
+    
+    <field name="vendor_title" type="text" 
+    label="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_TITLE" 
+    description="COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_ID" 
+    hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_TITLE"
+    readonly="true">
     </field>
     
     <field name="currency" id="currency" 

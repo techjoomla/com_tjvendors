@@ -53,13 +53,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	}
 </script>
 <?php
-$currencies = $this->input->get('currency','','ARRAY');
-$currUrl = "";
-
-foreach($currencies as $currency)
-{
-	$currUrl .= "&currency[]=" . $currency;
-}
+$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->item->vendor_id  . '&client=' . $this->input->get('client', '', 'STRING') . $currUrl); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">

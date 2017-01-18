@@ -135,10 +135,10 @@ class TjvendorsTablePayout extends JTable
 
 		// Fetch all existed records
 		$query = $db->getQuery(true);
-		$query->select($db->qn(array('vendor_id')))
-			->from($db->qn('#__tjvendors_passbook'))
-			->where($db->qn('vendor_id') . ' = ' . $this->vendor_id)
-			->where($db->qn('client') . " =  '$this->client'");
+		$query->select($db->quoteName(array('vendor_id')))
+			->from($db->quoteName('#__tjvendors_passbook'))
+			->where($db->quoteName('vendor_id') . ' = ' . $this->vendor_id)
+			->where($db->quoteName('client') . " =  '$this->client'");
 		$db->setQuery($query);
 
 		$userexist = $this->_db->loadResult();

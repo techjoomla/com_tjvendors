@@ -62,7 +62,7 @@ class TjvendorsModelPayouts extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'pass.id';
+			$orderCol = 'vendors.vendor_id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
@@ -79,7 +79,7 @@ class TjvendorsModelPayouts extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('pass.id', 'asc');
+		parent::populateState('vendors.vendor_id', 'asc');
 	}
 
 	/**
@@ -123,7 +123,7 @@ class TjvendorsModelPayouts extends JModelList
 				$query->where('(vendors.vendor_title LIKE ' . $search .
 							'OR fees.currency LIKE' . $search .
 							'OR pass.total LIKE' . $search .
-							'OR pass.id LIKE' . $search . ')');
+							'OR pass.vendor_id LIKE' . $search . ')');
 			}
 		}
 

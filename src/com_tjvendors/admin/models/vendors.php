@@ -33,7 +33,7 @@ class TjvendorsModelVendors extends JModelList
 			$config['filter_fields'] = array(
 				'vendor_id', 'a.`vendor_id`',
 				'user_id', 'a.`user_id`',
-				'vendor_client', 'a.`vendor_client`',
+				'ordering', 'a.`ordering`',
 			);
 		}
 
@@ -146,8 +146,7 @@ class TjvendorsModelVendors extends JModelList
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(user_id.name LIKE ' . $search .
-							'OR a.vendor_id LIKE' . $search . 'OR a.vendor_title LIKE' . $search . ')');
+				$query->where('(a.vendor_id LIKE' . $search . 'OR a.vendor_title LIKE' . $search . ')');
 			}
 		}
 

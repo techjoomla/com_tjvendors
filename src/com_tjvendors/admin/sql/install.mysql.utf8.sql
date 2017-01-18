@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
   `vendor_client` varchar(255) NOT NULL,
   `currency` text NOT NULL,
   `state` tinyint(1) NOT NULL,
+  `ordering` int(11) NOT NULL,
   `checked_out` int(11) NOT NULL,
   `checked_out_time` datetime NOT NULL,
   `params` varchar(255) NOT NULL,

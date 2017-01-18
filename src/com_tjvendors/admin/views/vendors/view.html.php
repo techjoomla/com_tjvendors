@@ -124,7 +124,6 @@ class TjvendorsViewVendors extends JViewLegacy
 		return array(
 			'a.`vendor_id`' => JText::_('JGRID_HEADING_ID'),
 			'a.`user_id`' => JText::_('COM_TJVENDORS_TITLE_VENDORS'),
-			'a.`vendor_client`' => JText::_('COM_TJVENDORS_VENDORS_CLIENT'),
 		);
 	}
 }

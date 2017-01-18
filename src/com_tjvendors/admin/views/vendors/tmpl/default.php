@@ -203,13 +203,11 @@ else
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
-					<?php if (isset($this->items[0]->ordering))
-					{?>
+					<?php if (isset($this->items[0]->ordering)) :?>
 					<th width="1%" class="nowrap center hidden-phone">
 						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 					</th>
-					<?php
-					}?>
+					<?php endif;?>
 					<th width="1%" class="hidden-phone">
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
@@ -220,10 +218,10 @@ else
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_TITLE_VENDORS', 'a.`vendor_title`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_DESC_VENDOR_TITLE', 'a.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ACTION_MENU', 'a.`user_id`', $listDirn, $listOrder); ?>
+						<?php echo JText::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
 					</th>
 				</tr>
 			</thead>
@@ -292,7 +290,8 @@ else
 								</a>
 							</td>
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . $currUrl ); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a>
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . $currUrl ); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a> ||
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&client=' . $this->input->get('client', '', 'STRING')); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_PAYOUTS'); ?></a>
 							</td>
 						</tr>
 				<?php

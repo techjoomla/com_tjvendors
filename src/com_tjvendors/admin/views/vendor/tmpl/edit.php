@@ -68,6 +68,7 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 					<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->item->checked_out_time; ?>" />
 					<input type="hidden" name="jform[checked_ou]" value="<?php echo $this->item->checked_out; ?>" />
 					<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
+					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 
 						<?php echo $this->form->renderField('user_id');
 

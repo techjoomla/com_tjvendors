@@ -31,10 +31,7 @@ class TjvendorsModelVendorFees extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'id', 'b.`id`',
-				'vendor_id', 'a.`vendor_id`',
 				'currency', 'b.`currency`',
-				'client', 'a.`client`',
 				'percent_commission', 'b.`percent_commission`',
 				'flat_commission', 'b.`flat_commission`',
 			);
@@ -145,11 +142,12 @@ class TjvendorsModelVendorFees extends JModelList
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(a.vendor_id LIKE ' . $search .
-							'OR b.currency LIKE' . $search .
+				$query->where('(b.currency LIKE ' . $search .
 							'OR b.percent_commission LIKE' . $search .
 							'OR b.flat_commission LIKE' . $search . ')');
 			}
+
+			$this->search = $search;
 		}
 
 		// Add the list ordering clause.
@@ -200,13 +198,16 @@ class TjvendorsModelVendorFees extends JModelList
 
 		$resultCurrency = array_diff($curr, $currency);
 
-		foreach ($resultCurrency as $result)
+		if (empty($this->search))
 		{
-			$items[$i]->vendor_id = $this->vendor_id;
-			$items[$i]->vendor_title = $vendorTitle;
-			$items[$i]->currency = $result;
-			$items[$i]->percent_commission = 0.0;
-			$items[$i++]->flat_commission = 0.0;
+			foreach ($resultCurrency as $result)
+			{
+				$items[$i]->vendor_id = $this->vendor_id;
+				$items[$i]->vendor_title = $vendorTitle;
+				$items[$i]->currency = $result;
+				$items[$i]->percent_commission = 0.0;
+				$items[$i++]->flat_commission = 0.0;
+			}
 		}
 
 		return $items;
@@ -225,7 +226,7 @@ class TjvendorsModelVendorFees extends JModelList
 
 		if ($tjvendorsid)
 		{
-			$db = JFactory::getDBO();
+			$db = JFactory::getDbo();
 			$query = "DELETE FROM #__tjvendors_fee where id IN (" . $tjvendorsid . ")";
 			$this->_db->setQuery($query);
 

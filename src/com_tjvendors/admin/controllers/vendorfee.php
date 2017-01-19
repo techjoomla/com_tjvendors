@@ -76,22 +76,7 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	}
 
 	/**
-	 * Function to add field data
-	 *
-	 * @return  void
-	 */
-	public function add()
-	{
-		$input = JFactory::getApplication()->input;
-		$link = JRoute::_(
-		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&client=' . $input->get('client', '', 'STRING')
-		. '&curr[]=INR&curr[]=USD', false
-		);
-		$this->setRedirect($link);
-	}
-
-	/**
-	 * Function to edit field data
+	 * Function to cancel field data
 	 *
 	 * @param   integer  $key  The primary key id for the item.
 	 * 

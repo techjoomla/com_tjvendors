@@ -154,7 +154,7 @@ else
 				</label>
 				<input type="text" name="filter_search" id="filter_search"
 					
-					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_USERNAME'); ?>"
+					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_VENDOR_FEE'); ?>"
 					value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
 					title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
 			</div>
@@ -228,11 +228,11 @@ else
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'b.`id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_LBL_VENDOR_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_LBL_VENDOR_ID', 'a.`vendor_id`'); ?>
 					</th>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY', 'a.`currency`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY', 'a.`currency`'); ?>
 					</th>
 					<th class='left'>
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'b.`percent_commission`', $listDirn, $listOrder); ?>

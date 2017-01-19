@@ -106,6 +106,21 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 	}
 
 	/**
+	 * Method for back to previous page
+	 *
+	 * @return  boolean
+	 */
+	public function back()
+	{
+		// Get the input
+		$input = JFactory::getApplication()->input;
+		$pks = $input->post->get('cid', array(), 'array');
+
+		// Redirect to the list screen.
+		$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendors', false));
+	}
+
+	/**
 	 * Method for delete vendor
 	 *
 	 * @return  boolean
@@ -113,8 +128,8 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 	public function delete()
 	{
 		$input  = JFactory::getApplication()->input;
-		$client = $input->get('client', '', 'STRING');
-
+		$vendorId = $input->get('vendor_id', '', 'INT');
+		$currency = $input->get('curr', '', 'ARRAY');
 		$model      = $this->getModel('vendorfees');
 		$post       = JRequest::get('post');
 
@@ -124,12 +139,12 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 
 		if ($result)
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&client=' . $client;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $curr;
 			$msg = JText::_('COM_TJVENDORS_RECORD_DELETED');
 		}
 		else
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&client=' . $client;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $currency;
 			$msg = JText::_('COM_TJVENDORS_ERR_DELETED');
 		}
 

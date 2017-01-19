@@ -212,15 +212,19 @@ else
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 
-					<?php if (isset($this->items[0]->state)){} ?>
+					<?php if (isset($this->items[0]->state)) :?>
+					<th width="1%" class="nowrap center">
+						<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
+					</th>
+					<?php endif?>
 
-					<th class='left'>
+					<th width="10%" class="nowrap center">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
-					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_DESC_VENDOR_TITLE', 'a.`vendor_title`', $listDirn, $listOrder); ?>
+					<th width="10%" class="nowrap center">
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'a.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
-					<th class='left'>
+					<th width="20%" class="nowrap center">
 						<?php echo JText::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
 					</th>
 				</tr>
@@ -279,19 +283,24 @@ else
 							<td class="hidden-phone">
 								<?php echo JHtml::_('grid.id', $i, $item->vendor_id); ?>
 							</td>
-							<?php if (isset($this->items[0]->state)){}?>
+							<?php if (isset($this->items[0]->state)) : ?>
+							<?php $class = ($canChange) ? 'active' : 'disabled'; ?>
+							<td class="center">
+								<?php echo JHtml::_('jgrid.published', $item->state, $i, 'vendors.', $canChange, 'cb'); ?>
+							</td>
+							<?php endif; ?>
 
-							<td>
+							<td class='center'>
 								<?php echo $item->vendor_id; ?>
 							</td>
-							<td>
+							<td class='center'>
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $item->vendor_id. '&client=' . $this->input->get('client', '', 'STRING'));?>">
 									<?php echo $this->escape($item->vendor_title); ?>
 								</a>
 							</td>
-							<td>
+							<td class='center'>
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . $currUrl ); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a> ||
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&client=' . $this->input->get('client', '', 'STRING')); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_PAYOUTS'); ?></a>
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING')); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_PAYOUTS'); ?></a>
 							</td>
 						</tr>
 				<?php

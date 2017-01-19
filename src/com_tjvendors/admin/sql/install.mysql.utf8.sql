@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS `#__tjvendors_passbook` (
-`payout_id` INT(11) UNSIGNED NOT NULL  AUTO_INCREMENT,
+`id` INT(11) UNSIGNED NOT NULL  AUTO_INCREMENT,
 `vendor_id` INT(11)  NOT NULL ,
 `currency` VARCHAR(255)  NOT NULL ,
 `total` INT(11)  NOT NULL ,
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_passbook` (
 `transaction_time` datetime NOT NULL DEFAULT NOW(),
 `client` VARCHAR(255)  NOT NULL ,
 `transaction_id` VARCHAR(255)  NOT NULL ,
-PRIMARY KEY (`payout_id`) 
+PRIMARY KEY (`id`) 
 ) DEFAULT CHARSET=utf8 COMMENT='Store Information' AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `#__tjvendors_fee` (

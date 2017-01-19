@@ -32,7 +32,7 @@ class TjvendorsModelVendors extends JModelList
 		{
 			$config['filter_fields'] = array(
 				'vendor_id', 'a.`vendor_id`',
-				'user_id', 'a.`user_id`',
+				'vendor_title', 'a.`vendor_title`',
 				'ordering', 'a.`ordering`',
 			);
 		}

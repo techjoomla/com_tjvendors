@@ -83,11 +83,6 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		if (file_exists($formPath))
 		{
-			if ($canDo->get('core.create'))
-			{
-				JToolBarHelper::addNew('vendor.add', 'JTOOLBAR_NEW');
-			}
-
 			if ($canDo->get('core.edit') && isset($this->items[0]))
 			{
 				JToolBarHelper::editList('vendor.edit', 'JTOOLBAR_EDIT');
@@ -96,6 +91,13 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		if ($canDo->get('core.edit.state'))
 		{
+			if (isset($this->items[0]->state))
+			{
+				JToolBarHelper::divider();
+				JToolBarHelper::custom('vendors.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
+				JToolBarHelper::custom('vendors.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
+			}
+
 			if (isset($this->items[0]))
 			{
 				// If this component does not use state then show a direct delete button as we can not trash
@@ -122,8 +124,8 @@ class TjvendorsViewVendors extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'a.`vendor_id`' => JText::_('JGRID_HEADING_ID'),
-			'a.`user_id`' => JText::_('COM_TJVENDORS_TITLE_VENDORS'),
+			'a.`vendor_id`' => JText::_('COM_TJVENDORS_VENDORS_ID'),
+			'a.`vendor_title`' => JText::_('COM_TJVENDORS_VENDORS_VENDOR_TITLE'),
 		);
 	}
 }

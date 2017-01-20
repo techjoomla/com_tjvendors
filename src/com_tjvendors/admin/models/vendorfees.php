@@ -31,6 +31,7 @@ class TjvendorsModelVendorFees extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
+				'id', 'b.`id`',
 				'currency', 'b.`currency`',
 				'percent_commission', 'b.`percent_commission`',
 				'flat_commission', 'b.`flat_commission`',
@@ -62,7 +63,7 @@ class TjvendorsModelVendorFees extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'a.id';
+			$orderCol = 'b.id';
 		}
 
 		$this->setState('list.ordering', $orderCol);

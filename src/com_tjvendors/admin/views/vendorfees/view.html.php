@@ -131,9 +131,9 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'a.`currency`' => JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY'),
-			'a.`percent_commission`' => JText::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),
-			'a.`flat_commission`' => JText::_('COM_TJVENDORS_VENDORS_FLAT_COMMISSION'),
+			'b.`currency`' => JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY'),
+			'b.`percent_commission`' => JText::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),
+			'b.`flat_commission`' => JText::_('COM_TJVENDORS_VENDORS_FLAT_COMMISSION'),
 		);
 	}
 }

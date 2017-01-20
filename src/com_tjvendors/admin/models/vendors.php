@@ -132,7 +132,7 @@ class TjvendorsModelVendors extends JModelList
 
 		// Join over the user field 'user_id'
 		$query->select('`user_id`.name AS `user_id`');
-		$query->join('LEFT', '#__users AS `user_id` ON `user_id`.id = a.`user_id`');
+		$query->join('LEFT', $db->quoteName('#__users', 'user_id') . 'ON (' . $db->quoteName('user_id.id') . ' = ' . $db->quoteName('a.user_id') . ')');
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
@@ -146,7 +146,7 @@ class TjvendorsModelVendors extends JModelList
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(a.vendor_id LIKE' . $search . 'OR a.vendor_title LIKE' . $search . ')');
+				$query->where('(' . $db->quoteName('a.vendor_id') . ' LIKE ' . $search . 'OR' . $db->quoteName('a.vendor_title') . ' LIKE ' . $search . ')');
 			}
 		}
 

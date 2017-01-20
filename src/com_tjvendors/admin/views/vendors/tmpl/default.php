@@ -213,18 +213,18 @@ else
 					</th>
 
 					<?php if (isset($this->items[0]->state)) :?>
-					<th width="1%" class="nowrap center">
+					<th width="1%" class="center">
 						<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
 					</th>
 					<?php endif?>
 
-					<th width="10%" class="nowrap center">
+					<th width="10%" class="center">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
-					<th width="10%" class="nowrap center">
+					<th width="10%" class="center">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'a.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
-					<th width="20%" class="nowrap center">
+					<th width="20%" class="center">
 						<?php echo JText::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
 					</th>
 				</tr>

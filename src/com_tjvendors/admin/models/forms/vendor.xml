@@ -13,8 +13,8 @@
 			<option value="1">JPUBLISHED</option>
 			<option value="0">JUNPUBLISHED</option>
 		</field>
-		<field name="checked_out" type="hidden" filter="unset" />
 		<field name="checked_out" type="hidden" />
+		<field name="ordering" type="hidden" />
 		<field name="currency" type="text" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY" rows="10" cols="5" />
 	</fieldset>
 </form>

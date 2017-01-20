@@ -123,7 +123,7 @@ class TjvendorsModelVendors extends JModelList
 
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tjvendors_vendors` AS a');
+		$query->from($db->quoteName('#__tjvendors_vendors', 'a'));
 
 		if (!empty($client))
 		{
@@ -141,7 +141,7 @@ class TjvendorsModelVendors extends JModelList
 		{
 			if (stripos($search, 'id:') === 0)
 			{
-				$query->where('a.vendor_id = ' . (int) substr($search, 3));
+				$query->where($db->quoteName('a.vendor_id') . ' = ' . (int) substr($search, 3));
 			}
 			else
 			{

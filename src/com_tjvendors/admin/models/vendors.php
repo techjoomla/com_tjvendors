@@ -32,8 +32,8 @@ class TjvendorsModelVendors extends JModelList
 		{
 			$config['filter_fields'] = array(
 				'vendor_id', 'a.`vendor_id`',
-				'user_id', 'a.`user_id`',
-				'vendor_client', 'a.`vendor_client`',
+				'vendor_title', 'a.`vendor_title`',
+				'ordering', 'a.`ordering`',
 			);
 		}
 
@@ -83,28 +83,6 @@ class TjvendorsModelVendors extends JModelList
 	}
 
 	/**
-	 * Method to get a store id based on model configuration state.
-	 *
-	 * This is necessary because the model is used by the component and
-	 * different modules that might need different sets of data or different
-	 * ordering requirements.
-	 *
-	 * @param   string  $id  A prefix for the store id.
-	 *
-	 * @return   string A store id.
-	 *
-	 * @since    1.6
-	 */
-	protected function getStoreId($id = '')
-	{
-		// Compile the store id.
-		$id .= ':' . $this->getState('filter.search');
-		$id .= ':' . $this->getState('filter.state');
-
-		return parent::getStoreId($id);
-	}
-
-	/**
 	 * Build an SQL query to load the list data.
 	 *
 	 * @return   JDatabaseQuery
@@ -123,7 +101,7 @@ class TjvendorsModelVendors extends JModelList
 
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tjvendors_vendors` AS a');
+		$query->from($db->quoteName('#__tjvendors_vendors', 'a'));
 
 		if (!empty($client))
 		{
@@ -132,7 +110,7 @@ class TjvendorsModelVendors extends JModelList
 
 		// Join over the user field 'user_id'
 		$query->select('`user_id`.name AS `user_id`');
-		$query->join('LEFT', '#__users AS `user_id` ON `user_id`.id = a.`user_id`');
+		$query->join('LEFT', $db->quoteName('#__users', 'user_id') . 'ON (' . $db->quoteName('user_id.id') . ' = ' . $db->quoteName('a.user_id') . ')');
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
@@ -141,13 +119,12 @@ class TjvendorsModelVendors extends JModelList
 		{
 			if (stripos($search, 'id:') === 0)
 			{
-				$query->where('a.vendor_id = ' . (int) substr($search, 3));
+				$query->where($db->quoteName('a.vendor_id') . ' = ' . (int) substr($search, 3));
 			}
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(user_id.name LIKE ' . $search .
-							'OR a.vendor_id LIKE' . $search . 'OR a.vendor_title LIKE' . $search . ')');
+				$query->where('(' . $db->quoteName('a.vendor_id') . ' LIKE ' . $search . 'OR' . $db->quoteName('a.vendor_title') . ' LIKE ' . $search . ')');
 			}
 		}
 

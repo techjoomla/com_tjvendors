@@ -115,17 +115,4 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		$this->extra_sidebar = '';
 	}
-
-	/**
-	 * Method to ord$this->itemer fields
-	 *
-	 * @return void
-	 */
-	protected function getSortFields()
-	{
-		return array(
-			'a.`vendor_id`' => JText::_('COM_TJVENDORS_VENDORS_ID'),
-			'a.`vendor_title`' => JText::_('COM_TJVENDORS_VENDORS_VENDOR_TITLE'),
-		);
-	}
 }

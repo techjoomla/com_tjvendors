@@ -129,7 +129,14 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 	{
 		$input  = JFactory::getApplication()->input;
 		$vendorId = $input->get('vendor_id', '', 'INT');
-		$currency = $input->get('curr', '', 'ARRAY');
+		$currencies = $input->get('curr', '', 'ARRAY');
+		$currUrl = "";
+
+		foreach ($currencies as $currency)
+		{
+			$currUrl .= "&curr[]=" . $currency;
+		}
+
 		$model      = $this->getModel('vendorfees');
 		$post       = JRequest::get('post');
 
@@ -139,12 +146,12 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 
 		if ($result)
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $curr;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $currUrl;
 			$msg = JText::_('COM_TJVENDORS_RECORD_DELETED');
 		}
 		else
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $currency;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $currUrl;
 			$msg = JText::_('COM_TJVENDORS_ERR_DELETED');
 		}
 

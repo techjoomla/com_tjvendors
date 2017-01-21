@@ -40,6 +40,10 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 		$this->input = JFactory::getApplication()->input;
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
+		$vendorDetail = $TjvendorsModelVendor->getItems();
+		$this->vendor_details = $vendorDetail;
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

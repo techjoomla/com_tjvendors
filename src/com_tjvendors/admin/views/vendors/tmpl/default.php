@@ -31,8 +31,6 @@ if ($saveOrder)
 	$saveOrderingUrl = 'index.php?option=com_tjvendors&task=vendors.saveOrderAjax&tmpl=component';
 	JHtml::_('sortablelist.sortable', 'vendorList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
-
-$sortFields = $this->getSortFields();
 ?>
 <script type="text/javascript">
 	Joomla.orderTable = function ()
@@ -165,27 +163,6 @@ else
 				</label>
 				<?php echo $this->pagination->getLimitBox(); ?>
 			</div>
-			<div class="btn-group pull-right hidden-phone">
-				<label for="directionTable" class="element-invisible">
-					<?php echo JText::_('JFIELD_ORDERING_DESC'); ?>
-				</label>
-				<select name="directionTable" id="directionTable" class="input-medium" onchange="Joomla.orderTable()">
-					<option value=""><?php echo JText::_('JFIELD_ORDERING_DESC'); ?></option>
-					<option value="asc" <?php echo $listDirn == 'asc' ? 'selected="selected"' : ''; ?>>
-						<?php echo JText::_('JGLOBAL_ORDER_ASCENDING'); ?>
-					</option>
-					<option value="desc" <?php echo $listDirn == 'desc' ? 'selected="selected"' : ''; ?>>
-						<?php echo JText::_('JGLOBAL_ORDER_DESCENDING'); ?>
-					</option>
-				</select>
-			</div>
-			<div class="btn-group pull-right">
-				<label for="sortTable" class="element-invisible"><?php echo JText::_('JGLOBAL_SORT_BY'); ?></label>
-				<select name="sortTable" id="sortTable" class="input-medium" onchange="Joomla.orderTable()">
-					<option value=""><?php echo JText::_('JGLOBAL_SORT_BY'); ?></option>
-					<?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $listOrder); ?>
-				</select>
-			</div>
 		</div>
 		<div class="clearfix"></div>
 		<?php
@@ -203,27 +180,29 @@ else
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
-					<?php if (isset($this->items[0]->ordering))
-					{?>
+					<?php if (isset($this->items[0]->ordering)) :?>
 					<th width="1%" class="nowrap center hidden-phone">
 						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 					</th>
-					<?php
-					}?>
+					<?php endif;?>
 					<th width="1%" class="hidden-phone">
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 
-					<?php if (isset($this->items[0]->state)){} ?>
+					<?php if (isset($this->items[0]->state)) :?>
+					<th width="1%" class="center">
+						<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
+					</th>
+					<?php endif?>
 
-					<th class='left'>
+					<th width="10%" class="center">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
-					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_TITLE_VENDORS', 'a.`vendor_title`', $listDirn, $listOrder); ?>
+					<th width="10%" class="center">
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'a.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
-					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ACTION_MENU', 'a.`user_id`', $listDirn, $listOrder); ?>
+					<th width="20%" class="center">
+						<?php echo JText::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
 					</th>
 				</tr>
 			</thead>
@@ -281,18 +260,24 @@ else
 							<td class="hidden-phone">
 								<?php echo JHtml::_('grid.id', $i, $item->vendor_id); ?>
 							</td>
-							<?php if (isset($this->items[0]->state)){}?>
+							<?php if (isset($this->items[0]->state)) : ?>
+							<?php $class = ($canChange) ? 'active' : 'disabled'; ?>
+							<td class="center">
+								<?php echo JHtml::_('jgrid.published', $item->state, $i, 'vendors.', $canChange, 'cb'); ?>
+							</td>
+							<?php endif; ?>
 
-							<td>
+							<td class='center'>
 								<?php echo $item->vendor_id; ?>
 							</td>
-							<td>
+							<td class='center'>
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $item->vendor_id. '&client=' . $this->input->get('client', '', 'STRING'));?>">
 									<?php echo $this->escape($item->vendor_title); ?>
 								</a>
 							</td>
-							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . $currUrl ); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a>
+							<td class='center'>
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . $currUrl ); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a> ||
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING')); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_PAYOUTS'); ?></a>
 							</td>
 						</tr>
 				<?php

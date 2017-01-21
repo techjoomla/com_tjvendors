@@ -48,6 +48,8 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 				<fieldset class="adminform">
 					<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor->vendor_id; ?>" />
 					<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->vendor->vendor_client; ?>" />
+					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
+
 						<?php echo $this->form->renderField('vendor_title'); ?>
 						<?php echo $this->form->renderField('vendor_description'); ?>
 						<?php echo $this->form->renderField('vendor_logo'); ?>

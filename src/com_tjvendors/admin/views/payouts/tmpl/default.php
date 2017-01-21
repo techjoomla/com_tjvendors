@@ -93,7 +93,6 @@ $sortFields = $this->getSortFields();
 		return false;
 	};
 
-
 </script>
 
 <?php
@@ -123,6 +122,7 @@ else
 <?php
 }?>
 	<div id="filter-bar" class="btn-toolbar">
+
 		<div class="filter-search btn-group pull-left">
 			<label for="filter_search" class="element-invisible">
 				<?php echo JText::_('JSEARCH_FILTER'); ?>
@@ -132,6 +132,8 @@ else
 				value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
 				title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
 		</div>
+
+
 		<div class="btn-group pull-left">
 			<button class="btn hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>">
 				<i class="icon-search"></i>
@@ -140,12 +142,25 @@ else
 				<i class="icon-remove"></i>
 			</button>
 		</div>
+
 		<div class="btn-group pull-right hidden-phone">
 			<label for="limit" class="element-invisible">
 				<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
 			</label>
 			<?php echo $this->pagination->getLimitBox(); ?>
 		</div>
+
+		<div class="btn-group pull-right hidden-phone">
+			<?php // Making custom filter list
+				$vendorList[]=JText::_('select an option');
+				$vendorList[]=JText::_('JFILTER_PAYOUT_ALL_VENDORS');
+				foreach ($this->vendor_details as $vendor)
+				{
+					$vendorList[]=$vendor;
+				}
+			 echo JHtml::_('select.genericlist', $vendorList, "filter_vendorId", 'class="input-medium" size="1" onchange="jQuery(\'#vendor_id\').val(jQuery(this).val());;jQuery(\'#task\').val(\'payouts.getRedirectToList\');document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor'));?>
+		</div>
+
 		<div class="btn-group pull-right hidden-phone">
 			<label for="directionTable" class="element-invisible">
 				<?php echo JText::_('JFIELD_ORDERING_DESC'); ?>
@@ -301,11 +316,11 @@ else
 		</table>
 		<?php
 	}?>
-		<input type="hidden" name="task" value=""/>
+		<input type="hidden" id="vendor_id" name="vendor_id" value="<?php echo $item->vendor_id; ?>"/>
+		<input type="hidden" id="task" name="task" value="payouts.getRedirectToList"/>
 		<input type="hidden" name="boxchecked" value="0"/>
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
-		<input type="hidden" name="total" value="123"/>
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

@@ -17,7 +17,7 @@ JHtml::_('behavior.keepalive');
 
 // Import CSS
 $document = JFactory::getDocument();
-$document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
+
 
 ?>
 <script type="text/javascript">
@@ -56,10 +56,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 </script>
 
 <form action="
-<?php
-echo JRoute::_('index.php?option=com_tjvendors&layout=edit&id=' . (int) $this->id . '&vendor_id=' . (int) $this->item->vendor_id);
-?>"
-	method="post" enctype="multipart/form-data" name="vendor-form" id="vendor-form" class="form-validate">
+<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&fee_id=' . (int) $this->fee_id . '&vendor_id=' . (int) $this->item->vendor_id);?>"
+method="post" enctype="multipart/form-data" name="vendor-form" id="vendor-form" class="form-validate">
 
 	<div class="form-horizontal">
 		<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'personal')); ?>
@@ -103,7 +101,7 @@ echo JRoute::_('index.php?option=com_tjvendors&layout=edit&id=' . (int) $this->i
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="jform[currency]" value="<?php echo $this->curr;?>" />
 		<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id;?>" />
-		<input type="hidden" name="jform[id]" value="<?php echo $this->id; ?>" />
+		<input type="hidden" name="jform[fee_id]" value="<?php echo $this->fee_id; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

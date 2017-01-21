@@ -31,7 +31,7 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		// Check for request forgeries
 		Jsession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		// Get id(s)
+		// Get fee_id
 		$pks = $this->input->post->get('cid', array(), 'array');
 
 		try

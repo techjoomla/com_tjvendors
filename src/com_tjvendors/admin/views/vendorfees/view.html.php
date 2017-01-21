@@ -71,7 +71,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		$state = $this->get('State');
 		$canDo = TjvendorsHelpersTjvendors::getActions();
 
-		JToolBarHelper::custom('vendorfees.back', 'publish.png', '', 'Back', false);
+		JToolBarHelper::custom('vendorfees.back', 'chevron-left.png', '', 'Back', false);
 
 		if (JVERSION >= '3.0')
 		{

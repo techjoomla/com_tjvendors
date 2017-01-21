@@ -40,22 +40,24 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	/**
 	 * Gets the URL arguments to append to an item redirect.
 	 *
-	 * @param   integer  $recordId  The primary key id for the item.
-	 * @param   string   $urlVar    The name of the URL variable for the id.
+	 * @param   integer  $recordId  The primary key fee_id for the item.
+	 * @param   string   $urlVar    The name of the URL variable for the fee_id.
 	 *
 	 * @return  string  The arguments to append to the redirect URL.
 	 *
 	 * @since   1.6
 	 */
-	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'fee_id')
 	{
 		$input = JFactory::getApplication()->input;
 		$cid      = $input->post->get('cid', array(), 'array');
 		$formData = new JRegistry($input->get('jform', '', 'array'));
 		$currency = $formData->get('currency');
 		$vendor_id = (int) $formData->get('vendor_id');
+		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
+
 		$append = parent::getRedirectToItemAppend($recordId);
-		$append .= '&vendor_id=' . $vendor_id . '&currency=' . $currency;
+		$append .= '&fee_id=' . $feeId . '&vendor_id=' . $vendor_id . '&currency=' . $currency;
 
 		return $append;
 	}
@@ -76,20 +78,19 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	}
 
 	/**
-	 * Function to cancel field data
-	 *
-	 * @param   integer  $key  The primary key id for the item.
+	 * Function to cancel button redirection
+	 * @param   integer  $key  The primary key fee_id for the item.
 	 * 
 	 * @return  void
 	 */
 	public function cancel($key = null)
 	{
 		$input = JFactory::getApplication()->input;
-
+		$currencies = $this->input->get('currency', '', 'ARRAY');
 		$cid      = $input->post->get('cid', array(), 'array');
 		$formData = new JRegistry($input->get('jform', '', 'array'));
-		$recordId = (int) $formData->get('vendor_id');
-		$link = JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $recordId . '&curr[]=INR&curr[]=USD', false
+		$vendorId = (int) $formData->get('vendor_id');
+		$link = JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&curr[]=INR&curr[]=USD', false
 		);
 		$this->setRedirect($link);
 	}
@@ -97,7 +98,7 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	/**
 	 * Function to edit field data
 	 *
-	 * @param   integer  $key  The primary key id for the item.
+	 * @param   integer  $key  The primary key fee_id for the item.
 	 * 
 	 * @return  void
 	 */
@@ -105,13 +106,13 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	{
 		$input    = JFactory::getApplication()->input;
 		$cid      = $input->post->get('cid', array(), 'array');
-		$recordId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
+		$vendorId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
 		$currency = (STRING) (count($cid) ? $cid[0] : $input->get('currency'));
-		$id = (int) (count($cid) ? $cid[0] : $input->getInt('id'));
+		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
 
 		$link = JRoute::_(
-		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&vendor_id=' . $recordId .
-		'&currency=' . $currency . '&id=' . $id, false
+		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&fee_id=' . $feeId .'&vendor_id=' . $vendorId .
+		'&currency=' . $currency , false
 		);
 		$this->setRedirect($link);
 	}

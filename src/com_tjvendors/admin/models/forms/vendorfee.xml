@@ -2,7 +2,7 @@
 <form>
   <fieldset>
 	  
-    <field name="id" type="int" 
+    <field name="fee_id" type="int" 
     default="1" 
     label="COM_TJVENDORS_FORM_LBL_VENDOR_ID" 
     readonly="true" 

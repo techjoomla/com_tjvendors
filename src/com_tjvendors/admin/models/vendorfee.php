@@ -136,7 +136,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
-		$query->select($db->quoteName('id'));
+		$query->select($db->quoteName('fee_id'));
 		$query->from($db->quoteName('#__tjvendors_vendors'));
 		$query->where($db->quoteName('vendor_id') . '=' . $vendorId);
 		$query->where($db->quoteName('currency') . '=' . $currency);

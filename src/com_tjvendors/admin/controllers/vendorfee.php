@@ -79,6 +79,7 @@ class TjvendorsControllerVendorFee extends JControllerForm
 
 	/**
 	 * Function to cancel button redirection
+	 * 
 	 * @param   integer  $key  The primary key fee_id for the item.
 	 * 
 	 * @return  void
@@ -111,8 +112,8 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
 
 		$link = JRoute::_(
-		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&fee_id=' . $feeId .'&vendor_id=' . $vendorId .
-		'&currency=' . $currency , false
+		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&fee_id=' . $feeId . '&vendor_id=' . $vendorId .
+		'&currency=' . $currency, false
 		);
 		$this->setRedirect($link);
 	}

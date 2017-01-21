@@ -253,7 +253,7 @@ class TjvendorsTablevendorfee extends JTable
 	 * Returns the parent asset's fee_id. If you have a tree structure, retrieve the parent's id using the external key field
 	 *
 	 * @param   JTable   $table  Table name
-	 * @param   integer  $id     fee_id
+	 * @param   integer  $feeId  fee_id
 	 *
 	 * @see JTable::_getAssetParentId
 	 *

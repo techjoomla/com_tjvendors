@@ -21,11 +21,6 @@ $document = JFactory::getDocument();
 
 ?>
 <script type="text/javascript">
-	js = jQuery.noConflict();
-	js(document).ready(function ()
-	{
-	});
-		
 
 	Joomla.submitbutton = function (task)
 	{
@@ -65,7 +60,6 @@ method="post" enctype="multipart/form-data" name="vendor-form" id="vendor-form" 
 		<div class="row-fluid">
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
-					
 
 						<?php echo $this->form->renderField('vendor_title'); ?>
 						<div class = "control-group" >

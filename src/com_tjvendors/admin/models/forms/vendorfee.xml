@@ -45,7 +45,9 @@
     class="inputbox validate-numeric" 
     label="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION" 
     description="COM_TJVENDORS_FORM_DESC_VENDOR_PERCENT_COMMISSION" 
-    hint="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION" 
+    hint="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION"
+    min="0"
+    max="100"
     filter="safehtml" />
     
     <field name="flat_commission" 

@@ -152,8 +152,8 @@ else
 
 		<div class="btn-group pull-right hidden-phone">
 			<?php // Making custom filter list
-				$vendorList[]=JText::_('select an option');
 				$vendorList[]=JText::_('JFILTER_PAYOUT_ALL_VENDORS');
+
 				foreach ($this->vendor_details as $vendor)
 				{
 					$vendorList[]=$vendor;

@@ -31,7 +31,7 @@ class TjvendorsModelVendorFees extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'fee_id', 'b.`fee_id`',
+				'id', 'b.`id`',
 				'currency', 'b.`currency`',
 				'percent_commission', 'b.`percent_commission`',
 				'flat_commission', 'b.`flat_commission`',
@@ -63,7 +63,7 @@ class TjvendorsModelVendorFees extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'b.fee_id';
+			$orderCol = 'b.id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
@@ -80,7 +80,7 @@ class TjvendorsModelVendorFees extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('b.fee_id', 'asc');
+		parent::populateState('b.id', 'asc');
 	}
 
 	/**
@@ -123,7 +123,7 @@ class TjvendorsModelVendorFees extends JModelList
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
-		$query->select($db->quoteName(array('a.vendor_id','a.vendor_title','b.percent_commission','b.flat_commission','b.fee_id','b.currency')));
+	$query->select($db->quoteName(array('a.vendor_id','a.vendor_title','a.currency','b.percent_commission','b.flat_commission','b.id','b.currency')));
 
 		$query->from($db->quoteName('#__tjvendors_fee', 'b'));
 
@@ -136,9 +136,9 @@ class TjvendorsModelVendorFees extends JModelList
 
 		if (!empty($search))
 		{
-			if (stripos($search, 'fee_id:') === 0)
+			if (stripos($search, 'id:') === 0)
 			{
-				$query->where($db->quoteName('b.fee_id') . ' = ' . (int) substr($search, 3));
+				$query->where($db->quoteName('b.id') . ' = ' . (int) substr($search, 3));
 			}
 			else
 			{
@@ -181,14 +181,14 @@ class TjvendorsModelVendorFees extends JModelList
 		$VendorFeeModel = JModelLegacy::getInstance('VendorFee', 'TjvendorsModel');
 
 		$input = JFactory::getApplication()->input;
-		$curr = $input->get('curr', '', 'ARRAY');
+		$curr = $input->get('currency', '', 'ARRAY');
 		$currency = array();
 
 		foreach ($items as $key => $item)
 		{
-			if (empty($item->fee_id))
+			if (empty($item->id))
 			{
-				$item->fee_id = $VendorFeeModel->getVendorFeeId($item->vendor_id, $item->currency);
+				$item->id = $VendorFeeModel->getVendorFeeId($item->vendor_id, $item->currency);
 			}
 
 			$currency[] = $item->currency;
@@ -235,7 +235,7 @@ class TjvendorsModelVendorFees extends JModelList
 			$query = $db->getQuery(true);
 
 			$query->delete($db->quoteName('#__tjvendors_fee'));
-			$query->where($db->quoteName('fee_id') . ' IN (' . $tjvendorsid . ')');
+			$query->where($db->quoteName('id') . ' IN (' . $tjvendorsid . ')');
 			$this->_db->setQuery($query);
 
 			if (!$this->_db->execute())

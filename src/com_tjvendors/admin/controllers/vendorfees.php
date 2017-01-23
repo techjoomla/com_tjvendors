@@ -115,9 +115,10 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		// Get the input
 		$input = JFactory::getApplication()->input;
 		$pks = $input->post->get('cid', array(), 'array');
+		$client = $input->get('client', '', 'STRING');
 
 		// Redirect to the list screen.
-		$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendors', false));
+		$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $client, false));
 	}
 
 	/**
@@ -128,13 +129,16 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 	public function delete()
 	{
 		$input  = JFactory::getApplication()->input;
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$vendorDetail = $TjvendorsModelVendor->getItem();
 		$vendorId = $input->get('vendor_id', '', 'INT');
-		$currencies = $input->get('curr', '', 'ARRAY');
-		$currUrl = "";
+		$VendorCurrency = $vendorDetail->currency;
+		$currencies = json_decode($VendorCurrency);
 
 		foreach ($currencies as $currency)
 		{
-			$currUrl .= "&curr[]=" . $currency;
+		$curr .= "&currency[]=" . $currency;
 		}
 
 		$model      = $this->getModel('vendorfees');
@@ -146,12 +150,12 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 
 		if ($result)
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $currUrl;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $curr;
 			$msg = JText::_('COM_TJVENDORS_RECORD_DELETED');
 		}
 		else
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $currUrl;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $curr;
 			$msg = JText::_('COM_TJVENDORS_ERR_DELETED');
 		}
 

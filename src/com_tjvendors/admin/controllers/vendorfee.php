@@ -47,17 +47,17 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	 *
 	 * @since   1.6
 	 */
-	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'fee_id')
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
 	{
 		$input = JFactory::getApplication()->input;
 		$cid      = $input->post->get('cid', array(), 'array');
 		$formData = new JRegistry($input->get('jform', '', 'array'));
 		$currency = $formData->get('currency');
 		$vendor_id = (int) $formData->get('vendor_id');
-		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
-
+		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('id'));
+		$client = (STRING) (count($cid) ? $cid[0] : $input->get('client'));
 		$append = parent::getRedirectToItemAppend($recordId);
-		$append .= '&fee_id=' . $feeId . '&vendor_id=' . $vendor_id . '&currency=' . $currency;
+		$append .= '&client=' . $client . '&vendor_id=' . $vendor_id . '&currency=' . $currency;
 
 		return $append;
 	}
@@ -87,12 +87,22 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	public function cancel($key = null)
 	{
 		$input = JFactory::getApplication()->input;
-		$currencies = $this->input->get('currency', '', 'ARRAY');
 		$cid      = $input->post->get('cid', array(), 'array');
 		$formData = new JRegistry($input->get('jform', '', 'array'));
 		$vendorId = (int) $formData->get('vendor_id');
-		$link = JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&curr[]=INR&curr[]=USD', false
-		);
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$vendorDetail = $TjvendorsModelVendor->getItem();
+		$VendorCurrency = $vendorDetail->currency;
+		$currencies = json_decode($VendorCurrency);
+		$client = $this->input->get('client', '', 'STRING');
+
+		foreach ($currencies as $currency)
+		{
+		$curr .= "&currency[]=" . $currency;
+		}
+
+		$link = JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $client . '&vendor_id=' . $vendorId . $curr, false);
 		$this->setRedirect($link);
 	}
 
@@ -110,9 +120,10 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$vendorId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
 		$currency = (STRING) (count($cid) ? $cid[0] : $input->get('currency'));
 		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
-
+		$currencies = json_decode($VendorCurrency);
+		$client = $this->input->get('client', '', 'STRING');
 		$link = JRoute::_(
-		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&fee_id=' . $feeId . '&vendor_id=' . $vendorId .
+		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&client=' . $client . '&id=' . $feeId . '&vendor_id=' . $vendorId .
 		'&currency=' . $currency, false
 		);
 		$this->setRedirect($link);

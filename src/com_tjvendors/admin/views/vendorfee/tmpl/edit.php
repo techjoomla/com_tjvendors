@@ -56,7 +56,7 @@ $document = JFactory::getDocument();
 </script>
 
 <form action="
-<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&fee_id=' . (int) $this->fee_id . '&vendor_id=' . (int) $this->item->vendor_id);?>"
+<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client=' . $this->input->get('client', '', 'STRING') . '&fee_id=' . (int) $this->id . '&vendor_id=' . (int) $this->item->vendor_id);?>"
 method="post" enctype="multipart/form-data" name="vendor-form" id="vendor-form" class="form-validate">
 
 	<div class="form-horizontal">
@@ -101,7 +101,7 @@ method="post" enctype="multipart/form-data" name="vendor-form" id="vendor-form" 
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="jform[currency]" value="<?php echo $this->curr;?>" />
 		<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id;?>" />
-		<input type="hidden" name="jform[fee_id]" value="<?php echo $this->fee_id; ?>" />
+		<input type="hidden" name="jform[id]" value="<?php echo $this->id; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

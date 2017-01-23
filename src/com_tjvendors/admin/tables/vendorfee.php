@@ -26,7 +26,7 @@ class TjvendorsTablevendorfee extends JTable
 	public function __construct(&$db)
 	{
 	JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendorfee', array('typeAlias' => 'com_tjvendors.vendorfee'));
-	parent::__construct('#__tjvendors_fee', 'fee_id', $db);
+	parent::__construct('#__tjvendors_fee', 'id', $db);
 	}
 
 	/**
@@ -56,13 +56,13 @@ class TjvendorsTablevendorfee extends JTable
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendorfee.' . $array['fee_id']))
+		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendorfee.' . $array['id']))
 		{
 			$actions = JAccess::getActionsFromFile(
 				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',
 				"/access/section[@name='vendor']/"
 			);
-			$default_actions = JAccess::getAssetRules('com_tjvendors.vendorfee.' . $array['fee_id'])->getData();
+			$default_actions = JAccess::getAssetRules('com_tjvendors.vendorfee.' . $array['id'])->getData();
 			$array_jaccess   = array();
 
 			foreach ($actions as $action)
@@ -116,7 +116,7 @@ class TjvendorsTablevendorfee extends JTable
 	public function check()
 	{
 		// If there is an ordering column and this is a new row then get the next ordering value
-		if (property_exists($this, 'ordering') && $this->fee_id == 0)
+		if (property_exists($this, 'ordering') && $this->id == 0)
 		{
 			$this->ordering = self::getNextOrder();
 		}
@@ -162,7 +162,7 @@ class TjvendorsTablevendorfee extends JTable
 	 * @param   mixed    $pks     An optional array of primary key values to update.  If not
 	 *                            set the instance property value is used.
 	 * @param   integer  $state   The publishing state. eg. [0 = unpublished, 1 = published]
-	 * @param   integer  $userId  The user fee_id of the user performing the operation.
+	 * @param   integer  $userId  The user id of the user performing the operation.
 	 *
 	 * @return   boolean  True on success.
 	 *
@@ -250,16 +250,16 @@ class TjvendorsTablevendorfee extends JTable
 	}
 
 	/**
-	 * Returns the parent asset's fee_id. If you have a tree structure, retrieve the parent's id using the external key field
+	 * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
 	 *
 	 * @param   JTable   $table  Table name
-	 * @param   integer  $feeId  fee_id
+	 * @param   integer  $id     Id
 	 *
 	 * @see JTable::_getAssetParentId
 	 *
 	 * @return mixed The id on success, false on failure.
 	 */
-	protected function _getAssetParentId(JTable $table = null, $feeId = null)
+	protected function _getAssetParentId(JTable $table = null, $id = null)
 	{
 		// We will retrieve the parent-asset from the Asset-table
 		$assetParent = JTable::getInstance('Asset');
@@ -271,16 +271,16 @@ class TjvendorsTablevendorfee extends JTable
 		$assetParent->loadByName('com_tjvendors');
 
 		// Return the found asset-parent-id
-		if ($assetParent->fee_id)
+		if ($assetParent->id)
 		{
-			$assetParentId = $assetParent->fee_id;
+			$assetParentId = $assetParent->id;
 		}
 
 		return $assetParentId;
 	}
 
 	/**
-	 * Delete a record by fee_id
+	 * Delete a record by id
 	 *
 	 * @param   mixed  $pk  Primary key value to delete. Optional
 	 *

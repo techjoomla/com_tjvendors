@@ -2,7 +2,7 @@
 <form>
   <fieldset>
 	  
-    <field name="fee_id" type="int" 
+    <field name="id" type="int" 
     default="1" 
     label="COM_TJVENDORS_FORM_LBL_VENDOR_ID" 
     readonly="true" 
@@ -20,6 +20,19 @@
     hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_TITLE"
     readonly="true">
     </field>
+    <field name="client"
+    type="text"
+    label="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT" 
+    description="COM_TJVENDORS_FORM_DESC_VENDOR_CLIENT" 
+    hint="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT" 
+    menu_published="0" 
+    filter="raw" 
+    directory_stripext="true" 
+    directory_hidenode="true" 
+    directory_hidedefault="true" 
+    heading="h4" close="true" 
+    option_on="Yes" option_off="Yes" 
+    toggle_default_value="0" />
     
     <field name="currency" id="currency" 
     type="text" 
@@ -30,9 +43,9 @@
     type="number" 
     size="40" 
     class="inputbox validate-numeric" 
-    label="COM_TJVENDORS_FORM_LBL_VENDOR_PERCENT_COMMISSION" 
+    label="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION" 
     description="COM_TJVENDORS_FORM_DESC_VENDOR_PERCENT_COMMISSION" 
-    hint="COM_TJVENDORS_FORM_LBL_VENDOR_PERCENT_COMMISSION" 
+    hint="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION" 
     filter="safehtml" />
     
     <field name="flat_commission" 

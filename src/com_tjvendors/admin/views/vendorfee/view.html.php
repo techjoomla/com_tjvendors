@@ -38,7 +38,7 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		$input = JFactory::getApplication()->input;
 		$this->curr = $input->get('currency', '', 'STRING');
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
-		$this->fee_id = $input->get('fee_id', '', 'INT');
+		$this->fee_id = $input->get('id', '', 'INT');
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
@@ -66,7 +66,7 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		JFactory::getApplication()->input->set('hidemainmenu', true);
 
 		$user  = JFactory::getUser();
-		$isNew = ($this->item->fee_id == 0);
+		$isNew = ($this->item->id == 0);
 
 		$input = JFactory::getApplication()->input;
 		$this->full_client = $input->get('client', '', 'STRING');
@@ -87,7 +87,7 @@ class TjvendorsViewVendorFee extends JViewLegacy
 			JToolBarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');
 		}
 
-		if (empty($this->item->fee_id))
+		if (empty($this->item->id))
 		{
 			JToolBarHelper::cancel('vendorfee.cancel', 'JTOOLBAR_CANCEL');
 		}

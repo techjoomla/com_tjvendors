@@ -21,7 +21,7 @@ $document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/
 
 
 $user      = JFactory::getUser();
-$userId    = $user->get('fee_id');
+$userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
@@ -63,11 +63,11 @@ $sortFields = $this->getSortFields();
 		});
 	});
 
-	window.toggleField = function (fee_id, task, field)
+	window.toggleField = function (id, task, field)
 	{
 		var f = document.adminForm,
 			i = 0, cbx,
-			cb = f[ fee_id ];
+			cb = f[ id ];
 
 		if (!cb) return false;
 
@@ -129,7 +129,7 @@ if (!empty($this->extra_sidebar))
 <form
 action="
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->items[0]->vendor_id . '&curr[]=INR&curr[]=USD'); ?>" 
+echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $this->input->get('client', '', 'STRING') . '&vendor_id=' . $this->items[0]->vendor_id . '&currency='); ?>" 
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
@@ -225,7 +225,7 @@ else
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'b.`fee_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'b.`id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_LBL_VENDOR_ID', 'a.`vendor_id`'); ?>
@@ -296,7 +296,7 @@ else
 						}?>
 
 							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->fee_id); ?>
+								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 							</td>
 							<td>
 								<?php echo $item->vendor_id; ?>
@@ -307,7 +307,7 @@ else
 							<td>
 								<a href="
 								<?php 
-								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . '&currency=' . $item->currency . '&fee_id=' . $item->fee_id);?>">
+								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . '&currency=' . $item->currency . '&fee_id=' . $item->id);?>">
 								<?php echo $item->currency; ?>
 								</a>
 							</td>

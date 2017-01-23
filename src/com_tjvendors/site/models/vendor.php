@@ -211,32 +211,6 @@ class TjvendorsModelVendor extends JModelAdmin
 	}
 
 	/**
-	 * Prepare and sanitise the table prior to saving.
-	 *
-	 * @param   JTable  $table  Table Object
-	 *
-	 * @return void
-	 *
-	 * @since    1.6
-	 */
-	protected function prepareTable($table)
-	{
-		jimport('joomla.filter.output');
-
-		if (empty($table->vendor_id))
-		{
-			// Set ordering to the last item if not set
-			if (@$table->ordering === '')
-			{
-				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__tjvendors_vendors');
-				$max = $db->loadResult();
-				$table->ordering = $max + 1;
-			}
-		}
-	}
-
-	/**
 	 * Method for save user specific %commission, flat commission, client
 	 *
 	 * @param   Array  $data  Data

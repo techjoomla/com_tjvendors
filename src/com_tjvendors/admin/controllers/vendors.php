@@ -113,14 +113,7 @@ class TjvendorsControllerVendors extends JControllerAdmin
 	{
 		$input  = JFactory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
-		$currencies = $input->get('currency', '', 'ARRAY');
-
-		$currUrl = "";
-
-		foreach ($currencies as $currency)
-		{
-			$currUrl .= "&currency[]=" . $currency;
-		}
+		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 
 		$model      = $this->getModel('vendors');
 		$post       = JRequest::get('post');
@@ -141,5 +134,20 @@ class TjvendorsControllerVendors extends JControllerAdmin
 		}
 
 		$this->setRedirect($redirect, $msg);
+	}
+
+	/**
+	 * Method for publish vendor
+	 *
+	 * @return  boolean
+	 */
+	public function publish()
+	{
+		$input  = JFactory::getApplication()->input;
+		$client = $input->get('client', '', 'STRING');
+		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
+		parent::publish();
+		$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client . $currUrl;
+		$this->setRedirect($redirect);
 	}
 }

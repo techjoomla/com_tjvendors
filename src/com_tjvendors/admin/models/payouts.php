@@ -30,10 +30,11 @@ class TjvendorsModelPayouts extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'payout_id', 'a.`payout_id`',
-				'vendor_id', 'a.`vendor_id`',
-				'total', 'a.`total`',
-				'currency', 'a.`currency`',
+				'id', 'pass.`id`',
+				'vendor_id', 'vendors.`vendor_id`',
+				'total', 'pass.`total`',
+				'currency', 'fees.`currency`',
+				'ordering', 'pass.`ordering`',
 			);
 		}
 
@@ -62,10 +63,22 @@ class TjvendorsModelPayouts extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'a.payout_id';
+			$orderCol = 'vendors.vendor_id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
+
+		// Filter vendor
+		$vendorId = $app->getUserStateFromRequest($this->context . '.title', 'filter_vendorId', '', 'string');
+		$this->setState('filter.vendor', $vendorId);
+
+		// Getting client from url
+		$client = $app->getUserStateFromRequest($this->context, 'client');
+		$this->setState('client', $client);
+
+		// Getting vendor from url
+		$vendor_id = $app->getUserStateFromRequest($this->context, 'vendor_id');
+		$this->setState('vendor_id', $vendor_id);
 
 		// Load the filter state.
 		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
@@ -79,7 +92,7 @@ class TjvendorsModelPayouts extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('a.payout_id', 'asc');
+		parent::populateState('vendors.vendor_id', 'asc');
 	}
 
 	/**
@@ -89,46 +102,54 @@ class TjvendorsModelPayouts extends JModelList
 	 *
 	 * @since    1.6
 	 */
-	protected function getListQuery()
+
+	public function getListQuery()
 	{
-		// Create a new query object.
-		$db    = $this->getDbo();
+		$vendor_id = $this->getState('vendor_id');
+		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$subQuery = $db->getQuery(true);
+		$client = $this->getState('client');
+		$query->select($db->quoteName(array('vendors.vendor_id','pass.id','fees.currency','vendors.vendor_title','pass.total')));
+		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
+		$query->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
+			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('fees.vendor_id') . ')');
+		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
+			' ON (' . $db->quoteName('fees.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') .
+			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')');
 
-		// Sub query
-		$subQuery->select('max(payout_id)')
-				->from($db->quoteName('#__tjvendors_passbook'))
-				->group($db->quoteName('vendor_id'));
+		if (!empty($client))
+		{
+		$query->where($db->quoteName('vendors.vendor_client') . ' = ' . "'$client'" . 'AND' . $db->quoteName('pass.id') . ' is not null');
+		}
 
-		// Select the required fields from the table.
-		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tjvendors_passbook` AS a');
-		$query->where($db->quoteName('a.payout_id') . ' IN (' . $subQuery . ')');
-
-		// Join over the user field 'user_id'
-		$query->select('`user_id`.name AS `user_id`');
-		$query->join('LEFT', '#__users AS `user_id` ON `user_id`.id = a.`vendor_id`');
+		$db->setQuery($query);
+		$rows = $db->loadAssocList();
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 
+		$vendor = $this->getState('filter.vendor');
+
 		if (!empty($search))
 		{
-			if (stripos($search, 'payout_id:') === 0)
+			if (stripos($search, 'id:') === 0)
 			{
-				$query->where('a.payout_id = ' . (int) substr($search, 3));
+				$query->where('pass.id = ' . (int) substr($search, 3));
 			}
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(user_id.name LIKE ' . $search .
-							'OR a.currency LIKE' . $search .
-							'OR a.total LIKE' . $search .
-							'OR a.payout_id LIKE' . $search . ')');
+				$query->where('(' . $db->quoteName('vendors.vendor_title') . ' LIKE ' . $search .
+							'OR ' . $db->quoteName('fees.currency') . ' LIKE' . $search .
+							'OR ' . $db->quoteName('pass.vendor_id') . ' LIKE' . $search . ')');
 			}
 		}
 
+		// Display according to filter
+		if ($vendor_id != null)
+		{
+				$query->where($db->quoteName('vendors.vendor_id') . '=' . $vendor_id);
+		}
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
@@ -139,5 +160,35 @@ class TjvendorsModelPayouts extends JModelList
 		}
 
 		return $query;
+	}
+
+	/**
+	 * get the list items
+	 *
+	 * @return   items
+	 *
+	 * @since    1.6
+	 */
+
+	public function getItems()
+	{
+		$items = parent::getItems();
+
+		// Get latest payout amount for provided vendor and currency
+		foreach ($items as $i => $item)
+		{
+			foreach ($items as $j => $tempItem)
+			{
+				if (($item->vendor_id == $tempItem->vendor_id) && ($item->currency == $tempItem->currency))
+				{
+					if ($item->id > $tempItem->id)
+					{
+						unset($items[$j]);
+					}
+				}
+			}
+		}
+
+		return $items;
 	}
 }

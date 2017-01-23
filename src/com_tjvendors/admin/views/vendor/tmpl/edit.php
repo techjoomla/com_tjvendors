@@ -53,13 +53,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	}
 </script>
 <?php
-$currencies = $this->input->get('currency','','ARRAY');
-$currUrl = "";
-
-foreach($currencies as $currency)
-{
-	$currUrl .= "&currency[]=" . $currency;
-}
+$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->item->vendor_id  . '&client=' . $this->input->get('client', '', 'STRING') . $currUrl); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
@@ -74,6 +68,7 @@ foreach($currencies as $currency)
 					<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->item->checked_out_time; ?>" />
 					<input type="hidden" name="jform[checked_ou]" value="<?php echo $this->item->checked_out; ?>" />
 					<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
+					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 
 						<?php echo $this->form->renderField('user_id');
 

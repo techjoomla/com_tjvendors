@@ -47,7 +47,7 @@ class TjvendorsControllerPayout extends JControllerForm
 	 *
 	 * @since   1.6
 	 */
-	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'payout_id')
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
 	{
 		$append = parent::getRedirectToItemAppend($recordId);
 		$append .= '&client=' . $this->client;
@@ -65,8 +65,10 @@ class TjvendorsControllerPayout extends JControllerForm
 
 	protected function getRedirectToListAppend()
 	{
+		$input = JFactory::getApplication()->input;
+		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$append = parent::getRedirectToListAppend();
-		$append .= '&client=' . $this->client;
+		$append .= '&client=' . $this->client . '&vendor_id=' . $vendor_id;
 
 		return $append;
 	}

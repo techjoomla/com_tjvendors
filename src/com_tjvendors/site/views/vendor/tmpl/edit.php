@@ -47,11 +47,14 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 			<div class="form-horizontal">
 				<fieldset class="adminform">
 					<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor->vendor_id; ?>" />
+					<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->vendor->vendor_client; ?>" />
+					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
+
 						<?php echo $this->form->renderField('vendor_title'); ?>
 						<?php echo $this->form->renderField('vendor_description'); ?>
 						<?php echo $this->form->renderField('vendor_logo'); ?>
 						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
-						<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
+						<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
 						<?php if (!empty($this->vendor->vendor_logo)) : ?>
 							<div class="control-group">
 								<div class="controls "><img src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
@@ -69,11 +72,6 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 					<?php echo JText::_('JCANCEL'); ?>
 				</button>
 			</div>
-
-		<?php echo $this->form->renderField('vendor_client'); ?>
-		<?php echo $this->form->renderField('user_id'); ?>
-		<?php echo $this->form->renderField('currency'); ?>
-		<?php echo $this->form->renderField('vendor_id'); ?>
 		<input type="hidden" name="task" value="vendor.save"/>
 		<?php echo JHtml::_('form.token'); ?>
 	</div>

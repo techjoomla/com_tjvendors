@@ -1,10 +1,10 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla  <contact@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 	// No direct access
 defined('_JEXEC') or die;
@@ -60,20 +60,20 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		<div class="row-fluid">
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
-					<input type="hidden" name="jform[id]" value="<?php echo $this->item->payout_id; ?>" />
-						<?php echo $this->form->renderField('vendor_id'); ?>
-						<?php echo $this->form->renderField('currency'); ?>
-						<?php echo $this->form->renderField('total'); ?>
-						<button class="validate btn btn-primary" id="pay-confirmation" onclick="return confirmationMsg()" >PAY</button>
-						<?php 
-						if ($this->state->params->get('save_history', 1))
-						{?>
-							<div class="control-group">
-								<div class="control-label"><?php echo $this->form->getLabel('version_note');?></div>
-								<div class="controls"><?php echo $this->form->getInput('version_note'); ?></div>
-							</div>
-						<?php
-						}?>
+					<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
+					<?php echo $this->form->renderField('vendor_title'); ?>
+					<?php echo $this->form->renderField('currency'); ?>
+					<?php echo $this->form->renderField('total'); ?>
+					<button class="validate btn btn-primary" id="pay-confirmation" onclick="return confirmationMsg()" >PAY</button>
+					<?php 
+					if ($this->state->params->get('save_history', 1))
+					{?>
+						<div class="control-group">
+							<div class="control-label"><?php echo $this->form->getLabel('version_note');?></div>
+						<div class="controls"><?php echo $this->form->getInput('version_note'); ?></div>
+						</div>
+					<?php
+					}?>
 				</fieldset>
 			</div>
 		</div>

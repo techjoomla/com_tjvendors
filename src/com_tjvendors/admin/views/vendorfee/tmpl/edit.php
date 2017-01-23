@@ -56,7 +56,7 @@ $document = JFactory::getDocument();
 </script>
 
 <form action="
-<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client=' . $this->input->get('client', '', 'STRING') . '&fee_id=' . (int) $this->id . '&vendor_id=' . (int) $this->item->vendor_id);?>"
+<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client=' . $this->input->get('client', '', 'STRING') . '&id=' . (int) $this->id . '&vendor_id=' . (int) $this->item->vendor_id);?>"
 method="post" enctype="multipart/form-data" name="vendor-form" id="vendor-form" class="form-validate">
 
 	<div class="form-horizontal">

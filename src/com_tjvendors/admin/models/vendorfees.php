@@ -9,6 +9,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
+jimport('joomla.application.component.model');
 
 /**
  * Methods supporting a list of Tjvendors records.
@@ -30,12 +31,10 @@ class TjvendorsModelVendorFees extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'id', 'a.`id`',
-				'vendor_id', 'a.`vendor_id`',
-				'currency', 'a.`currency`',
-				'client', 'a.`client`',
-				'percent_commission', 'a.`percent_commission`',
-				'flat_commission', 'a.`flat_commission`',
+				'fee_id', 'b.`fee_id`',
+				'currency', 'b.`currency`',
+				'percent_commission', 'b.`percent_commission`',
+				'flat_commission', 'b.`flat_commission`',
 			);
 		}
 
@@ -64,13 +63,13 @@ class TjvendorsModelVendorFees extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'a.id';
+			$orderCol = 'b.fee_id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
 
 		// Load the filter state.
-		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
+		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string');
 		$this->setState('filter.search', $search);
 
 		$published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
@@ -81,29 +80,29 @@ class TjvendorsModelVendorFees extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('a.id', 'asc');
+		parent::populateState('b.fee_id', 'asc');
 	}
 
 	/**
-	 * Method to get a store id based on model configuration state.
+	 * Method to get a store fee_id based on model configuration state.
 	 *
 	 * This is necessary because the model is used by the component and
 	 * different modules that might need different sets of data or different
 	 * ordering requirements.
 	 *
-	 * @param   string  $id  A prefix for the store id.
+	 * @param   string  $feeId  A prefix for the store fee_id.
 	 *
-	 * @return   string A store id.
+	 * @return   string A store fee_id.
 	 *
 	 * @since    1.6
 	 */
-	protected function getStoreId($id = '')
+	protected function getStoreId($feeId = '')
 	{
 		// Compile the store id.
-		$id .= ':' . $this->getState('filter.search');
-		$id .= ':' . $this->getState('filter.state');
+		$feeId .= ':' . $this->getState('filter.search');
+		$feeId .= ':' . $this->getState('filter.state');
 
-		return parent::getStoreId($id);
+		return parent::getStoreId($feeId);
 	}
 
 	/**
@@ -115,36 +114,41 @@ class TjvendorsModelVendorFees extends JModelList
 	 */
 	protected function getListQuery()
 	{
+		$input = JFactory::getApplication()->input;
+		$this->vendor_id = $input->get('vendor_id', '', 'INT');
+		$vendor_id = $this->vendor_id;
+
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
-		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tjvendors_fee` AS a');
+		$query->select($db->quoteName(array('a.vendor_id','a.vendor_title','b.percent_commission','b.flat_commission','b.fee_id','b.currency')));
 
-		// Join over the user field 'vendor_id'
-		$query->select('b.vendor_name AS `vendor_name`');
-		$query->join('LEFT', '#__vendor_information AS b ON a.vendor_id = b.vendor_id');
+		$query->from($db->quoteName('#__tjvendors_fee', 'b'));
+
+	$query->join('LEFT', ($db->quoteName('#__tjvendors_vendors', 'a') . 'ON ' . $db->quoteName('b.vendor_id') . ' = ' . $db->quoteName('a.vendor_id') ));
+
+		$query->where($db->quoteName('a.vendor_id') . ' = ' . $vendor_id);
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 
 		if (!empty($search))
 		{
-			if (stripos($search, 'id:') === 0)
+			if (stripos($search, 'fee_id:') === 0)
 			{
-				$query->where('a.id = ' . (int) substr($search, 3));
+				$query->where($db->quoteName('b.fee_id') . ' = ' . (int) substr($search, 3));
 			}
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(a.vendor_id LIKE ' . $search .
-							'OR a.currency LIKE' . $search .
-							'OR b.vendor_name LIKE' . $search .
-							'OR a.percent_commission LIKE' . $search .
-							'OR a.flat_commission LIKE' . $search . ')');
+				$query->where('(b.currency LIKE ' . $search .
+							'OR b.percent_commission LIKE' . $search .
+							'OR b.flat_commission LIKE' . $search . ')');
 			}
+
+			$this->search = $search;
 		}
 
 		// Add the list ordering clause.
@@ -168,6 +172,48 @@ class TjvendorsModelVendorFees extends JModelList
 	{
 		$items = parent::getItems();
 
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$vendorDetail = $TjvendorsModelVendor->getItem();
+		$vendorTitle = $vendorDetail->vendor_title;
+
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models');
+		$VendorFeeModel = JModelLegacy::getInstance('VendorFee', 'TjvendorsModel');
+
+		$input = JFactory::getApplication()->input;
+		$curr = $input->get('curr', '', 'ARRAY');
+		$currency = array();
+
+		foreach ($items as $key => $item)
+		{
+			if (empty($item->fee_id))
+			{
+				$item->fee_id = $VendorFeeModel->getVendorFeeId($item->vendor_id, $item->currency);
+			}
+
+			$currency[] = $item->currency;
+			$this->vendor_title = $item->vendor_title;
+			$items[$key] = $item;
+		}
+
+		// ItemCount used to check the count of item
+		$resultCurrency = array_diff($curr, $currency);
+		$itemCount = count($items);
+
+		if (empty($this->search))
+		{
+			foreach ($resultCurrency as $result)
+			{
+				$items[$itemCount]->vendor_id = $this->vendor_id;
+				$items[$itemCount]->vendor_title = $vendorTitle;
+				$items[$itemCount]->currency = $result;
+				$items[$itemCount]->percent_commission = 0;
+				$items[$itemCount]->flat_commission = 0;
+
+				$itemCount++;
+			}
+		}
+
 		return $items;
 	}
 
@@ -184,8 +230,12 @@ class TjvendorsModelVendorFees extends JModelList
 
 		if ($tjvendorsid)
 		{
-			$db = JFactory::getDBO();
-			$query = "DELETE FROM #__tjvendors_fee where id IN (" . $tjvendorsid . ")";
+				// Create a new query object.
+			$db = JFactory::getDbo();
+			$query = $db->getQuery(true);
+
+			$query->delete($db->quoteName('#__tjvendors_fee'));
+			$query->where($db->quoteName('fee_id') . ' IN (' . $tjvendorsid . ')');
 			$this->_db->setQuery($query);
 
 			if (!$this->_db->execute())

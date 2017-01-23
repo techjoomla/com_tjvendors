@@ -18,10 +18,10 @@ JHtml::_('formbehavior.chosen', 'select');
 // Import CSS
 $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
-$document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/list.css');
+
 
 $user      = JFactory::getUser();
-$userId    = $user->get('id');
+$userId    = $user->get('fee_id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
@@ -63,11 +63,11 @@ $sortFields = $this->getSortFields();
 		});
 	});
 
-	window.toggleField = function (id, task, field)
+	window.toggleField = function (fee_id, task, field)
 	{
 		var f = document.adminForm,
 			i = 0, cbx,
-			cb = f[ id ];
+			cb = f[ fee_id ];
 
 		if (!cb) return false;
 
@@ -127,11 +127,14 @@ if (!empty($this->extra_sidebar))
 
 ?>
 <form
-action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $this->input->get('client', '', 'STRING')); ?>" 
+action="
+<?php
+echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->items[0]->vendor_id . '&curr[]=INR&curr[]=USD'); ?>" 
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
-{?>
+{
+	?>
 	<div id="j-sidebar-container" class="span2">
 		<?php echo $this->sidebar; ?>
 	</div>
@@ -139,7 +142,8 @@ if (!empty($this->sidebar))
 <?php
 }
 else
-{?>
+{
+	?>
 	<div id="j-main-container">
 <?php 
 }?>
@@ -150,7 +154,7 @@ else
 				</label>
 				<input type="text" name="filter_search" id="filter_search"
 					
-					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_USERNAME'); ?>"
+					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_VENDOR_FEE'); ?>"
 					value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
 					title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
 			</div>
@@ -192,8 +196,9 @@ else
 		</div>
 		<div class="clearfix"></div>
 		<?php
-		if(empty($this->items))
-		{?>
+		if (empty($this->items))
+		{
+			?>
 			<div class="clearfix">&nbsp;</div>
 				<div class="alert alert-no-items">
 					<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
@@ -201,46 +206,39 @@ else
 		<?php
 		}
 		else
-		{?>
+		{
+			?>
 
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
 					<?php 
 					if (isset($this->items[0]->ordering))
-					{?>
+					{
+					?>
 					<th width="1%" class="nowrap center hidden-phone">
-						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+					<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 					</th>
 					<?php
 					}?>
 					<th width="1%" class="hidden-phone">
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
-
-					<?php if (isset($this->items[0]->state)){} ?>
-
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'b.`fee_id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_TITLE', 'a.`vendor_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_LBL_VENDOR_ID', 'a.`vendor_id`'); ?>
 					</th>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_CURRENCY', 'a.`currency`', $listDirn, $listOrder); ?>
-					</th>
-
-
-					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_CLIENT', 'a.`client`', $listDirn, $listOrder); ?>
-					</th>
-
-					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'a.`percent_commission`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY', 'a.`currency`'); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_FLAT_COMMISSION', 'a.`flat_commission`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'b.`percent_commission`', $listDirn, $listOrder); ?>
+					</th>
+					<th class='left'>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_FLAT_COMMISSION', 'b.`flat_commission`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
@@ -264,7 +262,8 @@ else
 					<tr class="row<?php echo $i % 2; ?>">
 					<?php
 						if (isset($this->items[0]->ordering))
-						{?>
+						{
+							?>
 							<td class="order nowrap center hidden-phone">
 								<?php
 								if ($canChange)
@@ -285,7 +284,8 @@ else
 								<?php
 								}
 								else
-								{?>
+								{
+									?>
 									<span class="sortable-handler inactive">
 										<i class="icon-menu"></i>
 									</span>
@@ -296,23 +296,21 @@ else
 						}?>
 
 							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
-							</td>
-							<?php if (isset($this->items[0]->state)){}?>
-
-							<td>
-								<?php echo $item->id; ?>
+								<?php echo JHtml::_('grid.id', $i, $item->fee_id); ?>
 							</td>
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&id=' . (int) $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>">	
-									<?php echo $this->escape($item->vendor_name); ?>
+								<?php echo $item->vendor_id; ?>
+							</td>
+							<td>
+									<?php echo $item->vendor_title; ?>
+							</td>
+							<td>
+								<a href="
+								<?php 
+								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . '&currency=' . $item->currency . '&fee_id=' . $item->fee_id);?>">
+								<?php echo $item->currency; ?>
 								</a>
 							</td>
-
-							<td>
-								<?php echo $item->currency; ?>
-							</td>
-							<td><?php echo $this->escape($item->client); ?></td>
 							<td>
 								<?php echo $item->percent_commission; ?>
 							</td>
@@ -321,7 +319,8 @@ else
 							</td>
 						</tr>
 				<?php
-				}?>
+				}
+				?>
 			</tbody>
 		</table>
 		<?php

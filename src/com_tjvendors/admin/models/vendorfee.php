@@ -106,11 +106,46 @@ class TjvendorsModelVendorFee extends JModelAdmin
 			{
 				$this->item = $this->getItem();
 			}
-
-			$data = $this->item;
 		}
 
+		$data = (array) $this->item;
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$vendorDetail = $TjvendorsModelVendor->getItem();
+		$data['vendor_title'] = $vendorDetail->vendor_title;
+
 		return $data;
+	}
+
+	/**
+	 * Method to get a single record.
+	 *
+	 * @param   STRING  $vendorId  The currency of the Vendor_id.
+	 * 
+	 * @param   STRING  $currency  The currency of the Vendor_id.
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 *
+	 * @since    1.6
+	 */
+	public function getVendorFeeId($vendorId,$currency)
+	{
+		if (!empty($vendorId) && !empty($currency))
+		{
+		$db    = $this->getDbo();
+		$query = $db->getQuery(true);
+
+		// Select the required fields from the table.
+		$query->select($db->quoteName('fee_id'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+		$query->where($db->quoteName('vendor_id') . '=' . $vendorId);
+		$query->where($db->quoteName('currency') . '=' . $currency);
+		$db->setQuery($query);
+
+		return $db->loadResult();
+		}
+
+	return false;
 	}
 
 	/**

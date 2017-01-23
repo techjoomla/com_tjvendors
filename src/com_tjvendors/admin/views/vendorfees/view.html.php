@@ -35,6 +35,9 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+		$input = JFactory::getApplication()->input;
+		$this->curr = $input->get('curr', '', 'ARRAY');
+		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
@@ -68,6 +71,8 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		$state = $this->get('State');
 		$canDo = TjvendorsHelpersTjvendors::getActions();
 
+		JToolBarHelper::custom('vendorfees.back', 'chevron-left.png', '', 'Back', false);
+
 		if (JVERSION >= '3.0')
 		{
 			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'book');
@@ -75,22 +80,6 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		else
 		{
 			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
-		}
-		// Check if the form exists before showing the add/edit buttons
-		$formPath = JPATH_COMPONENT_ADMINISTRATOR . '/views/vendorfee';
-
-		if (file_exists($formPath))
-		{
-			if ($canDo->get('core.create'))
-			{
-				JToolBarHelper::addNew('vendorfee.add', 'JTOOLBAR_NEW');
-				/*JToolbarHelper::custom('vendors.duplicate', 'copy.png', 'copy_f2.png', 'JTOOLBAR_DUPLICATE', true);*/
-			}
-
-			if ($canDo->get('core.edit') && isset($this->items[0]))
-			{
-				JToolBarHelper::editList('vendorfee.edit', 'JTOOLBAR_EDIT');
-			}
 		}
 
 		if ($canDo->get('core.edit.state'))
@@ -105,17 +94,6 @@ class TjvendorsViewVendorFees extends JViewLegacy
 			{
 				// If this component does not use state then show a direct delete button as we can not trash
 				JToolBarHelper::deleteList('', 'vendorfees.delete', 'JTOOLBAR_DELETE');
-			}
-
-			if (isset($this->items[0]->state))
-			{
-				JToolBarHelper::divider();
-				JToolBarHelper::archiveList('vendorfees.archive', 'JTOOLBAR_ARCHIVE');
-			}
-
-			if (isset($this->items[0]->checked_out))
-			{
-				JToolBarHelper::custom('vendorfees.checkin', 'checkin.png', 'checkin_f2.png', 'JTOOLBAR_CHECKIN', true);
 			}
 		}
 
@@ -153,12 +131,9 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'a.`id`' => JText::_('JGRID_HEADING_ID'),
-			'a.`vendor_id`' => JText::_('COM_TJVENDORS_VENDORS_TITLE'),
-			'a.`currency`' => JText::_('COM_TJVENDORS_VENDORS_CURRENCY'),
-			'a.`client`' => JText::_('COM_TJVENDORS_VENDORS_CLIENT'),
-			'a.`percent_commission`' => JText::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),
-			'a.`flat_commission`' => JText::_('COM_TJVENDORS_VENDORS_FLAT_COMMISSION'),
+			'b.`currency`' => JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY'),
+			'b.`percent_commission`' => JText::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),
+			'b.`flat_commission`' => JText::_('COM_TJVENDORS_VENDORS_FLAT_COMMISSION'),
 		);
 	}
 }

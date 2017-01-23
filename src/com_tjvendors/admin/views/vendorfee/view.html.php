@@ -36,8 +36,9 @@ class TjvendorsViewVendorFee extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$input = JFactory::getApplication()->input;
-		$this->foo = $input->get('curr', '', 'ARRAY');
-		$currn = $this->foo;
+		$this->curr = $input->get('currency', '', 'STRING');
+		$this->vendor_id = $input->get('vendor_id', '', 'INT');
+		$this->fee_id = $input->get('fee_id', '', 'INT');
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
@@ -65,7 +66,7 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		JFactory::getApplication()->input->set('hidemainmenu', true);
 
 		$user  = JFactory::getUser();
-		$isNew = ($this->item->id == 0);
+		$isNew = ($this->item->fee_id == 0);
 
 		$input = JFactory::getApplication()->input;
 		$this->full_client = $input->get('client', '', 'STRING');
@@ -74,60 +75,19 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		$client = JFactory::getApplication()->input->get('client', '', 'STRING');
 		$extensionName = strtoupper($client);
 
-		if ($isNew)
-		{
-			$viewTitle = JText::_('COM_TJVENDOR_ADD_USER_SPECIFIC_COMM');
-		}
-		else
-		{
-			$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMM');
-		}
-
-		if (isset($this->item->checked_out))
-		{
-			$checkedOut = !($this->item->checked_out == 0 || $this->item->checked_out == $user->get('id'));
-		}
-		else
-		{
-			$checkedOut = false;
-		}
+		$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMMISSION');
 
 		$canDo = TjvendorsHelpersTjvendors::getActions();
 
-		if (JVERSION >= '3.0')
-		{
 			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle,  'pencil-2');
-		}
-		else
-		{
-			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle, 'course.png');
-		}
 
 		// If not checked out, can save the item.
 		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create'))))
 		{
 			JToolBarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');
-			JToolBarHelper::save('vendorfee.save', 'JTOOLBAR_SAVE');
 		}
 
-		if (!$checkedOut && ($canDo->get('core.create')))
-		{
-			JToolBarHelper::custom('vendorfee.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-		}
-
-		// If an existing item, can save to a copy.
-		if (!$isNew && $canDo->get('core.create'))
-		{
-			JToolBarHelper::custom('vendorfee.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
-		}
-
-		// Button for version control
-		if ($this->state->params->get('save_history', 1) && $user->authorise('core.edit'))
-		{
-			JToolbarHelper::versions('com_tjvendors.vendorfee', $this->item->id);
-		}
-
-		if (empty($this->item->id))
+		if (empty($this->item->fee_id))
 		{
 			JToolBarHelper::cancel('vendorfee.cancel', 'JTOOLBAR_CANCEL');
 		}

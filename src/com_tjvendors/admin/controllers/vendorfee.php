@@ -95,14 +95,14 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$vendorDetail = $TjvendorsModelVendor->getItem();
 		$VendorCurrency = $vendorDetail->currency;
 		$currencies = json_decode($VendorCurrency);
+		$client = $this->input->get('client', '', 'STRING');
 
 		foreach ($currencies as $currency)
 		{
 		$curr .= "&currency[]=" . $currency;
 		}
 
-		$link = JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $this->input->get('client', '', 'STRING') . '&vendor_id=' . $vendorId . $curr,
-		false);
+		$link = JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $client . '&vendor_id=' . $vendorId . $curr, false);
 		$this->setRedirect($link);
 	}
 
@@ -120,9 +120,10 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$vendorId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
 		$currency = (STRING) (count($cid) ? $cid[0] : $input->get('currency'));
 		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
-
+		$currencies = json_decode($VendorCurrency);
+		$client = $this->input->get('client', '', 'STRING');
 		$link = JRoute::_(
-		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&client=' . $this->input->get('client', '', 'STRING') . '&id=' . $feeId . '&vendor_id=' . $vendorId .
+		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&client=' . $client . '&id=' . $feeId . '&vendor_id=' . $vendorId .
 		'&currency=' . $currency, false
 		);
 		$this->setRedirect($link);

@@ -105,7 +105,7 @@ if (!empty($this->extra_sidebar))
 
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&client=' . $this->input->get('client', '', 'STRING')); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&client=' . $this->input->get('client', '', 'STRING').'&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER')); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
 if(!empty($this->sidebar))

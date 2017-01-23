@@ -77,7 +77,7 @@ class TjvendorsViewPayout extends JViewLegacy
 		}
 		else
 		{
-			$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMM');
+			$viewTitle = JText::_('COM_TJVENDOR_EDIT_PAYOUT_SPECIFIC_COMM');
 		}
 
 		if (isset($this->item->checked_out))

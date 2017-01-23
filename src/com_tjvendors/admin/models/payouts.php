@@ -114,10 +114,11 @@ class TjvendorsModelPayouts extends JModelList
 		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
 			' ON (' . $db->quoteName('fees.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') .
 			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')');
+		$query->where($db->quoteName('pass.id') . ' is not null');
 
 		if (!empty($client))
 		{
-		$query->where($db->quoteName('vendors.vendor_client') . ' = ' . "'$client'" . 'AND' . $db->quoteName('pass.id') . ' is not null');
+		$query->where($db->quoteName('vendors.vendor_client') . ' = ' . "'$client'");
 		}
 
 		$db->setQuery($query);

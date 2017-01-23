@@ -69,16 +69,15 @@ class TjvendorsModelPayouts extends JModelList
 		$this->setState('list.ordering', $orderCol);
 
 		// Filter vendor
-		$vendorId = $app->getUserStateFromRequest($this->context . '.title', 'filter_vendorId', '', 'string');
+
+		$vendorId = $app->getUserStateFromRequest($this->context, 'vendor_id', '', 'string');
+
+		if (empty($vendorId))
+		{
+			$vendorId = $app->getUserStateFromRequest($this->context . '.title', 'filter_vendorId', '', 'string');
+		}
+
 		$this->setState('filter.vendor', $vendorId);
-
-		// Getting client from url
-		$client = $app->getUserStateFromRequest($this->context, 'client');
-		$this->setState('client', $client);
-
-		// Getting vendor from url
-		$vendor_id = $app->getUserStateFromRequest($this->context, 'vendor_id');
-		$this->setState('vendor_id', $vendor_id);
 
 		// Load the filter state.
 		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
@@ -105,7 +104,6 @@ class TjvendorsModelPayouts extends JModelList
 
 	public function getListQuery()
 	{
-		$vendor_id = $this->getState('vendor_id');
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$client = $this->getState('client');
@@ -128,6 +126,7 @@ class TjvendorsModelPayouts extends JModelList
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 
+		// Filter
 		$vendor = $this->getState('filter.vendor');
 
 		if (!empty($search))
@@ -146,10 +145,11 @@ class TjvendorsModelPayouts extends JModelList
 		}
 
 		// Display according to filter
-		if ($vendor_id != null)
+		if (!empty($vendor))
 		{
-				$query->where($db->quoteName('vendors.vendor_id') . '=' . $vendor_id);
+			$query->where($db->quoteName('vendors.vendor_id') . '=' . $vendor);
 		}
+
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');

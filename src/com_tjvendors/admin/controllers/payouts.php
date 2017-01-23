@@ -73,6 +73,27 @@ class TjvendorsControllerPayouts extends JControllerAdmin
 	}
 
 	/**
+	 * Redirect.
+	 *
+	 * @return void
+	 * 
+	 * @since    1.6
+	 */
+	public function getRedirectToList()
+	{
+		// Print_r($_POST);die;
+
+		// Get the input
+		$input = JFactory::getApplication()->input;
+		$vendor_id   = $input->post->get('vendor_id', '', 'INT');
+
+		// $append = parent::getRedirectToListAppend();
+
+		$append = 'index.php?option=com_tjvendors&view=payouts&client=com_jticketing&vendor_id=' . $vendor_id;
+		$this->setRedirect($append);
+	}
+
+	/**
 	 * Method to save the submitted ordering values for records via AJAX.
 	 *
 	 * @return  void

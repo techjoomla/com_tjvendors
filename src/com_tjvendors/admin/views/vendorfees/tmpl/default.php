@@ -129,7 +129,7 @@ if (!empty($this->extra_sidebar))
 <form
 action="
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $this->input->get('client', '', 'STRING') . '&vendor_id=' . $this->items[0]->vendor_id . '&currency='); ?>" 
+echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $this->input->get('client', '', 'STRING') . '&vendor_id=' . $this->items[0]->vendor_id . $this->currency); ?>" 
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))

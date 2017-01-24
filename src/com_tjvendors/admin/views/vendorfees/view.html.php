@@ -37,6 +37,12 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	{
 		$input = JFactory::getApplication()->input;
 		$this->curr = $input->get('currency', '', 'ARRAY');
+
+		foreach ($this->curr as $currency)
+		{
+		$this->currency .= "&currency[]=" . $currency;
+		}
+
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$this->client = $input->get('client', '', 'STRING');
 		$this->state = $this->get('State');
@@ -76,11 +82,11 @@ class TjvendorsViewVendorFees extends JViewLegacy
 
 		if (JVERSION >= '3.0')
 		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'book');
+			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'book');
 		}
 		else
 		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
+			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'vendors.png');
 		}
 
 		if ($canDo->get('core.edit.state'))

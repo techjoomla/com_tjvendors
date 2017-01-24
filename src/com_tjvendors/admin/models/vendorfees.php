@@ -123,7 +123,7 @@ class TjvendorsModelVendorFees extends JModelList
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
-	$query->select($db->quoteName(array('a.vendor_id','a.vendor_title','a.currency','b.percent_commission','b.flat_commission','b.id','b.currency')));
+	$query->select($db->quoteName(array('a.vendor_id','a.vendor_title','b.percent_commission','b.flat_commission','b.id','b.currency')));
 
 		$query->from($db->quoteName('#__tjvendors_fee', 'b'));
 

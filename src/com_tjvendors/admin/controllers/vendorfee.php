@@ -55,7 +55,7 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$currency = $formData->get('currency');
 		$vendor_id = (int) $formData->get('vendor_id');
 		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('id'));
-		$client = (STRING) (count($cid) ? $cid[0] : $input->get('client'));
+		$this->client = (STRING) (count($cid) ? $cid[0] : $input->get('client'));
 		$append = parent::getRedirectToItemAppend($recordId);
 		$append .= '&client=' . $client . '&vendor_id=' . $vendor_id . '&currency=' . $currency;
 
@@ -90,12 +90,14 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$cid      = $input->post->get('cid', array(), 'array');
 		$formData = new JRegistry($input->get('jform', '', 'array'));
 		$vendorId = (int) $formData->get('vendor_id');
+
+		// Calling model to get the array of currency
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		$vendorDetail = $TjvendorsModelVendor->getItem();
 		$VendorCurrency = $vendorDetail->currency;
 		$currencies = json_decode($VendorCurrency);
-		$client = $this->input->get('client', '', 'STRING');
+		$client = $this->client;
 
 		foreach ($currencies as $currency)
 		{
@@ -121,7 +123,7 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$currency = (STRING) (count($cid) ? $cid[0] : $input->get('currency'));
 		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
 		$currencies = json_decode($VendorCurrency);
-		$client = $this->input->get('client', '', 'STRING');
+		$client = $this->client;
 		$link = JRoute::_(
 		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&client=' . $client . '&id=' . $feeId . '&vendor_id=' . $vendorId .
 		'&currency=' . $currency, false

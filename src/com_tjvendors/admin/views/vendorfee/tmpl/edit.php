@@ -21,11 +21,6 @@ $document = JFactory::getDocument();
 
 ?>
 <script type="text/javascript">
-	js = jQuery.noConflict();
-	js(document).ready(function ()
-	{
-	});
-		
 
 	Joomla.submitbutton = function (task)
 	{
@@ -56,7 +51,7 @@ $document = JFactory::getDocument();
 </script>
 
 <form action="
-<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client=' . $this->input->get('client', '', 'STRING') . '&fee_id=' . (int) $this->id . '&vendor_id=' . (int) $this->item->vendor_id);?>"
+<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client=' . $this->input->get('client', '', 'STRING') . '&id=' . (int) $this->id . '&vendor_id=' . (int) $this->item->vendor_id);?>"
 method="post" enctype="multipart/form-data" name="vendor-form" id="vendor-form" class="form-validate">
 
 	<div class="form-horizontal">
@@ -65,7 +60,6 @@ method="post" enctype="multipart/form-data" name="vendor-form" id="vendor-form" 
 		<div class="row-fluid">
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
-					
 
 						<?php echo $this->form->renderField('vendor_title'); ?>
 						<div class = "control-group" >

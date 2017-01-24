@@ -82,11 +82,11 @@ class TjvendorsViewVendorFees extends JViewLegacy
 
 		if (JVERSION >= '3.0')
 		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'book');
+			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'book');
 		}
 		else
 		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
+			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'vendors.png');
 		}
 
 		if ($canDo->get('core.edit.state'))

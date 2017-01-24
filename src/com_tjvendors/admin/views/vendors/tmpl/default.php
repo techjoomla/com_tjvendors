@@ -277,6 +277,7 @@ else
 							</td>
 							<td class='center'>
 								<?php
+									$curr='';
 									$currencies = json_decode($item->currency);
 									foreach($currencies as $currency)
 									{
@@ -285,7 +286,6 @@ else
 								?>
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->vendor_client . $curr ); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a> ||
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->vendor_client); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_PAYOUTS'); ?></a>
-								<?php $curr='';?>
 							</td>
 						</tr>
 				<?php

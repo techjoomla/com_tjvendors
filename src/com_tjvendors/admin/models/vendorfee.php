@@ -113,6 +113,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		$vendorDetail = $TjvendorsModelVendor->getItem();
 		$data['vendor_title'] = $vendorDetail->vendor_title;
+		$data['client'] = $vendorDetail->vendor_client;
 
 		return $data;
 	}
@@ -120,15 +121,17 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	/**
 	 * Method to get a single record.
 	 *
-	 * @param   STRING  $vendorId  The currency of the Vendor_id.
+	 * @param   STRING  $vendorId  The vendorId of the Vendor_id.
 	 * 
 	 * @param   STRING  $currency  The currency of the Vendor_id.
 	 *
+	 * @param   STRING  $client    The client of the Vendor_id.
+	 * 
 	 * @return  mixed    Object on success, false on failure.
 	 *
 	 * @since    1.6
 	 */
-	public function getVendorFeeId($vendorId,$currency)
+	public function getVendorFeeId($vendorId,$currency,$client)
 	{
 		if (!empty($vendorId) && !empty($currency))
 		{
@@ -140,57 +143,13 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$query->from($db->quoteName('#__tjvendors_vendors'));
 		$query->where($db->quoteName('vendor_id') . '=' . $vendorId);
 		$query->where($db->quoteName('currency') . '=' . $currency);
+		$query->where($db->quoteName('vendor_client') . '=' . $client);
 		$db->setQuery($query);
 
 		return $db->loadResult();
 		}
 
 	return false;
-	}
-
-	/**
-	 * Method to get a single record.
-	 *
-	 * @param   integer  $pk  The id of the primary key.
-	 *
-	 * @return  mixed    Object on success, false on failure.
-	 *
-	 * @since    1.6
-	 */
-	public function getItem($pk = null)
-	{
-		if ($item = parent::getItem($pk))
-		{
-			// Do any procesing on fields here if needed
-		}
-
-		return $item;
-	}
-
-	/**
-	 * Prepare and sanitise the table prior to saving.
-	 *
-	 * @param   JTable  $table  Table Object
-	 *
-	 * @return void
-	 *
-	 * @since    1.6
-	 */
-	protected function prepareTable($table)
-	{
-		jimport('joomla.filter.output');
-
-		if (empty($table->id))
-		{
-			// Set ordering to the last item if not set
-			if (@$table->ordering === '')
-			{
-				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__tjvendors_fee');
-				$max             = $db->loadResult();
-				$table->ordering = $max + 1;
-			}
-		}
 	}
 
 	/**
@@ -206,8 +165,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$db = JFactory::getDBO();
 		$input  = JFactory::getApplication()->input;
 		$app  = JFactory::getApplication();
-		$client = $input->get('client', '', 'STRING');
-		$data['client'] = $client;
+		$data['client'] = $input->get('client', '', 'STRING');
 
 		if ($data['vendor_id'] != 0)
 		{
@@ -219,8 +177,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		}
 		else
 		{
-			$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER'), 'warning');
-
 			return false;
 		}
 

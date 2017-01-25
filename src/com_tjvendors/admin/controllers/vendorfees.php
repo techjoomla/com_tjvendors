@@ -22,39 +22,6 @@ use Joomla\Utilities\ArrayHelper;
 class TjvendorsControllerVendorFees extends JControllerAdmin
 {
 	/**
-	 * Method to clone existing Vendors
-	 *
-	 * @return void
-	 */
-	public function duplicate()
-	{
-		// Check for request forgeries
-		Jsession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
-		// Get fee_id
-		$pks = $this->input->post->get('cid', array(), 'array');
-
-		try
-		{
-			if (empty($pks))
-			{
-				throw new Exception(JText::_('COM_TJVENDORS_NO_ELEMENT_SELECTED'));
-			}
-
-			ArrayHelper::toInteger($pks);
-			$model = $this->getModel();
-			$model->duplicate($pks);
-			$this->setMessage(Jtext::_('COM_TJVENDORS_ITEMS_SUCCESS_DUPLICATED'));
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
-		}
-
-		$this->setRedirect('index.php?option=com_tjvendors&view=vendorfees');
-	}
-
-	/**
 	 * Proxy for getModel.
 	 *
 	 * @param   string  $name    Optional. Model name
@@ -70,39 +37,6 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 
 		return $model;
-	}
-
-	/**
-	 * Method to save the submitted ordering values for records via AJAX.
-	 *
-	 * @return  void
-	 *
-	 * @since   3.0
-	 */
-	public function saveOrderAjax()
-	{
-		// Get the input
-		$input = JFactory::getApplication()->input;
-		$pks   = $input->post->get('cid', array(), 'array');
-		$order = $input->post->get('order', array(), 'array');
-
-		// Sanitize the input
-		ArrayHelper::toInteger($pks);
-		ArrayHelper::toInteger($order);
-
-		// Get the model
-		$model = $this->getModel();
-
-		// Save the ordering
-		$return = $model->saveorder($pks, $order);
-
-		if ($return)
-		{
-			echo "1";
-		}
-
-		// Close the application
-		JFactory::getApplication()->close();
 	}
 
 	/**
@@ -133,14 +67,6 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		$vendorDetail = $TjvendorsModelVendor->getItem();
 		$vendorId = $input->get('vendor_id', '', 'INT');
-		$VendorCurrency = $vendorDetail->currency;
-		$currencies = json_decode($VendorCurrency);
-
-		foreach ($currencies as $currency)
-		{
-		$curr .= "&currency[]=" . $currency;
-		}
-
 		$model      = $this->getModel('vendorfees');
 		$post       = JRequest::get('post');
 
@@ -150,12 +76,12 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 
 		if ($result)
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $curr;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId;
 			$msg = JText::_('COM_TJVENDORS_RECORD_DELETED');
 		}
 		else
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&currency=' . $curr;
+			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId;
 			$msg = JText::_('COM_TJVENDORS_ERR_DELETED');
 		}
 

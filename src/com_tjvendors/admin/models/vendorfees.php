@@ -84,28 +84,6 @@ class TjvendorsModelVendorFees extends JModelList
 	}
 
 	/**
-	 * Method to get a store fee_id based on model configuration state.
-	 *
-	 * This is necessary because the model is used by the component and
-	 * different modules that might need different sets of data or different
-	 * ordering requirements.
-	 *
-	 * @param   string  $feeId  A prefix for the store fee_id.
-	 *
-	 * @return   string A store fee_id.
-	 *
-	 * @since    1.6
-	 */
-	protected function getStoreId($feeId = '')
-	{
-		// Compile the store id.
-		$feeId .= ':' . $this->getState('filter.search');
-		$feeId .= ':' . $this->getState('filter.state');
-
-		return parent::getStoreId($feeId);
-	}
-
-	/**
 	 * Build an SQL query to load the list data.
 	 *
 	 * @return   JDatabaseQuery
@@ -123,7 +101,7 @@ class TjvendorsModelVendorFees extends JModelList
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
-	$query->select($db->quoteName(array('a.vendor_id','a.vendor_title','b.percent_commission','b.flat_commission','b.id','b.currency')));
+	$query->select($db->quoteName(array('a.vendor_id','a.vendor_title','b.client','b.percent_commission','b.flat_commission','b.id','b.currency')));
 
 		$query->from($db->quoteName('#__tjvendors_fee', 'b'));
 
@@ -176,12 +154,11 @@ class TjvendorsModelVendorFees extends JModelList
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		$vendorDetail = $TjvendorsModelVendor->getItem();
 		$vendorTitle = $vendorDetail->vendor_title;
+		$client = $vendorDetail->vendor_client;
+		$currencies = json_decode($vendorDetail->currency);
 
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models');
 		$VendorFeeModel = JModelLegacy::getInstance('VendorFee', 'TjvendorsModel');
-
-		$input = JFactory::getApplication()->input;
-		$curr = $input->get('currency', '', 'ARRAY');
 		$currency = array();
 
 		foreach ($items as $key => $item)
@@ -197,7 +174,7 @@ class TjvendorsModelVendorFees extends JModelList
 		}
 
 		// ItemCount used to check the count of item
-		$resultCurrency = array_diff($curr, $currency);
+		$resultCurrency = array_diff($currencies, $currency);
 		$itemCount = count($items);
 
 		if (empty($this->search))
@@ -207,6 +184,7 @@ class TjvendorsModelVendorFees extends JModelList
 				$items[$itemCount]->vendor_id = $this->vendor_id;
 				$items[$itemCount]->vendor_title = $vendorTitle;
 				$items[$itemCount]->currency = $result;
+				$items[$itemCount]->client = $client;
 				$items[$itemCount]->percent_commission = 0;
 				$items[$itemCount]->flat_commission = 0;
 

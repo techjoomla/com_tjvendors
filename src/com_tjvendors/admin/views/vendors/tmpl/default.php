@@ -276,8 +276,7 @@ else
 								</a>
 							</td>
 							<td class='center'>
-								<?php
-									$curr='';
+								<?php$curr='';
 									$currencies = json_decode($item->currency);
 									foreach($currencies as $currency)
 									{

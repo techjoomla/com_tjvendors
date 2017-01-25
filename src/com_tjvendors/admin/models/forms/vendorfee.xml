@@ -57,6 +57,7 @@
     label="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION" 
     description="COM_TJVENDORS_FORM_DESC_VENDOR_FLAT_COMMISSION" 
     hint="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION" 
+    min="0"
     filter="safehtml" />
     
     <field name="version_note" 

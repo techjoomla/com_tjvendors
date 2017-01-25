@@ -307,7 +307,7 @@ else
 							<td>
 								<a href="
 								<?php 
-								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->client . '&currency=' . $item->currency . '&fee_id=' . $item->id);?>">
+								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&currency=' . $item->currency . '&fee_id=' . $item->id);?>">
 								<?php echo $item->currency; ?>
 								</a>
 							</td>
@@ -328,7 +328,6 @@ else
 			<input type="hidden" name="task" value=""/>
 			<input type="hidden" name="boxchecked" value="0"/>
 			<input type="hidden" name="vendor_id" value="<?php echo $this->vendor_id;?>"/>
-			<input type="hidden" name="client" value="<?php echo $item->client;?>"/>
 			<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 			<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
 			<?php echo JHtml::_('form.token'); ?>

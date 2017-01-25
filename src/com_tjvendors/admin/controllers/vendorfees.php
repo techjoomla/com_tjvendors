@@ -49,10 +49,9 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		// Get the input
 		$input = JFactory::getApplication()->input;
 		$pks = $input->post->get('cid', array(), 'array');
-		$client = $input->get('client', '', 'STRING');
 
 		// Redirect to the list screen.
-		$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $client, false));
+		$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendors', false));
 	}
 
 	/**
@@ -67,8 +66,8 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		$vendorDetail = $TjvendorsModelVendor->getItem();
 		$vendorId = $input->get('vendor_id', '', 'INT');
-		$model      = $this->getModel('vendorfees');
-		$post       = JRequest::get('post');
+		$model = $this->getModel('vendorfees');
+		$post = JRequest::get('post');
 
 		$tj_vendors_id = $post['cid'];
 

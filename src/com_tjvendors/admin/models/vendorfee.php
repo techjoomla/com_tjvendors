@@ -88,6 +88,27 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	}
 
 	/**
+	 * Method to get a single record.
+	 *
+	 * @param   integer  $pk  The id of the primary key.
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 *
+	 * @since    1.6
+	 */
+	public function getItem($pk)
+	{
+		$data = parent::getItem($pk);
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$vendorDetail = $TjvendorsModelVendor->getItem();
+		$data->vendor_title = $vendorDetail->vendor_title;
+		$data->client = $vendorDetail->vendor_client;
+
+		return $data;
+	}
+
+	/**
 	 * Method to get the data that should be injected in the form.
 	 *
 	 * @return   mixed  The data for the form.
@@ -109,11 +130,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		}
 
 		$data = (array) $this->item;
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$vendorDetail = $TjvendorsModelVendor->getItem();
-		$data['vendor_title'] = $vendorDetail->vendor_title;
-		$data['client'] = $vendorDetail->vendor_client;
 
 		return $data;
 	}
@@ -124,14 +140,12 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 * @param   STRING  $vendorId  The vendorId of the Vendor_id.
 	 * 
 	 * @param   STRING  $currency  The currency of the Vendor_id.
-	 *
-	 * @param   STRING  $client    The client of the Vendor_id.
 	 * 
 	 * @return  mixed    Object on success, false on failure.
 	 *
 	 * @since    1.6
 	 */
-	public function getVendorFeeId($vendorId,$currency,$client)
+	public function getVendorFeeId($vendorId,$currency)
 	{
 		if (!empty($vendorId) && !empty($currency))
 		{
@@ -143,7 +157,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$query->from($db->quoteName('#__tjvendors_vendors'));
 		$query->where($db->quoteName('vendor_id') . '=' . $vendorId);
 		$query->where($db->quoteName('currency') . '=' . $currency);
-		$query->where($db->quoteName('vendor_client') . '=' . $client);
 		$db->setQuery($query);
 
 		return $db->loadResult();
@@ -165,7 +178,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$db = JFactory::getDBO();
 		$input  = JFactory::getApplication()->input;
 		$app  = JFactory::getApplication();
-		$data['client'] = $input->get('client', '', 'STRING');
 
 		if ($data['vendor_id'] != 0)
 		{

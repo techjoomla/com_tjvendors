@@ -312,7 +312,7 @@ else
 								</a>
 							</td>
 							<td>
-								<?php echo $item->percent_commission; ?>
+								<?php echo $item->percent_commission . " %";?>
 							</td>
 							<td>
 								<?php echo $item->flat_commission; ?>

@@ -112,7 +112,7 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$vendorId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
 		$currency = (STRING) (count($cid) ? $cid[0] : $input->get('currency'));
 		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
-		$currencies = json_decode($VendorCurrency);
+
 		$link = JRoute::_(
 		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId .
 		'&currency=' . $currency, false

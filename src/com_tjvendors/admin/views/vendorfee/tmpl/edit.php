@@ -58,30 +58,30 @@ method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form"
 				<fieldset class="adminform">
 
 						<?php echo $this->form->renderField('vendor_title'); ?>
+
+						<?php
+						if (empty($this->item->currency))
+						{
+							?>
 						<div class = "control-group" >
 							<div class = "control-label">
 						<label class = "hasPopover" title data-content = "Currency"><?php echo $this->form->getLabel('currency');?></label>
 						</div>
 						<div class = "controls">
-						
+							
+						<input type="text" name="currency" value="<?php echo $this->curr; ?>" readonly="true"></input>
+
+						</div>
+						</div>
 						<?php
-						echo $this->curr;
-						?>
-						</div>
-						</div>
-						<?php echo $this->form->renderField('percent_commission'); ?>
-						<?php echo $this->form->renderField('flat_commission'); ?>
-						<?php 
-						if ($this->state->params->get('save_history', 1))
+						}
+						else
 						{
-							?>
-							<div class="control-group">
-								<div class="control-label"><?php echo $this->form->getLabel('version_note');?></div>
-								<div class="controls"><?php echo $this->form->getInput('version_note'); ?></div>
-							</div>
-							<?php
+							echo $this->form->renderField('currency');
 						}
 						?>
+						<?php echo $this->form->renderField('percent_commission'); ?>
+						<?php echo $this->form->renderField('flat_commission'); ?>
 
 				</fieldset>
 			</div>

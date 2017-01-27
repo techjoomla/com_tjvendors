@@ -72,9 +72,6 @@ class TjvendorsModelVendorFees extends JModelList
 		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search', '', 'string');
 		$this->setState('filter.search', $search);
 
-		$published = $app->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '', 'string');
-		$this->setState('filter.state', $published);
-
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_tjvendors');
 		$this->setState('params', $params);

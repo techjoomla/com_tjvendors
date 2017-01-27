@@ -20,6 +20,7 @@
     hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_TITLE"
     readonly="true">
     </field>
+    
     <field name="client"
     type="text"
     label="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT" 
@@ -33,11 +34,15 @@
     heading="h4" close="true" 
     option_on="Yes" option_off="Yes" 
     toggle_default_value="0" />
-    
-    <field name="currency" id="currency" 
+
+    <field name="currency" id="currency"
     type="text" 
     label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY" 
-    description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY" />
+    description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY" 
+    hint="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY"
+    filter="safehtml" 
+    readonly="true"
+    />
     
     <field name="percent_commission" 
     type="number" 

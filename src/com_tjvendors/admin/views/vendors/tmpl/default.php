@@ -283,7 +283,7 @@ else
 										$curr .= "&currency[]=" . $currency;
 									}
 								?>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->vendor_client . $curr ); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a> ||
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id ); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_FEE'); ?></a> ||
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->vendor_client); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_PAYOUTS'); ?></a>
 							</td>
 						</tr>

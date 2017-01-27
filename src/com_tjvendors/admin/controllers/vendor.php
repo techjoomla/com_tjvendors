@@ -49,10 +49,8 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
-		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
-
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
-		$append .= '&client=' . $this->client . $currUrl;
+		$append .= '&client=' . $this->client;
 
 		return $append;
 	}
@@ -66,10 +64,8 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToListAppend()
 	{
-		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
-
 		$append = parent::getRedirectToListAppend();
-		$append .= '&client=' . $this->client . $currUrl;
+		$append .= '&client=' . $this->client;
 
 		return $append;
 	}

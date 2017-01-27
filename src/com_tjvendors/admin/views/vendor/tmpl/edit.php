@@ -76,17 +76,30 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 						{
 							echo $this->form->renderField('vendor_client');
 						}
+						else
+						{
+						?>
+						<input type="hidden" name="jform[vendor_client]" value='<?php echo $this->item->vendor_client;?>' />
+						<?php
+						}
+						?>
 
-						echo $this->form->renderField('vendor_title'); ?>
+						<?php echo $this->form->renderField('vendor_title'); ?>
 						<?php echo $this->form->renderField('vendor_description'); ?>
 						<?php echo $this->form->renderField('vendor_logo'); ?>
+						<div class="controls">
+						<div class="alert alert-warning">
+						<?php
+						echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png');
+						?>
 						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
 						<?php if (!empty($this->item->vendor_logo)) : ?>
 							<div class="control-group">
 								<div class="controls "><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>"></div>
 							</div>
 						<?php endif; ?>
-
+						</div>
+					<input type="hidden" name="jform[currency]" value='<?php echo $this->item->currency;?>' />
 				</fieldset>
 			</div>
 		</div>

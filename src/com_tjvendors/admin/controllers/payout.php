@@ -38,24 +38,6 @@ class TjvendorsControllerPayout extends JControllerForm
 	}
 
 	/**
-	 * Gets the URL arguments to append to an item redirect.
-	 *
-	 * @param   integer  $recordId  The primary key id for the item.
-	 * @param   string   $urlVar    The name of the URL variable for the id.
-	 *
-	 * @return  string  The arguments to append to the redirect URL.
-	 *
-	 * @since   1.6
-	 */
-	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
-	{
-		$append = parent::getRedirectToItemAppend($recordId);
-		$append .= '&client=' . $this->client;
-
-		return $append;
-	}
-
-	/**
 	 * Gets the URL arguments to append to a list redirect.
 	 *
 	 * @return  string  The arguments to append to the redirect URL.
@@ -68,7 +50,7 @@ class TjvendorsControllerPayout extends JControllerForm
 		$input = JFactory::getApplication()->input;
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$append = parent::getRedirectToListAppend();
-		$append .= '&client=' . $this->client . '&vendor_id=' . $vendor_id;
+		$append .= '&vendor_id=' . $vendor_id;
 
 		return $append;
 	}

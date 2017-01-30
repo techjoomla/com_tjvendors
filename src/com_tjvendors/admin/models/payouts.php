@@ -68,16 +68,11 @@ class TjvendorsModelPayouts extends JModelList
 
 		$this->setState('list.ordering', $orderCol);
 
-		// Filter vendor
+		$vendor_client = $app->getUserStateFromRequest($this->context, 'client', '');
+		$this->setState('filter.client', $vendor_client);
 
-		$vendorId = $app->getUserStateFromRequest($this->context, 'vendor_id', '', 'string');
-
-		if (empty($vendorId))
-		{
-			$vendorId = $app->getUserStateFromRequest($this->context . '.title', 'filter_vendorId', '', 'string');
-		}
-
-		$this->setState('filter.vendor', $vendorId);
+		$vendorId = $app->getUserStateFromRequest($this->context . '.filter.vendor_id', 'vendor_id', '0', 'string');
+		$this->setState('filter.vendor_id', $vendorId);
 
 		// Load the filter state.
 		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
@@ -106,7 +101,7 @@ class TjvendorsModelPayouts extends JModelList
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$client = $this->getState('client');
+		$client = $this->getState('filter.client');
 		$query->select($db->quoteName(array('vendors.vendor_id','pass.id','fees.currency','vendors.vendor_title','pass.total')));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
 		$query->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
@@ -118,7 +113,7 @@ class TjvendorsModelPayouts extends JModelList
 
 		if (!empty($client))
 		{
-		$query->where($db->quoteName('vendors.vendor_client') . ' = ' . "'$client'");
+			$query->where($db->quoteName('vendors.vendor_client') . ' = ' . "'$client'");
 		}
 
 		$db->setQuery($query);
@@ -127,8 +122,8 @@ class TjvendorsModelPayouts extends JModelList
 		// Filter by search in title
 		$search = $this->getState('filter.search');
 
-		// Filter
-		$vendor = $this->getState('filter.vendor');
+		// Filter vendor id
+		$vendor = $this->getState('filter.vendor_id');
 
 		if (!empty($search))
 		{
@@ -146,6 +141,8 @@ class TjvendorsModelPayouts extends JModelList
 		}
 
 		// Display according to filter
+		$vendor = $this->getState('filter.vendor_id');
+
 		if (!empty($vendor))
 		{
 			$query->where($db->quoteName('vendors.vendor_id') . '=' . $vendor);

@@ -228,7 +228,7 @@ else
 						<?php echo JText::_('COM_TJVENDORS_VENDORS_ID'); ?>
 					</th>
 					<th class='left'>
-						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_ID'); ?>
+						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_FEE_TITLE'); ?>
 					</th>
 
 					<th class='left'>

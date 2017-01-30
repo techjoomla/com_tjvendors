@@ -129,7 +129,7 @@ if (!empty($this->extra_sidebar))
 <form
 action="
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&client=' . $this->input->get('client', '', 'STRING') . '&vendor_id=' . $this->items[0]->vendor_id . $this->currency); ?>" 
+echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $this->items[0]->vendor_id); ?>" 
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
@@ -225,14 +225,14 @@ else
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'b.`id`', $listDirn, $listOrder); ?>
+						<?php echo JText::_('COM_TJVENDORS_VENDORS_ID'); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_LBL_VENDOR_ID', 'a.`vendor_id`'); ?>
+						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_ID'); ?>
 					</th>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY', 'a.`currency`'); ?>
+						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY'); ?>
 					</th>
 					<th class='left'>
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'b.`percent_commission`', $listDirn, $listOrder); ?>
@@ -307,12 +307,12 @@ else
 							<td>
 								<a href="
 								<?php 
-								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . '&currency=' . $item->currency . '&fee_id=' . $item->id);?>">
+								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&currency=' . $item->currency . '&fee_id=' . $item->id);?>">
 								<?php echo $item->currency; ?>
 								</a>
 							</td>
 							<td>
-								<?php echo $item->percent_commission; ?>
+								<?php echo $item->percent_commission . " %";?>
 							</td>
 							<td>
 								<?php echo $item->flat_commission; ?>
@@ -327,6 +327,7 @@ else
 		}?>
 			<input type="hidden" name="task" value=""/>
 			<input type="hidden" name="boxchecked" value="0"/>
+			<input type="hidden" name="vendor_id" value="<?php echo $this->vendor_id;?>"/>
 			<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 			<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
 			<?php echo JHtml::_('form.token'); ?>

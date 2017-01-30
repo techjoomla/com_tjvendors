@@ -79,13 +79,9 @@ class TjvendorsViewVendorFee extends JViewLegacy
 
 		$canDo = TjvendorsHelpersTjvendors::getActions();
 
-			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle,  'pencil-2');
-
-		// If not checked out, can save the item.
-		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create'))))
-		{
-			JToolBarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');
-		}
+		JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle,  'pencil-2');
+		JToolBarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');
+		JToolBarHelper::save('vendorfee.save', 'JTOOLBAR_SAVE');
 
 		if (empty($this->item->id))
 		{

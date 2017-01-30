@@ -36,15 +36,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$input = JFactory::getApplication()->input;
-		$this->curr = $input->get('currency', '', 'ARRAY');
-
-		foreach ($this->curr as $currency)
-		{
-		$this->currency .= "&currency[]=" . $currency;
-		}
-
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
-		$this->client = $input->get('client', '', 'STRING');
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
@@ -73,7 +65,6 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	protected function addToolbar()
 	{
 		$input = JFactory::getApplication()->input;
-		$this->client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
 		$canDo = TjvendorsHelpersTjvendors::getActions();
@@ -138,7 +129,6 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'b.`currency`' => JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY'),
 			'b.`percent_commission`' => JText::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),
 			'b.`flat_commission`' => JText::_('COM_TJVENDORS_VENDORS_FLAT_COMMISSION'),
 		);

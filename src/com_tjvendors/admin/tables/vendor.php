@@ -124,6 +124,8 @@ class TjvendorsTablevendor extends JTable
 		}
 
 		$app = JFactory::getApplication();
+		$vendor_id = $app->input->get('vendor_id');
+
 		$files = $app->input->files->get('jform', array(), 'raw');
 		$array = $app->input->get('jform', array(), 'ARRAY');
 
@@ -172,7 +174,7 @@ class TjvendorsTablevendor extends JTable
 
 				if ($fileSize > 26214400)
 				{
-					$app->enqueueMessage('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR', 'warning');
+					$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'), 'warning');
 
 					return false;
 				}
@@ -188,7 +190,17 @@ class TjvendorsTablevendor extends JTable
 				{
 					if (! JFile::upload($fileTemp, $uploadPath))
 					{
-						$app->enqueueMessage('COM_TJVENDOR_FILE_MOVING_ERROR', 'warning');
+						$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'), 'warning');
+
+						return false;
+					}
+				}
+
+				if (!empty($extension))
+				{
+					if (($extension !== "png") && ($extension !== "jpg") && ($extension !== "jpeg"))
+					{
+						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
 
 						return false;
 					}
@@ -198,25 +210,52 @@ class TjvendorsTablevendor extends JTable
 			}
 		}
 
+		$currency = json_decode($array['currency'], true);
+
+		if (empty($currency))
+		{
+			$app->enqueueMessage(JText::_('COM_TJVENDORS_CURRENCY_RECORDS'), 'warning');
+
+			return false;
+		}
+
+		if (!$this->checkDuplicateUser($array))
+		{
+			$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
+
+			return false;
+		}
+
 		return parent::check();
 	}
 
 	/**
 	 * Method for checkDuplicateUser
 	 *
+	 * @param   array  $array  An array
+	 *
 	 * @return bool
 	 */
-	public function checkDuplicateUser()
+	public function checkDuplicateUser($array)
 	{
 		// Start city validations
 		$db = JFactory::getDbo();
 
+		$vendor_id = $array['vendor_id'];
+
 		// Fetch all existed records
 		$query = $db->getQuery(true);
-		$query->select($db->qn(array('user_id')))
-			->from($db->qn('#__tjvendors_vendors'))
-			->where($db->qn('user_id') . ' = ' . $this->user_id)
-			->where($db->qn('vendor_client') . " =  '$this->vendor_client'");
+		$query->select($db->qn(array('user_id')));
+		$query->from($db->qn('#__tjvendors_vendors'));
+
+		$query->where($db->qn('user_id') . ' = ' . $this->user_id);
+		$query->where($db->qn('vendor_client') . " =  '$this->vendor_client'");
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->qn('vendor_id') . ' != ' . $vendor_id);
+		}
+
 		$db->setQuery($query);
 
 		$userexist = $this->_db->loadResult();
@@ -351,20 +390,5 @@ class TjvendorsTablevendor extends JTable
 		}
 
 		return $assetParentId;
-	}
-
-	/**
-	 * Delete a record by id
-	 *
-	 * @param   mixed  $pk  Primary key value to delete. Optional
-	 *
-	 * @return bool
-	 */
-	public function delete($pk = null)
-	{
-		$this->load($pk);
-		$result = parent::delete($pk);
-
-		return $result;
 	}
 }

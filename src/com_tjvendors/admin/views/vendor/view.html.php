@@ -40,6 +40,13 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
 
+		if (empty($this->item->vendor_id))
+		{
+			$currUrl = $this->input->get('currency', '', 'ARRAY');
+			$this->item->currency = json_encode($currUrl);
+			$this->item->vendor_client = $this->input->get('client', '', 'STRING');
+		}
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
@@ -107,10 +114,9 @@ class TjvendorsViewVendor extends JViewLegacy
 			JToolBarHelper::save('vendor.save', 'JTOOLBAR_SAVE');
 		}
 
-		// If an existing item, can save to a copy.
-		if (!$isNew && $canDo->get('core.create'))
+		if (!$checkedOut && ($canDo->get('core.create')))
 		{
-			JToolBarHelper::custom('vendor.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
+			JToolBarHelper::custom('vendor.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 		}
 
 		if (empty($this->item->vendor_id))

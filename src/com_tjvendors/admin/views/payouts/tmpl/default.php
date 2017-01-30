@@ -62,50 +62,16 @@ $sortFields = $this->getSortFields();
 		});
 	});
 
-	window.toggleField = function (id, task, field)
-	{
-		var f = document.adminForm,
-			i = 0, cbx,
-			cb = f[ id ];
-
-		if (!cb) return false;
-
-		while (true)
-		{
-			cbx = f[ 'cb' + i ];
-
-			if (!cbx) break;
-
-			cbx.checked = false;
-			i++;
-		}
-
-		var inputField   = document.createElement('input');
-		inputField.type  = 'hidden';
-		inputField.name  = 'field';
-		inputField.value = field;
-		f.appendChild(inputField);
-
-		cb.checked = true;
-		f.boxchecked.value = 1;
-		window.submitform(task);
-
-		return false;
-	};
-
 </script>
-
 <?php
-
 // Joomla Component Creator code to allow adding non select list filters
 if (!empty($this->extra_sidebar))
 {
 	$this->sidebar .= $this->extra_sidebar;
 }
-
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&client=' . $this->input->get('client', '', 'STRING').'&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER')); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER')); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
 if(!empty($this->sidebar))
@@ -133,7 +99,6 @@ else
 				title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
 		</div>
 
-
 		<div class="btn-group pull-left">
 			<button class="btn hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>">
 				<i class="icon-search"></i>
@@ -158,7 +123,8 @@ else
 				{
 					$vendorList[]=$vendor;
 				}
-			 echo JHtml::_('select.genericlist', $vendorList, "filter_vendorId", 'class="input-medium" size="1" onchange="jQuery(\'#vendor_id\').val(jQuery(this).val());;jQuery(\'#task\').val(\'payouts.getRedirectToList\');document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor'));?>
+
+			 echo JHtml::_('select.genericlist', $vendorList, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
 
 		<div class="btn-group pull-right hidden-phone">
@@ -306,7 +272,7 @@ else
 						</td>
 
 						<td>
-							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&id=' .$item->id.'&client=' . $this->input->get('client', '', 'STRING'));?>"
+							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&id=' .$item->id);?>"
 							<button class="validate btn btn-primary">PAY</button>
 						</td>
 					</tr>
@@ -316,7 +282,6 @@ else
 		</table>
 		<?php
 	}?>
-		<input type="hidden" id="vendor_id" name="vendor_id" value="<?php echo $item->vendor_id; ?>"/>
 		<input type="hidden" name="boxchecked" value="0"/>
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>

@@ -121,20 +121,23 @@ class TjvendorsModelPayout extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$db = JFactory::getDbo();
 		$input  = JFactory::getApplication()->input;
-		$items = parent::getItem($pk = null);
-		$items = $this->getItem($data['id']);
-		$data['debit'] = $data['total'];
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$vendorDetail = $TjvendorsModelVendor->getItem();
+		$client = $vendorDetail->vendor_client;
+
+		// To get selected item
+		$item = $this->getItem($data['id']);
 		$pending_amount = $input->get('pendingamount', '', 'INTEGER');
-		$client = $input->get('client', '', 'STRING');
+		$data['debit'] = $data['total'];
 		$data['total'] = $pending_amount - $data['debit'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
-		$data['reference_order_id'] = $items->reference_order_id;
+		$data['reference_order_id'] = $item->reference_order_id;
 		$data['client'] = $client;
-		$data['transaction_id'] = $items->vendor_id . $client . $items->currency;
+		$data['transaction_id'] = $item->vendor_id . $client . $item->currency;
 		$data['id'] = '';
-		$data['vendor_id'] = $items->vendor_id;
+		$data['vendor_id'] = $item->vendor_id;
 
 		if (parent::save($data))
 		{

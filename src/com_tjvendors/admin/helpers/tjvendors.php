@@ -97,6 +97,7 @@ class TjvendorsHelpersTjvendors
 		$currUrl = "";
 
 		$currencies = (array) $currencies;
+
 		foreach ($currencies as $currency)
 		{
 			$currUrl .= "&currency[]=" . $currency;

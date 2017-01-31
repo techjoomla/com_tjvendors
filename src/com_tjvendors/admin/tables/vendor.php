@@ -186,21 +186,21 @@ class TjvendorsTablevendor extends JTable
 				$uploadPath = JPATH_ROOT . $filepath;
 				$fileTemp = $singleFile['tmp_name'];
 
-				if (! JFile::exists($uploadPath))
-				{
-					if (! JFile::upload($fileTemp, $uploadPath))
-					{
-						$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'), 'warning');
-
-						return false;
-					}
-				}
-
 				if (!empty($extension))
 				{
 					if (($extension !== "png") && ($extension !== "jpg") && ($extension !== "jpeg"))
 					{
 						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+
+						return false;
+					}
+				}
+
+				if (! JFile::exists($uploadPath))
+				{
+					if (! JFile::upload($fileTemp, $uploadPath))
+					{
+						$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'), 'warning');
 
 						return false;
 					}

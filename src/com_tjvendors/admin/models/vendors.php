@@ -34,6 +34,7 @@ class TjvendorsModelVendors extends JModelList
 				'vendor_id', 'a.`vendor_id`',
 				'vendor_title', 'a.`vendor_title`',
 				'ordering', 'a.`ordering`',
+				'state', 'a.`state`',
 			);
 		}
 

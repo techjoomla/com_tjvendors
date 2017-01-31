@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `#__tj_vendors` (
   `checked_out_time` datetime NOT NULL,
   `params` varchar(255) NOT NULL,
   PRIMARY KEY (`vendor_id`)
-) DEFAULT COLLATE=utf8mb4_unicode_ci;
+) DEFAULT COLLATE=utf8_general_ci;
 
 
 INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `content_history_options`)

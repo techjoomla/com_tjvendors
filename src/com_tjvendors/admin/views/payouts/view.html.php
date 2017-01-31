@@ -41,7 +41,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$this->model = $this->getModel('payouts');
 		$this->pagination = $this->get('Pagination');
 		$this->input = JFactory::getApplication()->input;
-		
+
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');

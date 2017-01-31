@@ -68,7 +68,7 @@ class TjvendorsModelPayouts extends JModelList
 
 		$this->setState('list.ordering', $orderCol);
 
-		$vendor_client = $app->getUserStateFromRequest($this->context, 'client', '');
+		$vendor_client = $app->getUserStateFromRequest($this->context . '.filter.client', 'client', '0', 'string');
 		$this->setState('filter.client', $vendor_client);
 
 		$vendorId = $app->getUserStateFromRequest($this->context . '.filter.vendor_id', 'vendor_id', '0', 'string');
@@ -101,7 +101,7 @@ class TjvendorsModelPayouts extends JModelList
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$client = $this->getState('filter.client');
+		$client = $this->getState('filter.client', '');
 		$query->select($db->quoteName(array('vendors.vendor_id','pass.id','fees.currency','vendors.vendor_title','pass.total')));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
 		$query->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
@@ -113,7 +113,7 @@ class TjvendorsModelPayouts extends JModelList
 
 		if (!empty($client))
 		{
-			$query->where($db->quoteName('vendors.vendor_client') . ' = ' . "'$client'");
+		$query->where($db->quoteName('vendors.vendor_client') . " = " . $db->quote($client));
 		}
 
 		$db->setQuery($query);

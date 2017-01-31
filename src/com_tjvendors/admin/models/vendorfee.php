@@ -72,12 +72,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$app = JFactory::getApplication();
 
 		// Get the form.
-		$form = $this->loadForm(
-			'com_tjvendors.vendorfee', 'vendorfee',
-			array('control' => 'jform',
-				'load_data' => $loadData
-			)
-		);
+		$form = $this->loadForm('com_tjvendors.vendorfee', 'vendorfee', array('control' => 'jform', 'load_data' => $loadData));
 
 		if (empty($form))
 		{
@@ -96,7 +91,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 *
 	 * @since    1.6
 	 */
-	public function getItem($pk)
+	public function getItem($pk = null)
 	{
 		$data = parent::getItem($pk);
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
@@ -119,7 +114,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	{
 		// Check the session for previously entered form data.
 		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.vendorfee.data', array());
-		$input = JFactory::getApplication()->input;
 
 		if (empty($data))
 		{
@@ -127,9 +121,9 @@ class TjvendorsModelVendorFee extends JModelAdmin
 			{
 				$this->item = $this->getItem();
 			}
-		}
 
-		$data = (array) $this->item;
+		$data = $this->item;
+		}
 
 		return $data;
 	}

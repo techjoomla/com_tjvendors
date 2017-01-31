@@ -178,6 +178,8 @@ class TjvendorsModelVendorFees extends JModelList
 		{
 			foreach ($resultCurrency as $result)
 			{
+				$items[$itemCount] = new stdClass;
+				$items[$itemCount]->id = '';
 				$items[$itemCount]->vendor_id = $this->vendor_id;
 				$items[$itemCount]->vendor_title = $vendorTitle;
 				$items[$itemCount]->currency = $result;

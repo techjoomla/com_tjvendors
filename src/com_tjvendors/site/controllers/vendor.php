@@ -152,7 +152,11 @@ class TjvendorsControllerVendor extends JControllerForm
 			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
 			$client = $app->getUserState('com_tjvendors.edit.vendor.client');
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $data['vendor_client'], false));
+			$this->setRedirect(
+					JRoute::_(
+					'index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $data['vendor_client'], false
+					)
+					);
 
 			return false;
 		}

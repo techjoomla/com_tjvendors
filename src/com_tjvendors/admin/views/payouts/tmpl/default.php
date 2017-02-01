@@ -116,14 +116,34 @@ else
 		</div>
 
 		<div class="btn-group pull-right hidden-phone">
-			<?php // Making custom filter list
-				$vendorList[]=JText::_('JFILTER_PAYOUT_ALL_VENDORS');
+			<?php	
+			$vendorListClient[]=JText::_('choose a client');
+			$allClients=(object)array("vendor_client"=>"0");
+			$vendorListClient[]=$allClients;
+			foreach ($this->vendor_details as $vendor)
+				{
+					$vendorListClient[]=$vendor;
+				}
+			echo JHtml::_('select.genericlist', $vendorListClient, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_client", "vendor_client", $this->state->get('filter.vendor_client'));
+			$filterClient=$this->state->get('filter.vendor_client');	?>
+		</div>
+
+		<div class="btn-group pull-right hidden-phone">
+			<?php 
+				// Making custom filter list
+				$vendorList[]=JText::_('Chose Vendor');
+				$allVendors = (object)array("vendor_id"=>"0","vendor_title"=>"All Vendors");
+
+				$vendorList[]=$allVendors;
 
 				foreach ($this->vendor_details as $vendor)
 				{
-					$vendorList[]=$vendor;
+					// Providing vendors for particular client
+					if($vendor->vendor_client==$filterClient)
+					{
+							$vendorList[]=$vendor;
+					}
 				}
-
 			 echo JHtml::_('select.genericlist', $vendorList, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
 

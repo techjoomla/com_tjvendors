@@ -68,11 +68,11 @@ class TjvendorsModelPayouts extends JModelList
 
 		$this->setState('list.ordering', $orderCol);
 
-		$vendor_client = $app->getUserStateFromRequest($this->context . '.filter.client', 'client', '0', 'string');
-		$this->setState('filter.client', $vendor_client);
-
 		$vendorId = $app->getUserStateFromRequest($this->context . '.filter.vendor_id', 'vendor_id', '0', 'string');
 		$this->setState('filter.vendor_id', $vendorId);
+
+		$client = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
+		$this->setState('filter.vendor_client', $client);
 
 		// Load the filter state.
 		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
@@ -101,7 +101,6 @@ class TjvendorsModelPayouts extends JModelList
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$client = $this->getState('filter.client', '');
 		$query->select($db->quoteName(array('vendors.vendor_id','pass.id','fees.currency','vendors.vendor_title','pass.total')));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
 		$query->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
@@ -110,6 +109,8 @@ class TjvendorsModelPayouts extends JModelList
 			' ON (' . $db->quoteName('fees.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') .
 			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')');
 		$query->where($db->quoteName('pass.id') . ' is not null');
+
+		$client = $this->getState('filter.vendor_client');
 
 		if (!empty($client))
 		{

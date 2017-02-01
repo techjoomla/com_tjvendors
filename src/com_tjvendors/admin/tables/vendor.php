@@ -176,6 +176,7 @@ class TjvendorsTablevendor extends JTable
 				{
 					$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'), 'warning');
 					$this->setError(JText::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'));
+
 					return false;
 				}
 
@@ -192,10 +193,10 @@ class TjvendorsTablevendor extends JTable
 					{
 						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
 						$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+
 						return false;
 					}
 				}
-
 
 				if (! JFile::exists($uploadPath))
 				{
@@ -203,6 +204,7 @@ class TjvendorsTablevendor extends JTable
 					{
 						$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'), 'warning');
 						$this->setError(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'));
+
 						return false;
 					}
 				}
@@ -217,6 +219,7 @@ class TjvendorsTablevendor extends JTable
 		{
 			$app->enqueueMessage(JText::_('COM_TJVENDORS_CURRENCY_RECORDS'), 'warning');
 			$this->setError(JText::_('COM_TJVENDORS_CURRENCY_RECORDS'));
+
 			return false;
 		}
 
@@ -224,6 +227,7 @@ class TjvendorsTablevendor extends JTable
 		{
 			$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
 			$this->setError(JText::_('COM_TJVENDORS_EXIST_RECORDS'));
+
 			return false;
 		}
 

@@ -124,7 +124,7 @@ if (!empty($this->extra_sidebar))
 $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 ?>
 <form
-action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING') . $currUrl); ?>" method="post" name="adminForm" id="adminForm">
+action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
 {?>

@@ -46,6 +46,7 @@ class TjvendorsHelpersTjvendors
 	{
 		$currencies = JFactory::getApplication()->input->get('currency', '', 'ARRAY');
 		$currUrl = "";
+		$currencies = (array) $currencies;
 
 		foreach ($currencies as $currency)
 		{

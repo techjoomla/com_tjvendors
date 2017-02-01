@@ -52,10 +52,8 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
-		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
-
 		$append = parent::getRedirectToItemAppend($recordId);
-		$append .= '&client=' . $this->vendor_client . $currUrl;
+		$append .= '&client=' . $this->vendor_client;
 
 		return $append;
 	}
@@ -70,7 +68,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	protected function getRedirectToListAppend()
 	{
 		$append = parent::getRedirectToListAppend();
-		$append .= '&client=' . $this->vendor_client . $currUrl;
+		$append .= '&client=' . $this->vendor_client;
 
 		return $append;
 	}
@@ -133,10 +131,10 @@ class TjvendorsControllerVendor extends JControllerForm
 			$app->setUserState('com_tjvendors.edit.vendor.data', $app->input->get('jform', array(), "ARRAY"));
 
 			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
+			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id');
 			$client = $app->getUserState('com_tjvendors.edit.vendor.client');
-			$currUrl = TjvendorsHelpersTjvendors::getCurrency();
-			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client . $currUrl, false));
+
+			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
 
 			return false;
 		}
@@ -151,23 +149,20 @@ class TjvendorsControllerVendor extends JControllerForm
 			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
 			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id');
+			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
 			$client = $app->getUserState('com_tjvendors.edit.vendor.client');
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
+			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $data['vendor_client'], false));
 
 			return false;
 		}
 
-		// Clear the profile id from the session.
-		// $app->setUserState('com_tjvendors.edit.vendor.vendor_id', null);
-
 		// Redirect to the list screen.
+		$vendor_id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id');
 		$this->setMessage(JText::_('COM_TJVENDORS_ITEM_SAVED_SUCCESSFULLY'));
-		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 		$this->setRedirect(
 				JRoute::_(
-				'index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $data['vendor_id'] . '&client=' . $data['vendor_client'] . $currUrl, false
+				'index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $vendor_id . '&client=' . $data['vendor_client'], false
 				)
 				);
 
@@ -182,10 +177,9 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	public function cancel()
 	{
-		$currUrl = TjvendorsHelpersTjvendors::getCurrency();
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
 		$this->setRedirect(
-		JRoute::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $data['vendor_client'] . $currUrl, false)
+		JRoute::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $data['vendor_client'], false)
 		);
 	}
 }

@@ -175,7 +175,7 @@ class TjvendorsTablevendor extends JTable
 				if ($fileSize > 26214400)
 				{
 					$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'), 'warning');
-
+					$this->setError(JText::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'));
 					return false;
 				}
 
@@ -191,17 +191,18 @@ class TjvendorsTablevendor extends JTable
 					if (($extension !== "png") && ($extension !== "jpg") && ($extension !== "jpeg"))
 					{
 						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
-
+						$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
 						return false;
 					}
 				}
+
 
 				if (! JFile::exists($uploadPath))
 				{
 					if (! JFile::upload($fileTemp, $uploadPath))
 					{
 						$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'), 'warning');
-
+						$this->setError(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'));
 						return false;
 					}
 				}
@@ -215,14 +216,14 @@ class TjvendorsTablevendor extends JTable
 		if (empty($currency))
 		{
 			$app->enqueueMessage(JText::_('COM_TJVENDORS_CURRENCY_RECORDS'), 'warning');
-
+			$this->setError(JText::_('COM_TJVENDORS_CURRENCY_RECORDS'));
 			return false;
 		}
 
 		if (!$this->checkDuplicateUser($array))
 		{
 			$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
-
+			$this->setError(JText::_('COM_TJVENDORS_EXIST_RECORDS'));
 			return false;
 		}
 

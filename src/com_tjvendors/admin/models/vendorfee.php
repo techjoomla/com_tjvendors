@@ -157,12 +157,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 					return true;
 				}
 			}
-			else
-			{
-				$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER_RESET_ERROR'), 'error');
-
-				return false;
-			}
 		}
 		else
 		{

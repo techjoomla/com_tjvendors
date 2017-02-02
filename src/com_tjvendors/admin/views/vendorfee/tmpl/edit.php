@@ -82,10 +82,8 @@ method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form"
 			</div>
 		</div>
 		<input type="hidden" name="task" value=""/>
-		<input type="hidden" name="jform[currency]" value="<?php echo $this->curr;?>" />
 		<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id;?>" />
 		<input type="hidden" name="jform[id]" value="<?php echo $this->id; ?>" />
-		<input type="hidden" name="jform[client]" value="<?php echo $this->item->client; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

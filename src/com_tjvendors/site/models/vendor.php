@@ -142,33 +142,52 @@ class TjvendorsModelVendor extends JModelAdmin
 		$app = JFactory::getApplication();
 
 		$data['user_id'] = JFactory::getUser()->id;
-		$data['vendor_client'] = ! empty($client) ? $client : $data['vendor_client'];
 
-		// Bind data
-		if (! $table->bind($data))
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		// Validate
-		if (! $table->check())
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
+		$currency = $data['currency'];
+	
 		if ($data['user_id'] != 0)
 		{
-			// Attempt to save data
-			if (parent::save($data))
+			// To check if editing in registration form
+			if ($data['vendor_id'])
 			{
-				$vendor_id = (int) $this->getState($this->getName() . '.id');
-				$app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
+			$table->save($data);
+			$vendor_id = (int) $this->getState($this->getName() . '.id');
+			$app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
 
-				return true;
+			return true;
+			}
+			else
+			{
+			// Attempt to save data
+			if ($table->save($data) === true)
+			{
+				$vendorId = $table->vendor_id;
+				$client = $table->vendor_client;
+				$currencies = json_decode($table->currency);
+
+				// Attempt to save the data in fee table
+				if (!empty($currencies))
+				{
+				if ($table->vendor_id)
+				{
+					foreach ($currencies as $currency)
+					{
+					$userdata = new stdClass;
+					$userdata->vendor_id  = $vendorId;
+					$userdata->client = $client;
+					$userdata->currency = $currency;
+					$userdata->percent_commission = '0';
+					$userdata->flat_commission = '0';
+
+					$result    = JFactory::getDbo()->insertObject('#__tjvendors_fee', $userdata);
+					}
+					$vendor_id = (int) $this->getState($this->getName() . '.id');
+					$app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
+
+					return true;
+				}
+				}
+			}
 			}
 		}
 		else

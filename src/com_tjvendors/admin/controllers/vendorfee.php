@@ -54,7 +54,6 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$formData = new JRegistry($input->get('jform', '', 'array'));
 		$currency = $formData->get('currency');
 		$vendor_id = (int) $formData->get('vendor_id');
-		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('id'));
 		$append = parent::getRedirectToItemAppend($recordId);
 		$append .= '&vendor_id=' . $vendor_id . '&currency=' . $currency;
 
@@ -81,24 +80,6 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	}
 
 	/**
-	 * Function to cancel button redirection
-	 * 
-	 * @param   integer  $key  The primary key fee_id for the item.
-	 * 
-	 * @return  void
-	 */
-	public function cancel($key = null)
-	{
-		$input = JFactory::getApplication()->input;
-
-		$formData = new JRegistry($input->get('jform', '', 'array'));
-		$vendorId = (int) $formData->get('vendor_id');
-
-		$link = JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId, false);
-		$this->setRedirect($link);
-	}
-
-	/**
 	 * Function to edit field data
 	 *
 	 * @param   integer  $key  The primary key fee_id for the item.
@@ -110,12 +91,9 @@ class TjvendorsControllerVendorFee extends JControllerForm
 		$input = JFactory::getApplication()->input;
 		$cid = $input->post->get('cid', array(), 'array');
 		$vendorId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
-		$currency = (STRING) (count($cid) ? $cid[0] : $input->get('currency'));
 		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
-
 		$link = JRoute::_(
-		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId .
-		'&currency=' . $currency, false
+		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId, false
 		);
 		$this->setRedirect($link);
 	}

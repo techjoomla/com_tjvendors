@@ -36,7 +36,6 @@ class TjvendorsViewVendorFee extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$input = JFactory::getApplication()->input;
-		$this->curr = $input->get('currency', '', 'STRING');
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$this->id = $input->get('id', '', 'INT');
 		$this->state = $this->get('State');

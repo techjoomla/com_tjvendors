@@ -64,13 +64,18 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		// Get the input
 		$input = JFactory::getApplication()->input;
 		$cid = $input->post->get('cid', array(), 'array');
-		$Id = (int) (count($cid) ? $cid[0] : $input->getInt('id'));
+		$post = JRequest::get('post');
+		$Id = $post['cid'];
 		$vendorId = $input->post->get('vendor_id', '', 'INT');
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendorfee');
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendorfee', 'TjvendorsModel');
-		$vendorDetail = (array) $TjvendorsModelVendor->getItem($Id);
+
+		foreach ($Id as $id)
+		{
+		$vendorDetail = (array) $TjvendorsModelVendor->getItem($id);
 		$model = $this->getModel('vendorfee');
 		$result = $model->save($vendorDetail);
+		}
 
 		// Redirect to the list screen.
 		$link = JRoute::_(

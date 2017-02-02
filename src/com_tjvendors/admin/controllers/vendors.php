@@ -51,18 +51,4 @@ class TjvendorsControllerVendors extends JControllerAdmin
 		$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client;
 		$this->setRedirect($redirect);
 	}
-
-	/**
-	 * Method for publish vendor
-	 *
-	 * @return  boolean
-	 */
-	public function publish()
-	{
-		$input  = JFactory::getApplication()->input;
-		$client = $input->get('client', '', 'STRING');
-		parent::publish();
-		$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client;
-		$this->setRedirect($redirect);
-	}
 }

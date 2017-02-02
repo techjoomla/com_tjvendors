@@ -1,77 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-  <fieldset>
-	  
-    <field name="id" type="int" 
-    default="1" 
-    label="COM_TJVENDORS_FORM_LBL_VENDOR_ID" 
-    readonly="true" 
-    description="JGLOBAL_FIELD_ID_DESC" />
-    
-    <field name="vendor_id" type="int" 
-    label="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID" 
-    description="COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_ID" 
-    hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID">
-    </field>
-    
-    <field name="vendor_title" type="text" 
-    label="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_TITLE" 
-    description="COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_ID" 
-    hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_TITLE"
-    readonly="true">
-    </field>
-    
-    <field name="client"
-    type="text"
-    label="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT" 
-    description="COM_TJVENDORS_FORM_DESC_VENDOR_CLIENT" 
-    hint="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT" 
-    menu_published="0" 
-    filter="raw" 
-    directory_stripext="true" 
-    directory_hidenode="true" 
-    directory_hidedefault="true" 
-    heading="h4" close="true" 
-    option_on="Yes" option_off="Yes" 
-    toggle_default_value="0" />
-
-    <field name="currency" id="currency"
-    type="text" 
-    label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY" 
-    description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY" 
-    hint="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY"
-    filter="safehtml" 
-    readonly="true"
-    />
-    
-    <field name="percent_commission" 
-    type="number" 
-    size="40" 
-    class="inputbox validate-numeric" 
-    label="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION" 
-    description="COM_TJVENDORS_FORM_DESC_VENDOR_PERCENT_COMMISSION" 
-    hint="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION"
-    min="0"
-    max="100"
-    filter="safehtml" />
-    
-    <field name="flat_commission" 
-    type="number" 
-    size="40" 
-    class="inputbox validate-numeric" 
-    label="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION" 
-    description="COM_TJVENDORS_FORM_DESC_VENDOR_FLAT_COMMISSION" 
-    hint="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION" 
-    min="0"
-    filter="safehtml" />
-    
-    <field name="version_note" 
-    type="text" 
-    label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" 
-    description="JGLOBAL_FIELD_VERSION_NOTE_DESC" 
-    class="inputbox" 
-    size="45" 
-    labelclass="control-label" />
-    
-  </fieldset>
+	<fieldset>
+		<field 
+			name="id"
+			type="int"
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_ID"
+			readonly="true"
+			class="readonly required"
+			description="JGLOBAL_FIELD_ID_DESC"
+			/>
+		<field
+			name="vendor_id" 
+			type="int" 
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID" 
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_ID"
+			hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_ID"
+			/>
+		<field
+			name="vendor_title" 
+			type="text" 
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_TITLE" 
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_ID" 
+			hint="COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_TITLE" 
+			readonly="true"
+			/>
+		<field 
+			name="client" 
+			type="text" 
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT" 
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_CLIENT" 
+			hint="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT" 
+			filter="safehtml"
+			/>
+		<field 
+			name="currency" 
+			id="currency" 
+			type="text" 
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY"
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY" 
+			hint="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY"
+			readonly="true"
+			filter="safehtml" 
+			/>
+		<field 
+			name="percent_commission" 
+			type="number"
+			size="40" 
+			class="inputbox validate-numeric" 
+			label="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION" 
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_PERCENT_COMMISSION"
+			hint="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION" 
+			min="0" 
+			max="100" 
+			filter="safehtml"
+			/>
+		<field 
+			name="flat_commission" 
+			type="number" 
+			size="40" 
+			default="0" 
+			class="inputbox validate-numeric"
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION" 
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_FLAT_COMMISSION" 
+			hint="COM_TJVENDORS_FORM_LBL_VENDOR_FLAT_COMMISSION" 
+			filter="safehtml"
+		/>
+		</fieldset>
 </form>

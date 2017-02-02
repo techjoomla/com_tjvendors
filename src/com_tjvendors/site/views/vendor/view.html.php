@@ -41,9 +41,12 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
 
-		$app = JFactory::getApplication();
-		$input = $app->input;
-		$this->vendor->vendor_client = $input->get('client', '', 'STRING');
+		if (empty($this->vendor->vendor_id))
+		{
+			$currUrl = $this->input->get('currency', '', 'ARRAY');
+			$this->vendor->currency = json_encode($currUrl);
+			$this->vendor->vendor_client = $this->input->get('client', '', 'STRING');
+		}
 
 		// Check for errors
 		if (count($errors = $this->get('Errors')))

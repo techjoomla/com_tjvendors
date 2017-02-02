@@ -7,17 +7,13 @@
  * @license    GNU General Public License version 2 or later.
  */
 // No direct access
-defined('_JEXEC') or die;
+defined('_JEXEC') or die();
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
-
-// Import CSS
-$document = JFactory::getDocument();
-
 
 ?>
 <script type="text/javascript">
@@ -27,7 +23,7 @@ $document = JFactory::getDocument();
 		if(task == 'vendorfee.apply' || task == 'vendorfee.save')
 		{
 				var percent_commission = document.getElementById("jform_percent_commission").value;
-				if (percent_commission > 100)
+				if (percent_commission < 0 || percent_commission > 100)
 				{
 						alert("<?php echo JText::_('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC');?>");
 				}
@@ -49,7 +45,7 @@ $document = JFactory::getDocument();
 </script>
 
 <form action="
-<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&id=' . (int) $this->id . '&vendor_id=' . (int) $this->item->vendor_id);?>"
+<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . (int) $this->id . '&vendor_id=' . (int) $this->item->vendor_id);?>"
 method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form" class="form-validate">
 
 	<div class="form-horizontal">
@@ -62,15 +58,14 @@ method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form"
 						<?php
 						if (empty($this->item->currency))
 						{
-							?>
+						?>
+
 						<div class = "control-group" >
-							<div class = "control-label">
+						<div class = "control-label">
 						<label class = "hasPopover" title data-content = "Currency"><?php echo $this->form->getLabel('currency');?></label>
 						</div>
 						<div class = "controls">
-							
 						<input type="text" name="currency" value="<?php echo $this->curr; ?>" readonly="true"></input>
-
 						</div>
 						</div>
 						<?php
@@ -86,8 +81,6 @@ method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form"
 				</fieldset>
 			</div>
 		</div>
-		<?php echo JHtml::_('bootstrap.endTab'); ?>
-		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="jform[currency]" value="<?php echo $this->curr;?>" />
 		<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id;?>" />

@@ -107,49 +107,4 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		return $data;
 	}
-
-	/**
-	 * Method for save user specific %commission, flat commission, client
-	 *
-	 * @param   Array  $data  Data
-	 *
-	 * @return id
-	 */
-	public function save($data)
-	{
-		$table = $this->getTable();
-
-		// Bind data
-		if (!$table->bind($data))
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		// Validate
-		if (!$table->check())
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		if ($data['user_id'] != 0)
-		{
-			// Attempt to save data
-			if (parent::save($data))
-			{
-				return true;
-			}
-		}
-		else
-		{
-			$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER'), 'warning');
-
-			return false;
-		}
-
-		return false;
-	}
 }

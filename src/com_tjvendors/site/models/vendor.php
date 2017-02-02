@@ -123,95 +123,13 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function getItem($pk = null)
 	{
-		if ($item = parent::getItem($pk))
-		{
-			// Create a new query object.
-			$db    = $this->getDbo();
-			$query = $db->getQuery(true);
-
-			$app = JFactory::getApplication();
-			$input = $app->input;
-			$client = $input->get('client', '', 'STRING');
-
-			$user = JFactory::getUser()->id;
-
-			// Select the required field from the table.
-			$query->select('*')
-				->from($db->quoteName('#__tjvendors_vendors'))
-				->where('user_id=' . $db->quote($user))
-				->where('vendor_client=' . $db->quote($client));
-
-			$db->setQuery($query);
-			$item = $db->loadObject();
-		}
+		$item = parent::getItem($pk);
 
 		return $item;
 	}
 
 	/**
-	 * Method to duplicate an Vendor
-	 *
-	 * @param   array  &$pks  An array of primary key IDs.
-	 *
-	 * @return  boolean  True if successful.
-	 *
-	 * @throws  Exception
-	 */
-	public function duplicate(&$pks)
-	{
-		$user = JFactory::getUser();
-
-		// Access checks.
-		if (! $user->authorise('core.create', 'com_tjvendors'))
-		{
-			throw new Exception(JText::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
-		}
-
-		$dispatcher = JEventDispatcher::getInstance();
-		$context = $this->option . '.' . $this->name;
-
-		// Include the plugins for the save events.
-		JPluginHelper::importPlugin($this->events_map['save']);
-
-		$table = $this->getTable();
-
-		foreach ($pks as $pk)
-		{
-			if ($table->load($pk, true))
-			{
-				// Reset the id to create a new record.
-				$table->vendor_id = 0;
-
-				if (! $table->check())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the before save event.
-				$result = $dispatcher->trigger($this->event_before_save, array($context, &$table, true));
-
-				if (in_array(false, $result, true) || ! $table->store())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the after save event.
-				$dispatcher->trigger($this->event_after_save, array($context, &$table, true));
-			}
-			else
-			{
-				throw new Exception($table->getError());
-			}
-		}
-
-		// Clean cache
-		$this->cleanCache();
-
-		return true;
-	}
-
-	/**
-	 * Method for save user specific %commission, flat commission, client
+	 * Method for save vendor information
 	 *
 	 * @param   Array  $data  Data
 	 *
@@ -221,15 +139,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$table = $this->getTable();
 		$db = JFactory::getDBO();
-
 		$app = JFactory::getApplication();
-		$input = $app->input;
-
-		$client = $input->get('client', '', 'STRING');
-		$currencies = $input->get('currency', '', 'ARRAY');
-
-		// Convert currency into json
-		$data['currency'] = json_encode($currencies);
 
 		$data['user_id'] = JFactory::getUser()->id;
 		$data['vendor_client'] = ! empty($client) ? $client : $data['vendor_client'];
@@ -250,21 +160,14 @@ class TjvendorsModelVendor extends JModelAdmin
 			return false;
 		}
 
-		if ($data['vendor_id'] == 0)
-		{
-			if (! $table->checkDuplicateUser())
-			{
-				$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
-
-				return false;
-			}
-		}
-
 		if ($data['user_id'] != 0)
 		{
 			// Attempt to save data
 			if (parent::save($data))
 			{
+				$vendor_id = (int) $this->getState($this->getName() . '.id');
+				$app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
+
 				return true;
 			}
 		}

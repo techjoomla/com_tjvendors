@@ -129,7 +129,7 @@ if (!empty($this->extra_sidebar))
 <form
 action="
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $this->items[0]->vendor_id); ?>" 
+echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id); ?>" 
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
@@ -228,7 +228,11 @@ else
 						<?php echo JText::_('COM_TJVENDORS_VENDORS_ID'); ?>
 					</th>
 					<th class='left'>
+<<<<<<< HEAD
 						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_FEE_TITLE'); ?>
+=======
+						<?php echo JText::_('COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_TITLE'); ?>
+>>>>>>> 7fd7343cc45a3041628764df8743f301320a7949
 					</th>
 
 					<th class='left'>

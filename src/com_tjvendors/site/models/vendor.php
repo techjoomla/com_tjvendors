@@ -144,7 +144,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$data['user_id'] = JFactory::getUser()->id;
 
 		$currency = $data['currency'];
-	
+
 		if ($data['user_id'] != 0)
 		{
 			// To check if editing in registration form
@@ -178,9 +178,9 @@ class TjvendorsModelVendor extends JModelAdmin
 					$userdata->currency = $currency;
 					$userdata->percent_commission = '0';
 					$userdata->flat_commission = '0';
-
 					$result    = JFactory::getDbo()->insertObject('#__tjvendors_fee', $userdata);
 					}
+
 					$vendor_id = (int) $this->getState($this->getName() . '.id');
 					$app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
 

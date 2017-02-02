@@ -70,7 +70,7 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendorfee', 'TjvendorsModel');
 		$vendorDetail = (array) $TjvendorsModelVendor->getItem($Id);
 		$model = $this->getModel('vendorfee');
-		$result = $model->save($vendorDetail, $reset = 'reset');
+		$result = $model->save($vendorDetail);
 
 		// Redirect to the list screen.
 		$link = JRoute::_(

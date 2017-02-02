@@ -130,18 +130,17 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	/**
 	 * Method for save user specific %commission, flat commission, client
 	 *
-	 * @param   Array     $data    Data
-	 * 
-	 * @param   variable  $method  to check reset or save
+	 * @param   Array  $data  Data
 	 *
 	 * @return id
 	 */
-	public function save($data, $method)
+	public function save($data)
 	{
 		$table = $this->getTable();
 		$db = JFactory::getDbo();
 		$input  = JFactory::getApplication()->input;
 		$app  = JFactory::getApplication();
+		$method = $input->getItem('task', '', 'STRING');
 
 		if ($method == 'reset')
 		{
@@ -153,12 +152,13 @@ class TjvendorsModelVendorFee extends JModelAdmin
 				// Attempt to save data
 				if (parent::save($data))
 				{
+					$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER_RESET_SUCCESS') . $data['currency'], 'Message');
 					return true;
 				}
 			}
 			else
 			{
-				$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER_RESET'), 'error');
+				$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER_RESET_ERROR'), 'error');
 
 				return false;
 			}

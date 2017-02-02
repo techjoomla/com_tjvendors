@@ -66,7 +66,7 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 				<fieldset class="adminform">
 					<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->item->vendor_id; ?>" />
 					<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->item->checked_out_time; ?>" />
-					<input type="hidden" name="jform[checked_ou]" value="<?php echo $this->item->checked_out; ?>" />
+					<input type="hidden" name="jform[checked_out]" value="<?php echo $this->item->checked_out; ?>" />
 					<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 
@@ -92,13 +92,13 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 						<?php
 						echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png');
 						?>
+						</div>
 						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
 						<?php if (!empty($this->item->vendor_logo)) : ?>
 							<div class="control-group">
 								<div class="controls "><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>"></div>
 							</div>
 						<?php endif; ?>
-						</div>
 					<input type="hidden" name="jform[currency]" value='<?php echo $this->item->currency;?>' />
 				</fieldset>
 			</div>

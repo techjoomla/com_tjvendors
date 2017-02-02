@@ -124,7 +124,7 @@ if (!empty($this->extra_sidebar))
 $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 ?>
 <form
-action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING') . $currUrl); ?>" method="post" name="adminForm" id="adminForm">
+action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
 {?>
@@ -271,7 +271,7 @@ else
 								<?php echo $item->vendor_id; ?>
 							</td>
 							<td class='center'>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $item->vendor_id. '&client=' . $this->input->get('client', '', 'STRING'));?>">
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $item->vendor_id. '&client=' . $item->vendor_client );?>">
 									<?php echo $this->escape($item->vendor_title); ?>
 								</a>
 							</td>

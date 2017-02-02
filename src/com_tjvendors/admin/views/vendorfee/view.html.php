@@ -71,13 +71,14 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		$input = JFactory::getApplication()->input;
 		$this->full_client = $input->get('client', '', 'STRING');
 
-		// Let's get the extension name
-		$client = JFactory::getApplication()->input->get('client', '', 'STRING');
-		$extensionName = strtoupper($client);
-
-		$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMMISSION');
-
-		$canDo = TjvendorsHelpersTjvendors::getActions();
+		if ($isNew)
+		{
+			$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMMISSION');
+		}
+		else
+		{
+			$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMMISSION');
+		}
 
 		JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle,  'pencil-2');
 		JToolBarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');

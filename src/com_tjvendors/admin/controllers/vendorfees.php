@@ -61,6 +61,7 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 	 */
 	public function delete()
 	{
+		$app = JFactory::getApplication();
 		$input  = JFactory::getApplication()->input;
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
@@ -81,7 +82,7 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		else
 		{
 			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId;
-			$msg = JText::_('COM_TJVENDORS_ERR_DELETED');
+			$app->enqueueMessage(JText::_('COM_TJVENDORS_ERR_DELETED'), 'ERROR');
 		}
 
 		$this->setRedirect($redirect, $msg);

@@ -153,6 +153,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 				if (parent::save($data))
 				{
 					$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER_RESET_SUCCESS') . $data['currency'], 'Message');
+
 					return true;
 				}
 			}

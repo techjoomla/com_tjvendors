@@ -55,36 +55,46 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 	}
 
 	/**
-	 * Method for delete vendor
+	 * Method for reseting to commissions
 	 *
 	 * @return  boolean
 	 */
-	public function delete()
+	public function reset()
 	{
-		$app = JFactory::getApplication();
-		$input  = JFactory::getApplication()->input;
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$vendorDetail = $TjvendorsModelVendor->getItem();
-		$vendorId = $input->get('vendor_id', '', 'INT');
-		$model = $this->getModel('vendorfees');
+		// Get the input
+		$input = JFactory::getApplication()->input;
+		$cid = $input->post->get('cid', array(), 'array');
+		$app  = JFactory::getApplication();
 		$post = JRequest::get('post');
+		$Id = $post['cid'];
+		$vendorId = $input->post->get('vendor_id', '', 'INT');
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendorfee');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendorfee', 'TjvendorsModel');
 
-		$tj_vendors_id = $post['cid'];
-
-		$result = $model->deleteVendorfee($tj_vendors_id);
-
-		if ($result)
+		if (!empty($cid))
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId;
-			$msg = JText::_('COM_TJVENDORS_RECORD_DELETED');
+		foreach ($Id as $id)
+		{
+		$vendorDetail = (array) $TjvendorsModelVendor->getItem($id);
+		$model = $this->getModel('vendorfee');
+		$result = $model->save($vendorDetail);
+		}
 		}
 		else
 		{
-			$redirect = 'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId;
-			$app->enqueueMessage(JText::_('COM_TJVENDORS_ERR_DELETED'), 'ERROR');
+			$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER_RESET_ERROR'), 'error');
+
+					// Redirect to the list screen.
+					$link = JRoute::_(
+					'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId, false
+					);
+					$this->setRedirect($link);
 		}
 
-		$this->setRedirect($redirect, $msg);
+		// Redirect to the list screen.
+		$link = JRoute::_(
+		'index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId, false
+		);
+		$this->setRedirect($link);
 	}
 }

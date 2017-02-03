@@ -107,4 +107,67 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		return $data;
 	}
+
+	/**
+	 * Method for save user specific %commission, flat commission, client
+	 *
+	 * @param   Array  $data  Data
+	 *
+	 * @return id
+	 */
+	public function save($data)
+	{
+		$table = $this->getTable();
+		$currency = $data['currency'];
+
+		if ($data['user_id'] != 0)
+		{
+			// To check if editing in registration form
+			if ($data['vendor_id'])
+			{
+			$table->save($data);
+
+			return true;
+			}
+			else
+			{
+			// Attempt to save data
+			if ($table->save($data) === true)
+			{
+				$vendorId = $table->vendor_id;
+				$client = $table->vendor_client;
+				$currencies = json_decode($table->currency);
+
+				// Attempt to save the data in fee table
+				if (!empty($currencies))
+				{
+				if ($table->vendor_id)
+				{
+					foreach ($currencies as $currency)
+					{
+					$userdata = new stdClass;
+					$userdata->vendor_id  = $vendorId;
+					$userdata->client = $client;
+					$userdata->currency = $currency;
+					$userdata->percent_commission = '0';
+					$userdata->flat_commission = '0';
+
+					$result    = JFactory::getDbo()->insertObject('#__tjvendors_fee', $userdata);
+					}
+
+					return true;
+				}
+				}
+			}
+			}
+		}
+		else
+		{
+			$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER'), 'warning');
+
+			return false;
+		}
+
+		return false;
+	}
 }

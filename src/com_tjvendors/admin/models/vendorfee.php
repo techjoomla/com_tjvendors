@@ -98,7 +98,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		$vendorDetail = $TjvendorsModelVendor->getItem();
 		$data->vendor_title = $vendorDetail->vendor_title;
-		$data->client = $vendorDetail->vendor_client;
 
 		return $data;
 	}
@@ -129,37 +128,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	}
 
 	/**
-	 * Method to get a single record.
-	 *
-	 * @param   STRING  $vendorId  The vendorId of the Vendor_id.
-	 * 
-	 * @param   STRING  $currency  The currency of the Vendor_id.
-	 * 
-	 * @return  mixed    Object on success, false on failure.
-	 *
-	 * @since    1.6
-	 */
-	public function getVendorFeeId($vendorId,$currency)
-	{
-		if (!empty($vendorId) && !empty($currency))
-		{
-		$db    = $this->getDbo();
-		$query = $db->getQuery(true);
-
-		// Select the required fields from the table.
-		$query->select($db->quoteName('id'));
-		$query->from($db->quoteName('#__tjvendors_vendors'));
-		$query->where($db->quoteName('vendor_id') . '=' . $vendorId);
-		$query->where($db->quoteName('currency') . '=' . $currency);
-		$db->setQuery($query);
-
-		return $db->loadResult();
-		}
-
-	return false;
-	}
-
-	/**
 	 * Method for save user specific %commission, flat commission, client
 	 *
 	 * @param   Array  $data  Data
@@ -169,10 +137,29 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	public function save($data)
 	{
 		$table = $this->getTable();
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 		$input  = JFactory::getApplication()->input;
 		$app  = JFactory::getApplication();
+		$method = $input->getItem('task', '', 'STRING');
 
+		if ($method == 'reset')
+		{
+		$data['percent_commission'] = '0';
+		$data['flat_commission'] = '0';
+
+			if ($data['id'] != 0)
+			{
+				// Attempt to save data
+				if (parent::save($data))
+				{
+					$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER_RESET_SUCCESS') . $data['currency'], 'Message');
+
+					return true;
+				}
+			}
+		}
+		else
+		{
 		if ($data['vendor_id'] != 0)
 		{
 			// Attempt to save data
@@ -187,5 +174,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		}
 
 		return false;
+		}
 	}
 }

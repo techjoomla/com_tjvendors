@@ -70,6 +70,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		$canDo = TjvendorsHelpersTjvendors::getActions();
 
 		JToolBarHelper::custom('vendorfees.back', 'chevron-left.png', '', 'Back', false);
+		JToolBarHelper::custom('vendorfees.reset', 'loop.png', '', 'RESET', false);
 
 		if (JVERSION >= '3.0')
 		{
@@ -87,26 +88,6 @@ class TjvendorsViewVendorFees extends JViewLegacy
 				JToolBarHelper::divider();
 				JToolBarHelper::custom('vendorfees.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
 				JToolBarHelper::custom('vendorfees.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
-			}
-			elseif (isset($this->items[0]))
-			{
-				// If this component does not use state then show a direct delete button as we can not trash
-				JToolBarHelper::deleteList('', 'vendorfees.delete', 'JTOOLBAR_DELETE');
-			}
-		}
-
-		// Show trash and delete for components that uses the state field
-		if (isset($this->items[0]->state))
-		{
-			if ($state->get('filter.state') == -2 && $canDo->get('core.delete'))
-			{
-				JToolBarHelper::deleteList('', 'vendorfees.delete', 'JTOOLBAR_EMPTY_TRASH');
-				JToolBarHelper::divider();
-			}
-			elseif ($canDo->get('core.edit.state'))
-			{
-				JToolBarHelper::trash('vendorfees.trash', 'JTOOLBAR_TRASH');
-				JToolBarHelper::divider();
 			}
 		}
 

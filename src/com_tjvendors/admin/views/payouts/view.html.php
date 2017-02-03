@@ -48,6 +48,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
 		$vendorsDetail = $TjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
+		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

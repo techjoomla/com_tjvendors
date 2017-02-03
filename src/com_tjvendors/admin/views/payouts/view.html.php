@@ -41,18 +41,14 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$this->model = $this->getModel('payouts');
 		$this->pagination = $this->get('Pagination');
 		$this->input = JFactory::getApplication()->input;
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
-		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$vendorsDetail = $TjvendorsModelVendors->getItems();
-		$this->vendor_details = $vendorsDetail;
 
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
-		$vendorDetail = $TjvendorsModelVendor->getItem($vendor_id);
-
-		$this->model->setState('filter.client', $vendorDetail->vendor_client);
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
+		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
+		$vendorsDetail = $TjvendorsModelVendors->getItems();
+		$this->vendor_details = $vendorsDetail;
+		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -111,9 +107,10 @@ class TjvendorsViewPayouts extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'vendors.`vendor_id`' => JText::_('COM_TJVENDORS_PAYOUTS_VENDOR_ID'),
+			'pass.`id`' => JText::_('COM_TJVENDORS_PAYOUTS_ID'),
 			'pass.`total`' => JText::_('COM_TJVENDORS_PAYOUTS_TOTAL'),
 			'fees.`currency`' => JText::_('COM_TJVENDORS_PAYOUTS_CURRENCY'),
+			'vendors.`vendor_title`' => JText::_('COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE'),
 		);
 	}
 }

@@ -87,6 +87,31 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
+	 * Get array of unique Clients
+	 *  
+	 * @return null|object
+	 */
+	public static function getUniqueClients()
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$columns = $db->quoteName('vendors.vendor_client');
+		$query->select('distinct' . $columns);
+		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
+		$db->setQuery($query);
+		$rows = $db->loadAssocList();
+		$uniqueClient[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT');
+		$uniqueClient[] = array("vendor_client" => "All Clients","client_value" => 0);
+
+		foreach ($rows as $row)
+		{
+			$uniqueClient[] = array("vendor_client" => $row['vendor_client'], "client_value" => $row['vendor_client']);
+		}
+
+		return $uniqueClient;
+	}
+
+	/**
 	 * Get array of currency
 	 *
 	 * @return null|object

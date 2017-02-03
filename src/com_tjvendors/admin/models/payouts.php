@@ -35,6 +35,7 @@ class TjvendorsModelPayouts extends JModelList
 				'total', 'pass.`total`',
 				'currency', 'fees.`currency`',
 				'ordering', 'pass.`ordering`',
+				'vendor_title', 'vendors.`vendor_title`',
 			);
 		}
 

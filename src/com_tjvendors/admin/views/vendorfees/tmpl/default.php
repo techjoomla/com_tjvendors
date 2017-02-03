@@ -228,11 +228,7 @@ else
 						<?php echo JText::_('COM_TJVENDORS_VENDORS_ID'); ?>
 					</th>
 					<th class='left'>
-<<<<<<< HEAD
 						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_FEE_TITLE'); ?>
-=======
-						<?php echo JText::_('COM_TJVENDORS_FORM_DESC_VENDOR_VENDOR_TITLE'); ?>
->>>>>>> 7fd7343cc45a3041628764df8743f301320a7949
 					</th>
 
 					<th class='left'>

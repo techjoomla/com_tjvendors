@@ -117,12 +117,10 @@ else
 
 		<div class="btn-group pull-right hidden-phone">
 			<?php	
-			$vendorListClient[]=JText::_('choose a client');
-			$allClients=(object)array("vendor_client"=>"0");
-			$vendorListClient[]=$allClients;
+			$vendorListClient[]=JText::_('All Clients');
 			foreach ($this->vendor_details as $vendor)
 				{
-					$vendorListClient[]=$vendor;
+					$vendorListClient[]=array("vendor_client"=>$vendor->vendor_client);
 				}
 			echo JHtml::_('select.genericlist', $vendorListClient, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_client", "vendor_client", $this->state->get('filter.vendor_client'));
 			$filterClient=$this->state->get('filter.vendor_client');	?>
@@ -189,7 +187,7 @@ else
 				<tr>
 					<?php if (isset($this->items[0]->ordering)): ?>
 					<th width="1%" class="nowrap center hidden-phone">
-						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 					</th>
 					<?php endif; ?>
 
@@ -200,19 +198,19 @@ else
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_VENDOR_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_VENDOR_ID', 'vendors.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'a.`payout_title`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'a.`currency`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'a.`payable_amount`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th class='left'>
@@ -228,7 +226,7 @@ else
 				</tr>
 			</tfoot>
 			<tbody>
-				<?php
+				<?php 
 				foreach ($this->items as $i => $item)
 				{
 					$ordering   = ($listOrder == 'a.ordering');

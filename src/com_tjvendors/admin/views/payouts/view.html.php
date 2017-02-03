@@ -107,7 +107,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'vendors.`vendor_id`' => JText::_('COM_TJVENDORS_PAYOUTS_VENDOR_ID'),
+			'pass.`id`' => JText::_('COM_TJVENDORS_PAYOUTS_ID'),
 			'pass.`total`' => JText::_('COM_TJVENDORS_PAYOUTS_TOTAL'),
 			'fees.`currency`' => JText::_('COM_TJVENDORS_PAYOUTS_CURRENCY'),
 			'vendors.`vendor_title`' => JText::_('COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE'),

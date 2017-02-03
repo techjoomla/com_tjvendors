@@ -193,7 +193,7 @@ else
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_VENDOR_ID', 'vendors.`vendor_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_ID', 'pass.`id`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th class='left'>
@@ -269,7 +269,7 @@ else
 						<?php if (isset($this->items[0]->state)){}?>
 
 						<td>
-							<?php echo $item->vendor_id; ?>
+							<?php echo $item->id; ?>
 						</td>
 
 						<td>

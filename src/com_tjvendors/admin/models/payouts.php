@@ -31,7 +31,6 @@ class TjvendorsModelPayouts extends JModelList
 		{
 			$config['filter_fields'] = array(
 				'id', 'pass.`id`',
-				'vendor_id', 'vendors.`vendor_id`',
 				'total', 'pass.`total`',
 				'currency', 'fees.`currency`',
 				'ordering', 'pass.`ordering`',

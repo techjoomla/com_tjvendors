@@ -38,6 +38,68 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
+	 * Get array of unique Clients
+	 *  
+	 * @param   string  $user_id  To give user specific clients for the filter  
+	 * 
+	 * @return null|object
+	 */
+	public static function getUniqueClients($user_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$columns = $db->quoteName(array('vendors.vendor_client','vendors.vendor_id'));
+		$columns[0] = 'DISTINCT' . $columns[0];
+		$query->select($columns);
+		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
+		$query->where($db->quoteName('vendors.user_id') . ' = ' . $user_id);
+		$db->setQuery($query);
+		$rows = $db->loadAssocList();
+		$uniqueClient[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT');
+		$uniqueClient[] = array("vendor_client" => "All Clients","client_value" => 0);
+
+		foreach ($rows as $row)
+		{
+			$uniqueClient[] = array("vendor_client" => $row['vendor_client'], "client_value" => $row['vendor_id']);
+		}
+
+		return $uniqueClient;
+	}
+
+	/**
+	 * Get array of pending payout amount
+	 *
+	 * @param   integer  $vendor_id  required to give vendor specific result
+	 *   
+	 * @return $totalDetails|array
+	 */
+	public static function getTotalDetails($vendor_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*')
+		->from($db->quoteName('#__tjvendors_passbook'))
+		->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+
+		$db->setQuery($query);
+		$rows = $db->loadAssocList();
+		$totalDebitAmount = 0;
+		$totalCreditAmount = 0;
+		$totalpendingAmount = 0;
+
+		foreach ($rows as $row)
+		{
+			$totalDebitAmount = $totalDebitAmount + $row['debit'];
+			$totalCreditAmount = $totalCreditAmount + $row['credit'];
+			$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
+		}
+
+		$totalDetails = array("debitAmount" => $totalDebitAmount,"creditAmount" => $totalCreditAmount,"pendingAmount" => $totalpendingAmount);
+
+		return $totalDetails;
+	}
+
+	/**
 	 * Get array of currency
 	 *
 	 * @return null|object

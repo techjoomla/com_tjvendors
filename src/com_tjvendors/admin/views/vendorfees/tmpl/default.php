@@ -96,9 +96,9 @@ $sortFields = $this->getSortFields();
 
 	Joomla.submitbutton = function (task)
 	{
-		if(task == 'vendorfees.delete')
+		if(task == 'vendorfees.reset')
 		{
-			var msg = "<?php echo JText::_('COM_TJVENDORS_CONFIRM_TO_DELETE_RECORD'); ?>";
+			var msg = "<?php echo JText::_('COM_TJVENDORS_CONFIRM_TO_RESET_COMMISSION'); ?>";
 
 			if (confirm(msg) == true)
 			{

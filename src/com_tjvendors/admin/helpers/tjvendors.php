@@ -101,7 +101,7 @@ class TjvendorsHelpersTjvendors
 		$db->setQuery($query);
 		$rows = $db->loadAssocList();
 		$uniqueClient[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT');
-		$uniqueClient[] = array("vendor_client" => "All Clients","client_value" => 0);
+		$uniqueClient[] = array("vendor_client" => JText::_('COM_TJVENDORS_FILTER_ALL_CLIENTS'),"client_value" => 0);
 
 		foreach ($rows as $row)
 		{
@@ -109,6 +109,50 @@ class TjvendorsHelpersTjvendors
 		}
 
 		return $uniqueClient;
+	}
+
+	/**
+	 * Get array of unique Clients
+	 * 
+	 * @param   string  $vendor_id  integer
+	 * 
+	 * @param   string  $client     string
+	 *  
+	 * @return null|object
+	 */
+	public static function getTotalDetails($vendor_id,$client)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('*'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$db->setQuery($query);
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . '=' . $vendor_id);
+		}
+
+		if (!empty($client))
+		{
+		$query->where($db->quoteName('client') . " = " . $db->quote($client));
+		}
+
+		$rows = $db->loadAssocList();
+		$totalDebitAmount = 0;
+		$totalCreditAmount = 0;
+		$totalpendingAmount = 0;
+
+		foreach ($rows as $row)
+		{
+			$totalDebitAmount = $totalDebitAmount + $row['debit'];
+			$totalCreditAmount = $totalCreditAmount + $row['credit'];
+			$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
+		}
+
+		$totalDetails = array("debitAmount" => $totalDebitAmount, "creditAmount" => $totalCreditAmount, "pendingAmount" => $totalpendingAmount);
+
+		return $totalDetails;
 	}
 
 	/**

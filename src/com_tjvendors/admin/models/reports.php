@@ -94,9 +94,7 @@ class TjvendorsModelReports extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('vendors.vendor_id', 'asc');
-
-		return $vendorId;
+		parent::populateState('vendors.vendor_id', 'desc');
 	}
 
 	/**

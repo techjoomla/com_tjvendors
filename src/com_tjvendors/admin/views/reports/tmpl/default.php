@@ -24,31 +24,24 @@ $userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
-$sortFields = $this->getSortFields();
 ?>
 <script type="text/javascript">
-	Joomla.orderTable = function ()
-	{
-		table = document.getElementById("sortTable");
-		direction = document.getElementById("directionTable");
-		order = table.options[table.selectedIndex].value;
-		if (order != '<?php echo $listOrder; ?>')
-		{
-			dirn = 'desc';
-		}
-		else
-		{
-			dirn = direction.options[direction.selectedIndex].value;
-		}
-
-		Joomla.tableOrdering(order, dirn, '');
-	};
 
 	jQuery(document).ready(function ()
 	{
 		jQuery('#clear-search-button').on('click', function ()
 		{
 			jQuery('#filter_search').val('');
+			jQuery('#adminForm').submit();
+		});
+	});
+	
+	jQuery(document).ready(function ()
+	{
+		jQuery('#clear-calendar').on('click', function ()
+		{
+			jQuery('#date').val('');
+			jQuery('#dates').val('');
 			jQuery('#adminForm').submit();
 		});
 	});
@@ -98,10 +91,31 @@ else
 				<i class="icon-remove"></i>
 			</button>
 		</div>
-
+		<div class="btn-group pull-left hidden-phone">
+			<?php
+				echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
+			?>
+		</div>
+		<div class="btn-group pull-left hidden-phone">
+			<?php
+				echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox','onchange' => 'document.adminForm.submit()' ));
+			?>
+		</div>
 		
+		<div class="btn-group pull-left hidden-phone">
+			<button class="btn hasTooltip" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
+				<i class="icon-remove"></i>
+			</button>
+		</div>
 
-		<div class="btn-group pull-right hidden-phone">
+		<div class="btn-group pull-left hidden-phone">
+			<div class="btn-group pull-right hidden-phone">
+				<label for="limit" class="element-invisible">
+					<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+				</label>
+				<?php echo $this->pagination->getLimitBox(); ?>
+			</div>
+			<div class="btn-group pull-right hidden-phone">
 			<?php	
 			echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
 			echo $filterClient = $this->state->get('filter.vendor_client'); 	?>
@@ -132,27 +146,9 @@ else
 				}
 			 echo JHtml::_('select.genericlist', $vendorList, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
-		</div>
-		<div class="btn-group pull-right hidden-phone">
-			<div class="btn-group pull-right hidden-phone">
-				<label for="limit" class="element-invisible">
-					<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
-				</label>
-				<?php echo $this->pagination->getLimitBox(); ?>
-			</div>
-			<div class="btn-group pull-right hidden-phone">
-				<?php
-					echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
-				?>
-			</div>
-			<div class="btn-group pull-right hidden-phone">
-				<?php
-					echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
-				?>
-			</div>
-			
 			
 		</div>
+	</div>
 
 		
 	</div>

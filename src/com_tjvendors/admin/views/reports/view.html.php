@@ -101,22 +101,4 @@ class TjvendorsViewReports extends JViewLegacy
 
 		$this->extra_sidebar = '';
 	}
-
-	/**
-	 * Method to ord$this->item fields
-	 *
-	 * @return void
-	 */
-	protected function getSortFields()
-	{
-		return array(
-			'pass.`id`' => JText::_('COM_TJVENDORS_PAYOUTS_ID'),
-			'pass.`total`' => JText::_('COM_TJVENDORS_PAYOUTS_TOTAL'),
-			'fees.`currency`' => JText::_('COM_TJVENDORS_PAYOUTS_CURRENCY'),
-			'vendors.`vendor_title`' => JText::_('COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE'),
-			'vendors.`vendor_client`' => JText::_('COM_TJVENDORS_REPORTS_CLIENT'),
-			'pass.`transaction_id`' => JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_ID'),
-			'pass.`transaction_time`' => JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TIME'),
-		);
-	}
 }

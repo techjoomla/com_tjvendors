@@ -81,6 +81,8 @@ class TjvendorsModelPayouts extends JModelList
 		// Load the parameters.
 		$params = JComponentHelper::getParams('com_tjvendors');
 		$this->setState('params', $params);
+		
+		$this->setState('list.limit', '0');
 
 		// List state information.
 		parent::populateState('vendors.vendor_id', 'asc');

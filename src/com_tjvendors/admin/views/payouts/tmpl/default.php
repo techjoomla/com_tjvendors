@@ -32,7 +32,6 @@ if ($saveOrder)
 	JHtml::_('sortablelist.sortable', 'payoutList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 
-$sortFields = $this->getSortFields();
 ?>
 <script type="text/javascript">
 
@@ -91,12 +90,7 @@ else
 			</button>
 		</div>
 
-		<div class="btn-group pull-right hidden-phone">
-			<label for="limit" class="element-invisible">
-				<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
-			</label>
-			<?php echo $this->pagination->getLimitBox(); ?>
-		</div>
+		<input id="limit" name="limit" type="hidden" value="0" default="0" />
 
 		<div class="btn-group pull-right hidden-phone">
 			<?php	
@@ -147,32 +141,33 @@ else
 
 					<?php if (isset($this->items[0]->state)){} ?>
 
-					<th class='left'>
+					<th class='right' width="2%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_ID', 'pass.`id`', $listDirn, $listOrder); ?>
 					</th>
 
-					<th class='left'>
+					<th class='right' width="8%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
-
-					<th class='left'>
+					<?php if($filterClient=='0')
+						{?>
+						<th width="8%">
+							<?php echo JHtml::_('grid.sort', 'Client', 'vendors.`vendor_client`', $listDirn, $listOrder);?>
+						</th>
+						<?php }?>
+					<th class='right' width="5%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
 					</th>
 
-					<th class='left'>
+					<th class='right' width="10%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 					</th>
 
-					<th class='left'>
+					<th class='right' width="10%">
 						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_ACTION'); ?>
 					</th>
 				</tr>
 			</thead>
-			<tfoot>
-					<td colspan="5">
-						<?php echo $this->pagination->getListFooter();?>
-					</td>
-			</tfoot>
+
 			<tbody>
 				<?php 
 				foreach ($this->items as $i => $item)
@@ -188,7 +183,11 @@ else
 						<td>
 								<?php echo $this->escape($item->vendor_title); ?>
 						</td>
-
+						<?php if($filterClient=='0'):?>
+						<td align="center">
+							<?php echo $item->client;?>
+						</td>
+						<?php endif;?>
 						<td>
 							<?php echo $item->currency; ?>
 						</td>

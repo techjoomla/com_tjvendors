@@ -84,7 +84,6 @@ class TjvendorsModelPayouts extends JModelList
 
 		// List state information.
 		parent::populateState('vendors.vendor_id', 'asc');
-
 	}
 
 	/**

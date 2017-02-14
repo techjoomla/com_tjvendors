@@ -28,7 +28,7 @@ class TjvendorsViewVendors extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		// $this->user_id = JFactory::getUser()->id;
+		$this->user_id = JFactory::getUser()->id;
 		$this->input = JFactory::getApplication()->input;
 
 		// Get data from the model
@@ -38,10 +38,9 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->state		= $items_model->getState();
 		$this->filterForm		= $items_model->getFilterForm();
 		$this->activeFilters	= $items_model->getActiveFilters();
-		$vendor_id = $this->input->get('vendor_id', '', 'INTEGER');
 
-		// $this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients($this->user_id);
-		$this->totalDetails = TjvendorsHelpersTjvendors::getTotalDetails($vendor_id);
+		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients($this->user_id);
+		$this->totalDetails = TjvendorsHelpersTjvendors::getTotalDetails($this->state->get('filter.vendor_client', ''), $this->user_id);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

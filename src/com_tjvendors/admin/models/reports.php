@@ -130,9 +130,9 @@ class TjvendorsModelReports extends JModelList
 		$fromDate = $this->getState('filter.fromDate', '');
 		$toDate = $this->getState('filter.toDate', '');
 
-		if(!empty($fromDate))
+		if (!empty($fromDate))
 		{
-			$query->where ($db->quoteName('transaction_time') . 'BETWEEN' . "'$fromDate'" . 'AND' .  "'$toDate'" );
+			$query->where($db ->quoteName('transaction_time') . 'BETWEEN' . "'$fromDate'" . 'AND' . "'$toDate'");
 		}
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
@@ -142,7 +142,6 @@ class TjvendorsModelReports extends JModelList
 		{
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
-
 
 		return $query;
 	}

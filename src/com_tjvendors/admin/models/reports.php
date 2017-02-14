@@ -73,6 +73,12 @@ class TjvendorsModelReports extends JModelList
 		$vendorId = $app->getUserStateFromRequest($this->context . '.filter.vendor_id', 'vendor_id', '0', 'string');
 		$this->setState('filter.vendor_id', $vendorId);
 
+		$fromDate = $app->getUserStateFromRequest($this->context . '.filter.fromDate', 'fromDates', '0', 'string');
+		$this->setState('filter.fromDate', $fromDate);
+
+		$toDate = $app->getUserStateFromRequest($this->context . '.filter.toDate', 'toDates', '0', 'string');
+		$this->setState('filter.toDate', $toDate);
+
 		$client = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
 		$this->setState('filter.vendor_client', $client);
 
@@ -120,6 +126,23 @@ class TjvendorsModelReports extends JModelList
 				$query->where($db->quoteName('credit') . " >0 ");
 			}
 		}
+
+		$fromDate = $this->getState('filter.fromDate', '');
+		$toDate = $this->getState('filter.toDate', '');
+
+		if(!empty($fromDate))
+		{
+			$query->where ($db->quoteName('transaction_time') . 'BETWEEN' . "'$fromDate'" . 'AND' .  "'$toDate'" );
+		}
+		// Add the list ordering clause.
+		$orderCol  = $this->state->get('list.ordering');
+		$orderDirn = $this->state->get('list.direction');
+
+		if ($orderCol && $orderDirn)
+		{
+			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
+
 
 		return $query;
 	}

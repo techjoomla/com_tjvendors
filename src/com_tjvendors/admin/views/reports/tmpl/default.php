@@ -99,12 +99,7 @@ else
 			</button>
 		</div>
 
-		<div class="btn-group pull-right hidden-phone">
-			<label for="limit" class="element-invisible">
-				<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
-			</label>
-			<?php echo $this->pagination->getLimitBox(); ?>
-		</div>
+		
 
 		<div class="btn-group pull-right hidden-phone">
 			<?php	
@@ -112,6 +107,13 @@ else
 			echo $filterClient = $this->state->get('filter.vendor_client'); 	?>
 		</div>
 
+		<div class="btn-group pull-right hidden-phone">
+			<?php 
+			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
+			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
+			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
+			echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
+		</div>
 		<div class="btn-group pull-right hidden-phone">
 			<?php 
 				// Making custom filter list
@@ -130,12 +132,26 @@ else
 				}
 			 echo JHtml::_('select.genericlist', $vendorList, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
+		</div>
 		<div class="btn-group pull-right hidden-phone">
-			<?php 
-			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
-			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
-			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
-			echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
+			<div class="btn-group pull-right hidden-phone">
+				<label for="limit" class="element-invisible">
+					<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+				</label>
+				<?php echo $this->pagination->getLimitBox(); ?>
+			</div>
+			<div class="btn-group pull-right hidden-phone">
+				<?php
+					echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
+				?>
+			</div>
+			<div class="btn-group pull-right hidden-phone">
+				<?php
+					echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
+				?>
+			</div>
+			
+			
 		</div>
 
 		
@@ -200,17 +216,14 @@ else
 					<td colspan="5">
 						<div class="pull-right">
 							<div>
-								<?php echo JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT');?>
-								<?php echo $this->totalDetails['pendingAmount'];?>
-						   </div>
-							<div>
-								<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT');?>
-								<?php echo $this->totalDetails['creditAmount']; ?>
-								</div>
-							<div>
-								<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT'); ?>
-								<?php echo $this->totalDetails['debitAmount']; ?>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT'). '&nbsp ' .$this->totalDetails['creditAmount']."</h4>";?>
 							</div>
+							<div>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT'). '&nbsp ' . $this->totalDetails['debitAmount']."</h4>"; ?>
+							</div>
+							<div>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp ' . $this->totalDetails['pendingAmount']."</h4>";?>
+						   </div>
 						</div>
 					</td>
 			</tfoot>

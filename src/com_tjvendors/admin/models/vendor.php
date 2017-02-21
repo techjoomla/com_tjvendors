@@ -176,7 +176,8 @@ class TjvendorsModelVendor extends JModelAdmin
 					}
 					else
 					{
-						// $app->enqueueMessage(JText::_('COM_TJVENDORS_DUPLICATE_CLIENT_ERROR'), 'warning');
+						$app->enqueueMessage(JText::_('COM_TJVENDORS_DUPLICATE_CLIENT_ERROR'), 'warning');
+
 						return false;
 					}
 				}

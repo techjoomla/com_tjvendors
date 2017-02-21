@@ -213,56 +213,7 @@ class TjvendorsTablevendor extends JTable
 			}
 		}
 
-		if (!$this->checkDuplicateUser($array))
-		{
-			$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
-			$this->setError(JText::_('COM_TJVENDORS_EXIST_RECORDS'));
-
-			return false;
-		}
-
 		return parent::check();
-	}
-
-	/**
-	 * Method for checkDuplicateUser
-	 *
-	 * @param   array  $array  An array
-	 *
-	 * @return bool
-	 */
-	public function checkDuplicateUser($array)
-	{
-		// Start city validations
-		$db = JFactory::getDbo();
-
-		$vendor_id = $array['vendor_id'];
-
-		// Fetch all existed records
-		$query = $db->getQuery(true);
-		$query->select($db->qn(array('user_id')));
-		$query->from($db->qn('#__tjvendors_vendors'));
-
-		$query->where($db->qn('user_id') . ' = ' . $this->user_id);
-		$query->where($db->qn('vendor_client') . " =  '$this->vendor_client'");
-
-		if (!empty($vendor_id))
-		{
-			$query->where($db->qn('vendor_id') . ' != ' . $vendor_id);
-		}
-
-		$db->setQuery($query);
-
-		$userexist = $this->_db->loadResult();
-
-		if ($userexist)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
 	}
 
 	/**

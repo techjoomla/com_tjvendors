@@ -55,7 +55,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 <?php
 $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->item->vendor_id  . '&client=' . $this->input->get('client', '', 'STRING') . $currUrl); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->item->vendor_id); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 	<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 	<div class="form-horizontal">
@@ -70,29 +70,35 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 					<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 
-						<?php echo $this->form->renderField('user_id');
-
-						if (empty($this->input->get('client', '', 'STRING')))
-						{
-							echo $this->form->renderField('vendor_client');
-						}
-						else
-						{
-						?>
-						<input type="hidden" name="jform[vendor_client]" value='<?php echo $this->item->vendor_client;?>' />
+						
+						<?php echo $this->form->renderField('user_id');?>
 						<?php
+						if (!empty($this->item->vendor_id))
+						{
+							if(!empty($this->clientsForVendor))
+							{
+								echo "Is a Vendor for : ";
+								foreach ($this->clientsForVendor as $client)
+								{
+									echo "<h4>" . JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
+								}
+								echo ".";
+							}
 						}
 						?>
-
+						<?php echo $this->form->renderField('vendor_client');?>
+						<?php echo $this->form->renderField('client');?>
 						<?php echo $this->form->renderField('vendor_title'); ?>
 						<?php echo $this->form->renderField('vendor_description'); ?>
 						<?php echo $this->form->renderField('vendor_logo'); ?>
+						
 						<div class="controls">
 						<div class="alert alert-warning">
 						<?php
 						echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png');
 						?>
 						</div>
+						
 						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
 						<?php if (!empty($this->item->vendor_logo)) : ?>
 							<div class="control-group">

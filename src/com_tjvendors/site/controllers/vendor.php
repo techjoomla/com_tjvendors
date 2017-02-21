@@ -126,7 +126,6 @@ class TjvendorsControllerVendor extends JControllerForm
 					$app->enqueueMessage($errors[$i], 'warning');
 				}
 			}
-
 			// Save the data in the session.
 			$app->setUserState('com_tjvendors.edit.vendor.data', $app->input->get('jform', array(), "ARRAY"));
 
@@ -145,6 +144,9 @@ class TjvendorsControllerVendor extends JControllerForm
 		// Check for errors.
 		if ($return === false)
 		{
+			$input = JFactory::getApplication();
+			$vendor_id = $input->get('vendor_id', '', 'INTEGER');
+
 			// Save the data in the session.
 			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
@@ -154,19 +156,32 @@ class TjvendorsControllerVendor extends JControllerForm
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
 			$this->setRedirect(
 					JRoute::_(
-					'index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $data['vendor_client'], false
+					'index.php?option=com_tjvendors&view=vendor&status=register&layout=edit&vendor_id=' . $data['vendor_id'], false
 					)
 					);
 
 			return false;
 		}
 
+		$user_id = Jfactory::getUser()->id;
+
+		// Get a db connection.
+		$db = JFactory::getDbo();
+
+		// Create a new query object.
+		$query = $db->getQuery(true);
+
+		$query->select($db->quoteName('vendor_id'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
+		$db->setQuery($query);
+		$vendor_id = $db->loadResult();
+
 		// Redirect to the list screen.
-		$vendor_id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id');
 		$this->setMessage(JText::_('COM_TJVENDORS_ITEM_SAVED_SUCCESSFULLY'));
 		$this->setRedirect(
 				JRoute::_(
-				'index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $vendor_id . '&client=' . $data['vendor_client'], false
+				'index.php?option=com_tjvendors&view=vendor&layout=default&vendor_id=' . $vendor_id . '&client=' . $data['vendor_client'], false
 				)
 				);
 
@@ -177,9 +192,11 @@ class TjvendorsControllerVendor extends JControllerForm
 	/**
 	 * Cancel description
 	 *
+	 * @param   integer  $key  The key 
+	 * 
 	 * @return description
 	 */
-	public function cancel()
+	public function cancel($key=null)
 	{
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
 		$this->setRedirect(

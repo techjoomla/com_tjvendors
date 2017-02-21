@@ -115,6 +115,85 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
+	 * Get clients for vendors
+	 *
+	 * @param   integer  $vendor_id  required to give vendor specific result
+	 * 
+	 * @return clientsForVendor|array
+	 */
+	public static function getClientsForVendor($vendor_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('*'));
+		$query->from($db->quoteName('#__vendor_client_xref'));
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
+		}
+
+		$db->setQuery($query);
+
+		if (!empty($rows = $db->loadAssocList()))
+		{
+			foreach ($rows as $client)
+			{
+				$clientsForVendor[] = $client['client'];
+			}
+
+			return $clientsForVendor;
+		}
+	}
+
+	/**
+	 * Get vendor for that user
+	 *
+	 * @return vendor
+	 */
+	public static function getvendor()
+	{
+		$user_id = jFactory::getuser()->id;
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('vendor_id'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
+		$db->setQuery($query);
+		$vendor = $db->loadResult();
+
+		return $vendor;
+	}
+
+	/**
+	 * Check for duplicate clients
+	 *
+	 * @param   integer  $vendor_id      required to give vendor specific result
+	 * 
+	 * @param   integer  $vendor_client  client taken from the form
+	 * 
+	 * @return vendor_client|string
+	 */
+	public static function checkForDuplicateClient($vendor_id,$vendor_client)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('client'));
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
+		$db->setQuery($query);
+		$result = $db->loadAssocList();
+
+		foreach ($result as $client)
+		{
+			if ($client['client'] == $vendor_client)
+			{
+				return $vendor_client;
+			}
+		}
+	}
+
+	/**
 	 * Get array of currency
 	 *
 	 * @return null|object

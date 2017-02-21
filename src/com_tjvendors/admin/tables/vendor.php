@@ -213,16 +213,6 @@ class TjvendorsTablevendor extends JTable
 			}
 		}
 
-		$currency = json_decode($array['currency'], true);
-
-		if (empty($currency))
-		{
-			$app->enqueueMessage(JText::_('COM_TJVENDORS_CURRENCY_RECORDS'), 'warning');
-			$this->setError(JText::_('COM_TJVENDORS_CURRENCY_RECORDS'));
-
-			return false;
-		}
-
 		if (!$this->checkDuplicateUser($array))
 		{
 			$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');

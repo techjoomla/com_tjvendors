@@ -156,6 +156,38 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
+	 * Get array of unique Clients
+	 * 
+	 * @param   string  $vendor_id  integer
+	 *  
+	 * @return clientsForVendor 
+	 */
+	public static function getClientsForVendor($vendor_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('*'));
+		$query->from($db->quoteName('#__vendor_client_xref'));
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
+		}
+
+		$db->setQuery($query);
+
+		if (!empty($rows = $db->loadAssocList()))
+		{
+			foreach ($rows as $client)
+			{
+				$clientsForVendor[] = $client['client'];
+			}
+
+			return $clientsForVendor;
+		}
+	}
+
+	/**
 	 * Get array of currency
 	 *
 	 * @return null|object

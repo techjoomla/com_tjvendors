@@ -36,16 +36,15 @@ class TjvendorsViewVendor extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$this->state = $this->get('State');
+		$this->user_id = jFactory::getuser()->id;
 		$this->vendor  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
-
-		if (empty($this->vendor->vendor_id))
-		{
-			$currUrl = $this->input->get('currency', '', 'ARRAY');
-			$this->vendor->currency = json_encode($currUrl);
-			$this->vendor->vendor_client = $this->input->get('client', '', 'STRING');
-		}
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$this->vendor_id = TjvendorsHelpersTjvendors::getvendor();
+		$this->VendorDetail = $TjvendorsModelVendor->getItem($this->vendor_id);
+		$this->clientsForVendor = TjvendorsHelpersTjvendors::getClientsForVendor($this->vendor_id);
 
 		// Check for errors
 		if (count($errors = $this->get('Errors')))

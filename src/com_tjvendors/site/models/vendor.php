@@ -106,6 +106,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				$this->item = $this->getItem();
 			}
 
+			$this->item->vendor_client = "";
 			$data = $this->item;
 		}
 
@@ -131,6 +132,35 @@ class TjvendorsModelVendor extends JModelAdmin
 	/**
 	 * Method for save vendor information
 	 *
+	 * @param   Integer  $vendorId  used for inserting data for that vendor
+	 *
+	 * @return id
+	 */
+	public function addVendorId($vendorId)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('max(' . $db->quoteName('id') . ')');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$db->setQuery($query);
+		$res = $db->loadResult();
+		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendorId));
+
+		// Conditions for which records should be updated.
+		$conditions = array($db->quoteName('id') . ' = ' . $res);
+
+		$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);
+
+		$db->setQuery($query);
+
+		$result = $db->execute();
+
+		return true;
+	}
+
+	/**
+	 * Method for save vendor information
+	 *
 	 * @param   Array  $data  Data
 	 *
 	 * @return id
@@ -143,51 +173,62 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		$data['user_id'] = JFactory::getUser()->id;
 
-		$currency = $data['currency'];
-
 		if ($data['user_id'] != 0)
 		{
 			// To check if editing in registration form
 			if ($data['vendor_id'])
 			{
-			$table->save($data);
-			$vendor_id = (int) $this->getState($this->getName() . '.id');
-			$app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
+				$table->save($data);
 
-			return true;
+				// $app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
+
+				if (!empty($data['vendor_client']))
+				{
+					$checkForDuplicateClient = TjvendorsHelpersTjvendors::checkForDuplicateClient($data['vendor_id'], $data['vendor_client']);
+
+					if ($checkForDuplicateClient != $data['vendor_client'])
+					{
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
+
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+					}
+					else
+					{
+							$app->enqueueMessage(JText::_('COM_TJVENDORS_DUPLICATE_CLIENT_ERROR'), 'warning');
+
+						return false;
+					}
+
+					return true;
+				}
+
+				return true;
 			}
 			else
 			{
 			// Attempt to save data
-			if ($table->save($data) === true)
-			{
-				$vendorId = $table->vendor_id;
-				$client = $table->vendor_client;
-				$currencies = json_decode($table->currency);
+				if ($table->save($data) === true)
+				{
+					$vendorId = $table->vendor_id;
 
-				// Attempt to save the data in fee table
-				if (!empty($currencies))
-				{
-				if ($table->vendor_id)
-				{
-					foreach ($currencies as $currency)
+					if (!empty($data['vendor_client']))
 					{
-					$userdata = new stdClass;
-					$userdata->vendor_id  = $vendorId;
-					$userdata->client = $client;
-					$userdata->currency = $currency;
-					$userdata->percent_commission = '0';
-					$userdata->flat_commission = '0';
-					$result    = JFactory::getDbo()->insertObject('#__tjvendors_fee', $userdata);
-					}
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
 
-					$vendor_id = (int) $this->getState($this->getName() . '.id');
-					$app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+						$this->addVendorId($vendorId);
+					}
 
 					return true;
 				}
-				}
-			}
+
+				return true;
 			}
 		}
 		else

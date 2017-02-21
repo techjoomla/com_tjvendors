@@ -27,12 +27,6 @@ class TjvendorsControllerVendor extends JControllerForm
 	public function __construct()
 	{
 		$this->view_list = 'vendors';
-		$this->input = JFactory::getApplication()->input;
-
-		if (empty($this->client))
-		{
-			$this->client = $this->input->get('client', '');
-		}
 
 		parent::__construct();
 	}
@@ -50,7 +44,6 @@ class TjvendorsControllerVendor extends JControllerForm
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
-		$append .= '&client=' . $this->client;
 
 		return $append;
 	}
@@ -65,7 +58,6 @@ class TjvendorsControllerVendor extends JControllerForm
 	protected function getRedirectToListAppend()
 	{
 		$append = parent::getRedirectToListAppend();
-		$append .= '&client=' . $this->client;
 
 		return $append;
 	}

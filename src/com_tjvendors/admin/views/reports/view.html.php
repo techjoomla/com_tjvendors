@@ -17,7 +17,7 @@ jimport('joomla.application.component.view');
  *
  * @since  1.6
  */
-class TjvendorsViewPayouts extends JViewLegacy
+class TjvendorsViewReports extends JViewLegacy
 {
 	protected $items;
 
@@ -38,7 +38,8 @@ class TjvendorsViewPayouts extends JViewLegacy
 	{
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
-		$this->model = $this->getModel('payouts');
+		$this->model = $this->getModel('reports');
+		$this->pagination = $this->get('Pagination');
 		$this->input = JFactory::getApplication()->input;
 
 		// Getting vendor id from url
@@ -48,6 +49,9 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$vendorsDetail = $TjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
 		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
+		$vendor_id = $this->state->get('filter.vendor_id');
+		$client = $this->state->get('filter.vendor_client');
+		$this->totalDetails = TjvendorsHelpersTjvendors::getTotalDetails($vendor_id, $client);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -55,7 +59,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 			throw new Exception(implode("\n", $errors));
 		}
 
-		TjvendorsHelpersTjvendors::addSubmenu('payouts');
+		TjvendorsHelpersTjvendors::addSubmenu('reports');
 
 		$this->addToolbar();
 
@@ -80,11 +84,11 @@ class TjvendorsViewPayouts extends JViewLegacy
 
 		if (JVERSION >= '3.0')
 		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'book');
+			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'book');
 		}
 		else
 		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'payouts.png');
+			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'reports.png');
 		}
 
 		if ($canDo->get('core.admin'))
@@ -93,7 +97,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 		}
 
 		// Set sidebar action - New in 3.0
-		JHtmlSidebar::setAction('index.php?option=com_tjvendors&view=payouts');
+		JHtmlSidebar::setAction('index.php?option=com_tjvendors&view=reports');
 
 		$this->extra_sidebar = '';
 	}

@@ -96,23 +96,7 @@ $sortFields = $this->getSortFields();
 
 	Joomla.submitbutton = function (task)
 	{
-		if(task == 'vendorfees.delete')
-		{
-			var msg = "<?php echo JText::_('COM_TJVENDORS_CONFIRM_TO_DELETE_RECORD'); ?>";
-
-			if (confirm(msg) == true)
-			{
-				Joomla.submitform(task, document.getElementById('adminForm'));
-			}
-			else
-			{
-				return false;
-			}
-		}
-		else
-		{
 			Joomla.submitform(task, document.getElementById('adminForm'));
-		}
 	}
 
 </script>

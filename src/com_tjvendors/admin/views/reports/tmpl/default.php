@@ -24,14 +24,6 @@ $userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
-$saveOrder = $listOrder == 'a.`ordering`';
-
-if ($saveOrder)
-{
-	$saveOrderingUrl = 'index.php?option=com_tjvendors&task=payouts.saveOrderAjax&tmpl=component';
-	JHtml::_('sortablelist.sortable', 'payoutList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
-}
-
 ?>
 <script type="text/javascript">
 
@@ -40,6 +32,16 @@ if ($saveOrder)
 		jQuery('#clear-search-button').on('click', function ()
 		{
 			jQuery('#filter_search').val('');
+			jQuery('#adminForm').submit();
+		});
+	});
+	
+	jQuery(document).ready(function ()
+	{
+		jQuery('#clear-calendar').on('click', function ()
+		{
+			jQuery('#date').val('');
+			jQuery('#dates').val('');
 			jQuery('#adminForm').submit();
 		});
 	});
@@ -53,7 +55,7 @@ if (!empty($this->extra_sidebar))
 }
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER')); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports'); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
 if(!empty($this->sidebar))
@@ -89,10 +91,31 @@ else
 				<i class="icon-remove"></i>
 			</button>
 		</div>
+		<div class="btn-group pull-left hidden-phone">
+			<?php
+				echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
+			?>
+		</div>
+		<div class="btn-group pull-left hidden-phone">
+			<?php
+				echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox','onchange' => 'document.adminForm.submit()' ));
+			?>
+		</div>
+		
+		<div class="btn-group pull-left hidden-phone">
+			<button class="btn hasTooltip" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
+				<i class="icon-remove"></i>
+			</button>
+		</div>
 
-		<input id="limit" name="limit" type="hidden" value="0" default="0" />
-
-		<div class="btn-group pull-right hidden-phone">
+		<div class="btn-group pull-left hidden-phone">
+			<div class="btn-group pull-right hidden-phone">
+				<label for="limit" class="element-invisible">
+					<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+				</label>
+				<?php echo $this->pagination->getLimitBox(); ?>
+			</div>
+			<div class="btn-group pull-right hidden-phone">
 			<?php	
 			echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
 			echo $filterClient = $this->state->get('filter.vendor_client'); 	?>
@@ -100,11 +123,18 @@ else
 
 		<div class="btn-group pull-right hidden-phone">
 			<?php 
+			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
+			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
+			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
+			echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
+		</div>
+		<div class="btn-group pull-right hidden-phone">
+			<?php 
 				// Making custom filter list
 				$vendorList[] = JText::_('JFILTER_PAYOUT_CHOOSE_VENDOR');
 				$allVendors = array("vendor_id" => "0","vendor_title" => "All Vendors");
 
-				$vendorList[] = $allVendors;
+				$vendorList[]=$allVendors;
 
 				foreach ($this->vendor_details as $vendor)
 				{
@@ -116,6 +146,9 @@ else
 				}
 			 echo JHtml::_('select.genericlist', $vendorList, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
+			
+		</div>
+	</div>
 
 		
 	</div>
@@ -141,65 +174,112 @@ else
 
 					<?php if (isset($this->items[0]->state)){} ?>
 
-					<th class='right' width="2%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_ID', 'pass.`id`', $listDirn, $listOrder); ?>
+					<th class='left' width="10%">
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder); ?>
 					</th>
-
-					<th class='right' width="8%">
+					<th class='left' width="10%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
-					<?php if($filterClient=='0')
-						{?>
-						<th width="8%">
-							<?php echo JHtml::_('grid.sort', 'Client', 'vendors.`vendor_client`', $listDirn, $listOrder);?>
-						</th>
-						<?php }?>
-					<th class='right' width="5%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
+					<th class='left' width="10%">
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder); ?>
 					</th>
 
-					<th class='right' width="10%">
+					<th class='left' width="5%">
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
+					</th>
+					<th class='left' width="10%">
+						<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE'); ?>
+					</th>
+					<th class='left' width="5%">
+						<?php echo JText::_('COM_TJVENDORS_REPORTS_AMOUNT'); ?>
+					</th>
+					<th class='left' width="10%">
+						<?php echo JText::_('COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID'); ?>
+					</th>
+					<th class='left' width="10%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 					</th>
 
-					<th class='right' width="10%">
-						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_ACTION'); ?>
+					<th class='left' width="10%">
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
-
+			<tfoot>
+					<td colspan="5">
+						<?php echo $this->pagination->getListFooter();?>
+				   </td>
+					<td colspan="5">
+						<div class="pull-right">
+							<div>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT'). '&nbsp ' .$this->totalDetails['creditAmount']."</h4>";?>
+							</div>
+							<div>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT'). '&nbsp ' . $this->totalDetails['debitAmount']."</h4>"; ?>
+							</div>
+							<div>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp ' . $this->totalDetails['pendingAmount']."</h4>";?>
+						   </div>
+						</div>
+					</td>
+			</tfoot>
+			
 			<tbody>
 				<?php 
 				foreach ($this->items as $i => $item)
 				{
-				?>
-					<tr class="row<?php echo $i % 2; ?>">
+					?>
 						<?php if (isset($this->items[0]->state)){}?>
 
 						<td>
-							<?php echo $item->id; ?>
+							<?php echo $item->transaction_id; ?>
 						</td>
 
 						<td>
 								<?php echo $this->escape($item->vendor_title); ?>
 						</td>
-						<?php if($filterClient=='0'):?>
-						<td align="center">
-							<?php echo $item->client;?>
+						<td>
+							<?php echo $item->client; ?>
 						</td>
-						<?php endif;?>
 						<td>
 							<?php echo $item->currency; ?>
+						</td>
+						<td>
+							<?php 
+								if($item->credit == 0)
+								{
+									echo "debit";
+								}
+								else
+								{
+									echo "credit";
+								}
+							?>
+						</td>
+						<td>
+							<?php 
+								if($item->credit == 0)
+								{
+									echo $item->debit;
+								}
+								else
+								{
+									echo $item->credit;
+								}
+							?>
+						</td>
+						<td>
+							<?php echo $item->reference_order_id; ?>
 						</td>
 
 						<td>
 							<?php echo $item->total; ?>
 						</td>
-
+						
 						<td>
-							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&id=' .$item->id);?>"
-							<button class="validate btn btn-primary">PAY</button>
+							<?php echo $item->transaction_time; ?>
 						</td>
+
 					</tr>
 				<?php
 				}?>

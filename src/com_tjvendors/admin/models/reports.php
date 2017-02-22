@@ -15,7 +15,7 @@ jimport('joomla.application.component.modellist');
  *
  * @since  1.6
  */
-class TjvendorsModelPayouts extends JModelList
+class TjvendorsModelReports extends JModelList
 {
 /**
 	* Constructor.
@@ -33,8 +33,10 @@ class TjvendorsModelPayouts extends JModelList
 				'id', 'pass.`id`',
 				'total', 'pass.`total`',
 				'currency', 'fees.`currency`',
-				'ordering', 'pass.`ordering`',
 				'vendor_title', 'vendors.`vendor_title`',
+				'client', 'vendors.`vendor_client`',
+				'transaction_id', 'pass.`transaction_id`',
+				'transaction_time', 'pass.`transaction_time`',
 			);
 		}
 
@@ -71,8 +73,17 @@ class TjvendorsModelPayouts extends JModelList
 		$vendorId = $app->getUserStateFromRequest($this->context . '.filter.vendor_id', 'vendor_id', '0', 'string');
 		$this->setState('filter.vendor_id', $vendorId);
 
+		$fromDate = $app->getUserStateFromRequest($this->context . '.filter.fromDate', 'fromDates', '0', 'string');
+		$this->setState('filter.fromDate', $fromDate);
+
+		$toDate = $app->getUserStateFromRequest($this->context . '.filter.toDate', 'toDates', '0', 'string');
+		$this->setState('filter.toDate', $toDate);
+
 		$client = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
 		$this->setState('filter.vendor_client', $client);
+
+		$transactionType = $app->getUserStateFromRequest($this->context . '.filter.transactionType', 'transactionType', '0', 'string');
+		$this->setState('filter.transactionType', $transactionType);
 
 		// Load the filter state.
 		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
@@ -82,10 +93,8 @@ class TjvendorsModelPayouts extends JModelList
 		$params = JComponentHelper::getParams('com_tjvendors');
 		$this->setState('params', $params);
 
-		$this->setState('list.limit', '0');
-
 		// List state information.
-		parent::populateState('vendors.vendor_id', 'asc');
+		parent::populateState('vendors.vendor_id', 'desc');
 	}
 
 	/**
@@ -99,56 +108,30 @@ class TjvendorsModelPayouts extends JModelList
 	public function getListQuery()
 	{
 		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('vendors.vendor_id','fees.currency','vendors.vendor_title','pass.*',)));
-		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
-		$query->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
-			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('fees.vendor_id') . ')');
-		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
-			' ON (' . $db->quoteName('fees.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') .
-			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')');
-		$query->where($db->quoteName('pass.id') . ' is not null');
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payouts');
+		$TjvendorsModelPayouts = JModelLegacy::getInstance('Payouts', 'TjvendorsModel');
+		$query = $PayoutsDetail = $TjvendorsModelPayouts->getListQuery();
+		$transactionType = $this->getState('filter.transactionType', '');
 
-		$client = $this->getState('filter.vendor_client');
-
-		if (!empty($client))
+		if (!empty($transactionType))
 		{
-		$query->where($db->quoteName('vendors.vendor_client') . " = " . $db->quote($client));
-		}
-
-		$db->setQuery($query);
-		$rows = $db->loadAssocList();
-
-		// Filter by search in title
-		$search = $this->getState('filter.search');
-
-		// Filter vendor id
-		$vendor = $this->getState('filter.vendor_id');
-
-		if (!empty($search))
-		{
-			if (stripos($search, 'id:') === 0)
+			if ($transactionType == "debit")
 			{
-				$query->where('pass.id = ' . (int) substr($search, 3));
+				$query->where($db->quoteName('debit') . " >0 ");
 			}
 			else
 			{
-				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(' . $db->quoteName('vendors.vendor_title') . ' LIKE ' . $search .
-							'OR ' . $db->quoteName('fees.currency') . ' LIKE' . $search .
-							'OR ' . $db->quoteName('vendors.vendor_client') . ' LIKE' . $search .
-							'OR ' . $db->quoteName('pass.vendor_id') . ' LIKE' . $search . ')');
+				$query->where($db->quoteName('credit') . " >0 ");
 			}
 		}
 
-		// Display according to filter
-		$vendor = $this->getState('filter.vendor_id');
+		$fromDate = $this->getState('filter.fromDate', '');
+		$toDate = $this->getState('filter.toDate', '');
 
-		if (!empty($vendor))
+		if (!empty($fromDate))
 		{
-			$query->where($db->quoteName('vendors.vendor_id') . '=' . $vendor);
+			$query->where($db ->quoteName('transaction_time') . 'BETWEEN' . "'$fromDate'" . 'AND' . "'$toDate'");
 		}
-
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
@@ -172,21 +155,6 @@ class TjvendorsModelPayouts extends JModelList
 	public function getItems()
 	{
 		$items = parent::getItems();
-
-		// Get latest payout amount for provided vendor and currency
-		foreach ($items as $i => $item)
-		{
-			foreach ($items as $j => $tempItem)
-			{
-				if (($item->vendor_id == $tempItem->vendor_id) && ($item->currency == $tempItem->currency))
-				{
-					if ($item->id > $tempItem->id)
-					{
-						unset($items[$j]);
-					}
-				}
-			}
-		}
 
 		return $items;
 	}

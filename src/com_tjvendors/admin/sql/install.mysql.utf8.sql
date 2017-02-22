@@ -22,6 +22,15 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_fee` (
 PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 COMMENT='Store Information' AUTO_INCREMENT=1;
 
+CREATE TABLE IF NOT EXISTS `#__vendor_client_xref` (
+`id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+`vendor_id` INT(11)  NOT NULL ,
+`client` VARCHAR(255)  NOT NULL ,
+`approved` tinyint(1)  NOT NULL DEFAULT 1,
+`state` tinyint(1)  NOT NULL DEFAULT 1,
+PRIMARY KEY (`id`)
+) DEFAULT CHARSET=utf8 COMMENT='Store Information' AUTO_INCREMENT=1;
+
 CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
   `vendor_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,

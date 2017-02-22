@@ -1,21 +1,23 @@
 <?php
 /**
- * @version    SVN:
+ * @version    CVS: 1.0.0
  * @package    Com_Tjvendors
- * @author     Techjoomla  <contact@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @author     Parth Lawate <contact@techjoomla.com>
+ * @copyright  2016 Parth Lawate
+ * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modellist');
+// No direct access.
+defined('_JEXEC') or die();
+
+jimport('joomla.application.component.modeladmin');
 
 /**
- * Methods supporting a list of Tjvendors records.
+ * Tjvendors model.
  *
  * @since  1.6
  */
-class TjvendorsModelPayouts extends JModelList
+class TjvendorsModelVendors extends JModelList
 {
 /**
 	* Constructor.
@@ -32,9 +34,12 @@ class TjvendorsModelPayouts extends JModelList
 			$config['filter_fields'] = array(
 				'id', 'pass.`id`',
 				'total', 'pass.`total`',
-				'currency', 'fees.`currency`',
-				'ordering', 'pass.`ordering`',
-				'vendor_title', 'vendors.`vendor_title`',
+				'currency', 'pass.`currency`',
+				'transaction_id', 'pass.`transaction_id`',
+				'transaction_time', 'pass.`transaction_time`',
+				'reference_order_id','pass.`reference_order_id`',
+				'vendor_client','vendors.`vendor_client`',
+
 			);
 		}
 
@@ -61,15 +66,16 @@ class TjvendorsModelPayouts extends JModelList
 		// Set ordering.
 		$orderCol = $app->getUserStateFromRequest($this->context . '.filter_order', 'filter_order');
 
-		if (!in_array($orderCol, $this->filter_fields))
-		{
-			$orderCol = 'vendors.vendor_id';
-		}
-
 		$this->setState('list.ordering', $orderCol);
 
-		$vendorId = $app->getUserStateFromRequest($this->context . '.filter.vendor_id', 'vendor_id', '0', 'string');
-		$this->setState('filter.vendor_id', $vendorId);
+		$transactionType = $app->getUserStateFromRequest($this->context . '.filter.transactionType', 'transactionType', '0', 'string');
+		$this->setState('filter.transactionType', $transactionType);
+
+		$fromDate = $app->getUserStateFromRequest($this->context . '.filter.fromDate', 'fromDates', '0', 'string');
+		$this->setState('filter.fromDate', $fromDate);
+
+		$toDate = $app->getUserStateFromRequest($this->context . '.filter.toDate', 'toDates', '0', 'string');
+		$this->setState('filter.toDate', $toDate);
 
 		$client = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
 		$this->setState('filter.vendor_client', $client);
@@ -82,10 +88,7 @@ class TjvendorsModelPayouts extends JModelList
 		$params = JComponentHelper::getParams('com_tjvendors');
 		$this->setState('params', $params);
 
-		$this->setState('list.limit', '0');
-
-		// List state information.
-		parent::populateState('vendors.vendor_id', 'asc');
+		parent::populateState();
 	}
 
 	/**
@@ -96,11 +99,12 @@ class TjvendorsModelPayouts extends JModelList
 	 * @since    1.6
 	 */
 
-	public function getListQuery()
+	protected function getListQuery()
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('vendors.vendor_id','fees.currency','vendors.vendor_title','pass.*',)));
+		$columns = array('vendors.vendor_id', 'vendors.vendor_client', 'pass.*', 'fees.currency');
+		$query->select($db->quoteName($columns));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
 		$query->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
 			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('fees.vendor_id') . ')');
@@ -108,22 +112,12 @@ class TjvendorsModelPayouts extends JModelList
 			' ON (' . $db->quoteName('fees.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') .
 			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')');
 		$query->where($db->quoteName('pass.id') . ' is not null');
-
-		$client = $this->getState('filter.vendor_client');
-
-		if (!empty($client))
-		{
-		$query->where($db->quoteName('vendors.vendor_client') . " = " . $db->quote($client));
-		}
-
 		$db->setQuery($query);
+
 		$rows = $db->loadAssocList();
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
-
-		// Filter vendor id
-		$vendor = $this->getState('filter.vendor_id');
 
 		if (!empty($search))
 		{
@@ -141,12 +135,41 @@ class TjvendorsModelPayouts extends JModelList
 			}
 		}
 
-		// Display according to filter
-		$vendor = $this->getState('filter.vendor_id');
+		$transactionType = $this->getState('filter.transactionType', '');
 
-		if (!empty($vendor))
+		if (!empty($transactionType))
 		{
-			$query->where($db->quoteName('vendors.vendor_id') . '=' . $vendor);
+			if ($transactionType == "debit")
+			{
+				$query->where($db->quoteName('debit') . " >0 ");
+			}
+			else
+			{
+				$query->where($db->quoteName('credit') . " >0 ");
+			}
+		}
+
+		$fromDate = $this->getState('filter.fromDate', '');
+		$toDate = $this->getState('filter.toDate', '');
+
+		if (!empty($fromDate))
+		{
+			$query->where($db->quoteName('transaction_time') . ' BETWEEN ' . "'$fromDate'" . 'AND' . "'$toDate'");
+		}
+
+		$client = $this->getState('filter.vendor_client', '');
+		$user_id = JFactory::getUser()->id;
+
+		// Display according to filter
+		$client = $this->getState('filter.vendor_client');
+
+		if ($client == '0')
+		{
+			$query->where($db->quoteName('vendors.user_id') . '=' . $user_id);
+		}
+		else
+		{
+			$query->where($db->quoteName('vendors.vendor_id') . '=' . $client);
 		}
 
 		// Add the list ordering clause.
@@ -162,31 +185,15 @@ class TjvendorsModelPayouts extends JModelList
 	}
 
 	/**
-	 * get the list items
+	 * Get items data.
 	 *
 	 * @return   items
 	 *
 	 * @since    1.6
 	 */
-
 	public function getItems()
 	{
 		$items = parent::getItems();
-
-		// Get latest payout amount for provided vendor and currency
-		foreach ($items as $i => $item)
-		{
-			foreach ($items as $j => $tempItem)
-			{
-				if (($item->vendor_id == $tempItem->vendor_id) && ($item->currency == $tempItem->currency))
-				{
-					if ($item->id > $tempItem->id)
-					{
-						unset($items[$j]);
-					}
-				}
-			}
-		}
 
 		return $items;
 	}

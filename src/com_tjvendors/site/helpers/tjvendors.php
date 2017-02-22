@@ -38,6 +38,162 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
+	 * Get array of unique Clients
+	 *  
+	 * @param   string  $user_id  To give user specific clients for the filter  
+	 * 
+	 * @return null|object
+	 */
+	public static function getUniqueClients($user_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$columns = $db->quoteName(array('vendors.vendor_client','vendors.vendor_id'));
+		$columns[0] = 'DISTINCT' . $columns[0];
+		$query->select($columns);
+		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
+		$query->where($db->quoteName('vendors.user_id') . ' = ' . $user_id);
+		$db->setQuery($query);
+		$rows = $db->loadAssocList();
+		$uniqueClient[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT');
+		$uniqueClient[] = array("vendor_client" => "All Clients","client_value" => 0);
+
+		foreach ($rows as $row)
+		{
+			$uniqueClient[] = array("vendor_client" => $row['vendor_client'], "client_value" => $row['vendor_id']);
+		}
+
+		return $uniqueClient;
+	}
+
+	/**
+	 * Get array of pending payout amount
+	 *
+	 * @param   integer  $vendor_id  required to give vendor specific result
+	 * 
+	 * @param   integer  $user_id    required to give user specific result
+	 *   
+	 * @return $totalDetails|array
+	 */
+	public static function getTotalDetails($vendor_id,$user_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$subQuery = $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+
+		if ($vendor_id == 0)
+		{
+			$subQuery->select('vendor_id');
+			$subQuery->from($db->quoteName('#__tjvendors_vendors'));
+			$subQuery->where($db->quoteName('user_id') . ' = ' . $db->quote($user_id));
+			$query->where($db->quoteName('vendor_id') . ' IN (' . $subQuery . ')');
+			$query->order($db->quoteName('vendor_id') . ' ASC');
+		}
+		else
+		{
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		$db->setQuery($query);
+		$rows = $db->loadAssocList();
+		$totalDebitAmount = 0;
+		$totalCreditAmount = 0;
+		$totalpendingAmount = 0;
+
+		foreach ($rows as $row)
+		{
+			$totalDebitAmount = $totalDebitAmount + $row['debit'];
+			$totalCreditAmount = $totalCreditAmount + $row['credit'];
+			$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
+		}
+
+		$totalDetails = array("debitAmount" => $totalDebitAmount,"creditAmount" => $totalCreditAmount,"pendingAmount" => $totalpendingAmount);
+
+		return $totalDetails;
+	}
+
+	/**
+	 * Get clients for vendors
+	 *
+	 * @param   integer  $vendor_id  required to give vendor specific result
+	 * 
+	 * @return clientsForVendor|array
+	 */
+	public static function getClientsForVendor($vendor_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('*'));
+		$query->from($db->quoteName('#__vendor_client_xref'));
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
+		}
+
+		$db->setQuery($query);
+
+		if (!empty($rows = $db->loadAssocList()))
+		{
+			foreach ($rows as $client)
+			{
+				$clientsForVendor[] = $client['client'];
+			}
+
+			return $clientsForVendor;
+		}
+	}
+
+	/**
+	 * Get vendor for that user
+	 *
+	 * @return vendor
+	 */
+	public static function getvendor()
+	{
+		$user_id = jFactory::getuser()->id;
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('vendor_id'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
+		$db->setQuery($query);
+		$vendor = $db->loadResult();
+
+		return $vendor;
+	}
+
+	/**
+	 * Check for duplicate clients
+	 *
+	 * @param   integer  $vendor_id      required to give vendor specific result
+	 * 
+	 * @param   integer  $vendor_client  client taken from the form
+	 * 
+	 * @return vendor_client|string
+	 */
+	public static function checkForDuplicateClient($vendor_id,$vendor_client)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('client'));
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
+		$db->setQuery($query);
+		$result = $db->loadAssocList();
+
+		foreach ($result as $client)
+		{
+			if ($client['client'] == $vendor_client)
+			{
+				return $vendor_client;
+			}
+		}
+	}
+
+	/**
 	 * Get array of currency
 	 *
 	 * @return null|object

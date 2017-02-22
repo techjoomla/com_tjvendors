@@ -104,11 +104,6 @@ class TjvendorsModelVendors extends JModelList
 		$query->select($this->getState('list.select', 'DISTINCT a.*'));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'a'));
 
-		if (!empty($client))
-		{
-			$query->where($db->quoteName('vendor_client') . " = " . $db->quote($client));
-		}
-
 		// Join over the user field 'user_id'
 		$query->select('`user_id`.name AS `user_id`');
 		$query->join('LEFT', $db->quoteName('#__users', 'user_id') . 'ON (' . $db->quoteName('user_id.id') . ' = ' . $db->quoteName('a.user_id') . ')');

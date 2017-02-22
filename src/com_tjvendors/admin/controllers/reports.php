@@ -1,8 +1,8 @@
 <?php
 /**
- * @version    SVN: 
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
+ * @author     Techjoomla  <contact@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
@@ -19,7 +19,7 @@ use Joomla\Utilities\ArrayHelper;
  *
  * @since  1.6
  */
-class TjvendorsControllerVendorFees extends JControllerAdmin
+class TjvendorsControllerReports extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.
@@ -32,25 +32,10 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 	 *
 	 * @since    1.6
 	 */
-	public function getModel($name = 'vendorfee', $prefix = 'TjvendorsModel', $config = array())
+	public function getModel($name = 'payout', $prefix = 'TjvendorsModel', $config = array())
 	{
 		$model = parent::getModel($name, $prefix, array('ignore_request' => true));
 
 		return $model;
-	}
-
-	/**
-	 * Method for back to previous page
-	 *
-	 * @return  boolean
-	 */
-	public function back()
-	{
-		// Get the input
-		$input = JFactory::getApplication()->input;
-		$pks = $input->post->get('cid', array(), 'array');
-
-		// Redirect to the list screen.
-		$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendors', false));
 	}
 }

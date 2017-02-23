@@ -178,7 +178,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			// To check if editing in registration form
 			if ($data['vendor_id'])
 			{
-				 $table->save($data);
+				$table->save($data);
 
 				// $app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
 

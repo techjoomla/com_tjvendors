@@ -59,6 +59,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			var user=document.getElementById('jform_user_id').value;
 			//~ console.log(user);
 			var userObject = {};
+			var client = "<?php echo $this->input->get('client', '', 'STRING'); ?>";
 			userObject["user"] = user;
 			JSON.stringify(userObject) ;
 			jQuery.ajax({
@@ -69,7 +70,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 				success:function(data) {
 						if(data.vendor_id)
 						{
-								document.location='index.php?option=com_tjvendors&status=register&view=vendor&layout=edit&vendor_id='+data.vendor_id;
+								document.location='index.php?option=com_tjvendors&status=register&view=vendor&layout=edit&client='+client+'&vendor_id='+data.vendor_id;
 						}
 				},
 		   });
@@ -188,6 +189,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
 		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value=""/>
+		<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

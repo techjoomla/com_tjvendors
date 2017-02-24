@@ -77,7 +77,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToListAppend()
 	{
-		$input  = JFactory::getApplication()->input;
+		$input  = JFactory::getApplication()->input->post;
 		$client = $input->get('client', '', 'STRING');
 		$append = parent::getRedirectToListAppend();
 		$append .= '&client=' . $client;

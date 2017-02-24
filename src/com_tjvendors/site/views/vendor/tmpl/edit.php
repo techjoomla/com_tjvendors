@@ -93,6 +93,12 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 											<div class="controls "><img src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
 										</div>
 								<?php } 
+								if(empty($this->vendor->vendor_logo)):?>
+									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/media/com_tjvendor/vendor/defaultprofile.png" />
+									<div class="control-group">
+											<div class="controls "><img src="<?php echo JUri::root() . "/media/com_tjvendor/vendor/defaultprofile.png"; ?>"></div>
+										</div>
+								<?php endif;
 								?>
 								<div>
 									<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">

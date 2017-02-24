@@ -99,14 +99,20 @@ class TjvendorsModelVendors extends JModelList
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
+		$subQuery = $db->getQuery(true);
 
-		// Select the required fields from the table.
-		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from($db->quoteName('#__tjvendors_vendors', 'a'));
+		$subQuery->select('vendor_id')
+			->from($db->quoteName('#__vendor_client_xref'));
 
-		// Join over the user field 'user_id'
-		$query->select('`user_id`.name AS `user_id`');
-		$query->join('LEFT', $db->quoteName('#__users', 'user_id') . 'ON (' . $db->quoteName('user_id.id') . ' = ' . $db->quoteName('a.user_id') . ')');
+			if (!empty($client))
+			{
+				$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
+			}
+
+		// Create the base select statement.
+		$query->select('*')
+			->from($db->quoteName('#__tjvendors_vendors', 'a'))
+			->where($db->quoteName('vendor_id') . ' IN (' . $subQuery . ')');
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');

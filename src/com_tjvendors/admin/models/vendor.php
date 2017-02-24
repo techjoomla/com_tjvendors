@@ -140,6 +140,59 @@ class TjvendorsModelVendor extends JModelAdmin
 	}
 
 	/**
+	 * Method to check duplicate user.
+	 *
+	 * @param   integer  $user  user name.
+	 * 
+	 * @return   array rows
+	 *
+	 * @since    1.6
+	 */
+	public function checkDuplicateUser($user)
+	{
+		$user_id = $this->getUserId($user);
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('*'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+
+		if (!empty($user_id))
+		{
+			$query->where($db->quoteName('user_id') . ' = ' . $user_id);
+		}
+
+		$db->setQuery($query);
+		$rows = $db->loadAssoc();
+
+		if ($rows)
+		{
+			return $rows;
+		}
+	}
+
+	/**
+	 * Method to give user_id
+	 *
+	 * @param   integer  $user  user name.
+	 * 
+	 * @return   array rows
+	 *
+	 * @since    1.6
+	 */
+	public function getUserId($user)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('id'));
+		$query->from($db->quoteName('#__users'));
+		$query->where($db->quoteName('name') . ' = ' . $db->quote($user));
+		$db->setQuery($query);
+		$row = $db->loadResult();
+
+		return $row;
+	}
+
+	/**
 	 * Method for save user specific %commission, flat commission, client
 	 *
 	 * @param   Array  $data  Data
@@ -202,12 +255,12 @@ class TjvendorsModelVendor extends JModelAdmin
 						$this->addVendorId();
 					}
 
-				return true;
+					return true;
 				}
 
 				$table->save($data);
 
-			return true;
+				return true;
 			}
 		}
 		else

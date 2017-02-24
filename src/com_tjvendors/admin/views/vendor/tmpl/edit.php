@@ -18,6 +18,8 @@ JHtml::_('behavior.keepalive');
 // Import CSS
 $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
+//$document->addScript(JUri::root() . 'administrator/components/com_tjvendors/assets/js/vendor.js');
+
 ?>
 <script type="text/javascript">
 	js = jQuery.noConflict();
@@ -51,11 +53,31 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			Joomla.submitform(task, document.getElementById('vendor-form'));
 		}
 	}
+
+	
+		jQuery(document).on("change","#jform_user_id", function () {
+			var user=document.getElementById('jform_user_id').value;
+			//~ console.log(user);
+			var userObject = {};
+			userObject["user"] = user;
+			JSON.stringify(userObject) ;
+			jQuery.ajax({
+				type: "POST",
+				dataType: "json",
+				data: userObject,
+				url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
+				success:function(data) {
+						if(data.vendor_id)
+						{
+								document.location='index.php?option=com_tjvendors&status=register&view=vendor&layout=edit&vendor_id='+data.vendor_id;
+						}
+				},
+		   });
+		});
+
 </script>
-<?php
-$currUrl = TjvendorsHelpersTjvendors::getCurrency();
-?>
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . (int) $this->item->vendor_id); ?>"
+
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client='.$this->input->get('client', '', 'INTEGER').'&vendor_id=' . (int) $this->item->vendor_id); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 	<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 	<div class="form-horizontal">
@@ -69,10 +91,33 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 					<input type="hidden" name="jform[checked_out]" value="<?php echo $this->item->checked_out; ?>" />
 					<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
+					<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 
+					<?php 
+						$status=$this->input->get('status');
+
+						if ($this->item->vendor_id != 0 && $status!="update")
+						{
+							echo $this->form->renderField('user_id');
+							echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
+							<a href="<?php echo JRoute::_('http://ttpl50-php5.local/JoomlaTJVendor/administrator/index.php?option=com_tjvendors&view=vendor&layout=edit&status=update&vendor_id='.$this->item->vendor_id);?>">
+							<?php
+								echo $this->item->vendor_title."</a>";
+								echo " <br> ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD')."". $this->input->get('client', '', 'STRING') ."".JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
+							?>
+							<div>
+								<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
+									<span><?php echo JText::_('JSUBMIT'); ?></span>
+								</button>
+								<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
+									<span><?php echo JText::_('JCANCEL'); ?></span>
+								</button>
+							</div>
+					<?php }
+					elseif($this->item->vendor_id==0)
+					{
+						 echo $this->form->renderField('user_id');
 						
-						<?php echo $this->form->renderField('user_id');?>
-						<?php
 						if (!empty($this->item->vendor_id))
 						{
 							if(!empty($this->clientsForVendor))
@@ -80,18 +125,48 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 								echo "Is a Vendor for : ";
 								foreach ($this->clientsForVendor as $client)
 								{
-									echo "<h4>" . JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
+									echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
 								}
 								echo ".";
 							}
 						}
+						echo $this->form->renderField('client');
+						echo $this->form->renderField('vendor_title'); 
+						echo $this->form->renderField('vendor_description'); 
+						echo $this->form->renderField('vendor_logo'); 
 						?>
-						<?php echo $this->form->renderField('vendor_client');?>
-						<?php echo $this->form->renderField('client');?>
-						<?php echo $this->form->renderField('vendor_title'); ?>
-						<?php echo $this->form->renderField('vendor_description'); ?>
-						<?php echo $this->form->renderField('vendor_logo'); ?>
+						<div class="controls">
+						<div class="alert alert-warning">
+						<?php
+						echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png');
+						?>
+						</div>
 						
+						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
+						<?php 
+					}
+					elseif($this->item->vendor_id!=0 && $status=="update")
+					{
+						echo $this->form->renderField('user_id');
+
+						if (!empty($this->item->vendor_id))
+						{
+							if(!empty($this->clientsForVendor))
+							{
+								echo "Is a Vendor for : ";
+								foreach ($this->clientsForVendor as $client)
+								{
+									echo "<li>";
+									echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
+									echo "</li>";
+								}
+							}
+						}
+						echo $this->form->renderField('client');
+						echo $this->form->renderField('vendor_title'); 
+						echo $this->form->renderField('vendor_description'); 
+						echo $this->form->renderField('vendor_logo'); 
+						?>
 						<div class="controls">
 						<div class="alert alert-warning">
 						<?php
@@ -104,8 +179,9 @@ $currUrl = TjvendorsHelpersTjvendors::getCurrency();
 							<div class="control-group">
 								<div class="controls "><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>"></div>
 							</div>
-						<?php endif; ?>
-					<input type="hidden" name="jform[currency]" value='<?php echo $this->item->currency;?>' />
+						<?php endif; 
+					}
+					?>
 				</fieldset>
 			</div>
 		</div>

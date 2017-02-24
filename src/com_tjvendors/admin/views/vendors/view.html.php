@@ -68,6 +68,7 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		$state = $this->get('State');
 		$canDo = TjvendorsHelpersTjvendors::getActions();
+		JToolBarHelper::addNew('vendor.add');
 
 		if (JVERSION >= '3.0')
 		{

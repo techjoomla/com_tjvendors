@@ -31,9 +31,10 @@ defined('_JEXEC') or die();
 			<?php 
 				if(!empty($this->clientsForVendor))
 				{
+					echo "<br>You are a vendor for:";
 					foreach($this->clientsForVendor as $client)
 					{
-						echo "<div class=pull-right><h4> ".JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($client))." </h4></div> ";
+						echo "<li> ".JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($client))." </li> ";
 					}
 				}
 			 ?>

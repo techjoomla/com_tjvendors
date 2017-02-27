@@ -141,4 +141,74 @@ class TjvendorsModelVendors extends JModelList
 
 		return $query;
 	}
+
+	/**
+	 * Build an SQL query to load the list data.
+	 *
+	 * @param   integer  $vendor_id  for deleting record of that vendor
+	 *
+	 * @return   JDatabaseQuery
+	 *
+	 * @since    1.6
+	 */
+	public function checkForAvailableRecords($vendor_id)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query ->select('COUNT(*)');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$db->setQuery($query);
+		$result = $db->loadResult();
+
+		return $result;
+	}
+
+	/**
+	 * Build an SQL query to load the list data.
+	 *
+	 * @param   integer  $vendor_id  for deleting record of that vendor
+	 * 
+	 * @param   string   $client     client from url
+	 * 
+	 * @return   JDatabaseQuery
+	 *
+	 * @since    1.6
+	 */
+	public function deleteSingleRecord($vendor_id,$client)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->delete($db->quoteName('#__vendor_client_xref'));
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+
+			if (!empty($client))
+			{
+				$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+			}
+
+			$db->setQuery($query);
+		$result = $db->execute();
+		$availability = $this->checkForAvailableRecords($vendor_id, $client);
+
+		return $availability;
+	}
+
+	/**
+	 * Build an SQL query to load the list data.
+	 *
+	 * @param   integer  $vendor_id  for deleting record of that vendor
+	 * 
+	 * @param   string   $client     client from url
+	 * 
+	 * @return   JDatabaseQuery
+	 *
+	 * @since    1.6
+	 */
+	public function delete($vendor_id,$client)
+	{
+		$singleRecordStatus = $this->deleteSingleRecord($vendor_id, $client);
+
+		return $singleRecordStatus;
+	}
 }

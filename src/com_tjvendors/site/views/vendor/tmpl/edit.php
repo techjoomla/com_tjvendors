@@ -54,7 +54,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 
 						<?php
 						$status=$this->input->get('status');
-							if($this->vendor_id !=0 && $status=="register")
+							if($this->vendor_id !=0 && $status!="update")
 							{
 								echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&status=update&layout=edit&vendor_id='.$this->vendor_id);?>">
@@ -75,7 +75,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 								</div>
 						<?php
 							}
-							elseif($this->vendor_id==0&& $status=="register")
+							elseif($this->vendor_id==0)
 							{?>
 								 <input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 								<?php echo$this->form->renderField('vendor_title'); ?>
@@ -111,7 +111,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 								</div>
 						<?php
 							}
-							else
+							elseif($this->vendor_id!=0&& $status=="update")
 							{?>
 								
 								<?php echo$this->form->renderField('vendor_title'); ?>

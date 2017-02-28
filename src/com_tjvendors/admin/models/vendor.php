@@ -203,6 +203,8 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$app = JFactory::getApplication();
 		$table = $this->getTable();
+		$input = JFactory::getApplication()->input;
+		$layout = $input->get('layout', '', 'STRING');
 
 		if ($data['user_id'] != 0)
 		{
@@ -211,7 +213,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$table->save($data);
 
-				if (!empty($data['vendor_client']))
+				if ($layout == "edit" && !empty($data['vendor_client']))
 				{
 					require_once JPATH_SITE . '/components/com_tjvendors/helpers/tjvendors.php';
 					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;

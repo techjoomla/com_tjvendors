@@ -143,11 +143,11 @@ class TjvendorsModelVendors extends JModelList
 	}
 
 	/**
-	 * Build an SQL query to load the list data.
+	 * Build an SQL query check for available data
 	 *
-	 * @param   integer  $vendor_id  for deleting record of that vendor
+	 * @param   integer  $vendor_id  for checking data for that vendor
 	 *
-	 * @return   JDatabaseQuery
+	 * @return   result
 	 *
 	 * @since    1.6
 	 */
@@ -165,6 +165,25 @@ class TjvendorsModelVendors extends JModelList
 	}
 
 	/**
+	 * Build an SQL query to delete vendor data
+	 *
+	 * @param   integer  $vendor_id  for deleting record of that vendor
+	 *
+	 * @return   JDatabaseQuery
+	 *
+	 * @since    1.6
+	 */
+	public function deleteVendor($vendor_id)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->delete($db->quoteName('#__tjvendors_vendors'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$db->setQuery($query);
+		$result = $db->execute();
+	}
+
+	/**
 	 * Build an SQL query to load the list data.
 	 *
 	 * @param   integer  $vendor_id  for deleting record of that vendor
@@ -175,7 +194,7 @@ class TjvendorsModelVendors extends JModelList
 	 *
 	 * @since    1.6
 	 */
-	public function deleteSingleRecord($vendor_id,$client)
+	public function deleteClientFromVendor($vendor_id,$client)
 	{
 		$db = $this->getDbo();
 		$query = $db->getQuery(true);
@@ -191,24 +210,9 @@ class TjvendorsModelVendors extends JModelList
 		$result = $db->execute();
 		$availability = $this->checkForAvailableRecords($vendor_id, $client);
 
-		return $availability;
-	}
-
-	/**
-	 * Build an SQL query to load the list data.
-	 *
-	 * @param   integer  $vendor_id  for deleting record of that vendor
-	 * 
-	 * @param   string   $client     client from url
-	 * 
-	 * @return   JDatabaseQuery
-	 *
-	 * @since    1.6
-	 */
-	public function delete($vendor_id,$client)
-	{
-		$singleRecordStatus = $this->deleteSingleRecord($vendor_id, $client);
-
-		return $singleRecordStatus;
+		if ($availability == 0)
+		{
+			$this->deleteVendor($vendor_id);
+		}
 	}
 }

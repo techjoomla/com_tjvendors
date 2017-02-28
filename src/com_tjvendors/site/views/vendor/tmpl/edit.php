@@ -56,11 +56,14 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 						$status=$this->input->get('status');
 							if($this->vendor_id !=0 && $status!="update")
 							{
+								$client=$this->input->get('client', '', 'STRING');
 								echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&status=update&layout=edit&vendor_id='.$this->vendor_id);?>">
 								<?php
 								echo $this->VendorDetail->vendor_title."</a>";
-								echo " <br> ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD')."". $this->input->get('client', '', 'STRING') ."".JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');?>
+								echo " <br> ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
+								echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
+								echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');?>
 								<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 								<input type="hidden" name="jform[vendor_title]" value="<?php echo $this->VendorDetail->vendor_title; ?>" />
 								<input type="hidden" name="jform[vendor_description]" value="<?php echo $this->VendorDetail->vendor_description; ?>" />

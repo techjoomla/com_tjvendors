@@ -52,12 +52,7 @@ class TjvendorsControllerVendors extends JControllerAdmin
 
 		foreach ($cid as $vendor_id)
 		{
-			$status = $model->delete($vendor_id, $client);
-
-			if ($status == 0)
-			{
-				parent::delete();
-			}
+			$model->deleteClientFromVendor($vendor_id, $client);
 		}
 
 		$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client;

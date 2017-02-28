@@ -112,18 +112,19 @@ class TjvendorsModelVendor extends JModelAdmin
 	/**
 	 * Method to add vendor id after client is added to the table.
 	 *
+	 * @param   Array  $vendor_id  vendor id
+	 * 
 	 * @return   mixed
 	 *
 	 * @since    1.6
 	 */
-	public function addVendorId()
+	public function addVendorId($vendor_id)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('max(' . $db->quoteName('id') . ')');
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$db->setQuery($query);
-		$vendor_id = (int) $this->getState($this->getName() . '.id');
 		$res = $db->loadResult();
 		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 
@@ -205,6 +206,8 @@ class TjvendorsModelVendor extends JModelAdmin
 		$table = $this->getTable();
 		$input = JFactory::getApplication()->input;
 		$layout = $input->get('layout', '', 'STRING');
+		$logoDetails = $app->input->files->get('jform', array(), 'raw');
+		$logoName = $logoDetails['vendor_logo']['name'];
 
 		if ($data['user_id'] != 0)
 		{
@@ -241,28 +244,25 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 			else
 			{
-				// Attempt to save data
-				if (!empty($data['vendor_client']))
+				if ($table->save($data) === true)
 				{
-					$vendor_id = (int) $this->getState($this->getName() . '.id');
-					$client_entry = new stdClass;
-					$client_entry->client = $data['vendor_client'];
-					$client_entry->vendor_id = $vendor_id;
+					$vendorId = $table->vendor_id;
 
-					// Insert the object into the user profile table.
-					$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
-
-					if (parent::save($data))
+					if (!empty($data['vendor_client']))
 					{
-						$this->addVendorId();
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
+
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+						$this->addVendorId($vendorId);
 					}
 
 					return true;
 				}
 
-				$table->save($data);
-
-				return true;
+				return false;
 			}
 		}
 		else

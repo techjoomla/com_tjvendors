@@ -150,8 +150,6 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 							echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png');
 							?>
 							</div>
-							
-							<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
 							<?php 
 						}
 						?>

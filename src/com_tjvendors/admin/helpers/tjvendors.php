@@ -188,6 +188,32 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
+	 * Check For Duplicate users
+	 *
+	 * @return rows|object
+	 */
+	public static function checkDuplicateUser()
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('*'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+
+		if (!empty($user_id))
+		{
+			$query->where($db->quoteName('user_id') . ' = ' . $user_id);
+		}
+
+		$db->setQuery($query);
+		$rows = $db->loadAssocList();
+
+		if ($rows)
+		{
+			return $rows;
+		}
+	}
+
+	/**
 	 * Get array of currency
 	 *
 	 * @return null|object

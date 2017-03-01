@@ -112,18 +112,19 @@ class TjvendorsModelVendor extends JModelAdmin
 	/**
 	 * Method to add vendor id after client is added to the table.
 	 *
+	 * @param   Array  $vendor_id  vendor id
+	 * 
 	 * @return   mixed
 	 *
 	 * @since    1.6
 	 */
-	public function addVendorId()
+	public function addVendorId($vendor_id)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('max(' . $db->quoteName('id') . ')');
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$db->setQuery($query);
-		$vendor_id = (int) $this->getState($this->getName() . '.id');
 		$res = $db->loadResult();
 		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 
@@ -140,6 +141,59 @@ class TjvendorsModelVendor extends JModelAdmin
 	}
 
 	/**
+	 * Method to check duplicate user.
+	 *
+	 * @param   integer  $user  user name.
+	 * 
+	 * @return   array rows
+	 *
+	 * @since    1.6
+	 */
+	public function checkDuplicateUser($user)
+	{
+		$user_id = $this->getUserId($user);
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('*'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+
+		if (!empty($user_id))
+		{
+			$query->where($db->quoteName('user_id') . ' = ' . $user_id);
+		}
+
+		$db->setQuery($query);
+		$rows = $db->loadAssoc();
+
+		if ($rows)
+		{
+			return $rows;
+		}
+	}
+
+	/**
+	 * Method to give user_id
+	 *
+	 * @param   integer  $user  user name.
+	 * 
+	 * @return   array rows
+	 *
+	 * @since    1.6
+	 */
+	public function getUserId($user)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('id'));
+		$query->from($db->quoteName('#__users'));
+		$query->where($db->quoteName('name') . ' = ' . $db->quote($user));
+		$db->setQuery($query);
+		$row = $db->loadResult();
+
+		return $row;
+	}
+
+	/**
 	 * Method for save user specific %commission, flat commission, client
 	 *
 	 * @param   Array  $data  Data
@@ -150,6 +204,10 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$app = JFactory::getApplication();
 		$table = $this->getTable();
+		$input = JFactory::getApplication()->input;
+		$layout = $input->get('layout', '', 'STRING');
+		$logoDetails = $app->input->files->get('jform', array(), 'raw');
+		$logoName = $logoDetails['vendor_logo']['name'];
 
 		if ($data['user_id'] != 0)
 		{
@@ -158,7 +216,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$table->save($data);
 
-				if (!empty($data['vendor_client']))
+				if ($layout == "edit" && !empty($data['vendor_client']))
 				{
 					require_once JPATH_SITE . '/components/com_tjvendors/helpers/tjvendors.php';
 					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
@@ -186,28 +244,25 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 			else
 			{
-				// Attempt to save data
-				if (!empty($data['vendor_client']))
+				if ($table->save($data) === true)
 				{
-					$vendor_id = (int) $this->getState($this->getName() . '.id');
-					$client_entry = new stdClass;
-					$client_entry->client = $data['vendor_client'];
-					$client_entry->vendor_id = $vendor_id;
+					$vendorId = $table->vendor_id;
 
-					// Insert the object into the user profile table.
-					$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
-
-					if (parent::save($data))
+					if (!empty($data['vendor_client']))
 					{
-						$this->addVendorId();
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
+
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+						$this->addVendorId($vendorId);
 					}
 
-				return true;
+					return true;
 				}
 
-				$table->save($data);
-
-			return true;
+				return false;
 			}
 		}
 		else

@@ -43,9 +43,29 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
+		$input  = JFactory::getApplication()->input;
+		$client = $input->get('client', '', 'STRING');
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
+		$append .= '&client=' . $client;
 
 		return $append;
+	}
+
+	/**
+	 * Check for duplicate users
+	 * 
+	 * @return null
+	 * 
+	 * @since   1.6
+	 */
+	public function checkDuplicateUser()
+	{
+		$input  = JFactory::getApplication()->input->post;
+		$user = $input->get('user', '', 'STRING');
+		$model = $this->getModel('vendor');
+		$results = $model->checkDuplicateUser($user);
+		echo json_encode($results);
+		jexit();
 	}
 
 	/**
@@ -57,7 +77,10 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToListAppend()
 	{
+		$input  = JFactory::getApplication()->input->post;
+		$client = $input->get('client', '', 'STRING');
 		$append = parent::getRedirectToListAppend();
+		$append .= '&client=' . $client;
 
 		return $append;
 	}

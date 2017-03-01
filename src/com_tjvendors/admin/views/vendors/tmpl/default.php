@@ -269,7 +269,7 @@ else
 
 							
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendor.edit&vendor_id=' . (int) $item->vendor_id. '&client=' . $item->vendor_client );?>">
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' .$this->input->get('client', '', 'STRING').'&vendor_id=' . (int) $item->vendor_id );?>">
 									<?php echo $this->escape($item->vendor_title); ?>
 								</a>
 							</td>

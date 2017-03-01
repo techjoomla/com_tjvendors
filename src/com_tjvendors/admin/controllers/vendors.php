@@ -47,7 +47,14 @@ class TjvendorsControllerVendors extends JControllerAdmin
 	{
 		$input  = JFactory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
-		parent::delete();
+		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$model = $this->getModel("vendors");
+
+		foreach ($cid as $vendor_id)
+		{
+			$model->deleteClientFromVendor($vendor_id, $client);
+		}
+
 		$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client;
 		$this->setRedirect($redirect);
 	}

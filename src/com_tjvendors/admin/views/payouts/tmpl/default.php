@@ -141,28 +141,23 @@ else
 
 					<?php if (isset($this->items[0]->state)){} ?>
 
-					<th class='right' width="2%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_ID', 'pass.`id`', $listDirn, $listOrder); ?>
-					</th>
+					
 
-					<th class='right' width="8%">
+					<th width="8%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
-					<?php if($filterClient=='0')
-						{?>
-						<th width="8%">
-							<?php echo JHtml::_('grid.sort', 'Client', 'vendors.`vendor_client`', $listDirn, $listOrder);?>
-						</th>
-						<?php }?>
-					<th class='right' width="5%">
+					
+					<th  width="5%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
 					</th>
-
-					<th class='right' width="10%">
+					<th width="10%">
+						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_PAID_UPTO');  ?>
+					</th>
+					<th  width="10%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 					</th>
 
-					<th class='right' width="10%">
+					<th  width="10%">
 						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_ACTION'); ?>
 					</th>
 				</tr>
@@ -176,24 +171,28 @@ else
 					<tr class="row<?php echo $i % 2; ?>">
 						<?php if (isset($this->items[0]->state)){}?>
 
-						<td>
-							<?php echo $item->id; ?>
-						</td>
+						
 
 						<td>
 								<?php echo $this->escape($item->vendor_title); ?>
 						</td>
-						<?php if($filterClient=='0'):?>
-						<td align="center">
-							<?php echo $item->client;?>
-						</td>
-						<?php endif;?>
+						
 						<td>
 							<?php echo $item->currency; ?>
 						</td>
 
 						<td>
-							<?php echo $item->total; ?>
+						<?php
+						$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id,$item->currency);
+							echo $paidAmount;
+						?>
+						</td>
+
+						<td>
+						<?php
+							$totalPendingAmount = TjvendorsHelpersTjvendors::gettotalPendingAmount($item->vendor_id,$item->currency);
+							echo $totalPendingAmount;
+						?>
 						</td>
 
 						<td>

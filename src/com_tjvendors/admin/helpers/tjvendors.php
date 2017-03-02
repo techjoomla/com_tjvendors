@@ -95,9 +95,9 @@ class TjvendorsHelpersTjvendors
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$columns = $db->quoteName('vendors.vendor_client');
+		$columns = $db->quoteName('client');
 		$query->select('distinct' . $columns);
-		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
+		$query->from($db->quoteName('#__vendor_client_xref'));
 		$db->setQuery($query);
 		$rows = $db->loadAssocList();
 		$uniqueClient[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT');
@@ -105,7 +105,7 @@ class TjvendorsHelpersTjvendors
 
 		foreach ($rows as $row)
 		{
-			$uniqueClient[] = array("vendor_client" => $row['vendor_client'], "client_value" => $row['vendor_client']);
+			$uniqueClient[] = array("vendor_client" => $row['client'], "client_value" => $row['client']);
 		}
 
 		return $uniqueClient;
@@ -214,22 +214,108 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
-	 * Get array of currency
+	 * Get paid amount
 	 *
-	 * @return null|object
+	 * @param   string  $vendor_id  integer
+	 * 
+	 * @param   string  $currency   currency for that vendor
+	 * 
+	 * @return amount
 	 */
-	public static function getCurrency()
+	public static function getPaidAmount($vendor_id,$currency)
 	{
-		$currencies = JFactory::getApplication()->input->get('currency', '', 'ARRAY');
-		$currUrl = "";
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('sum(' . $db->quoteName('debit') . ')');
+		$query->from($db->quoteName('#__tjvendors_passbook'));
 
-		$currencies = (array) $currencies;
-
-		foreach ($currencies as $currency)
+		if (!empty($vendor_id))
 		{
-			$currUrl .= "&currency[]=" . $currency;
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 		}
 
-		return $currUrl;
+		if (!empty($currency))
+		{
+			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		$db->setQuery($query);
+		$amount = $db->loadresult();
+
+		return $amount;
+	}
+
+	/**
+	 * Get paid amount
+	 *
+	 * @param   string  $vendor_id  integer
+	 * 
+	 * @param   string  $currency   currency for that vendor
+	 * 
+	 * @return amount
+	 */
+	public static function gettotalPendingAmount($vendor_id,$currency)
+	{
+		$db = JFactory::getDbo();
+		$subQuery = $db->getQuery(true);
+		$clients = self::getClients($vendor_id);
+		$totalAmount = 0;
+
+		foreach ($clients as $client)
+		{
+				$query = $db->getQuery(true);
+				$subQuery = $db->getQuery(true);
+				$subQuery->select('max(' . $db->quotename('id') . ')');
+				$subQuery->from($db->quotename('#__tjvendors_passbook'));
+
+				if (!empty($vendor_id))
+				{
+					$query->where($db->quotename('vendor_id') . ' = ' . $db->quote($vendor_id));
+				}
+
+				if (!empty($currency))
+				{
+					$subQuery->where($db->quotename('currency') . ' = ' . $db->quote($currency));
+				}
+
+				if (!empty($client))
+				{
+					$subQuery->where($db->quotename('client') . ' = ' . $db->quote($client['client']));
+				}
+
+				$query->select($db->quotename('total'));
+				$query->from($db->quotename('#__tjvendors_passbook'));
+				$query->where($db->quotename('id') . ' = (' . $subQuery . ')');
+				$db->setQuery($query);
+				$result = $db->loadresult();
+				$totalAmount = $totalAmount + $result;
+		}
+
+		return $totalAmount;
+	}
+
+	/**
+	 * Get array of clients
+	 *
+	 * @param   string  $vendor_id  integer
+	 * 
+	 * @return client|array
+	 */
+	public static function getClients($vendor_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('distinct' . $db->quoteName('client'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		$db->setQuery($query);
+		$clients = $db->loadAssocList();
+
+		return $clients;
 	}
 }

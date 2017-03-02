@@ -68,6 +68,7 @@
 		<fields name="params">
 			<fieldset name="component">
 				<field name="save_history" default="0" />
+				<field name="bulk_payout" default="0" />
 			</fieldset>
 		</fields>
 	</config>

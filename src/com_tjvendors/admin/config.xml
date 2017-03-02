@@ -8,6 +8,10 @@
       <option value="0">JNO</option>
       <option value="1">JYES</option>
     </field>
+    <field name="bulk_payout" type="radio" class="btn-group btn-group-yesno" default="0" label="JGLOBAL_BULK_PAYOUT" description="JGLOBAL_BULK_PAYOUT_DESC">
+      <option value="0">JNO</option>
+      <option value="1">JYES</option>
+    </field>
     <field name="history_limit" type="text" filter="integer" label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL" description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC" default="5" />
   </fieldset>
 </config>

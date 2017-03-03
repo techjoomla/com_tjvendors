@@ -264,6 +264,13 @@ class TjvendorsHelpersTjvendors
 		return $amount;
 	}
 
+	/*public static function generatePayoutDetails($vendor_id,$currency,$result,$client)
+	{
+		$payoutDetails = array("vendor_id" => $vendor_id, "currency" => $currency, "total" => $result, "client" => $client);
+
+		return $payoutDetails;
+	}*/
+
 	/**
 	 * Get paid amount
 	 *
@@ -273,7 +280,7 @@ class TjvendorsHelpersTjvendors
 	 * 
 	 * @return amount
 	 */
-	public static function gettotalPendingAmount($vendor_id,$currency)
+	public static function getTotalPendingAmount($vendor_id,$currency)
 	{
 		$input = JFactory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
@@ -317,17 +324,7 @@ class TjvendorsHelpersTjvendors
 		return $totalAmount;
 	}
 
-	/**
-	 * Get paid amount
-	 *
-	 * @param   string  $vendor_id     integer
-	 * 
-	 * @param   string  $currency      currency for that vendor
-	 * 
-	 * @param   string  $filterClient  client from filter
-	 * 
-	 * @return amount
-	 */
+	/*
 	public static function gettotalPendingAmountForAClient($vendor_id, $currency, $filterClient)
 	{
 		$input = JFactory::getApplication()->input;
@@ -374,6 +371,50 @@ class TjvendorsHelpersTjvendors
 			$totalAmount = $totalAmount + $result;
 
 		return $totalAmount;
+	}
+ */
+
+	/**
+	 * Get array of clients
+	 *
+	 * @param   integer  $vendor_id  integer
+	 * 
+	 * @param   string   $currency   integer
+	 * 
+	 * @param   string   $client     integer
+	 * 
+	 * @return client|array
+	 */
+	public static function getPayoutDetail($vendor_id,$currency,$client)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$subQuery = $db->getQuery(true);
+		$subQuery->select('max(' . $db->quoteName('id') . ')');
+		$subQuery->from($db->quoteName('#__tjvendors_passbook'));
+
+		if (!empty($vendor_id))
+		{
+			$subQuery->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($currency))
+		{
+			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		if (!empty($client))
+		{
+			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
+		$query->select($db->quoteName('total'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quoteName('id') . ' IN (' . $subQuery . ')');
+		$db->setQuery($query);
+		$payoutDetail = $db->loadResult();
+
+		return $payoutDetail;
 	}
 
 	/**

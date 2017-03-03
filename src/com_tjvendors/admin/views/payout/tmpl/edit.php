@@ -67,6 +67,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value="payout.save"/>
 		<input type="hidden" name="pendingamount" value="<?php echo $this->item->total;?>"/>
+		<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>

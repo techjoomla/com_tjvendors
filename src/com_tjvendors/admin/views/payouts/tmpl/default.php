@@ -211,19 +211,18 @@ else
 						}
 						?>
 						</td>
-
+						
 						<td>
 						<?php
 						$com_params = JComponentHelper::getParams('com_tjvendors');
 						$bulkPayoutStatus = $com_params->get('bulk_payout');
 						if($bulkPayoutStatus==0)
 						{
-							$totalPendingAmount = TjvendorsHelpersTjvendors::gettotalPendingAmountForAClient($item->vendor_id,$item->currency,$filterClient);
-							echo $totalPendingAmount;
+							echo $item->total;
 						}
 						else
 						{
-							$totalPendingAmount = TjvendorsHelpersTjvendors::gettotalPendingAmount($item->vendor_id,$item->currency);
+							$totalPendingAmount = TjvendorsHelpersTjvendors::getTotalPendingAmount($item->vendor_id,$item->currency);
 							echo $totalPendingAmount;
 						}
 
@@ -231,7 +230,7 @@ else
 						</td>
 
 						<td>
-							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&id=' .$item->id);?>"
+							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&id=' .$item->id. '&client=' .$this->input->get('client', '', 'STRING'));?>"
 							<button class="validate btn btn-primary">PAY</button>
 						</td>
 					</tr>

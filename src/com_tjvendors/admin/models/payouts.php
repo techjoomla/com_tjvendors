@@ -71,8 +71,8 @@ class TjvendorsModelPayouts extends JModelList
 		$vendorId = $app->getUserStateFromRequest($this->context . '.filter.vendor_id', 'vendor_id', '0', 'string');
 		$this->setState('filter.vendor_id', $vendorId);
 
-		$client = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
-		$this->setState('filter.vendor_client', $client);
+		$filterClient = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
+		$this->setState('filter.vendor_client', $filterClient);
 
 		// Load the filter state.
 		$search = $app->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
@@ -100,7 +100,12 @@ class TjvendorsModelPayouts extends JModelList
 	{
 		$input = JFactory::getApplication()->input;
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
+		$urlClient = $input->get('client', '', 'STRING');
+		$filterClient = $this->getState('filter.vendor_client');
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$bulkPayoutStatus = $com_params->get('bulk_payout');
 		$db = JFactory::getDbo();
+
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName(array('vendors.vendor_id','fees.currency','vendors.vendor_title','pass.*',)));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
@@ -112,12 +117,27 @@ class TjvendorsModelPayouts extends JModelList
 			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')');
 		$query->where($db->quoteName('pass.id') . ' is not null');
 
-		if (!empty($vendor_id))
+		if ($filterClient != '0')
 		{
-			$query->where($db->quoteName('pass.vendor_id') . ' = ' . $vendor_id);
+			$client = $filterClient;
+		}
+		else
+		{
+			$client = $urlClient;
 		}
 
-		$client = $this->getState('filter.vendor_client');
+		if ($bulkPayoutStatus == 0)
+		{
+			if (!empty($client))
+			{
+				$query->where($db->quoteName('pass.client') . ' = ' . $db->quote($client));
+			}
+		}
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('pass.vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
 
 		$db->setQuery($query);
 		$rows = $db->loadAssocList();

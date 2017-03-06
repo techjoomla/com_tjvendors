@@ -113,7 +113,7 @@ if (!empty($this->extra_sidebar))
 <form
 action="
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id); ?>" 
+echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id.'&client=' . $this->input->get('client', '', 'STRING')); ?>" 
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
@@ -291,7 +291,7 @@ else
 							<td>
 								<a href="
 								<?php 
-								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&currency=' . $item->currency . '&fee_id=' . $item->id);?>">
+								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->client . '&fee_id=' . $item->id);?>">
 								<?php echo $item->currency; ?>
 								</a>
 							</td>
@@ -312,6 +312,7 @@ else
 			<input type="hidden" name="task" value=""/>
 			<input type="hidden" name="boxchecked" value="0"/>
 			<input type="hidden" name="vendor_id" value="<?php echo $this->vendor_id;?>"/>
+			<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>
 			<input type="hidden" name="id" value="<?php echo $this->id;?>"/>
 			<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 			<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>

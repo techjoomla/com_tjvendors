@@ -51,6 +51,6 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 		$pks = $input->post->get('cid', array(), 'array');
 
 		// Redirect to the list screen.
-		$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendors', false));
+		$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $input->get('client', '', 'STRING'), false));
 	}
 }

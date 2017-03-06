@@ -92,6 +92,7 @@ class TjvendorsModelVendorFees extends JModelList
 		$input = JFactory::getApplication()->input;
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$vendor_id = $this->vendor_id;
+		$client = $input->get('client', '', 'STRING');
 
 		// Create a new query object.
 		$db    = $this->getDbo();
@@ -105,6 +106,11 @@ class TjvendorsModelVendorFees extends JModelList
 	$query->join('LEFT', ($db->quoteName('#__tjvendors_vendors', 'a') . 'ON ' . $db->quoteName('b.vendor_id') . ' = ' . $db->quoteName('a.vendor_id') ));
 
 		$query->where($db->quoteName('a.vendor_id') . ' = ' . $vendor_id);
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('b.client') . ' = ' . $db->quote($client));
+		}
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');

@@ -112,6 +112,7 @@ class TjvendorsModelReports extends JModelList
 		$TjvendorsModelPayouts = JModelLegacy::getInstance('Payouts', 'TjvendorsModel');
 		$query = $PayoutsDetail = $TjvendorsModelPayouts->getListQuery();
 		$transactionType = $this->getState('filter.transactionType', '');
+		$client = $this->getState('filter.vendor_client', '');
 
 		if (!empty($transactionType))
 		{
@@ -123,6 +124,11 @@ class TjvendorsModelReports extends JModelList
 			{
 				$query->where($db->quoteName('credit') . " >0 ");
 			}
+		}
+
+		if (!empty($client))
+		{
+				$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
 		$fromDate = $this->getState('filter.fromDate', '');

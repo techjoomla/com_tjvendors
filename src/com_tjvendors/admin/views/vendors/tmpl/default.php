@@ -274,8 +274,8 @@ else
 							</td>
 							<td>
 
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_UPDATE_FEE'); ?></a> |
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_MANAGE_PAYOUTS'); ?></a>
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_FEE'); ?></a> |
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_PAYOUTS'); ?></a>
 
 							</td>
 							<td >

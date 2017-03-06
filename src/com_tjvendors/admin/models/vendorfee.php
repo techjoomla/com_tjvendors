@@ -142,24 +142,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$app  = JFactory::getApplication();
 		$method = $input->getItem('task', '', 'STRING');
 
-		if ($method == 'reset')
-		{
-		$data['percent_commission'] = '0';
-		$data['flat_commission'] = '0';
-
-			if ($data['id'] != 0)
-			{
-				// Attempt to save data
-				if (parent::save($data))
-				{
-					$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER_RESET_SUCCESS') . $data['currency'], 'Message');
-
-					return true;
-				}
-			}
-		}
-		else
-		{
 		if ($data['vendor_id'] != 0)
 		{
 			// Attempt to save data
@@ -170,10 +152,15 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		}
 		else
 		{
-			return false;
+			$vendor_id = TjvendorsHelpersTjvendors::getUserId($data['user_id']);
+			$data['vendor_id'] = $vendor_id;
+
+			if (parent::save($data))
+			{
+				return true;
+			}
 		}
 
 		return false;
-		}
 	}
 }

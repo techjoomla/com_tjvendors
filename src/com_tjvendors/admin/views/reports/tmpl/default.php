@@ -144,7 +144,7 @@ else
 							$vendorList[] = $vendor;
 					}
 				}
-			 echo JHtml::_('select.genericlist', $vendorList, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
+			 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
 			
 		</div>

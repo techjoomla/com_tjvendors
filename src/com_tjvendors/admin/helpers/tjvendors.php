@@ -284,6 +284,7 @@ class TjvendorsHelpersTjvendors
 	{
 		$input = JFactory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
+		$vendor_id = $input->get('vendor_id', '', 'STRING');
 		$com_params = JComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
 		$db = JFactory::getDbo();
@@ -300,7 +301,7 @@ class TjvendorsHelpersTjvendors
 
 			if (!empty($vendor_id))
 			{
-				$query->where($db->quotename('vendor_id') . ' = ' . $db->quote($vendor_id));
+				$subQuery->where($db->quotename('vendor_id') . ' = ' . $db->quote($vendor_id));
 			}
 
 			if (!empty($currency))
@@ -440,5 +441,25 @@ class TjvendorsHelpersTjvendors
 		$clients = $db->loadAssocList();
 
 		return $clients;
+	}
+
+	/**
+	 * Get get vendor_id
+	 *
+	 * @param   string  $userId  integer
+	 * 
+	 * @return res|integer
+	 */
+	public static function getUserId($userId)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('vendor_id'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+		$query->where($db->quoteName('user_id') . ' = ' . $db->quote($userId));
+		$db->setQuery($query);
+		$res = $db->loadResult();
+
+		return $res;
 	}
 }

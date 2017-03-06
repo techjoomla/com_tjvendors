@@ -39,6 +39,8 @@ class TjvendorsViewPayout extends JViewLegacy
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$this->bulkPayoutStatus = $com_params->get('bulk_payout');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

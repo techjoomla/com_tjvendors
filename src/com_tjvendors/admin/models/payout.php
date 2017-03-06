@@ -108,7 +108,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		if ($bulkPayoutStatus != 0)
 		{
 			$payoutAmount = TjvendorsHelpersTjvendors::getTotalPendingAmount($this->item->vendor_id, $this->item->currency);
-			$this->item->total = $payoutAmount;
+			$this->item->bulk_total = $payoutAmount;
 		}
 
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');

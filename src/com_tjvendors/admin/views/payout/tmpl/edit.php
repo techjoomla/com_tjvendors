@@ -58,7 +58,15 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
 					<?php echo $this->form->renderField('vendor_title'); ?>
 					<?php echo $this->form->renderField('currency'); ?>
-					<?php echo $this->form->renderField('total'); ?>
+					<?php if($this->bulkPayoutStatus!=0)
+					{
+						echo $this->form->renderField('bulk_total');
+					}
+					else
+					{
+						echo $this->form->renderField('total');
+					}
+					?>
 					<button class="validate btn btn-primary" id="pay-confirmation" onclick="return confirmationMsg()" >PAY</button>
 				</fieldset>
 			</div>

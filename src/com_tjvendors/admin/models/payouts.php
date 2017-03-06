@@ -104,17 +104,18 @@ class TjvendorsModelPayouts extends JModelList
 		$filterClient = $this->getState('filter.vendor_client');
 		$com_params = JComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
+		$vendor = $this->getState('filter.vendor_id');
+
+		$com_jticketing_params = JComponentHelper::getParams('com_jticketing');
+		$com_currency = $com_jticketing_params->get('currency');
+
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('vendors.vendor_id','fees.currency','vendors.vendor_title','pass.*',)));
+		$query->select($db->quoteName(array('vendors.vendor_id','vendors.vendor_title','pass.*',)));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
-		$query->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
-			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('fees.vendor_id') . ')');
 		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
-			' ON (' . $db->quoteName('fees.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') .
-			' AND ' . $db->quoteName('fees.client') . ' = ' . $db->quoteName('pass.client') .
-			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')');
+			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') . ')');
 		$query->where($db->quoteName('pass.id') . ' is not null');
 
 		if ($filterClient != '0')
@@ -134,9 +135,15 @@ class TjvendorsModelPayouts extends JModelList
 			}
 		}
 
-		if (!empty($vendor_id))
+		// Display according to filter
+
+		if (empty($vendor))
 		{
-			$query->where($db->quoteName('pass.vendor_id') . ' = ' . $db->quote($vendor_id));
+			$query->where($db->quoteName('pass.vendor_id') . '=' . $vendor_id);
+		}
+		else
+		{
+			$query->where($db->quoteName('pass.vendor_id') . ' = ' . $db->quote($vendor));
 		}
 
 		$db->setQuery($query);
@@ -144,9 +151,6 @@ class TjvendorsModelPayouts extends JModelList
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
-
-		// Filter vendor id
-		$vendor = $this->getState('filter.vendor_id');
 
 		if (!empty($search))
 		{
@@ -162,14 +166,6 @@ class TjvendorsModelPayouts extends JModelList
 							'OR ' . $db->quoteName('vendors.vendor_client') . ' LIKE' . $search .
 							'OR ' . $db->quoteName('pass.vendor_id') . ' LIKE' . $search . ')');
 			}
-		}
-
-		// Display according to filter
-		$vendor = $this->getState('filter.vendor_id');
-
-		if (!empty($vendor))
-		{
-			$query->where($db->quoteName('vendors.vendor_id') . '=' . $vendor);
 		}
 
 		// Add the list ordering clause.

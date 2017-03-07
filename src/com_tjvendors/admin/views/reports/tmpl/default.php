@@ -196,16 +196,18 @@ else
 							</th>
 					<?php
 						}
-						if(empty($this->state->get('filter.currency'))):?>
+						if(empty($this->state->get('filter.currency')))
+						{?>
 							<th class='left' width="5%">
 							<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
 							</th>
-					<?php endif;
-						?>
-					
+					<?php }
+						if(empty($this->state->get('filter.transactionType')))
+						{?>
 					<th class='left' width="10%">
 						<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE'); ?>
 					</th>
+					<?php } ?>
 					<th class='left' width="5%">
 						<?php echo JText::_('COM_TJVENDORS_REPORTS_AMOUNT'); ?>
 					</th>
@@ -254,12 +256,21 @@ else
 						<td>
 								<?php echo $this->escape($item->vendor_title); ?>
 						</td>
+					<?php if(empty($this->state->get('filter.vendor_client')))
+						{?>
 						<td>
 							<?php echo $item->client; ?>
 						</td>
+					<?php }
+
+						 if(empty($this->state->get('filter.currency')))
+						{?>
 						<td>
 							<?php echo $item->currency; ?>
 						</td>
+						<?php }
+						if(empty($this->state->get('filter.transactionType')))
+						{?>
 						<td>
 							<?php 
 								if($item->credit == 0)
@@ -272,6 +283,7 @@ else
 								}
 							?>
 						</td>
+						<?php } ?>
 						<td>
 							<?php 
 								if($item->credit == 0)

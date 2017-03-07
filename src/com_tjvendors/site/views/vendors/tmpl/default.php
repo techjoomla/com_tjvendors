@@ -27,12 +27,23 @@ $listDirn      = $this->state->get('list.direction');
 			jQuery('#adminForm').submit();
 		});
 	});
+	jQuery(document).ready(function ()
+	{
+		jQuery('#clear-calendar').on('click', function ()
+		{
+			jQuery('#date').val('');
+			jQuery('#dates').val('');
+			jQuery('#adminForm').submit();
+		});
+	});
 </script>
+<?php if (JFactory::getUser()->id) :?>
 	<form action="<?php
 		echo JRoute::_('index.php?option=com_tjvendors&view=vendors');
 	?>" method="post" id="adminForm" name="adminForm">
 			
 			<div btn-group pull-left hidden-phone>
+				
 				<div class="btn-group hidden-phone">
 					<?php
 						echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
@@ -43,6 +54,7 @@ $listDirn      = $this->state->get('list.direction');
 						echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
 					?>
 				</div>
+				
 				<div class="btn-group pull-left hidden-phone">
 					<input type="text" name="filter_search" id="filter_search"placeholder="<?php echo JText::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_VENDOR_TITLE');?>"
 						value="<?php
@@ -58,6 +70,11 @@ $listDirn      = $this->state->get('list.direction');
 						<i class="icon-remove"></i>
 					</button>
 				</div>
+				<div class="btn-group pull-left hidden-phone">
+					<button class="btn hasTooltip" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
+						<i class="icon-remove"></i>
+					</button>
+				</div>
 			</div>
 			<div class="btn-group pull-left hidden-phone">
 				<div class="btn-group  hidden-phone">
@@ -65,10 +82,15 @@ $listDirn      = $this->state->get('list.direction');
 					<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
 				</label>
 				<?php echo $this->pagination->getLimitBox(); ?>
-			</div>
+				</div>
 				<div class="btn-group  hidden-phone">
 						<?php
-							echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
+							echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
+						?>
+				</div>
+				<div class="btn-group  hidden-phone">
+						<?php
+							echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client", "client", $this->state->get('filter.vendor_client'));
 						?>
 				</div>
 				<div class="btn-group hidden-phone">
@@ -202,3 +224,4 @@ $listDirn      = $this->state->get('list.direction');
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
 		<?php echo JHtml::_('form.token');?>
 	</form>
+<?php endif;?>

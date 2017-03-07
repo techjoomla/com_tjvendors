@@ -25,6 +25,8 @@ $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
 $saveOrder = $listOrder == 'a.`ordering`';
+$input = JFactory::getApplication()->input;
+$client = $input->get('client', '', 'STRING');
 
 if ($saveOrder)
 {
@@ -34,7 +36,7 @@ if ($saveOrder)
 
 ?>
 <script type="text/javascript">
-
+var client = "<?php echo $client; ?>";
 	jQuery(document).ready(function ()
 	{
 		jQuery('#clear-search-button').on('click', function ()
@@ -43,6 +45,13 @@ if ($saveOrder)
 			jQuery('#adminForm').submit();
 		});
 	});
+	Joomla.submitbutton = function (task)
+	{
+		if(task == "back")
+		{
+			window.location = "index.php?option=com_tjvendors&view=vendors&client="+client;
+		}
+	}
 
 </script>
 <?php
@@ -125,11 +134,6 @@ else
 		<div class="btn-group pull-right hidden-phone">
 			<?php 
 				// Making custom filter list
-				$vendorList[] = JText::_('JFILTER_PAYOUT_CHOOSE_VENDOR');
-				$allVendors = array("vendor_id" => "0","vendor_title" => "All Vendors");
-
-				$vendorList[] = $allVendors;
-
 			 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
 

@@ -46,24 +46,28 @@ class TjvendorsHelpersTjvendors
 	 */
 	public static function getUniqueClients($user_id)
 	{
+		$vendor_id = self::getvendor();
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$columns = $db->quoteName(array('vendors.vendor_client','vendors.vendor_id'));
-		$columns[0] = 'DISTINCT' . $columns[0];
-		$query->select($columns);
-		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
-		$query->where($db->quoteName('vendors.user_id') . ' = ' . $user_id);
-		$db->setQuery($query);
-		$rows = $db->loadAssocList();
-		$uniqueClient[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT');
-		$uniqueClient[] = array("vendor_client" => "All Clients","client_value" => 0);
+		$query->select('DISTINCT' . $db->quoteName('client'));
+		$query->from($db->quoteName('#__tjvendors_passbook', 'vendors'));
 
-		foreach ($rows as $row)
+		if (!empty($vendor_id))
 		{
-			$uniqueClient[] = array("vendor_client" => $row['vendor_client'], "client_value" => $row['vendor_id']);
+			$query->where($db->quoteName('vendors.vendor_id') . ' = ' . $vendor_id);
 		}
 
-		return $uniqueClient;
+		$db->setQuery($query);
+		$clients[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENTS');
+
+		$result = $db->loadAssocList();
+
+		foreach ($result as $i)
+		{
+			$clients[] = $i;
+		}
+
+		return $clients;
 	}
 
 	/**
@@ -166,6 +170,37 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
+	 * Get vendor for that user
+	 *
+	 * @return vendor
+	 */
+	public static function getCurrencies()
+	{
+		$vendor_id = self::getvendor();
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('DISTINCT' . $db->quoteName('currency'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
+		}
+
+		$db->setQuery($query);
+		$currencies[] = JText::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
+
+		$result = $db->loadAssocList();
+
+		foreach ($result as $i)
+		{
+			$currencies[] = $i;
+		}
+
+		return $currencies;
+	}
+
+	/**
 	 * Check for duplicate clients
 	 *
 	 * @param   integer  $vendor_id      required to give vendor specific result
@@ -191,24 +226,5 @@ class TjvendorsHelpersTjvendors
 				return $vendor_client;
 			}
 		}
-	}
-
-	/**
-	 * Get array of currency
-	 *
-	 * @return null|object
-	 */
-	public static function getCurrency()
-	{
-		$currencies = JFactory::getApplication()->input->get('currency', '', 'ARRAY');
-		$currUrl = "";
-		$currencies = (array) $currencies;
-
-		foreach ($currencies as $currency)
-		{
-			$currUrl .= "&currency[]=" . $currency;
-		}
-
-		return $currUrl;
 	}
 }

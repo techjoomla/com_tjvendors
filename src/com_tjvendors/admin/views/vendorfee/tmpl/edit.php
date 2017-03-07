@@ -42,6 +42,7 @@ JHtml::_('behavior.keepalive');
 			Joomla.submitform(task, document.getElementById('vendorfee-form'));
 		}
 	}
+
 </script>
 
 <form action="
@@ -57,13 +58,17 @@ method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form"
 						if($this->item->vendor_id == 0)
 						{
 							echo $this->form->renderField('user_id');
+							echo $this->form->renderField('currency');
 						}
 						else
 						{
 							echo $this->item->vendor_title;
+							echo $this->form->renderField('currency_unchange');
+						?>
+						<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id; ?>" />
+						<?php
 						}
 						?>
-						<?php echo $this->form->renderField('currency'); ?>
 						<?php echo $this->form->renderField('percent_commission'); ?>
 						<?php echo $this->form->renderField('flat_commission'); ?>
 						<input type="hidden" name="jform[client]" value="<?php echo $this->input->get('client', '', 'STRING');?>" />

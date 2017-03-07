@@ -444,6 +444,63 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
+	 * Get get unique Currency
+	 *
+	 * @param   string  $currency   integer
+	 * 
+	 * @param   string  $vendor_id  integer
+	 *
+	 * @return boolean
+	 */
+
+	public static function checkUniqueCurrency($currency, $vendor_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('currency'));
+		$query->from($db->quoteName('#__tjvendors_fee'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$db->setQuery($query);
+		$currencies = $db->loadAssocList();
+		$count = 0;
+
+		foreach ($currencies as $i)
+		{
+			if ($currency == $i['currency'])
+			{
+				return false;
+				break;
+			}
+			else
+			{
+				continue;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Get get currencies
+	 *
+	 * @param   string  $vendor_id  integer
+	 * 
+	 * @return currencies|array
+	 */
+	public static function getCurrencies($vendor_id)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('DISTINCT' . $db->quoteName('currency'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$db->setQuery($query);
+		$currencies = $db->loadAssocList();
+
+		return $currencies;
+	}
+
+	/**
 	 * Get get vendor_id
 	 *
 	 * @param   string  $userId  integer

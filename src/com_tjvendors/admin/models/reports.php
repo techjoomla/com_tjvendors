@@ -73,6 +73,9 @@ class TjvendorsModelReports extends JModelList
 		$vendorId = $app->getUserStateFromRequest($this->context . '.filter.vendor_id', 'vendor_id', '0', 'string');
 		$this->setState('filter.vendor_id', $vendorId);
 
+		$currency = $app->getUserStateFromRequest($this->context . '.filter.currency', 'currency', '0', 'string');
+		$this->setState('filter.currency', $currency);
+
 		$fromDate = $app->getUserStateFromRequest($this->context . '.filter.fromDate', 'fromDates', '0', 'string');
 		$this->setState('filter.fromDate', $fromDate);
 
@@ -113,6 +116,7 @@ class TjvendorsModelReports extends JModelList
 		$query = $PayoutsDetail = $TjvendorsModelPayouts->getListQuery();
 		$transactionType = $this->getState('filter.transactionType', '');
 		$client = $this->getState('filter.vendor_client', '');
+		$currency = $this->getState('filter.currency', '');
 
 		if (!empty($transactionType))
 		{
@@ -129,6 +133,11 @@ class TjvendorsModelReports extends JModelList
 		if (!empty($client))
 		{
 				$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
+		if (!empty($currency))
+		{
+				$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
 
 		$fromDate = $this->getState('filter.fromDate', '');

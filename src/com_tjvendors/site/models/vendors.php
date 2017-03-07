@@ -71,6 +71,9 @@ class TjvendorsModelVendors extends JModelList
 		$transactionType = $app->getUserStateFromRequest($this->context . '.filter.transactionType', 'transactionType', '0', 'string');
 		$this->setState('filter.transactionType', $transactionType);
 
+		$currency = $app->getUserStateFromRequest($this->context . '.filter.currency', 'currency', '0', 'string');
+		$this->setState('filter.currency', $currency);
+
 		$fromDate = $app->getUserStateFromRequest($this->context . '.filter.fromDate', 'fromDates', '0', 'string');
 		$this->setState('filter.fromDate', $fromDate);
 
@@ -103,15 +106,31 @@ class TjvendorsModelVendors extends JModelList
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$columns = array('vendors.vendor_id', 'vendors.vendor_client', 'pass.*', 'fees.currency');
+		$client = $this->getState('filter.vendor_client', '');
+		$currency = $this->getState('filter.currency', '');
+		$vendor_id = TjvendorsHelpersTjvendors::getVendor();
+		$columns = array('vendors.vendor_id', 'vendors.vendor_client', 'pass.*');
 		$query->select($db->quoteName($columns));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
-		$query->join('LEFT', $db->quoteName('#__tjvendors_fee', 'fees') .
-			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('fees.vendor_id') . ')');
 		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
-			' ON (' . $db->quoteName('fees.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') .
-			' AND ' . $db->quoteName('fees.currency') . ' = ' . $db->quoteName('pass.currency') . ')');
+			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') . ')');
 		$query->where($db->quoteName('pass.id') . ' is not null');
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendors.vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('pass.client') . ' = ' . $db->quote($client));
+		}
+
+		if (!empty($currency))
+		{
+			$query->where($db->quoteName('pass.currency') . ' = ' . $db->quote($currency));
+		}
+
 		$db->setQuery($query);
 
 		$rows = $db->loadAssocList();
@@ -129,8 +148,8 @@ class TjvendorsModelVendors extends JModelList
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(' . $db->quoteName('vendors.vendor_title') . ' LIKE ' . $search .
-							'OR ' . $db->quoteName('fees.currency') . ' LIKE' . $search .
-							'OR ' . $db->quoteName('vendors.vendor_client') . ' LIKE' . $search .
+							'OR ' . $db->quoteName('pass.currency') . ' LIKE' . $search .
+							'OR ' . $db->quoteName('pass.client') . ' LIKE' . $search .
 							'OR ' . $db->quoteName('pass.vendor_id') . ' LIKE' . $search . ')');
 			}
 		}
@@ -162,15 +181,6 @@ class TjvendorsModelVendors extends JModelList
 
 		// Display according to filter
 		$client = $this->getState('filter.vendor_client');
-
-		if ($client == '0')
-		{
-			$query->where($db->quoteName('vendors.user_id') . '=' . $user_id);
-		}
-		else
-		{
-			$query->where($db->quoteName('vendors.vendor_id') . '=' . $client);
-		}
 
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');

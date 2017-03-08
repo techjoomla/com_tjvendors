@@ -121,7 +121,8 @@ class TjvendorsModelVendorFee extends JModelAdmin
 				$this->item = $this->getItem();
 			}
 
-		$data = $this->item;
+			$this->item->currency_unchange = $this->item->currency;
+			$data = $this->item;
 		}
 
 		return $data;
@@ -141,39 +142,37 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$input  = JFactory::getApplication()->input;
 		$app  = JFactory::getApplication();
 		$method = $input->getItem('task', '', 'STRING');
+		$vendor_id = TjvendorsHelpersTjvendors::getUserId($data['user_id']);
 
-		if ($method == 'reset')
+		if (!empty($vendor_id))
 		{
-		$data['percent_commission'] = '0';
-		$data['flat_commission'] = '0';
+			$data['vendor_id'] = $vendor_id;
+			$uniqueCurrency = TjvendorsHelpersTjvendors::checkUniqueCurrency($data['currency'], $data['vendor_id']);
 
-			if ($data['id'] != 0)
+			if (!empty($uniqueCurrency))
 			{
-				// Attempt to save data
 				if (parent::save($data))
 				{
-					$app->enqueueMessage(JText::_('COM_TJVENDORS_SELECT_USER_RESET_SUCCESS') . $data['currency'], 'Message');
-
 					return true;
 				}
 			}
+			else
+			{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'), 'error');
+			}
+		}
+		elseif (empty($data['id']))
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_VENDORFEE_NOT_A_VENDOR'), 'error');
 		}
 		else
 		{
-		if ($data['vendor_id'] != 0)
-		{
-			// Attempt to save data
 			if (parent::save($data))
 			{
 				return true;
 			}
 		}
-		else
-		{
-			return false;
-		}
 
 		return false;
-		}
 	}
 }

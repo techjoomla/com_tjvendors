@@ -43,15 +43,6 @@ class TjvendorsViewVendor extends JViewLegacy
 
 		// A print_r($this->checkDuplicateUser = TjvendorsHelpersTjvendors::checkDuplicateUser());die;
 
-		if (!empty($this->checkDuplicateClients))
-		{
-			echo "already a vendor";
-		}
-		else
-		{
-			// Echo "register now";
-		}
-
 		if (empty($this->item->vendor_id))
 		{
 			$currUrl = $this->input->get('currency', '', 'ARRAY');

@@ -42,6 +42,7 @@ JHtml::_('behavior.keepalive');
 			Joomla.submitform(task, document.getElementById('vendorfee-form'));
 		}
 	}
+
 </script>
 
 <form action="
@@ -53,36 +54,31 @@ method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form"
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
 
-						<?php echo $this->form->renderField('vendor_title'); ?>
-
-						<?php
-						if (empty($this->item->currency))
+					<?php 
+						if($this->item->vendor_id == 0)
 						{
-						?>
-
-						<div class = "control-group" >
-						<div class = "control-label">
-						<label class = "hasPopover" title data-content = "Currency"><?php echo $this->form->getLabel('currency');?></label>
-						</div>
-						<div class = "controls">
-						<input type="text" name="currency" value="<?php echo $this->curr; ?>" readonly="true"></input>
-						</div>
-						</div>
-						<?php
+							echo $this->form->renderField('user_id');
+							echo $this->form->renderField('currency');
 						}
 						else
 						{
-							echo $this->form->renderField('currency');
+							echo $this->item->vendor_title;
+							echo $this->form->renderField('currency_unchange');
+						?>
+						<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id; ?>" />
+						<?php
 						}
 						?>
 						<?php echo $this->form->renderField('percent_commission'); ?>
 						<?php echo $this->form->renderField('flat_commission'); ?>
+						<input type="hidden" name="jform[client]" value="<?php echo $this->input->get('client', '', 'STRING');?>" />
 
 				</fieldset>
 			</div>
 		</div>
 		<input type="hidden" name="task" value=""/>
-		<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id;?>" />
+		<input type="hidden" name="vendor_id" value="<?php echo $this->vendor_id;?>" />
+		<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>" />
 		<input type="hidden" name="jform[id]" value="<?php echo $this->id; ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>

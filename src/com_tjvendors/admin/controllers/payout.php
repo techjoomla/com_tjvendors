@@ -49,8 +49,10 @@ class TjvendorsControllerPayout extends JControllerForm
 	{
 		$input = JFactory::getApplication()->input;
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
+		$client = $input->get('client', '', 'STRING');
 		$append = parent::getRedirectToListAppend();
 		$append .= '&vendor_id=' . $vendor_id;
+		$append .= '&client=' . $client;
 
 		return $append;
 	}

@@ -95,6 +95,8 @@ class TjvendorsModelPayout extends JModelAdmin
 	{
 		// Check the session for previously entered form data.
 		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.payout.data', array());
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$bulkPayoutStatus = $com_params->get('bulk_payout');
 
 		if (empty($data))
 		{
@@ -102,6 +104,12 @@ class TjvendorsModelPayout extends JModelAdmin
 			{
 				$this->item = $this->getItem();
 			}
+
+		if ($bulkPayoutStatus != 0)
+		{
+			$payoutAmount = TjvendorsHelpersTjvendors::getTotalPendingAmount($this->item->vendor_id, $this->item->currency);
+			$this->item->bulk_total = $payoutAmount;
+		}
 
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
 			$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
@@ -121,11 +129,49 @@ class TjvendorsModelPayout extends JModelAdmin
 	 */
 	public function save($data)
 	{
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$bulkPayoutStatus = $com_params->get('bulk_payout');
+
 		$input  = JFactory::getApplication()->input;
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$vendorDetail = $TjvendorsModelVendor->getItem();
-		$client = $vendorDetail->vendor_client;
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
+		$TjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
+
+		$vendorDetail = $TjvendorsModelPayout->getItem();
+
+		$client = $vendorDetail->client;
+
+		if ($bulkPayoutStatus != 0)
+		{
+			$vendorClients = TjvendorsHelpersTjvendors::getClients($vendorDetail->vendor_id);
+
+			foreach ($vendorClients as $client)
+			{
+				$pending_amount = TjvendorsHelpersTjvendors::getPayoutDetail($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
+				$data['debit'] = $pending_amount;
+				$data['total'] = $pending_amount - $data['debit'];
+				$data['transaction_time'] = JFactory::getDate()->toSql();
+				$data['reference_order_id'] = $vendorDetail->reference_order_id;
+				$data['client'] = $client['client'];
+				$data['transaction_id'] = $vendorDetail->vendor_id . $client['client'] . $vendorDetail->currency;
+				$data['id'] = '';
+				$data['vendor_id'] = $vendorDetail->vendor_id;
+
+				if (parent::save($data))
+				{
+					$id = (int) $this->getState($this->getName() . '.id');
+					$payout_update = new stdClass;
+
+					// Must be a valid primary key value.
+					$payout_update->id = $id;
+					$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
+
+					// Update their details in the users table using id as the primary key.
+					$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+				}
+			}
+
+			return true;
+		}
 
 		// To get selected item
 		$item = $this->getItem($data['id']);
@@ -134,7 +180,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		$data['total'] = $pending_amount - $data['debit'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
 		$data['reference_order_id'] = $item->reference_order_id;
-		$data['client'] = $client;
+		$data['client'] = $vendorDetail->client;
 		$data['transaction_id'] = $item->vendor_id . $client . $item->currency;
 		$data['id'] = '';
 		$data['vendor_id'] = $item->vendor_id;

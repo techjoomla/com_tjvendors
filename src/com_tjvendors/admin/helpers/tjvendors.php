@@ -325,56 +325,6 @@ class TjvendorsHelpersTjvendors
 		return $totalAmount;
 	}
 
-	/*
-	public static function gettotalPendingAmountForAClient($vendor_id, $currency, $filterClient)
-	{
-		$input = JFactory::getApplication()->input;
-		$urlClient = $input->get('client', '', 'STRING');
-		$db = JFactory::getDbo();
-		$subQuery = $db->getQuery(true);
-		$clients = self::getClients($vendor_id);
-		$totalAmount = 0;
-
-			$query = $db->getQuery(true);
-			$subQuery = $db->getQuery(true);
-			$subQuery->select('max(' . $db->quotename('id') . ')');
-			$subQuery->from($db->quotename('#__tjvendors_passbook'));
-
-			if ($filterClient == '0')
-			{
-				$client = $urlClient;
-			}
-			else
-			{
-				$client = $filterClient;
-			}
-
-			if (!empty($vendor_id))
-			{
-				$query->where($db->quotename('vendor_id') . ' = ' . $db->quote($vendor_id));
-			}
-
-			if (!empty($currency))
-			{
-				$subQuery->where($db->quotename('currency') . ' = ' . $db->quote($currency));
-			}
-
-			if (!empty($client))
-			{
-				$subQuery->where($db->quotename('client') . ' = ' . $db->quote($client));
-			}
-
-			$query->select($db->quotename('total'));
-			$query->from($db->quotename('#__tjvendors_passbook'));
-			$query->where($db->quotename('id') . ' = (' . $subQuery . ')');
-			$db->setQuery($query);
-			$result = $db->loadresult();
-			$totalAmount = $totalAmount + $result;
-
-		return $totalAmount;
-	}
- */
-
 	/**
 	 * Get array of clients
 	 *

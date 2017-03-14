@@ -40,7 +40,9 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->activeFilters	= $items_model->getActiveFilters();
 		$this->currencies = TjvendorsHelpersTjvendors::getCurrencies();
 		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients($this->user_id);
-		$this->totalDetails = TjvendorsHelpersTjvendors::getTotalDetails($this->state->get('filter.vendor_client', ''), $this->user_id);
+		$client = $this->state->get('filter.vendor_client', '');
+		$currency = $this->state->get('filter.currency', '');
+		$this->totalDetails = TjvendorsHelpersTjvendors::getTotalDetails($client, $this->user_id, $currency);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

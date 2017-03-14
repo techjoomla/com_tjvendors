@@ -62,7 +62,7 @@ method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form"
 						}
 						else
 						{
-							echo $this->item->vendor_title;
+							echo $this->form->renderField('vendor_title');
 							echo $this->form->renderField('currency_unchange');
 						?>
 						<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id; ?>" />

@@ -32,7 +32,7 @@ class TjvendorsModelReports extends JModelList
 			$config['filter_fields'] = array(
 				'id', 'pass.`id`',
 				'total', 'pass.`total`',
-				'currency', 'fees.`currency`',
+				'currency', 'pass.`currency`',
 				'vendor_title', 'vendors.`vendor_title`',
 				'client', 'vendors.`vendor_client`',
 				'transaction_id', 'pass.`transaction_id`',
@@ -137,7 +137,7 @@ class TjvendorsModelReports extends JModelList
 
 		if (!empty($currency))
 		{
-				$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+				$query->where($db->quoteName('pass.currency') . ' = ' . $db->quote($currency));
 		}
 
 		$fromDate = $this->getState('filter.fromDate', '');

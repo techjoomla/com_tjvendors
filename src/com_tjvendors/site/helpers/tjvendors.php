@@ -76,10 +76,12 @@ class TjvendorsHelpersTjvendors
 	 * @param   integer  $vendor_id  required to give vendor specific result
 	 * 
 	 * @param   integer  $user_id    required to give user specific result
+	 * 
+	 * @param   integer  $currency   required to give user specific result
 	 *   
 	 * @return $totalDetails|array
 	 */
-	public static function getTotalDetails($vendor_id,$user_id)
+	public static function getTotalDetails($vendor_id, $user_id, $currency)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -100,11 +102,16 @@ class TjvendorsHelpersTjvendors
 		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 		}
 
+		if (!empty($currency))
+		{
+			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
 		$db->setQuery($query);
 		$rows = $db->loadAssocList();
-		$totalDebitAmount = 0;
-		$totalCreditAmount = 0;
-		$totalpendingAmount = 0;
+		$totalDebitAmount = 0.0;
+		$totalCreditAmount = 0.0;
+		$totalpendingAmount = 0.0;
 
 		foreach ($rows as $row)
 		{
@@ -129,7 +136,7 @@ class TjvendorsHelpersTjvendors
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName('*'));
+		$query->select('*');
 		$query->from($db->quoteName('#__vendor_client_xref'));
 
 		if (!empty($vendor_id))
@@ -138,10 +145,11 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
+		$result = $db->loadAssocList();
 
-		if (!empty($rows = $db->loadAssocList()))
+		if (!empty($result))
 		{
-			foreach ($rows as $client)
+			foreach ($result as $client)
 			{
 				$clientsForVendor[] = $client['client'];
 			}

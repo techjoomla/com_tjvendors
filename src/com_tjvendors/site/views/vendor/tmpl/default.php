@@ -10,6 +10,8 @@
 defined('_JEXEC') or die();
 ?>
 <?php if (JFactory::getUser()->id && !empty($this->vendor_id) ){?>
+
+	<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 <div class="vendor-cover row-fluid">
 	<div class="span3">
 	<img alt="" src="<?php echo JUri::root() . $this->VendorDetail->vendor_logo; ?>">
@@ -40,7 +42,7 @@ defined('_JEXEC') or die();
 			 ?>
 		</div>
 		<div class="span6">
-			<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&status=update&layout=edit&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
+			<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&status=update&layout=edit&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
 		</div>
 </div>
 <?php } ?>

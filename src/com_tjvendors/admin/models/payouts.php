@@ -32,7 +32,7 @@ class TjvendorsModelPayouts extends JModelList
 			$config['filter_fields'] = array(
 				'id', 'pass.`id`',
 				'total', 'pass.`total`',
-				'currency', 'fees.`currency`',
+				'currency', 'pass.`currency`',
 				'ordering', 'pass.`ordering`',
 				'vendor_title', 'vendors.`vendor_title`',
 			);
@@ -112,7 +112,7 @@ class TjvendorsModelPayouts extends JModelList
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('vendors.vendor_id','vendors.vendor_title','pass.*',)));
+		$query->select(array('vendors.vendor_id','vendors.vendor_title','pass.*'));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
 		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
 			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') . ')');
@@ -162,7 +162,7 @@ class TjvendorsModelPayouts extends JModelList
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(' . $db->quoteName('vendors.vendor_title') . ' LIKE ' . $search .
-							'OR ' . $db->quoteName('fees.currency') . ' LIKE' . $search .
+							'OR ' . $db->quoteName('pass.currency') . ' LIKE' . $search .
 							'OR ' . $db->quoteName('vendors.vendor_client') . ' LIKE' . $search .
 							'OR ' . $db->quoteName('pass.vendor_id') . ' LIKE' . $search . ')');
 			}

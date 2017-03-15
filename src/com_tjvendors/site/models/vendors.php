@@ -109,8 +109,7 @@ class TjvendorsModelVendors extends JModelList
 		$client = $this->getState('filter.vendor_client', '');
 		$currency = $this->getState('filter.currency', '');
 		$vendor_id = TjvendorsHelpersTjvendors::getVendor();
-		$columns = array('vendors.vendor_id', 'vendors.vendor_client', 'pass.*');
-		$query->select($db->quoteName($columns));
+		$query->select(array('vendors.vendor_id', 'vendors.vendor_client', 'pass.*'));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
 		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
 			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') . ')');
@@ -132,8 +131,6 @@ class TjvendorsModelVendors extends JModelList
 		}
 
 		$db->setQuery($query);
-
-		$rows = $db->loadAssocList();
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');

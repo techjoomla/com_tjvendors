@@ -73,15 +73,15 @@ class TjvendorsHelpersTjvendors
 	/**
 	 * Get array of pending payout amount
 	 *
-	 * @param   integer  $vendor_id  required to give vendor specific result
+	 * @param   integer  $client    required to give vendor specific result
+	 *  
+	 * @param   integer  $user_id   required to give user specific result
 	 * 
-	 * @param   integer  $user_id    required to give user specific result
-	 * 
-	 * @param   integer  $currency   required to give user specific result
+	 * @param   integer  $currency  required to give user specific result
 	 *   
 	 * @return $totalDetails|array
 	 */
-	public static function getTotalDetails($vendor_id, $user_id, $currency)
+	public static function getTotalDetails($client, $user_id, $currency)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -89,22 +89,20 @@ class TjvendorsHelpersTjvendors
 		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 
-		if ($vendor_id == 0)
-		{
 			$subQuery->select('vendor_id');
 			$subQuery->from($db->quoteName('#__tjvendors_vendors'));
 			$subQuery->where($db->quoteName('user_id') . ' = ' . $db->quote($user_id));
 			$query->where($db->quoteName('vendor_id') . ' IN (' . $subQuery . ')');
 			$query->order($db->quoteName('vendor_id') . ' ASC');
-		}
-		else
-		{
-		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
-		}
 
 		if (!empty($currency))
 		{
 			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
 		$db->setQuery($query);

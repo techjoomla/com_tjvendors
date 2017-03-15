@@ -86,7 +86,9 @@ class TjvendorsHelpersTjvendors
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$subQuery = $db->getQuery(true);
-		$query->select('*');
+		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
+		$query->select('sum(' . $db->quoteName('debit') . ') As debit');
+
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 
 			$subQuery->select('vendor_id');
@@ -106,17 +108,10 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$rows = $db->loadAssocList();
-		$totalDebitAmount = 0.0;
-		$totalCreditAmount = 0.0;
-		$totalpendingAmount = 0.0;
-
-		foreach ($rows as $row)
-		{
-			$totalDebitAmount = $totalDebitAmount + $row['debit'];
-			$totalCreditAmount = $totalCreditAmount + $row['credit'];
-			$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
-		}
+		$rows = $db->loadAssoc();
+		$totalDebitAmount = $rows['debit'];
+		$totalCreditAmount = $rows['credit'];
+		$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
 
 		$totalDetails = array("debitAmount" => $totalDebitAmount,"creditAmount" => $totalCreditAmount,"pendingAmount" => $totalpendingAmount);
 

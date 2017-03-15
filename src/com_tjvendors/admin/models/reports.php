@@ -126,7 +126,7 @@ class TjvendorsModelReports extends JModelList
 			}
 			else
 			{
-				$query->where($db->quoteName('credit') . " >0 ");
+				$query->where($db->quoteName('credit') . " != 0 ");
 			}
 		}
 

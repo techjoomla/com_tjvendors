@@ -37,7 +37,7 @@ $listDirn      = $this->state->get('list.direction');
 		});
 	});
 </script>
-<?php if (JFactory::getUser()->id) :?>
+<?php if (JFactory::getUser()->id && !empty($this->vendor_id)) :?>
 	<form action="<?php
 		echo JRoute::_('index.php?option=com_tjvendors&view=vendors');
 	?>" method="post" id="adminForm" name="adminForm">

@@ -147,8 +147,8 @@ class TjvendorsModelPayout extends JModelAdmin
 			foreach ($vendorClients as $client)
 			{
 				$pending_amount = TjvendorsHelpersTjvendors::getPayoutDetail($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
-				$data['debit'] = $pending_amount;
-				$data['total'] = $pending_amount - $data['debit'];
+				$data['debit'] = $pending_amount['total'];
+				$data['total'] = $pending_amount['total'] - $data['debit'];
 				$data['transaction_time'] = JFactory::getDate()->toSql();
 				$data['reference_order_id'] = $vendorDetail->reference_order_id;
 				$data['client'] = $client['client'];

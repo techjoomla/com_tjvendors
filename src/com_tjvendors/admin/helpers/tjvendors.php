@@ -116,16 +116,19 @@ class TjvendorsHelpersTjvendors
 	 * @param   string  $vendor_id  integer
 	 * 
 	 * @param   string  $client     string
+	 * 
+	 * @param   string  $currency   string
 	 *  
 	 * @return null|object
 	 */
-	public static function getTotalDetails($vendor_id,$client)
+	public static function getTotalDetails($vendor_id, $client, $currency)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName('*'));
+		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
+		$query->select('sum(' . $db->quoteName('debit') . ') As debit');
+
 		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$db->setQuery($query);
 
 		if (!empty($vendor_id))
 		{
@@ -137,17 +140,16 @@ class TjvendorsHelpersTjvendors
 		$query->where($db->quoteName('client') . " = " . $db->quote($client));
 		}
 
-		$rows = $db->loadAssocList();
-		$totalDebitAmount = 0;
-		$totalCreditAmount = 0;
-		$totalpendingAmount = 0;
-
-		foreach ($rows as $row)
+		if (!empty($currency))
 		{
-			$totalDebitAmount = $totalDebitAmount + $row['debit'];
-			$totalCreditAmount = $totalCreditAmount + $row['credit'];
-			$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
+		$query->where($db->quoteName('currency') . " = " . $db->quote($currency));
 		}
+
+		$db->setQuery($query);
+		$rows = $db->loadAssoc();
+		$totalDebitAmount = $rows['debit'];
+		$totalCreditAmount = $rows['credit'];
+		$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
 
 		$totalDetails = array("debitAmount" => $totalDebitAmount, "creditAmount" => $totalCreditAmount, "pendingAmount" => $totalpendingAmount);
 
@@ -165,7 +167,7 @@ class TjvendorsHelpersTjvendors
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName('*'));
+		$query->select('*');
 		$query->from($db->quoteName('#__vendor_client_xref'));
 
 		if (!empty($vendor_id))
@@ -174,8 +176,9 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
+		$result = $rows = $db->loadAssocList();
 
-		if (!empty($rows = $db->loadAssocList()))
+		if (!empty($result))
 		{
 			foreach ($rows as $client)
 			{
@@ -326,6 +329,43 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
+	 * Get total amount
+	 *
+	 * @param   integer  $vendor_id  integer
+	 * 
+	 * @param   string   $currency   integer
+	 * 
+	 * @return client|array
+	 */
+
+	public static function getTotalAmount($vendor_id, $currency)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$subQuery = $db->getQuery(true);
+		$subQuery->select('max(' . $db->quoteName('id') . ')');
+		$subQuery->from($db->quoteName('#__tjvendors_passbook'));
+
+		if (!empty($vendor_id))
+		{
+			$subQuery->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($currency))
+		{
+			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		$query->select($db->quoteName('*'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quoteName('id') . ' = (' . $subQuery . ')');
+		$db->setQuery($query);
+		$result = $db->loadAssoc();
+
+		return $result;
+	}
+
+	/**
 	 * Get array of clients
 	 *
 	 * @param   integer  $vendor_id  integer
@@ -359,11 +399,11 @@ class TjvendorsHelpersTjvendors
 			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
-		$query->select($db->quoteName('total'));
+		$query->select($db->quoteName('*'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 		$query->where($db->quoteName('id') . ' IN (' . $subQuery . ')');
 		$db->setQuery($query);
-		$payoutDetail = $db->loadResult();
+		$payoutDetail = $db->loadAssoc();
 
 		return $payoutDetail;
 	}

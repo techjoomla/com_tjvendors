@@ -154,7 +154,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$user_id = $this->getUserId($user);
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName('*'));
+		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_vendors'));
 
 		if (!empty($user_id))
@@ -206,8 +206,6 @@ class TjvendorsModelVendor extends JModelAdmin
 		$table = $this->getTable();
 		$input = JFactory::getApplication()->input;
 		$layout = $input->get('layout', '', 'STRING');
-		$logoDetails = $app->input->files->get('jform', array(), 'raw');
-		$logoName = $logoDetails['vendor_logo']['name'];
 
 		if ($data['user_id'] != 0)
 		{

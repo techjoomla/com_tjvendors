@@ -64,7 +64,7 @@ if (!empty($this->extra_sidebar))
 }
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports'); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . $this->input->get('vendor_id', '', 'STRING') . '&client=' . $this->input->get('client', '', 'STRING')); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
 if(!empty($this->sidebar))
@@ -189,20 +189,23 @@ else
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 					<?php
-						if(empty($this->state->get('filter.vendor_client')))
+						$filterClient = $this->state->get('filter.vendor_client');
+						if(empty($filterClient))
 						{?>
 							<th class='left' width="10%">
 								<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder); ?>
 							</th>
 					<?php
 						}
-						if(empty($this->state->get('filter.currency')))
+						$filterCurrency = $this->state->get('filter.currency');
+						if(empty($filterCurrency))
 						{?>
 							<th class='left' width="5%">
-							<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
+							<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
 							</th>
 					<?php }
-						if(empty($this->state->get('filter.transactionType')))
+						$transactionType = $this->state->get('filter.transactionType');
+						if(empty($transactionType))
 						{?>
 					<th class='left' width="10%">
 						<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE'); ?>
@@ -256,20 +259,20 @@ else
 						<td>
 								<?php echo $this->escape($item->vendor_title); ?>
 						</td>
-					<?php if(empty($this->state->get('filter.vendor_client')))
+					<?php if (empty($filterClient))
 						{?>
 						<td>
-							<?php echo $item->client; ?>
+					<?php echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($item->client));?>
 						</td>
 					<?php }
 
-						 if(empty($this->state->get('filter.currency')))
+						 if (empty($filterCurrency))
 						{?>
 						<td>
 							<?php echo $item->currency; ?>
 						</td>
 						<?php }
-						if(empty($this->state->get('filter.transactionType')))
+						if (empty($transactionType))
 						{?>
 						<td>
 							<?php 

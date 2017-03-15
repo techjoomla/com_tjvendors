@@ -177,12 +177,13 @@ class TjvendorsControllerVendor extends JControllerForm
 		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
 		$db->setQuery($query);
 		$vendor_id = $db->loadResult();
+		$input = JFactory::getApplication()->input;
 
 		// Redirect to the list screen.
 		$this->setMessage(JText::_('COM_TJVENDORS_ITEM_SAVED_SUCCESSFULLY'));
 		$this->setRedirect(
 				JRoute::_(
-				'index.php?option=com_tjvendors&view=vendor&layout=default&vendor_id=' . $vendor_id . '&client=' . $data['vendor_client'], false
+				'index.php?option=com_tjvendors&view=vendor&layout=default&vendor_id=' . $vendor_id . '&client=' . $input->get('client', '', 'STRING'), false
 				)
 				);
 
@@ -199,9 +200,10 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	public function cancel($key=null)
 	{
+		$input = JFactory::getApplication()->input;
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
 		$this->setRedirect(
-		JRoute::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $data['vendor_client'], false)
+		JRoute::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $input->get('client', '', 'STRING'), false)
 		);
 	}
 }

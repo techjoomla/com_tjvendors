@@ -37,7 +37,9 @@ $listDirn      = $this->state->get('list.direction');
 		});
 	});
 </script>
-<?php if (JFactory::getUser()->id) :?>
+<?php 
+$user_id = JFactory::getUser()->id;
+if ( $user_id && !empty($this->vendor_id)) :?>
 	<form action="<?php
 		echo JRoute::_('index.php?option=com_tjvendors&view=vendors');
 	?>" method="post" id="adminForm" name="adminForm">
@@ -86,11 +88,13 @@ $listDirn      = $this->state->get('list.direction');
 				<div class="btn-group  hidden-phone">
 						<?php
 							echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
+							$currency = $this->state->get('filter.currency');
 						?>
 				</div>
 				<div class="btn-group  hidden-phone">
 						<?php
 							echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client", "client", $this->state->get('filter.vendor_client'));
+							$client = $this->state->get('filter.vendor_client');
 						?>
 				</div>
 				<div class="btn-group hidden-phone">
@@ -99,6 +103,7 @@ $listDirn      = $this->state->get('list.direction');
 					$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
 					$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
 					echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
+				<?php $transactionType = $this->state->get('filter.transactionType'); ?>
 				</div>
 			</div>
 		<table class="table table-striped table-hover">
@@ -110,17 +115,25 @@ $listDirn      = $this->state->get('list.direction');
 						<th width="5%">
 							<?php echo JHtml::_('grid.sort', 'Transaction ID', 'pass.`transaction_id`', $listDirn, $listOrder);?>
 						</th>
-						<?php if($this->state->get('filter.vendor_client')==0):?>
+					<?php if($client == '0')
+						{?>
 						<th width="5%">
 							<?php echo JHtml::_('grid.sort', 'Client', 'vendors.`vendor_client`', $listDirn, $listOrder);?>
 						</th>
-						<?php endif;?>
+					<?php }
+						if ($currency == '0')
+						{?>
+						
 						<th width="5%">
 							<?php echo JHtml::_('grid.sort', 'Currency', 'pass.`currency`', $listDirn, $listOrder); ?>
 					   </th>
+					<?php }
+						if ($transactionType == '0')
+						{?> 
 						<th width="10%">
 							<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE');?>
 					   </th>
+					<?php }?>
 						<th width="5%">
 							<?php echo JText::_('COM_TJVENDORS_REPORTS_AMOUNT');?>
 					   </th>
@@ -162,7 +175,10 @@ $listDirn      = $this->state->get('list.direction');
 							</div>
 						<?php endif;?>
 						<?php
-						foreach ($this->items as $i => $row):
+					if(!empty($this->items))
+					{
+						foreach ($this->items as $i => $row)
+						{
 						?>
 							<tr>
 								<td>
@@ -171,14 +187,22 @@ $listDirn      = $this->state->get('list.direction');
 								<td align="center">
 									<?php echo $row->transaction_id;?>
 								</td>
-								<?php if($this->state->get('filter.vendor_client')==0):?>
+							<?php if($client == '0')
+								{?>
 								<td align="center">
-									<?php echo $row->client;?>
+									<?php	echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($row->client));?>
 								</td>
-								<?php endif;?>
+							<?php }
+								if($currency == '0')
+								{
+								?>
 								<td align="center">
 									<?php echo $row->currency;?>
 								</td>
+							<?php }
+								if($transactionType == '0')
+								{
+								?>
 								<td align="center">
 									<?php
 										if ($row->credit == 0)
@@ -191,6 +215,7 @@ $listDirn      = $this->state->get('list.direction');
 											}
 										?>
 								</td>
+							<?php }?>
 								<td align="center">
 									<?php
 										if ($row->credit == 0)
@@ -214,7 +239,8 @@ $listDirn      = $this->state->get('list.direction');
 								</td>
 							</tr>
 							<?php
-						endforeach;
+						}
+					};
 					?>
 			</tbody>
 		</table>

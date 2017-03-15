@@ -56,4 +56,17 @@ class TjvendorsControllerPayout extends JControllerForm
 
 		return $append;
 	}
+
+	/**
+	 * Add credit entry for the purchase.
+	 *
+	 * @return  null
+	 *
+	 * @since   1.6
+	 */
+	public function addCreditEntry()
+	{
+		$model = $this->getModel('payout');
+		$results = $model->addCreditEntry();
+	}
 }

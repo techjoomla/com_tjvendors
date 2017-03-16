@@ -255,7 +255,7 @@ if ( $user_id && !empty($this->vendor_id))
 }
 else
 {
-	$link = JUri::root() . 'index.php?option=com_users';
+	$link =JRoute::_('index.php?option=com_users');
 	$app = JFactory::getApplication();
 	$app->redirect($link);
 }?>

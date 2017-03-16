@@ -53,7 +53,6 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
 
 						<?php
-						$status=$this->input->get('status');
 							if($this->vendor_id !=0 && $status!="update")
 							{
 								$client=$this->input->get('client', '', 'STRING');

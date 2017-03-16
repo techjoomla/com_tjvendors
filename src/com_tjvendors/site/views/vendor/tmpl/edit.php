@@ -155,7 +155,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 <?php }
 else
 {
-	$link = JUri::root() . 'index.php?option=com_users';
+	$link =JRoute::_('index.php?option=com_users');
 	$app = JFactory::getApplication();
 	$app->redirect($link);
 }

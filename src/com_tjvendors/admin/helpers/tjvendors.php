@@ -198,7 +198,7 @@ class TjvendorsHelpersTjvendors
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select($db->quoteName('*'));
+		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_vendors'));
 
 		if (!empty($user_id))
@@ -356,7 +356,7 @@ class TjvendorsHelpersTjvendors
 			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
 
-		$query->select($db->quoteName('*'));
+		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 		$query->where($db->quoteName('id') . ' = (' . $subQuery . ')');
 		$db->setQuery($query);
@@ -399,7 +399,7 @@ class TjvendorsHelpersTjvendors
 			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
-		$query->select($db->quoteName('*'));
+		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 		$query->where($db->quoteName('id') . ' IN (' . $subQuery . ')');
 		$db->setQuery($query);
@@ -452,7 +452,6 @@ class TjvendorsHelpersTjvendors
 		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 		$db->setQuery($query);
 		$currencies = $db->loadAssocList();
-		$count = 0;
 
 		foreach ($currencies as $i)
 		{

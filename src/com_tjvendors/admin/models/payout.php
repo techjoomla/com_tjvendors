@@ -168,6 +168,8 @@ class TjvendorsModelPayout extends JModelAdmin
 					// Update their details in the users table using id as the primary key.
 					$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
 				}
+
+				JFactory::getApplication()->enqueueMessage('Payout Successsfully Done.');
 			}
 
 			return true;
@@ -195,6 +197,7 @@ class TjvendorsModelPayout extends JModelAdmin
 
 			// Update their details in the users table using id as the primary key.
 			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+				JFactory::getApplication()->enqueueMessage('Payout Successsfully Done.');
 
 			return true;
 		}

@@ -97,9 +97,9 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 										</div>
 								<?php } 
 								if(empty($this->vendor->vendor_logo)):?>
-									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/media/com_tjvendor/vendor/defaultprofile.png" />
+									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/administrator/components/com_tjvendors/assets/images/default.png" />
 									<div class="control-group">
-											<div class="controls "><img src="<?php echo JUri::root() . "/media/com_tjvendor/vendor/defaultprofile.png"; ?>"></div>
+											<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>"></div>
 										</div>
 								<?php endif;
 								?>
@@ -153,5 +153,10 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	</div>
 </form>
 <?php }
-
+else
+{
+	$link = JUri::root() . 'index.php?option=com_users';
+	$app = JFactory::getApplication();
+	$app->redirect($link);
+}
 

@@ -45,4 +45,10 @@ defined('_JEXEC') or die();
 			<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&status=update&layout=edit&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
 		</div>
 </div>
-<?php } ?>
+<?php }
+else
+{
+	$link = JUri::root() . 'index.php?option=com_users';
+	$app = JFactory::getApplication();
+	$app->redirect($link);
+} ?>

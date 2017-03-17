@@ -39,7 +39,8 @@ $listDirn      = $this->state->get('list.direction');
 </script>
 <?php 
 $user_id = JFactory::getUser()->id;
-if ( $user_id && !empty($this->vendor_id)) :?>
+if ( $user_id && !empty($this->vendor_id))
+{?>
 	<form action="<?php
 		echo JRoute::_('index.php?option=com_tjvendors&view=vendors');
 	?>" method="post" id="adminForm" name="adminForm">
@@ -250,4 +251,11 @@ if ( $user_id && !empty($this->vendor_id)) :?>
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
 		<?php echo JHtml::_('form.token');?>
 	</form>
-<?php endif;?>
+<?php
+}
+else
+{
+	$link =JRoute::_('index.php?option=com_users');
+	$app = JFactory::getApplication();
+	$app->redirect($link);
+}?>

@@ -57,7 +57,6 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	
 		jQuery(document).on("change","#jform_user_id", function () {
 			var user=document.getElementById('jform_user_id').value;
-			//~ console.log(user);
 			var userObject = {};
 			var client = "<?php echo $this->input->get('client', '', 'STRING'); ?>";
 			userObject["user"] = user;
@@ -95,8 +94,6 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 
 					<?php 
-						$status=$this->input->get('status');
-
 						if ($this->item->vendor_id != 0)
 						{
 							$input=JFactory::getApplication()->input;
@@ -143,6 +140,13 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 							echo $this->form->renderField('vendor_title'); 
 							echo $this->form->renderField('vendor_description'); 
 							echo $this->form->renderField('vendor_logo'); 
+							if(empty($this->item->vendor_logo)) :?>
+								<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/administrator/components/com_tjvendors/assets/images/default.png" />
+									<div class="control-group">
+											<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>"></div>
+										</div>
+								
+							<?php endif;
 							?>
 							<div class="controls">
 							<div class="alert alert-warning">

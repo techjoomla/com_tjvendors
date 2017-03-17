@@ -30,19 +30,13 @@ defined('_JEXEC') or die();
 </div>
 <div class="vendor-cover row-fluid">
 		<div class="span6">
-			<?php 
-				if(!empty($this->clientsForVendor))
-				{
-					echo "<br>You are a vendor for:";
-					foreach($this->clientsForVendor as $client)
-					{
-						echo "<li> ".JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($client))." </li> ";
-					}
-				}
-			 ?>
-		</div>
-		<div class="span6">
 			<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&status=update&layout=edit&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
 		</div>
 </div>
-<?php } ?>
+<?php }
+else
+{
+	$link =JRoute::_('index.php?option=com_users');
+	$app = JFactory::getApplication();
+	$app->redirect($link);
+} ?>

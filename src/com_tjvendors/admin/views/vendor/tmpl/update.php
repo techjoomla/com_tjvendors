@@ -95,23 +95,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 
 					<?php 
-						$status=$this->input->get('status');
-
-					echo $this->form->renderField('user_id');
-
-						if (!empty($this->item->vendor_id))
-						{
-							if(!empty($this->clientsForVendor))
-							{
-								echo "Is a Vendor for : ";
-								foreach ($this->clientsForVendor as $client)
-								{
-									echo "<li>";
-									echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
-									echo "</li>";
-								}
-							}
-						}
+						echo $this->form->renderField('user_id');
 						echo $this->form->renderField('client');
 						echo $this->form->renderField('vendor_title'); 
 						echo $this->form->renderField('vendor_description'); 

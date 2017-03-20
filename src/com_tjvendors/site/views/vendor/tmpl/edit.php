@@ -38,9 +38,10 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	}
 </script>
 
-<?php if (JFactory::getUser()->id ){?>
+<?php 
+if (JFactory::getUser()->id ){?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=$this->vendor_id&client=' .  '&client=' . $this->vendor->vendor_client ); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 	<div class="form-horizontal">
 		<div class="row-fluid">
@@ -53,7 +54,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
 
 						<?php
-							if($this->vendor_id !=0 && $status!="update")
+							if($this->vendor_id !=0)
 							{
 								$client=$this->input->get('client', '', 'STRING');
 								echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>

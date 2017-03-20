@@ -109,7 +109,7 @@ class TjvendorsModelVendors extends JModelList
 		$client = $this->getState('filter.vendor_client', '');
 		$currency = $this->getState('filter.currency', '');
 		$vendor_id = TjvendorsHelpersTjvendors::getVendor();
-		$columns = array('vendors.vendor_id', 'vendors.vendor_client');
+		$columns = array('vendors.vendor_id');
 		$query->select($db->quoteName($columns));
 		$query->select('pass.*');
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
@@ -170,9 +170,17 @@ class TjvendorsModelVendors extends JModelList
 		$fromDate = $this->getState('filter.fromDate', '');
 		$toDate = $this->getState('filter.toDate', '');
 
-		if (!empty($fromDate))
+		if (empty($toDate) && !empty($fromDate))
 		{
-			$query->where($db->quoteName('transaction_time') . ' BETWEEN ' . "'$fromDate'" . 'AND' . "'$toDate'");
+			$query->where($db ->quoteName('transaction_time') . " >= " . $db->quote($fromDate));
+		}
+		elseif (empty($fromDate) && !empty($toDate))
+		{
+			$query->where($db ->quoteName('transaction_time') . " <= " . $db->quote($toDate));
+		}
+		elseif (!empty($fromDate) && !empty($toDate))
+		{
+			$query->where($db ->quoteName('transaction_time') . 'BETWEEN' . "'$fromDate'" . 'AND' . "'$toDate'");
 		}
 
 		$client = $this->getState('filter.vendor_client', '');

@@ -160,6 +160,7 @@ else
 
 		
 	</div>
+	<table class="table table-striped" id="countryList">
 	<?php
 	if(empty($this->items))
 	{?>
@@ -171,7 +172,7 @@ else
 	}
 	else
 	{?>
-		<table class="table table-striped" id="payoutList">
+		<table class="table table-striped" >
 			<thead>
 				<tr>
 					<?php if (isset($this->items[0]->ordering)): ?>
@@ -182,17 +183,17 @@ else
 
 					<?php if (isset($this->items[0]->state)){} ?>
 
-					<th class='left' width="10%">
+					<th class='left' width="5%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder); ?>
 					</th>
-					<th class='left' width="10%">
+					<th class='left' width="5%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 					<?php
 						$filterClient = $this->state->get('filter.vendor_client');
 						if(empty($filterClient))
 						{?>
-							<th class='left' width="10%">
+							<th class='left' width="5%">
 								<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder); ?>
 							</th>
 					<?php
@@ -207,25 +208,32 @@ else
 						$transactionType = $this->state->get('filter.transactionType');
 						if(empty($transactionType))
 						{?>
-					<th class='left' width="10%">
+					<th class='left' width="5%">
 						<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE'); ?>
 					</th>
 					<?php } ?>
 					<th class='left' width="5%">
 						<?php echo JText::_('COM_TJVENDORS_REPORTS_AMOUNT'); ?>
 					</th>
-					<th class='left' width="10%">
+					<th class='left' width="5%">
 						<?php echo JText::_('COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID'); ?>
 					</th>
-					<th class='left' width="10%">
+					<th class='left' width="5%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 					</th>
 
-					<th class='left' width="10%">
+					<th class='left' width="5%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder); ?>
+					</th>
+					<th class='left' width="5%">
+						<?php echo JText::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS'); ?>
+					</th>
+					<th class='left' width="5%">
+						<?php echo JText::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE'); ?>
 					</th>
 				</tr>
 			</thead>
+			<?php if($filterCurrency != '0'):?>
 			<tfoot>
 					<td colspan="5">
 						<?php echo $this->pagination->getListFooter();?>
@@ -233,18 +241,18 @@ else
 					<td colspan="5">
 						<div class="pull-right">
 							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_TOTAL_CREDIT_AMOUNT'). '&nbsp ' .$this->totalDetails['creditAmount']."</h4>";?>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_TOTAL_CREDIT_AMOUNT'). '&nbsp ' .$this->totalDetails['creditAmount']. '&nbsp' . $filterCurrency ."</h4>";?>
 							</div>
 							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_TOTAL_DEBIT_AMOUNT'). '&nbsp ' . $this->totalDetails['debitAmount']."</h4>"; ?>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_TOTAL_DEBIT_AMOUNT'). '&nbsp ' . $this->totalDetails['debitAmount']. '&nbsp' . $filterCurrency ."</h4>"; ?>
 							</div>
 							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_TOTAL_PENDING_AMOUNT') . '&nbsp ' . $this->totalDetails['pendingAmount']."</h4>";?>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_TOTAL_PENDING_AMOUNT') . '&nbsp ' . $this->totalDetails['pendingAmount']. '&nbsp' . $filterCurrency ."</h4>";?>
 						   </div>
 						</div>
 					</td>
 			</tfoot>
-			
+			<?php endif;?>
 			<tbody>
 				<?php 
 				foreach ($this->items as $i => $item)
@@ -310,7 +318,17 @@ else
 						<td>
 							<?php echo $item->transaction_time; ?>
 						</td>
-
+						<?php	$status = json_decode($item->params, true);?>
+						<td>
+							<?php 
+								echo $status['entry_status'];
+							?>
+						</td>
+						<td>
+							<?php 
+								echo $status['customer_note'];
+							?>
+						</td>
 					</tr>
 				<?php
 				}?>

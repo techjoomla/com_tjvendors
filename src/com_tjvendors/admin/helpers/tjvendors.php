@@ -123,6 +123,11 @@ class TjvendorsHelpersTjvendors
 	 */
 	public static function getTotalDetails($vendor_id, $client, $currency)
 	{
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$payout_day_limit = $com_params->get('payout_limit_days');
+		$presentDAte = JFactory::getDate();
+		$presentDAte->sub(new DateInterval('P' . $payout_day_limit . 'D'));
+		$payout_date_limit = $presentDAte->format('Y-m-d') . "\n";
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
@@ -143,6 +148,11 @@ class TjvendorsHelpersTjvendors
 		if (!empty($currency))
 		{
 		$query->where($db->quoteName('currency') . " = " . $db->quote($currency));
+		}
+
+		if (!empty($payout_date_limit))
+		{
+		$query->where($db->quoteName('transaction_time') . " <= " . $db->quote($payout_date_limit));
 		}
 
 		$db->setQuery($query);
@@ -440,16 +450,28 @@ class TjvendorsHelpersTjvendors
 	 * 
 	 * @param   string  $vendor_id  integer
 	 *
+	 * @param   string  $client     integer
+	 * 
 	 * @return boolean
 	 */
 
-	public static function checkUniqueCurrency($currency, $vendor_id)
+	public static function checkUniqueCurrency($currency, $vendor_id, $client)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('currency'));
 		$query->from($db->quoteName('#__tjvendors_fee'));
+
+		if (!empty($client))
+		{
 		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
 		$db->setQuery($query);
 		$currencies = $db->loadAssocList();
 

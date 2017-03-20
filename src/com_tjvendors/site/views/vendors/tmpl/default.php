@@ -57,7 +57,13 @@ if ( $user_id && !empty($this->vendor_id))
 						echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
 					?>
 				</div>
-				
+				<div class="btn-group pull-left hidden-phone">
+					<button class="btn hasTooltip" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
+						<i class="icon-remove"></i>
+					</button>
+				</div>
+			</div>
+			
 				<div class="btn-group pull-left hidden-phone">
 					<input type="text" name="filter_search" id="filter_search"placeholder="<?php echo JText::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_VENDOR_TITLE');?>"
 						value="<?php
@@ -73,12 +79,6 @@ if ( $user_id && !empty($this->vendor_id))
 						<i class="icon-remove"></i>
 					</button>
 				</div>
-				<div class="btn-group pull-left hidden-phone">
-					<button class="btn hasTooltip" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
-						<i class="icon-remove"></i>
-					</button>
-				</div>
-			</div>
 			<div class="btn-group pull-left hidden-phone">
 				<div class="btn-group  hidden-phone">
 				<label for="limit" class="element-invisible">

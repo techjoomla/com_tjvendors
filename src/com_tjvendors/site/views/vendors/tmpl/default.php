@@ -107,6 +107,17 @@ if ( $user_id && !empty($this->vendor_id))
 				<?php $transactionType = $this->state->get('filter.transactionType'); ?>
 				</div>
 			</div>
+			<?php
+				if (empty($this->items))
+				{?>
+					<div class="clearfix">&nbsp;</div>
+					<div class="alert alert-no-items">
+					<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?>
+					</div>
+				<?php }
+				else
+				{
+				?>
 		<table class="table table-striped table-hover">
 			<thead>
 					<tr>
@@ -149,6 +160,7 @@ if ( $user_id && !empty($this->vendor_id))
 					   </th>
 					</tr>
 			</thead>
+			<?php if($currency != '0'):?>
 			<tfoot>
 					<td colspan="5">
 						<?php echo $this->pagination->getListFooter();?>
@@ -156,28 +168,20 @@ if ( $user_id && !empty($this->vendor_id))
 					<td colspan="5">
 						<div class="pull-right">
 							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT'). '&nbsp ' .$this->totalDetails['creditAmount']."</h4>";?>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT'). '&nbsp ' .$this->totalDetails['creditAmount']. '&nbsp' . $currency ."</h4>";?>
 							</div>
 							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT'). '&nbsp ' . $this->totalDetails['debitAmount']."</h4>"; ?>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT'). '&nbsp ' . $this->totalDetails['debitAmount']. '&nbsp' . $currency ."</h4>"; ?>
 							</div>
 							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp ' . $this->totalDetails['pendingAmount']."</h4>";?>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp ' . $this->totalDetails['pendingAmount']. '&nbsp' . $currency ."</h4>";?>
 						   </div>
 						</div>
 					</td>
 			</tfoot>
+			<?php endif;?>
 			<tbody>
-					<?php
-						if (empty($this->items)):?>
-							<div class="clearfix">&nbsp;</div>
-							<div class="alert alert-no-items">
-							<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?>
-							</div>
-						<?php endif;?>
 						<?php
-					if(!empty($this->items))
-					{
 						foreach ($this->items as $i => $row)
 						{
 						?>
@@ -241,10 +245,12 @@ if ( $user_id && !empty($this->vendor_id))
 							</tr>
 							<?php
 						}
-					};
 					?>
 			</tbody>
 		</table>
+	<?php
+	}
+	?>
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="boxchecked" value="0"/>
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder;?>"/>

@@ -105,10 +105,12 @@ class TjvendorsModelPayouts extends JModelList
 		$com_params = JComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
 		$vendor = $this->getState('filter.vendor_id');
-
-		$com_jticketing_params = JComponentHelper::getParams('com_jticketing');
-		$com_currency = $com_jticketing_params->get('currency');
-
+		$component_params = JComponentHelper::getParams($urlClient);
+		$com_currency = $component_params->get('currency');
+		$payout_day_limit = $com_params->get('payout_limit_days');
+		$date = JFactory::getDate();
+		$presentDate = $date->modify("-" . $payout_day_limit . " day");
+		$payout_date_limit = $presentDate->format('Y-m-d');
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
@@ -117,6 +119,8 @@ class TjvendorsModelPayouts extends JModelList
 		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
 			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') . ')');
 		$query->where($db->quoteName('pass.id') . ' is not null');
+
+		$query->where($db->quoteName('pass.transaction_time') . ' <= ' . $db->quote($payout_date_limit));
 
 		if ($filterClient != '0')
 		{

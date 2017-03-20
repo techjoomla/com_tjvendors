@@ -110,13 +110,18 @@ class TjvendorsModelReports extends JModelList
 
 	public function getListQuery()
 	{
-		$db = JFactory::getDbo();
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payouts');
-		$TjvendorsModelPayouts = JModelLegacy::getInstance('Payouts', 'TjvendorsModel');
-		$query = $PayoutsDetail = $TjvendorsModelPayouts->getListQuery();
 		$transactionType = $this->getState('filter.transactionType', '');
 		$client = $this->getState('filter.vendor_client', '');
 		$currency = $this->getState('filter.currency', '');
+
+		$db = JFactory::getDbo();
+
+		$query = $db->getQuery(true);
+		$query->select(array('vendors.vendor_id','vendors.vendor_title','pass.*'));
+		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
+		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
+			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') . ')');
+		$query->where($db->quoteName('pass.id') . ' is not null');
 
 		if (!empty($transactionType))
 		{
@@ -143,7 +148,15 @@ class TjvendorsModelReports extends JModelList
 		$fromDate = $this->getState('filter.fromDate', '');
 		$toDate = $this->getState('filter.toDate', '');
 
-		if (!empty($fromDate))
+		if (empty($toDate) && !empty($fromDate))
+		{
+			$query->where($db ->quoteName('transaction_time') . " >= " . $db->quote($fromDate));
+		}
+		elseif (empty($fromDate) && !empty($toDate))
+		{
+			$query->where($db ->quoteName('transaction_time') . " <= " . $db->quote($toDate));
+		}
+		elseif (!empty($fromDate) && !empty($toDate))
 		{
 			$query->where($db ->quoteName('transaction_time') . 'BETWEEN' . "'$fromDate'" . 'AND' . "'$toDate'");
 		}

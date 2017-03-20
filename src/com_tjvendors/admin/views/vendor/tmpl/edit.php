@@ -29,7 +29,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 
 	Joomla.submitbutton = function (task)
 	{
-		if(task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new' || task == 'vendor.save2copy')
+		if(task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new')
 		{
 			var username = document.getElementById("jform_user_id").value;
 
@@ -54,7 +54,6 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		}
 	}
 
-	
 		jQuery(document).on("change","#jform_user_id", function () {
 			var user=document.getElementById('jform_user_id').value;
 			var userObject = {};

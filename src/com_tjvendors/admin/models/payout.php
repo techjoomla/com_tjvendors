@@ -251,6 +251,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		$creditEntry->transaction_time = $data['transaction_time'];
 		$creditEntry->client = $data['client'];
 		$creditEntry->transaction_id = $data['transaction_id'];
+		$creditEntry->params = $data['params'];
 
 		// Insert the object into the user profile table.
 		$result = JFactory::getDbo()->insertObject('#__tjvendors_passbook', $creditEntry);

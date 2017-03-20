@@ -38,8 +38,6 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
   `vendor_title` varchar(255) NOT NULL,
   `vendor_description` text NOT NULL,
   `vendor_logo` varchar(255) NOT NULL,
-  `vendor_client` varchar(255) NOT NULL,
-  `currency` text NOT NULL,
   `state` tinyint(1) NOT NULL,
   `ordering` int(11) NOT NULL,
   `checked_out` int(11) NOT NULL,

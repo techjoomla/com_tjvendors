@@ -108,9 +108,9 @@ class TjvendorsModelPayouts extends JModelList
 		$component_params = JComponentHelper::getParams($urlClient);
 		$com_currency = $component_params->get('currency');
 		$payout_day_limit = $com_params->get('payout_limit_days');
-		$presentDAte = JFactory::getDate();
-		$presentDAte->sub(new DateInterval('P' . $payout_day_limit . 'D'));
-		$payout_date_limit = $presentDAte->format('Y-m-d') . "\n";
+		$date = JFactory::getDate();
+		$presentDate = $date->modify("-" . $payout_day_limit . " day");
+		$payout_date_limit = $presentDate->format('Y-m-d');
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);

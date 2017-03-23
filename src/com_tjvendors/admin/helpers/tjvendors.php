@@ -266,6 +266,8 @@ class TjvendorsHelpersTjvendors
 			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
 
+		$query->where($db->quoteName('credit') . ' != 0');
+
 		if ($bulkPayoutStatus == 0 && !empty($client))
 		{
 			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
@@ -509,6 +511,81 @@ class TjvendorsHelpersTjvendors
 		$currencies = $db->loadAssocList();
 
 		return $currencies;
+	}
+
+	/**
+	 * Get get vendor_id
+	 *
+	 * @param   integer  $vendor_id  integer
+	 * 
+	 * @param   string   $client     string
+	 * 
+	 * @param   string   $currency   string
+	 * 
+	 * @return res|integer
+	 */
+	public static function getPayableAmount($vendor_id, $client, $currency)
+	{
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$payout_day_limit = $com_params->get('payout_limit_days');
+		$date = JFactory::getDate();
+		$presentDate = $date->modify("-" . $payout_day_limit . " day");
+		$payout_date_limit = $presentDate->format('Y-m-d');
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		$payout_entry = self::checkOrderPayout($vendor_id);
+
+		if (empty($payout_entry))
+		{
+			$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
+		}
+		else
+		{
+			$query->where($db->quoteName('transaction_time') . ' > ' . $db->quote($payout_entry['transaction_time']));
+			$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote("2017-03-29"));
+		}
+
+		$db->setQuery($query);
+		$res = $db->loadResult();
+
+		if (!empty($res))
+		{
+			$result = array("payableAmount" => $res, "payout_date_limit" => $payout_date_limit);
+		}
+		else
+		{
+			$result = array("payableAmount" => 0, "payout_date_limit" => $payout_date_limit);
+		}
+
+		return $result;
+	}
+
+	/**
+	 * check order payout
+	 *
+	 * @param   integer  $vendor_id  integer
+	 * 
+	 * @return res|integer
+	 */
+	public static function checkOrderPayout($vendor_id)
+	{
+		$db = JFactory::getDbo();
+
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quoteName('debit') . ' > 0 AND ' . $db->quoteName('credit') . '!= 0');
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$db->setQuery($query);
+		$result = $db->loadAssoc();
+
+		return $result;
 	}
 
 	/**

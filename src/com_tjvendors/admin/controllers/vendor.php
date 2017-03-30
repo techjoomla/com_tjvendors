@@ -1,16 +1,16 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
-
 // No direct access
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.controllerform');
+JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
 
 /**
  * Vendor controller class.
@@ -27,12 +27,6 @@ class TjvendorsControllerVendor extends JControllerForm
 	public function __construct()
 	{
 		$this->view_list = 'vendors';
-		$this->input = JFactory::getApplication()->input;
-
-		if (empty($this->client))
-		{
-			$this->client = $this->input->get('client', '');
-		}
 
 		parent::__construct();
 	}
@@ -49,10 +43,30 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
+		$input  = JFactory::getApplication()->input;
+		$client = $input->get('client', '', 'STRING');
+		$vendor_id = $input->get('vendor_id', '', 'STRING');
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
-		$append .= '&client=' . $this->client;
+		$append .= '&client=' . $client . '&vendor_id=' . $vendor_id;
 
 		return $append;
+	}
+
+	/**
+	 * Check for duplicate users
+	 * 
+	 * @return null
+	 * 
+	 * @since   1.6
+	 */
+	public function checkDuplicateUser()
+	{
+		$input  = JFactory::getApplication()->input->post;
+		$user = $input->get('user', '', 'STRING');
+		$model = $this->getModel('vendor');
+		$results = $model->checkDuplicateUser($user);
+		echo json_encode($results);
+		jexit();
 	}
 
 	/**
@@ -64,8 +78,10 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToListAppend()
 	{
+		$input  = JFactory::getApplication()->input->post;
+		$client = $input->get('client', '', 'STRING');
 		$append = parent::getRedirectToListAppend();
-		$append .= '&client=' . $this->client;
+		$append .= '&client=' . $client;
 
 		return $append;
 	}

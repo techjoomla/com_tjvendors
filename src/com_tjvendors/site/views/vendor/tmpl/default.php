@@ -9,16 +9,34 @@
 // No direct access
 defined('_JEXEC') or die();
 ?>
+<?php if (JFactory::getUser()->id && !empty($this->vendor_id) ){?>
+
+	<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 <div class="vendor-cover row-fluid">
 	<div class="span3">
-	<img alt="" src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>">
-</div>
+	<img alt="" src="<?php echo JUri::root() . $this->VendorDetail->vendor_logo; ?>">
+	</div>
 	<div class="span9">
-		<div><h3><?php echo $this->vendor->vendor_title; ?></h3>
-		<?php if ($this->vendor->user_id == JFactory::getUser()->id || JFactory::getUser()->authorise('core.admin')){?>
-		<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . (int) $this->vendor->vendor_id  . '&client=' . $this->vendor->vendor_client); ?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
-		<?php } ?>
+		<div>
+			<h3>
+				<?php echo $this->VendorDetail->vendor_title; ?>
+			</h3>
 		</div>
-		<div><?php echo $this->vendor->vendor_description; ?></div>
+		<div>
+			<?php echo $this->VendorDetail->vendor_description; ?>
+		</div>
+
 	</div>
 </div>
+<div class="vendor-cover row-fluid">
+		<div class="span6">
+			<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&status=update&layout=edit&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
+		</div>
+</div>
+<?php }
+else
+{
+	$link =JRoute::_('index.php?option=com_users');
+	$app = JFactory::getApplication();
+	$app->redirect($link);
+} ?>

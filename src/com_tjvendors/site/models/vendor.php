@@ -106,6 +106,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				$this->item = $this->getItem();
 			}
 
+			$this->item->vendor_client = "";
 			$data = $this->item;
 		}
 
@@ -123,104 +124,42 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function getItem($pk = null)
 	{
-		if ($item = parent::getItem($pk))
-		{
-			// Do any procesing on fields here if needed
-		}
+		$item = parent::getItem($pk);
 
 		return $item;
 	}
 
 	/**
-	 * Method to duplicate an Vendor
+	 * Method for save vendor information
 	 *
-	 * @param   array  &$pks  An array of primary key IDs.
+	 * @param   Integer  $vendorId  used for inserting data for that vendor
 	 *
-	 * @return  boolean  True if successful.
-	 *
-	 * @throws  Exception
+	 * @return id
 	 */
-	public function duplicate(&$pks)
+	public function addVendorId($vendorId)
 	{
-		$user = JFactory::getUser();
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('max(' . $db->quoteName('id') . ')');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$db->setQuery($query);
+		$res = $db->loadResult();
+		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendorId));
 
-		// Access checks.
-		if (! $user->authorise('core.create', 'com_tjvendors'))
-		{
-			throw new Exception(JText::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
-		}
+		// Conditions for which records should be updated.
+		$conditions = array($db->quoteName('id') . ' = ' . $res);
 
-		$dispatcher = JEventDispatcher::getInstance();
-		$context = $this->option . '.' . $this->name;
+		$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);
 
-		// Include the plugins for the save events.
-		JPluginHelper::importPlugin($this->events_map['save']);
+		$db->setQuery($query);
 
-		$table = $this->getTable();
-
-		foreach ($pks as $pk)
-		{
-			if ($table->load($pk, true))
-			{
-				// Reset the id to create a new record.
-				$table->vendor_id = 0;
-
-				if (! $table->check())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the before save event.
-				$result = $dispatcher->trigger($this->event_before_save, array($context, &$table, true));
-
-				if (in_array(false, $result, true) || ! $table->store())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the after save event.
-				$dispatcher->trigger($this->event_after_save, array($context, &$table, true));
-			}
-			else
-			{
-				throw new Exception($table->getError());
-			}
-		}
-
-		// Clean cache
-		$this->cleanCache();
+		$result = $db->execute();
 
 		return true;
 	}
 
 	/**
-	 * Prepare and sanitise the table prior to saving.
-	 *
-	 * @param   JTable  $table  Table Object
-	 *
-	 * @return void
-	 *
-	 * @since    1.6
-	 */
-	protected function prepareTable($table)
-	{
-		jimport('joomla.filter.output');
-
-		if (empty($table->vendor_id))
-		{
-			// Set ordering to the last item if not set
-			if (@$table->ordering === '')
-			{
-				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__tj_vendors');
-				$max = $db->loadResult();
-				$table->ordering = $max + 1;
-			}
-		}
-	}
-
-	/**
-	 * Method for save user specific %commission, flat commission, client
+	 * Method for save vendor information
 	 *
 	 * @param   Array  $data  Data
 	 *
@@ -230,43 +169,65 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$table = $this->getTable();
 		$db = JFactory::getDBO();
-		$input = JFactory::getApplication()->input;
 		$app = JFactory::getApplication();
-		$client = $input->get('client', '', 'STRING');
 
-		$data['vendor_client'] = ! empty($client) ? $client : $data['vendor_client'];
+		$data['user_id'] = JFactory::getUser()->id;
 
-		// Bind data
-		if (! $table->bind($data))
+		if ($data['user_id'] != 0)
 		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		// Validate
-		if (! $table->check())
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		if ($data['vendor_id'] == 0)
-		{
-			if (! $table->checkDuplicateUser())
+			// To check if editing in registration form
+			if ($data['vendor_id'])
 			{
-				$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
+				$table->save($data);
 
-				return false;
+				// $app->setUserState('com_tjvendors.edit.vendor.vendor_id', $vendor_id);
+
+				if (!empty($data['vendor_client']))
+				{
+					$checkForDuplicateClient = TjvendorsHelpersTjvendors::checkForDuplicateClient($data['vendor_id'], $data['vendor_client']);
+
+					if ($checkForDuplicateClient != $data['vendor_client'])
+					{
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
+
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+					}
+					else
+					{
+							$app->enqueueMessage(JText::_('COM_TJVENDORS_DUPLICATE_CLIENT_ERROR'), 'warning');
+
+						return false;
+					}
+
+					return true;
+				}
+
+				return true;
 			}
-		}
-
-		if ($data['user_vendor_id'] != 0)
-		{
-			// Attempt to save data
-			if (parent::save($data))
+			else
 			{
+			// Attempt to save data
+				if ($table->save($data) === true)
+				{
+					$vendorId = $table->vendor_id;
+
+					if (!empty($data['vendor_client']))
+					{
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
+
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+						$this->addVendorId($vendorId);
+					}
+
+					return true;
+				}
+
 				return true;
 			}
 		}
@@ -324,7 +285,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			$query = $db->getQuery(true);
 
 			$query->select("*");
-			$query->from($db->qn("#__tj_vendors"));
+			$query->from($db->qn("#__tjvendors_vendors"));
 			$query->where($db->qn("user_id") . " = " . $user->id);
 
 			if (! empty($client))
@@ -340,7 +301,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$query = $db->getQuery(true);
 				$query->select("*");
-				$query->from($db->qn("#__tj_vendors"));
+				$query->from($db->qn("#__tjvendors_vendors"));
 				$query->where($db->qn("user_id") . " = " . $user->id);
 				$query->where($db->qn("vendor_client") . "  = ''");
 

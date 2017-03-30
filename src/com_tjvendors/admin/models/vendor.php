@@ -1,12 +1,11 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
-
 // No direct access.
 defined('_JEXEC') or die;
 
@@ -103,6 +102,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				$this->item = $this->getItem();
 			}
 
+			$this->item->vendor_client = "";
 			$data = $this->item;
 		}
 
@@ -110,110 +110,87 @@ class TjvendorsModelVendor extends JModelAdmin
 	}
 
 	/**
-	 * Method to get a single record.
+	 * Method to add vendor id after client is added to the table.
 	 *
-	 * @param   integer  $pk  The id of the primary key.
-	 *
-	 * @return  mixed    Object on success, false on failure.
+	 * @param   Array  $vendor_id  vendor id
+	 * 
+	 * @return   mixed
 	 *
 	 * @since    1.6
 	 */
-	public function getItem($pk = null)
+	public function addVendorId($vendor_id)
 	{
-		if ($item = parent::getItem($pk))
-		{
-			// Do any procesing on fields here if needed
-		}
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('max(' . $db->quoteName('id') . ')');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$db->setQuery($query);
+		$res = $db->loadResult();
+		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 
-		return $item;
-	}
+		// Conditions for which records should be updated.
+		$conditions = array($db->quoteName('id') . ' = ' . $res);
 
-	/**
-	 * Method to duplicate an Vendor
-	 *
-	 * @param   array  &$pks  An array of primary key IDs.
-	 *
-	 * @return  boolean  True if successful.
-	 *
-	 * @throws  Exception
-	 */
-	public function duplicate(&$pks)
-	{
-		$user = JFactory::getUser();
+		$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);
 
-		// Access checks.
-		if (!$user->authorise('core.create', 'com_tjvendors'))
-		{
-			throw new Exception(JText::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
-		}
+		$db->setQuery($query);
 
-		$dispatcher = JEventDispatcher::getInstance();
-		$context    = $this->option . '.' . $this->name;
-
-		// Include the plugins for the save events.
-		JPluginHelper::importPlugin($this->events_map['save']);
-
-		$table = $this->getTable();
-
-		foreach ($pks as $pk)
-		{
-			if ($table->load($pk, true))
-			{
-				// Reset the id to create a new record.
-				$table->vendor_id = 0;
-
-				if (!$table->check())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the before save event.
-				$result = $dispatcher->trigger($this->event_before_save, array($context, &$table, true));
-
-				if (in_array(false, $result, true) || !$table->store())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the after save event.
-				$dispatcher->trigger($this->event_after_save, array($context, &$table, true));
-			}
-			else
-			{
-				throw new Exception($table->getError());
-			}
-		}
-
-		// Clean cache
-		$this->cleanCache();
+		$result = $db->execute();
 
 		return true;
 	}
 
 	/**
-	 * Prepare and sanitise the table prior to saving.
+	 * Method to check duplicate user.
 	 *
-	 * @param   JTable  $table  Table Object
-	 *
-	 * @return void
+	 * @param   integer  $user  user name.
+	 * 
+	 * @return   array rows
 	 *
 	 * @since    1.6
 	 */
-	protected function prepareTable($table)
+	public function checkDuplicateUser($user)
 	{
-		jimport('joomla.filter.output');
+		$user_id = $this->getUserId($user);
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__tjvendors_vendors'));
 
-		if (empty($table->vendor_id))
+		if (!empty($user_id))
 		{
-			// Set ordering to the last item if not set
-			if (@$table->ordering === '')
-			{
-				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__tj_vendors');
-				$max             = $db->loadResult();
-				$table->ordering = $max + 1;
-			}
+			$query->where($db->quoteName('user_id') . ' = ' . $user_id);
 		}
+
+		$db->setQuery($query);
+		$rows = $db->loadAssoc();
+
+		if ($rows)
+		{
+			return $rows;
+		}
+	}
+
+	/**
+	 * Method to give user_id
+	 *
+	 * @param   integer  $user  user name.
+	 * 
+	 * @return   array rows
+	 *
+	 * @since    1.6
+	 */
+	public function getUserId($user)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('id'));
+		$query->from($db->quoteName('#__users'));
+		$query->where($db->quoteName('name') . ' = ' . $db->quote($user));
+		$db->setQuery($query);
+		$row = $db->loadResult();
+
+		return $row;
 	}
 
 	/**
@@ -225,46 +202,65 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function save($data)
 	{
+		$app = JFactory::getApplication();
 		$table = $this->getTable();
-		$db = JFactory::getDBO();
-		$input  = JFactory::getApplication()->input;
-		$app  = JFactory::getApplication();
-		$client = $input->get('client', '', 'STRING');
-
-		$data['vendor_client'] = !empty($client)? $client:$data['vendor_client'];
-
-		// Bind data
-		if (!$table->bind($data))
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		// Validate
-		if (!$table->check())
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		if ($data['vendor_id'] == 0)
-		{
-			if (!$table->checkDuplicateUser())
-			{
-				$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
-
-				return false;
-			}
-		}
+		$input = JFactory::getApplication()->input;
+		$layout = $input->get('layout', '', 'STRING');
 
 		if ($data['user_id'] != 0)
 		{
-			// Attempt to save data
-			if (parent::save($data))
+			// To check if editing in registration form
+			if ($data['vendor_id'])
 			{
+				$table->save($data);
+
+				if ($layout == "edit" && !empty($data['vendor_client']))
+				{
+					require_once JPATH_SITE . '/components/com_tjvendors/helpers/tjvendors.php';
+					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
+					$checkForDuplicateClient = $tjvendorsHelpersTjvendors->checkForDuplicateClient($data['vendor_id'], $data['vendor_client']);
+
+					if ($checkForDuplicateClient != $data['vendor_client'])
+					{
+						$vendor_id = (int) $this->getState($this->getName() . '.id');
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
+
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+					}
+					else
+					{
+						$app->enqueueMessage(JText::_('COM_TJVENDORS_DUPLICATE_CLIENT_ERROR'), 'warning');
+
+						return false;
+					}
+				}
+
 				return true;
+			}
+			else
+			{
+				if ($table->save($data) === true)
+				{
+					$vendorId = $table->vendor_id;
+
+					if (!empty($data['vendor_client']))
+					{
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
+
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+						$this->addVendorId($vendorId);
+					}
+
+					return true;
+				}
+
+				return false;
 			}
 		}
 		else

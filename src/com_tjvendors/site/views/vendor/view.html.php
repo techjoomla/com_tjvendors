@@ -1,11 +1,10 @@
 <?php
-
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2017 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 // No direct access
 defined('_JEXEC') or die;
@@ -37,11 +36,17 @@ class TjvendorsViewVendor extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$this->state = $this->get('State');
+		$this->user_id = jFactory::getuser()->id;
 		$this->vendor  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$this->vendor_id = TjvendorsHelpersTjvendors::getvendor();
+		$this->VendorDetail = $TjvendorsModelVendor->getItem($this->vendor_id);
+		$this->clientsForVendor = TjvendorsHelpersTjvendors::getClientsForVendor($this->vendor_id);
 
-		// Check for errors.
+		// Check for errors
 		if (count($errors = $this->get('Errors')))
 		{
 			throw new Exception(implode("\n", $errors));

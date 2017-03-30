@@ -11,6 +11,7 @@
 defined('_JEXEC') or die();
 
 jimport('joomla.application.component.controllerform');
+JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
 
 /**
  * Vendor controller class.
@@ -77,7 +78,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	 *
 	 * @param   string  $key     The name of the primary key of the URL variable.
 	 * @param   string  $urlVar  The name of the URL variable if different from the primary key (sometimes required to avoid router collisions).
-	 * 
+	 *
 	 * @return	void
 	 *
 	 * @since	1.6
@@ -125,13 +126,13 @@ class TjvendorsControllerVendor extends JControllerForm
 					$app->enqueueMessage($errors[$i], 'warning');
 				}
 			}
-
 			// Save the data in the session.
 			$app->setUserState('com_tjvendors.edit.vendor.data', $app->input->get('jform', array(), "ARRAY"));
 
 			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
+			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id');
 			$client = $app->getUserState('com_tjvendors.edit.vendor.client');
+
 			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
 
 			return false;
@@ -143,26 +144,47 @@ class TjvendorsControllerVendor extends JControllerForm
 		// Check for errors.
 		if ($return === false)
 		{
+			$input = JFactory::getApplication();
+			$vendor_id = $input->get('vendor_id', '', 'INTEGER');
+
 			// Save the data in the session.
 			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
 			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id');
+			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
 			$client = $app->getUserState('com_tjvendors.edit.vendor.client');
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
+			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $data['vendor_id'];
+			$this->setRedirect(
+					JRoute::_(
+					'index.php?option=com_tjvendors&view=vendor&status=register&layout=edit' . $dynamicLink, false
+					)
+					);
 
 			return false;
 		}
 
-		// Clear the profile id from the session.
-		$app->setUserState('com_tjvendors.edit.vendor.vendor_id', null);
+		$user_id = Jfactory::getUser()->id;
+
+		// Get a db connection.
+		$db = JFactory::getDbo();
+
+		// Create a new query object.
+		$query = $db->getQuery(true);
+
+		$query->select($db->quoteName('vendor_id'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
+		$db->setQuery($query);
+		$vendor_id = $db->loadResult();
+		$input = JFactory::getApplication()->input;
 
 		// Redirect to the list screen.
 		$this->setMessage(JText::_('COM_TJVENDORS_ITEM_SAVED_SUCCESSFULLY'));
-
 		$this->setRedirect(
-				JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $data['vendor_id'] . '&client=' . $data['vendor_client'], false)
+				JRoute::_(
+				'index.php?option=com_tjvendors&view=vendor&layout=default&vendor_id=' . $vendor_id . '&client=' . $input->get('client', '', 'STRING'), false
+				)
 				);
 
 		// Flush the data from the session.
@@ -172,13 +194,16 @@ class TjvendorsControllerVendor extends JControllerForm
 	/**
 	 * Cancel description
 	 *
+	 * @param   integer  $key  The key 
+	 * 
 	 * @return description
 	 */
-	public function cancel()
+	public function cancel($key=null)
 	{
+		$input = JFactory::getApplication()->input;
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
 		$this->setRedirect(
-		JRoute::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $data['vendor_client'], false)
+		JRoute::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $input->get('client', '', 'STRING'), false)
 		);
 	}
 }

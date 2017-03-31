@@ -38,6 +38,7 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
+		$this->params = JComponentHelper::getParams('com_tjvendors');
 		$this->input = JFactory::getApplication()->input;
 		$this->clientsForVendor = TjvendorsHelpersTjvendors::getClientsForVendor($this->item->vendor_id);
 

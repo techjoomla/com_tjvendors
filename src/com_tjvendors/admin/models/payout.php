@@ -194,8 +194,40 @@ class TjvendorsModelPayout extends JModelAdmin
 		$data['id'] = '';
 		$data['vendor_id'] = $item->vendor_id;
 		$data['credit'] = - $data['debit'];
-		$params = array("entry_status" => "debit_payout");
+		$params = array("customer_note" => "", "entry_status" => "debit_payout");
 		$data['params'] = json_encode($params);
+
+		if ($data['debit'] < $payableAmount['total'])
+		{
+			for ($i = 0; $i <= 1; $i++)
+			{
+				if ($i == 1)
+				{
+					$data['credit'] = $data['total'];
+					$data['total'] = $data['total'];
+					$data['debit'] = '0';
+					$params = array("customer_note" => "", "entry_status" => "credit_remaining_payout");
+					$data['params'] = json_encode($params);
+				}
+
+				if (parent::save($data))
+				{
+					$id = (int) $this->getState($this->getName() . '.id');
+					$payout_update = new stdClass;
+
+					// Must be a valid primary key value.
+					$payout_update->id = $id;
+					$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
+
+					// Update their details in the users table using id as the primary key.
+					$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+					$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
+						JFactory::getApplication()->enqueueMessage($message);
+				}
+			}
+
+			return true;
+		}
 
 		if (parent::save($data))
 		{

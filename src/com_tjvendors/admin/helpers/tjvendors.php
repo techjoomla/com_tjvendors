@@ -124,13 +124,12 @@ class TjvendorsHelpersTjvendors
 	public static function getTotalDetails($vendor_id, $client, $currency)
 	{
 		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$payout_day_limit = $com_params->get('payout_limit_days');
-		$presentDAte = JFactory::getDate();
-		$presentDAte->sub(new DateInterval('P' . $payout_day_limit . 'D'));
-		$payout_date_limit = $presentDAte->format('Y-m-d') . "\n";
+		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
+		$date = JFactory::getDate();
+		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
+		$query->select('sum(CASE WHEN ' . $db->quoteName('credit') . ' >= 0 THEN ' . $db->quoteName('credit') . ' ELSE 0 END' . ') As credit');
 		$query->select('sum(' . $db->quoteName('debit') . ') As debit');
 
 		$query->from($db->quoteName('#__tjvendors_passbook'));
@@ -148,11 +147,6 @@ class TjvendorsHelpersTjvendors
 		if (!empty($currency))
 		{
 		$query->where($db->quoteName('currency') . " = " . $db->quote($currency));
-		}
-
-		if (!empty($payout_date_limit))
-		{
-		$query->where($db->quoteName('transaction_time') . " <= " . $db->quote($payout_date_limit));
 		}
 
 		$db->setQuery($query);
@@ -506,7 +500,12 @@ class TjvendorsHelpersTjvendors
 		$query = $db->getQuery(true);
 		$query->select('DISTINCT' . $db->quoteName('currency'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
 		$db->setQuery($query);
 		$currencies = $db->loadAssocList();
 
@@ -527,18 +526,30 @@ class TjvendorsHelpersTjvendors
 	public static function getPayableAmount($vendor_id, $client, $currency)
 	{
 		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$payout_day_limit = $com_params->get('payout_limit_days');
+		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
 		$date = JFactory::getDate();
-		$presentDate = $date->modify("-" . $payout_day_limit . " day");
-		$payout_date_limit = $presentDate->format('Y-m-d');
+		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
-		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
-		$payout_entry = self::checkOrderPayout($vendor_id);
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
+		if (!empty($currency))
+		{
+			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		$payout_entry = self::checkOrderPayout($vendor_id, $currency);
 
 		if (empty($payout_entry))
 		{
@@ -547,7 +558,7 @@ class TjvendorsHelpersTjvendors
 		else
 		{
 			$query->where($db->quoteName('transaction_time') . ' > ' . $db->quote($payout_entry['transaction_time']));
-			$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote("2017-03-29"));
+			$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
 		}
 
 		$db->setQuery($query);
@@ -570,9 +581,11 @@ class TjvendorsHelpersTjvendors
 	 *
 	 * @param   integer  $vendor_id  integer
 	 * 
+	 * @param   integer  $currency   integer
+	 *
 	 * @return res|integer
 	 */
-	public static function checkOrderPayout($vendor_id)
+	public static function checkOrderPayout($vendor_id, $currency)
 	{
 		$db = JFactory::getDbo();
 
@@ -581,7 +594,17 @@ class TjvendorsHelpersTjvendors
 		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 		$query->where($db->quoteName('debit') . ' > 0 AND ' . $db->quoteName('credit') . '!= 0');
-		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($currency))
+		{
+			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
 		$db->setQuery($query);
 		$result = $db->loadAssoc();
 

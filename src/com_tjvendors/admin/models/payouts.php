@@ -105,8 +105,7 @@ class TjvendorsModelPayouts extends JModelList
 		$com_params = JComponentHelper::getParams('com_tjvendors');
 		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
 		$date = JFactory::getDate();
-		$presentDate = $date->modify("-" . $payout_day_limit . " day");
-		$payout_date_limit = $presentDate->format('Y-m-d');
+		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
 		$vendor = $this->getState('filter.vendor_id');
 

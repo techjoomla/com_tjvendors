@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_passbook` (
 `transaction_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
 `client` VARCHAR(255)  NOT NULL ,
 `transaction_id` VARCHAR(255)  NOT NULL ,
-PRIMARY KEY (`id`) 
+PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `#__tjvendors_fee` (

@@ -77,6 +77,7 @@ var _URL = window.URL || window.webkitURL;
 var jgiveAllowedMediaSize = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
 var allowedMediaSizeErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
 var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
+var allowedImageTypeErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
 
 jQuery(window).load(function(){
 	jQuery("#jform_profile_image").change(function(e) {
@@ -95,14 +96,14 @@ jQuery(window).load(function(){
 
 				if (this.width < 445 || this.height < 265)
 				{
-					alert(allowedImageDimensionErrorMessage + Joomla.JText._('COM_TJVENDORS_VENDOR_LOGO_IMAGE_DIMES_INFO') + this.width + "px X " + this.height + "px");
+					alert(allowedImageDimensionErrorMessage + this.width + "px X " + this.height + "px");
 				}
 
 			};
 
 			img.onerror = function()
 			{
-				alert(Joomla.JText._('COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION') + file.type);
+				alert(allowedImageTypeErrorMessage + file.type);
 				jQuery("#jform_profile_image").val('');
 				return false;
 			};

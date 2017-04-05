@@ -54,11 +54,12 @@ if (JFactory::getUser()->id ){?>
 					<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
 
 						<?php
+						$input = JFactory::getApplication()->input;
 							if($this->vendor_id !=0)
 							{
 								$client=$this->input->get('client', '', 'STRING');
 								echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&status=update&layout=edit&vendor_id='.$this->vendor_id);?>">
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&vendor_id='.$this->vendor_id);?>">
 								<?php
 								echo $this->VendorDetail->vendor_title."</a>";
 								echo " <br> ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
@@ -103,35 +104,6 @@ if (JFactory::getUser()->id ){?>
 										</div>
 								<?php endif;
 								?>
-								<div>
-									<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-										<span><?php echo JText::_('JSUBMIT'); ?></span>
-									</button>
-
-									<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-										<?php echo JText::_('JCANCEL'); ?>
-									</button>
-								</div>
-						<?php
-							}
-							elseif($this->vendor_id!=0&& $status=="update")
-							{?>
-								
-								<?php echo$this->form->renderField('vendor_title'); ?>
-								<?php echo $this->form->renderField('vendor_description'); ?>
-								<?php echo $this->form->renderField('vendor_logo'); ?>
-								<div class="controls">
-									<div class="alert alert-warning">
-										<?php echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png'); ?>
-									</div>
-								</div>
-									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
-								<?php if (!empty($this->vendor->vendor_logo))
-									{ ?>
-										<div class="control-group">
-											<div class="controls "><img src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
-										</div>
-								<?php } ?>
 								<div>
 									<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
 										<span><?php echo JText::_('JSUBMIT'); ?></span>

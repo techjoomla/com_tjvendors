@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 	<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 <div class="vendor-cover row-fluid">
 	<div class="span3">
-	<img alt="" src="<?php echo JUri::root() . $this->VendorDetail->vendor_logo; ?>">
+	<img width="200px" alt="" src="<?php echo JUri::root() . $this->VendorDetail->vendor_logo; ?>">
 	</div>
 	<div class="span9">
 		<div>
@@ -30,7 +30,7 @@ defined('_JEXEC') or die();
 </div>
 <div class="vendor-cover row-fluid">
 		<div class="span6">
-			<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&status=update&layout=edit&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
+			<span class="vendor-action pull-right"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&layout=profile&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
 		</div>
 </div>
 <?php }

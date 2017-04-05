@@ -113,6 +113,7 @@ class TjvendorsModelReports extends JModelList
 		$transactionType = $this->getState('filter.transactionType', '');
 		$client = $this->getState('filter.vendor_client', '');
 		$currency = $this->getState('filter.currency', '');
+		$vendor_id = $this->getState('filter.vendor_id', '');
 
 		$db = JFactory::getDbo();
 
@@ -131,7 +132,7 @@ class TjvendorsModelReports extends JModelList
 			}
 			else
 			{
-				$query->where($db->quoteName('credit') . " != 0 ");
+				$query->where($db->quoteName('credit') . " >0 ");
 			}
 		}
 
@@ -140,10 +141,17 @@ class TjvendorsModelReports extends JModelList
 				$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
+		if (!empty($vendor_id))
+		{
+				$query->where($db->quoteName('pass.vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
 		if (!empty($currency))
 		{
 				$query->where($db->quoteName('pass.currency') . ' = ' . $db->quote($currency));
 		}
+
+		$query->where("json_extract(pass.params, '$.entry_status') != 'credit_remaining_payout'");
 
 		$fromDate = $this->getState('filter.fromDate', '');
 		$toDate = $this->getState('filter.toDate', '');

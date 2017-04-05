@@ -183,10 +183,10 @@ else
 
 					<?php if (isset($this->items[0]->state)){} ?>
 
-					<th class='left' width="5%">
+					<th class='left' width="10%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder); ?>
 					</th>
-					<th class='left' width="5%">
+					<th class='left' width="8%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 					<?php
@@ -198,37 +198,55 @@ else
 							</th>
 					<?php
 						}
+
 						$filterCurrency = $this->state->get('filter.currency');
 						if(empty($filterCurrency))
 						{?>
 							<th class='left' width="5%">
 							<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
 							</th>
-					<?php }
+					<?php 
+						}
+
 						$transactionType = $this->state->get('filter.transactionType');
 						if(empty($transactionType))
 						{?>
-					<th class='left' width="5%">
-						<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE'); ?>
+							<th class='left' width="10%">
+								<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE'); ?>
+							</th>
+					<?php
+						}
+
+						if($transactionType == "credit" || empty($transactionType))
+						{?>
+							<th class='left' width="10%">
+								<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
+							</th>
+					<?php
+						}
+
+						if($transactionType == "debit" || empty($transactionType))
+						{?>
+							<th class='left' width="10%">
+								<?php	echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
+							</th>
+					<?php
+						}
+					?>
+					<th class='left' width="12%">
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID', 'pass.`reference_order_id`', $listDirn, $listOrder); ?>
 					</th>
-					<?php } ?>
-					<th class='left' width="5%">
-						<?php echo JText::_('COM_TJVENDORS_REPORTS_AMOUNT'); ?>
-					</th>
-					<th class='left' width="5%">
-						<?php echo JText::_('COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID'); ?>
-					</th>
-					<th class='left' width="5%">
+					<th class='left' width="10%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 					</th>
 
-					<th class='left' width="5%">
+					<th class='left' width="10%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder); ?>
 					</th>
-					<th class='left' width="5%">
+					<th class='left' width="8%">
 						<?php echo JText::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS'); ?>
 					</th>
-					<th class='left' width="5%">
+					<th class='left' width="10%">
 						<?php echo JText::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE'); ?>
 					</th>
 				</tr>
@@ -284,7 +302,7 @@ else
 						{?>
 						<td>
 							<?php 
-								if($item->credit == 0)
+								if($item->credit < 0)
 								{
 									echo "debit";
 								}
@@ -294,25 +312,38 @@ else
 								}
 							?>
 						</td>
-						<?php } ?>
-						<td>
-							<?php 
-								if($item->credit == 0)
-								{
-									echo $item->debit;
-								}
-								else
-								{
-									echo $item->credit;
-								}
-							?>
-						</td>
+						<?php }
+						if($transactionType == "credit" || empty($transactionType))
+						{ ?>
+							<td>
+								<?php
+									if($item->credit <='0')
+									{
+										echo "0";
+									}
+									else
+									{
+										echo $item->credit;
+									}
+								?>
+							</td>
+						<?php
+						}
+						if($transactionType == "debit" || empty($transactionType))
+						{
+						?>
+							<td>
+							<?php echo $item->debit;?>
+							</td>
+						<?php 
+						}
+						?>
 						<td>
 							<?php echo $item->reference_order_id; ?>
 						</td>
 
 						<td>
-							<?php echo $item->total; ?>
+							<?php echo abs($item->total); ?>
 						</td>
 						
 						<td>

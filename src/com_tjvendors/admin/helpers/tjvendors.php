@@ -267,18 +267,15 @@ class TjvendorsHelpersTjvendors
 			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
+		$query->where("json_extract(params, '$.entry_status')!='debit_refund'");
+
+		$query->where("json_extract(params, '$.entry_status')!='debit_pending'");
+
 		$db->setQuery($query);
-		$amount = $db->loadresult();
+		$amount = $db->loadResult();
 
 		return $amount;
 	}
-
-	/*public static function generatePayoutDetails($vendor_id,$currency,$result,$client)
-	{
-		$payoutDetails = array("vendor_id" => $vendor_id, "currency" => $currency, "total" => $result, "client" => $client);
-
-		return $payoutDetails;
-	}*/
 
 	/**
 	 * Get paid amount
@@ -341,10 +338,12 @@ class TjvendorsHelpersTjvendors
 	 * 
 	 * @param   string   $currency   integer
 	 * 
+	 * @param   string   $client     integer
+	 * 
 	 * @return client|array
 	 */
 
-	public static function getTotalAmount($vendor_id, $currency)
+	public static function getTotalAmount($vendor_id, $currency, $client)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -360,6 +359,11 @@ class TjvendorsHelpersTjvendors
 		if (!empty($currency))
 		{
 			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		if (!empty($client))
+		{
+			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
 		$query->select('*');
@@ -531,36 +535,68 @@ class TjvendorsHelpersTjvendors
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
-		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$subQuery = $db->getQuery(true);
+		$subQuery->select('max(' . $db->quoteName('id') . ')');
+		$subQuery->from($db->quoteName('#__tjvendors_passbook'));
 
 		if (!empty($vendor_id))
 		{
-			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+			$subQuery->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 		}
 
 		if (!empty($client))
 		{
-			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
 		if (!empty($currency))
 		{
-			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
 
-		$payout_entry = self::checkOrderPayout($vendor_id, $currency);
+		$payoutEntry = self::checkOrderPayout($vendor_id, $currency, $client);
+		$payoutEntryStatus = json_decode($payoutEntry['params']);
+		$refundPendingEntry = self::checkRefundPending($vendor_id, $currency, $client);
 
-		if (empty($payout_entry))
+		if (empty($payoutEntry))
 		{
+			$subQuery->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
+		}
+		elseif($payoutEntryStatus->entry_status == "debit_payout")
+		{
+			$subQuery->where($db->quoteName('transaction_time') . ' > ' . $db->quote($payoutEntry['transaction_time']));
+			$subQuery->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
+		}
+		/*elseif($payoutEntryStatus->entry_status == "debit_refund" || $payoutEntryStatus->entry_status == "debit_pending")
+		{
+		}
+		$params = json_decode($payoutEntry['params']);
+		$params2 = json_decode($refundPendingEntry['params']);
+		if( $params2->entry_status == "debit_refund" || $params2->entry_status == "debit_pending")
+		{
+			if($refundPendingEntry['transaction_time'] < $payoutEntry['transaction_time'])
+			{die("2");
+				$query->where($db->quoteName('transaction_time') . ' >= ' . $db->quote($payoutEntry['transaction_time']));
+			}
+			if($refundPendingEntry['transaction_time'] >= $payoutEntry['transaction_time'])
+			{
+				$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
+			}
+			else
+			{die("4");
+				$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
+			}
+
+		}
+		elseif($params->entry_status == "debit_payout")
+		{
+			$query->where($db->quoteName('transaction_time') . ' >= ' . $db->quote($payoutEntry['transaction_time']));
 			$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
 		}
-		else
-		{
-			$query->where($db->quoteName('transaction_time') . ' > ' . $db->quote($payout_entry['transaction_time']));
-			$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
-		}
-
+		*/
+		$query->select($db->quoteName('total'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quotename('id') . ' = (' . $subQuery . ')');
 		$db->setQuery($query);
 		$res = $db->loadResult();
 
@@ -583,9 +619,11 @@ class TjvendorsHelpersTjvendors
 	 * 
 	 * @param   integer  $currency   integer
 	 *
+	 * @param   integer  $client     integer
+	 * 
 	 * @return res|integer
 	 */
-	public static function checkOrderPayout($vendor_id, $currency)
+	public static function checkRefundPending($vendor_id, $currency, $client)
 	{
 		$db = JFactory::getDbo();
 
@@ -593,7 +631,6 @@ class TjvendorsHelpersTjvendors
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('debit') . ' > 0 AND ' . $db->quoteName('credit') . '!= 0');
 
 		if (!empty($vendor_id))
 		{
@@ -604,6 +641,61 @@ class TjvendorsHelpersTjvendors
 		{
 			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
+		$query->where("json_extract(params, '$.entry_status') ='debit_refund' OR json_extract(params, '$.entry_status') = 'debit_pending' ");
+
+		$db->setQuery($query);
+		$result = $db->loadAssoc();
+
+		return $result;
+	}
+
+	/**
+	 * check order payout
+	 *
+	 * @param   integer  $vendor_id  integer
+	 * 
+	 * @param   integer  $currency   integer
+	 * 
+	 * @param   integer  $client     integer
+	 *
+	 * @return res|integer
+	 */
+	public static function checkOrderPayout($vendor_id, $currency, $client)
+	{
+		$db = JFactory::getDbo();
+
+		// Create a new query object.
+		$query = $db->getQuery(true);
+		$subQuery = $db->getQuery(true);
+		$subQuery->select('max(' . $db->quoteName('id') . ')');
+		$subQuery->from($db->quoteName('#__tjvendors_passbook'));
+
+		$subQuery->where("json_extract(params, '$.entry_status') ='debit_payout'");
+
+		if (!empty($vendor_id))
+		{
+			$subQuery->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($currency))
+		{
+			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		if (!empty($client))
+		{
+			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
+		$query->select('*');
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quotename('id') . ' = (' . $subQuery . ')');
 
 		$db->setQuery($query);
 		$result = $db->loadAssoc();

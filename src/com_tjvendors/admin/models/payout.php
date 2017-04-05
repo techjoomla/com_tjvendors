@@ -160,7 +160,7 @@ class TjvendorsModelPayout extends JModelAdmin
 				$data['credit'] = - $data['debit'];
 				$data['id'] = '';
 				$data['vendor_id'] = $vendorDetail->vendor_id;
-				$params = array("entry_status" => "debit_payout");
+				$params = array("customer_note" => "", "entry_status" => "debit_payout");
 				$data['params'] = json_encode($params);
 
 				if (parent::save($data))
@@ -203,9 +203,9 @@ class TjvendorsModelPayout extends JModelAdmin
 			{
 				if ($i == 1)
 				{
-					$data['credit'] = $data['total'];
+					$data['credit'] = '0.00';
 					$data['total'] = $data['total'];
-					$data['debit'] = '0';
+					$data['debit'] = '0.00';
 					$params = array("customer_note" => "", "entry_status" => "credit_remaining_payout");
 					$data['params'] = json_encode($params);
 				}

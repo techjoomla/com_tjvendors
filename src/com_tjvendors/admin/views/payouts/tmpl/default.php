@@ -206,11 +206,19 @@ else
 						{
 							$client=0;
 							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id,$item->currency, $client);
+							if(empty($paidAmount))
+							{
+								$paidAmount = '0';
+							}
 							echo $paidAmount;
 						}
 						else
 						{
 							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id,$item->currency, $filterClient);
+							if(empty($paidAmount))
+							{
+								$paidAmount = '0';
+							}
 							echo $paidAmount;
 						}
 						?>

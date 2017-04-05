@@ -167,6 +167,8 @@ class TjvendorsModelVendors extends JModelList
 			}
 		}
 
+		$query->where("json_extract(pass.params, '$.entry_status') != 'credit_remaining_payout'");
+
 		$fromDate = $this->getState('filter.fromDate', '');
 		$toDate = $this->getState('filter.toDate', '');
 

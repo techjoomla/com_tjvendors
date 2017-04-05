@@ -7,7 +7,7 @@
 		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label" />
 		<field name="vendor_title" required="true" type="text" size="40" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE" description="COM_TJVENDORS_FORM_DESC_VENDOR_TITLE" hint="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE" />
 		<field name="vendor_description" type="textarea" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_DESCRIPTION" description="COM_TJVENDORS_FORM_DESC_VENDOR_PROFILE_DESCRIPTION" hint="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_DESCRIPTION" rows="10" cols="5" />
-		<field name="vendor_logo" type="file" accept="image/*" label="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR" description="COM_TJVENDORS_FORM_DESC_VENDOR_PROFILE_AVATAR" hint="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR" filter="raw" />
+		<field name="vendor_logo" type="file" id="profile_image" accept="image/*" label="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR" description="COM_TJVENDORS_FORM_DESC_VENDOR_PROFILE_AVATAR" hint="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR" filter="raw" />
 		<field name="checked_out_time" default="0000-00-00 00:00:00" type="hidden" filter="unset" />
 		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
 			<option value="1">JPUBLISHED</option>

@@ -65,6 +65,7 @@
         <fields name="params">
             <fieldset name="component">
                 <field name="save_history" default="0" />
+                <field name="payout_limit_days" default="5" />
             </fieldset>
         </fields>
     </config>

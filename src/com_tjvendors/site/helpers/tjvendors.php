@@ -86,7 +86,7 @@ class TjvendorsHelpersTjvendors
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$subQuery = $db->getQuery(true);
-		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
+		$query->select('sum(CASE WHEN ' . $db->quoteName('credit') . ' >= 0 THEN ' . $db->quoteName('credit') . ' ELSE 0 END' . ') As credit');
 		$query->select('sum(' . $db->quoteName('debit') . ') As debit');
 
 		$query->from($db->quoteName('#__tjvendors_passbook'));

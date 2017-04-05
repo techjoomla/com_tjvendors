@@ -318,7 +318,8 @@ else
 						<td>
 							<?php echo $item->transaction_time; ?>
 						</td>
-						<?php	$status = json_decode($item->params, true);?>
+						<?php
+							$status = json_decode($item->params, true);?>
 						<td>
 							<?php 
 								echo $status['entry_status'];

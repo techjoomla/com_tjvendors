@@ -73,6 +73,44 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 				},
 		   });
 		});
+var _URL = window.URL || window.webkitURL;
+var jgiveAllowedMediaSize = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
+var allowedMediaSizeErrorMessage = "<?php echo JText::_("check size") . $this->params->get('image_size') . 'KB';?>";
+var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_JGIVE_IMAGE_SIZE_TIP");?>";
+
+jQuery(window).load(function(){
+	jQuery("#jform_profile_image").change(function(e) {
+		var file, img;
+		if ((file = this.files[0]))
+		{
+			img = new Image();
+			img.onload = function() {
+
+				if (file.size > jgiveAllowedMediaSize)
+				{
+					alert(allowedMediaSizeErrorMessage);
+					jQuery("#jform_profile_image").val('');
+					return false;
+				}
+
+				if (this.width < 445 || this.height < 265)
+				{
+					alert(allowedImageDimensionErrorMessage + Joomla.JText._('COM_JGIVE_CAMPAIGN_MAIN_IMAGE_DIMES_INFO') + this.width + "px X " + this.height + "px");
+				}
+
+			};
+
+			img.onerror = function()
+			{
+				alert(Joomla.JText._('COM_JGIVE_CAMPAIGN_MAIN_IMAGE_TYPE_VALIDATION') + file.type);
+				jQuery("#jform_profile_image").val('');
+				return false;
+			};
+
+			img.src = _URL.createObjectURL(file);
+		}
+	});
+});
 
 </script>
 

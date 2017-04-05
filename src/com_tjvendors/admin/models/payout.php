@@ -107,8 +107,13 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		if ($bulkPayoutStatus != 0)
 		{
-			$payoutAmount = TjvendorsHelpersTjvendors::getTotalPendingAmount($this->item->vendor_id, $this->item->currency);
-			$this->item->bulk_total = $payoutAmount;
+			$payoutAmount = TjvendorsHelpersTjvendors::getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
+			$this->item->bulk_total = $payoutAmount['payableAmount'];
+		}
+		else
+		{
+			$payableAmount = TjvendorsHelpersTjvendors::getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
+			$this->item->total = $payableAmount['payableAmount'];
 		}
 
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
@@ -147,14 +152,16 @@ class TjvendorsModelPayout extends JModelAdmin
 			foreach ($vendorClients as $client)
 			{
 				$pending_amount = TjvendorsHelpersTjvendors::getPayoutDetail($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
-				$data['debit'] = $pending_amount['total'];
+				$data['debit'] = $data['bulk_total'];
 				$data['total'] = $pending_amount['total'] - $data['debit'];
 				$data['transaction_time'] = JFactory::getDate()->toSql();
-				$data['reference_order_id'] = $vendorDetail->reference_order_id;
 				$data['client'] = $client['client'];
 				$data['transaction_id'] = $vendorDetail->vendor_id . $client['client'] . $vendorDetail->currency;
+				$data['credit'] = - $data['debit'];
 				$data['id'] = '';
 				$data['vendor_id'] = $vendorDetail->vendor_id;
+				$params = array("entry_status" => "debit_payout");
+				$data['params'] = json_encode($params);
 
 				if (parent::save($data))
 				{
@@ -179,13 +186,48 @@ class TjvendorsModelPayout extends JModelAdmin
 		// To get selected item
 		$item = $this->getItem($data['id']);
 		$data['debit'] = $data['total'];
-		$data['total'] = $item->total - $data['debit'];
+		$payableAmount = TjvendorsHelpersTjvendors::getTotalAmount($item->vendor_id, $item->currency);
+		$data['total'] = $payableAmount['total'] - $data['debit'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
-		$data['reference_order_id'] = $item->reference_order_id;
 		$data['client'] = $vendorDetail->client;
 		$data['transaction_id'] = $item->vendor_id . $client . $item->currency;
 		$data['id'] = '';
 		$data['vendor_id'] = $item->vendor_id;
+		$data['credit'] = - $data['debit'];
+		$params = array("customer_note" => "", "entry_status" => "debit_payout");
+		$data['params'] = json_encode($params);
+
+		if ($data['debit'] < $payableAmount['total'])
+		{
+			for ($i = 0; $i <= 1; $i++)
+			{
+				if ($i == 1)
+				{
+					$data['credit'] = $data['total'];
+					$data['total'] = $data['total'];
+					$data['debit'] = '0';
+					$params = array("customer_note" => "", "entry_status" => "credit_remaining_payout");
+					$data['params'] = json_encode($params);
+				}
+
+				if (parent::save($data))
+				{
+					$id = (int) $this->getState($this->getName() . '.id');
+					$payout_update = new stdClass;
+
+					// Must be a valid primary key value.
+					$payout_update->id = $id;
+					$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
+
+					// Update their details in the users table using id as the primary key.
+					$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+					$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
+						JFactory::getApplication()->enqueueMessage($message);
+				}
+			}
+
+			return true;
+		}
 
 		if (parent::save($data))
 		{

@@ -8,9 +8,10 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="payout_limit_days" type="number" default="default" label="Enter no of days for payout to be calculated before today" description="Enter the no of days before which the payout will be calculated.
+		<field name="payout_limit_days" type="number" default="5" label="Enter no of days for payout to be calculated before today" description="Enter the no of days before which the payout will be calculated.
 		Taking an example when there are credit entries throughout this month but you want to calculate the payout amount for the whole month excluding the 5 days before today.
 		 " rows="10" cols="5" />
+		 <field name="image_size" type="number" default="2" label="Enter the image size" description="Enter the image size that you want to be appeared on the site" rows="10" cols="5" />
 	</fieldset>
 </config>
 <!--

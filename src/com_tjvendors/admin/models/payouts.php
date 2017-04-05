@@ -103,14 +103,18 @@ class TjvendorsModelPayouts extends JModelList
 		$urlClient = $input->get('client', '', 'STRING');
 		$filterClient = $this->getState('filter.vendor_client');
 		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
+		$date = JFactory::getDate();
+		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
 		$vendor = $this->getState('filter.vendor_id');
-		$component_params = JComponentHelper::getParams($urlClient);
-		$com_currency = $component_params->get('currency');
-		$payout_day_limit = $com_params->get('payout_limit_days');
-		$date = JFactory::getDate();
-		$presentDate = $date->modify("-" . $payout_day_limit . " day");
-		$payout_date_limit = $presentDate->format('Y-m-d');
+
+		if (!empty($urlClient))
+		{
+			$component_params = JComponentHelper::getParams($urlClient);
+			$com_currency = $component_params->get('currency');
+		}
+
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
@@ -120,7 +124,10 @@ class TjvendorsModelPayouts extends JModelList
 			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') . ')');
 		$query->where($db->quoteName('pass.id') . ' is not null');
 
-		$query->where($db->quoteName('pass.transaction_time') . ' <= ' . $db->quote($payout_date_limit));
+		if (!empty($payout_date_limit))
+		{
+			$query->where($db->quoteName('pass.transaction_time') . ' <= ' . $db->quote($payout_date_limit));
+		}
 
 		if ($filterClient != '0')
 		{

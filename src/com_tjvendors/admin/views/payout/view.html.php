@@ -102,12 +102,6 @@ class TjvendorsViewPayout extends JViewLegacy
 			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS') . $viewTitle, 'course.png');
 		}
 
-		// Button for version control
-		if ($this->state->params->get('save_history', 1) && $user->authorise('core.edit'))
-		{
-			JToolbarHelper::versions('com_tjvendors.payout', $this->item->id);
-		}
-
 		if (empty($this->item->id))
 		{
 			JToolBarHelper::cancel('payout.cancel', 'JTOOLBAR_CANCEL');

@@ -193,7 +193,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		$data['transaction_id'] = $item->vendor_id . $client . $item->currency;
 		$data['id'] = '';
 		$data['vendor_id'] = $item->vendor_id;
-		$data['credit'] = - $data['debit'];
+		$data['credit'] = '0.00';
 		$params = array("customer_note" => "", "entry_status" => "debit_payout");
 		$data['params'] = json_encode($params);
 

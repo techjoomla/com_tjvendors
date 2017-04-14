@@ -42,8 +42,6 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->input = JFactory::getApplication()->input;
 		$this->clientsForVendor = TjvendorsHelpersTjvendors::getClientsForVendor($this->item->vendor_id);
 
-		// A print_r($this->checkDuplicateUser = TjvendorsHelpersTjvendors::checkDuplicateUser());die;
-
 		if (empty($this->item->vendor_id))
 		{
 			$currUrl = $this->input->get('currency', '', 'ARRAY');

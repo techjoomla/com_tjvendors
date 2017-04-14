@@ -58,7 +58,9 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			var user=document.getElementById('jform_user_id').value;
 			var userObject = {};
 			var client = "<?php echo $this->input->get('client', '', 'STRING'); ?>";
+			var vendor_id = "<?php echo $this->input->get('vendor_id', '', 'STRING'); ?>";
 			userObject["user"] = user;
+			userObject["vendor_id"] = vendor_id;
 			JSON.stringify(userObject) ;
 			jQuery.ajax({
 				type: "POST",
@@ -66,10 +68,29 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 				data: userObject,
 				url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
 				success:function(data) {
-						if(data.vendor_id)
-						{
-								document.location='index.php?option=com_tjvendors&view=vendor&layout=edit&client='+client+'&vendor_id='+data.vendor_id;
-						}
+					if (data.vendor_id)
+					{
+						document.location='index.php?option=com_tjvendors&view=vendor&layout=edit&client='+client+'&vendor_id='+data.vendor_id;
+					}
+					if(data.onEdit == "true")
+					{
+						document.location='index.php?option=com_tjvendors&view=vendor&layout=edit&client='+client;
+					}
+				},
+			});
+		});
+		jQuery(document).on("change","#jformpaymentGateway", function () {
+			var payment_gateway=document.getElementById('jformpaymentGateway').value;
+			var userObject = {};
+			userObject["payment_gateway"] = payment_gateway;
+			JSON.stringify(userObject) ;
+			jQuery.ajax({
+				type: "POST",
+				dataType: "json",
+				data: userObject,
+				url: "index.php?option=com_tjvendors&task=vendor.buildForm",
+				success:function(data) {
+			jQuery('#payment_details').html(data);
 				},
 		   });
 		});
@@ -199,6 +220,23 @@ jQuery(window).load(function(){
 			</div>
 		</div>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
+		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'name', JText::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS')); ?>
+			<?php
+				if(!empty ($this->input->get('client', '', 'STRING')))
+				{
+					echo $this->form->renderField('primaryEmail');
+				}
+				else
+				{?>
+					<input type="hidden" name="jform[primaryEmail]" id="jform_primaryEmail" value="0" />
+				<?php
+				}
+				?>
+			<?php echo $this->form->renderField('paymentgateway');?>
+
+			<div id="payment_details"></div>
+		<?php echo JHtml::_('bootstrap.endTab'); ?>
+
 		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>

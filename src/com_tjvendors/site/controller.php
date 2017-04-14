@@ -38,26 +38,4 @@ class TjvendorsController extends JControllerLegacy
 
 		return $this;
 	}
-
-	/**
-	 * Get payment gateway html from plugin
-	 *
-	 * @return  html
-	 *
-	 * @since   1.5
-	 */
-	public function pregetHTML()
-	{
-		$jinput    = JFactory::getApplication()->input;
-		$client = $jinput->get('client');
-
-		$params               = JComponentHelper::getParams($client);
-		$gateways             = $params->get('gateways');
-
-		JPluginHelper::importPlugin('payment');
-		$dispatcher = JDispatcher::getInstance();
-		$html       = $dispatcher->trigger('PreonTP_GetHTML', array($gateways));
-
-		return $html;
-	}
 }

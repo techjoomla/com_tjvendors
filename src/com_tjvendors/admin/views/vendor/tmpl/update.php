@@ -54,24 +54,18 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		}
 	}
 
-	
-		jQuery(document).on("change","#jform_user_id", function () {
-			var user=document.getElementById('jform_user_id').value;
-			//~ console.log(user);
+		jQuery(document).on("change","#jformpaymentGateway", function () {
+			var payment_gateway=document.getElementById('jformpaymentGateway').value;
 			var userObject = {};
-			var client = "<?php echo $this->input->get('client', '', 'STRING'); ?>";
-			userObject["user"] = user;
+			userObject["payment_gateway"] = payment_gateway;
 			JSON.stringify(userObject) ;
 			jQuery.ajax({
 				type: "POST",
 				dataType: "json",
 				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
+				url: "index.php?option=com_tjvendors&task=vendor.buildForm",
 				success:function(data) {
-						if(data.vendor_id)
-						{
-								document.location='index.php?option=com_tjvendors&view=vendor&layout=edit&client='+client+'&vendor_id='+data.vendor_id;
-						}
+			jQuery('#payment_details').html(data);
 				},
 		   });
 		});
@@ -157,6 +151,11 @@ jQuery(window).load(function(){
 				</fieldset>
 			</div>
 		</div>
+		<?php echo JHtml::_('bootstrap.endTab'); ?>
+		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'name', JText::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS')); ?>
+			<?php echo $this->form->renderField('paymentgateway');?>
+						<div id="payment_details"></div>
+					<input type="hidden" name="jform[primaryEmail]" id="jform_primaryEmail" value="0" />
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
 		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value=""/>

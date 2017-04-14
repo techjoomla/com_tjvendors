@@ -2,7 +2,7 @@
 <form>
 	<fieldset>
 		<field name="vendor_id" type="text" default="0" label="COM_TJVENDORS_FORM_LBL_VENDOR_ID" readonly="true" class="readonly " description="JGLOBAL_FIELD_ID_DESC" />
-		<field name="user_id" type="user" label="COM_TJVENDORS_FORM_LBL_VENDOR_USER_ID" description="COM_TJVENDORS_FORM_DESC_VENDOR_USER_ID"  hint="COM_TJVENDORS_FORM_LBL_VENDOR_USER_ID" menu_published="0" filter="raw" directory_stripext="true" directory_hidenode="true" directory_hidedefault="true" heading="h4" close="true" option_on="Yes" option_off="Yes" toggle_default_value="0" />
+		<field name="user_id" type="user" label="COM_TJVENDORS_FORM_LBL_VENDOR_USER_ID" description="COM_TJVENDORS_FORM_DESC_VENDOR_USER_ID" hint="COM_TJVENDORS_FORM_LBL_VENDOR_USER_ID" menu_published="0" filter="raw" directory_stripext="true" directory_hidenode="true" directory_hidedefault="true" heading="h4" close="true" option_on="Yes" option_off="Yes" toggle_default_value="0" />
 		<field name="vendor_client" type="text" label="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT" description="COM_TJVENDORS_FORM_DESC_VENDOR_CLIENT" hint="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT" menu_published="0" filter="raw" directory_stripext="true" directory_hidenode="true" directory_hidedefault="true" heading="h4" close="true" option_on="Yes" option_off="Yes" toggle_default_value="0" />
 		<field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label" />
 		<field name="vendor_title" required="true" type="text" size="40" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE" description="COM_TJVENDORS_FORM_DESC_VENDOR_TITLE" hint="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE" />
@@ -16,5 +16,10 @@
 		<field name="checked_out" type="hidden" />
 		<field name="ordering" type="hidden" />
 		<field name="currency" type="text" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY" rows="10" cols="5" />
+		<field name="paymentgateway" type="paymentgateway" filter="unset" label="COM_TJVENDORS_FORM_LBL_VENDOR_PAYMENT_GATEWAY" />
+		<field name="primaryEmail" type="radio" required="true" default="0" label="COM_TJVENDORS_FORM_LBL_VENDOR_PRIMARY_EMAIL_CONFIRMATION" description="COM_TJVENDORS_FORM_DESC_VENDOR_EMAIL_CONFIRMATION" class="btn-group btn-group-yesno">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 	</fieldset>
 </form>

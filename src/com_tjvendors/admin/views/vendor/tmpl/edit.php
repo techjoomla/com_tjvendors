@@ -79,8 +79,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 				},
 			});
 		});
-		jQuery(document).on("change","#jformpaymentGateway", function () {
-			var payment_gateway=document.getElementById('jformpaymentGateway').value;
+		jQuery(document).on("change","#jform_payment_gateway", function () {
+			var payment_gateway=document.getElementById('jform_payment_gateway').value;
 			var userObject = {};
 			userObject["payment_gateway"] = payment_gateway;
 			JSON.stringify(userObject) ;
@@ -224,7 +224,7 @@ jQuery(window).load(function(){
 			<?php
 				if(!empty ($this->input->get('client', '', 'STRING')))
 				{
-					echo $this->form->renderField('primaryEmail');
+					echo $this->form->renderField('primary');
 				}
 				else
 				{?>
@@ -232,7 +232,7 @@ jQuery(window).load(function(){
 				<?php
 				}
 				?>
-			<?php echo $this->form->renderField('paymentgateway');?>
+			<?php echo $this->form->renderField('payment_gateway');?>
 
 			<div id="payment_details"></div>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>

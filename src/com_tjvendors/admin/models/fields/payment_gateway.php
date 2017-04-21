@@ -27,7 +27,7 @@ class JFormFieldPaymentGateway extends JFormFieldList
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $type = 'paymentgateway';
+	protected $type = 'payment_gateway';
 
 	/**
 	 * Fiedd to decide if options are being loaded externally and from xml
@@ -44,11 +44,25 @@ class JFormFieldPaymentGateway extends JFormFieldList
 	 *
 	 * @since   11.4
 	 */
-	protected function getInput()
+	protected function getOptions()
 	{
 		$type = "payment";
 		$paymentPluginsDetails = JPluginHelper::getPlugin($type, $plugin = null);
+		foreach ($paymentPluginsDetails as $detail)
+		{
+			$options[] = JHtml::_('select.option', $detail->name, $detail->name);
+		}
 
-		return JHtml::_('select.genericlist', $paymentPluginsDetails, "jform[paymentGateway]", 'class="input-medium" size="1"', "name", "name");
+		if (!$this->loadExternally)
+		{
+			// Merge any additional options in the XML definition.
+			$options = array_merge(parent::getOptions(), $options);
+		}
+
+		return $options;
+
 	}
+	
+	
+	
 }

@@ -62,7 +62,7 @@ if (JFactory::getUser()->id ){?>
 		<div class="row-fluid">
 			<div class="form-horizontal">
 				<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'name')); ?> 
-					<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'name', JText::_('COM_EXAMPLE_NAME')); ?> 
+					<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'name', JText::_('COM_TJVENDORS_VENDOR_REGISTRATION_DETAILS')); ?> 
 						<fieldset class="adminform">
 							<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id; ?>" />
 							<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->vendor->checked_out_time; ?>" />
@@ -136,7 +136,7 @@ if (JFactory::getUser()->id ){?>
 						</fieldset>
 					<?php echo JHtml::_('bootstrap.endTab'); ?>
 
-					<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'desc', JText::_('COM_EXAMPLE_DESCRIPTION')); ?>
+					<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'desc', JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS')); ?>
 						<?php
 							if(!empty ($this->input->get('client', '', 'STRING')))
 							{

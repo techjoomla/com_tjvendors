@@ -54,8 +54,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		}
 	}
 
-		jQuery(document).on("change","#jformpaymentGateway", function () {
-			var payment_gateway=document.getElementById('jformpaymentGateway').value;
+		jQuery(document).on("change","#jform_payment_gateway", function () {
+			var payment_gateway=document.getElementById('jform_payment_gateway').value;
 			var userObject = {};
 			userObject["payment_gateway"] = payment_gateway;
 			JSON.stringify(userObject) ;
@@ -69,6 +69,11 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 				},
 		   });
 		});
+		jQuery(window).load(function()
+		{
+					jQuery('#jform_payment_gateway').trigger('change');
+		});
+	
 var _URL = window.URL || window.webkitURL;
 var jgiveAllowedMediaSize = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
 var allowedMediaSizeErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
@@ -153,7 +158,17 @@ jQuery(window).load(function(){
 		</div>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'name', JText::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS')); ?>
-			<?php echo $this->form->renderField('paymentgateway');?>
+			<?php
+				if(!empty ($this->input->get('client', '', 'STRING')))
+				{
+					echo $this->form->renderField('primary');
+				}
+				else
+				{?>
+					<input type="hidden" name="jform[primaryEmail]" id="jform_primaryEmail" value="0" />
+				<?php
+				}
+			 echo $this->form->renderField('payment_gateway');?>
 						<div id="payment_details"></div>
 					<input type="hidden" name="jform[primaryEmail]" id="jform_primaryEmail" value="0" />
 		<?php echo JHtml::_('bootstrap.endTab'); ?>

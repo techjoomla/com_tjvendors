@@ -673,7 +673,6 @@ class TjvendorsHelpersTjvendors
  */
 	public static function getPaymentDetails($vendor_id, $client)
 	{
-		//~ echo $client;die;
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('params'));

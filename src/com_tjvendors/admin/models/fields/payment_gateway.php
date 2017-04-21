@@ -48,6 +48,7 @@ class JFormFieldPaymentGateway extends JFormFieldList
 	{
 		$type = "payment";
 		$paymentPluginsDetails = JPluginHelper::getPlugin($type, $plugin = null);
+
 		foreach ($paymentPluginsDetails as $detail)
 		{
 			$options[] = JHtml::_('select.option', $detail->name, $detail->name);
@@ -60,9 +61,5 @@ class JFormFieldPaymentGateway extends JFormFieldList
 		}
 
 		return $options;
-
 	}
-	
-	
-	
 }

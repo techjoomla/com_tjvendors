@@ -27,7 +27,7 @@ class JFormFieldPaymentGateway extends JFormFieldList
 	 * @var		string
 	 * @since	1.6
 	 */
-	protected $type = 'payment_gateway';
+	protected $type = 'paymentGateway';
 
 	/**
 	 * Fiedd to decide if options are being loaded externally and from xml
@@ -48,7 +48,7 @@ class JFormFieldPaymentGateway extends JFormFieldList
 	{
 		$type = "payment";
 		$paymentPluginsDetails = JPluginHelper::getPlugin($type, $plugin = null);
-
+		//~ $options[] = JHtml::_('select.option', 'COM_TJVENDORS_PAYMENT_DETAILS_NO_OPTIONS_CHOSEN', JText::_('COM_TJVENDORS_PAYMENT_DETAILS_NO_OPTIONS_CHOSEN'));
 		foreach ($paymentPluginsDetails as $detail)
 		{
 			$options[] = JHtml::_('select.option', $detail->name, $detail->name);

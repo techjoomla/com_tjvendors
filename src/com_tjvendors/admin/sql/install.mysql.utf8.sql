@@ -28,6 +28,9 @@ CREATE TABLE IF NOT EXISTS `#__vendor_client_xref` (
 `client` VARCHAR(255)  NOT NULL ,
 `approved` tinyint(1)  NOT NULL DEFAULT '1',
 `state` tinyint(1)  NOT NULL DEFAULT '1',
+`payment_gateway` varchar(255)  NOT NULL DEFAULT '1',
+`primary` tinyint(1)  NOT NULL DEFAULT '1',
+`params` varchar(255)  NOT NULL DEFAULT '1',
 PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 

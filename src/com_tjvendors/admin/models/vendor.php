@@ -275,7 +275,6 @@ class TjvendorsModelVendor extends JModelAdmin
 		$table = $this->getTable();
 		$input = JFactory::getApplication()->input;
 		$layout = $input->get('layout', '', 'STRING');
-
 		$paymentForm = $app->input->get('jform', array(), 'ARRAY');
 
 		if (!empty($paymentForm))

@@ -135,7 +135,7 @@ class TjvendorsModelVendor extends JModelAdmin
 					}
 				}
 
-					$this->item->primary = "1";
+					$this->item->primary_gateway = "1";
 			}
 
 			$data = $this->item;
@@ -169,7 +169,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$res = $db->loadResult();
 		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id),
 		$db->quoteName('payment_gateway') . ' = ' . $db->quote($payment_gateway),
-		$db->quoteName('primary') . ' = ' . $db->quote($primary),
+		$db->quoteName('primary_gateway') . ' = ' . $db->quote($primary),
 		$db->quoteName('params') . ' = ' . $db->quote($paymentDetails),
 		);
 
@@ -292,7 +292,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				$paymentDetails = json_encode($paymentDetails);
 		}
 
-		if (empty($data['vendor_client']) || $paymentForm['primary'] == '1')
+		if (empty($data['vendor_client']) || $paymentForm['primary_gateway'] == '1')
 		{
 			$data['params'] = $paymentDetails;
 			$data['payment_gateway'] = $paymentForm['payment_gateway'];
@@ -316,7 +316,7 @@ class TjvendorsModelVendor extends JModelAdmin
 						$vendor_id = (int) $this->getState($this->getName() . '.id');
 						$client_entry = new stdClass;
 						$client_entry->client = $data['vendor_client'];
-						$client_entry->primary = $data['primary'];
+						$client_entry->primary = $data['primary_gateway'];
 						$client_entry->vendor_id = $data['vendor_id'];
 						$client_entry->payment_gateway = $paymentForm['payment_gateway'];
 						$client_entry->params = $paymentDetails;
@@ -339,7 +339,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				if ($table->save($data) === true)
 				{
 					$vendorId = $table->vendor_id;
-					$primary = $data['primary'];
+					$primary = $data['primary_gateway'];
 
 					if (!empty($data['vendor_client']))
 					{

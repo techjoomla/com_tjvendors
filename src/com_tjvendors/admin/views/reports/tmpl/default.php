@@ -343,7 +343,7 @@ else
 						</td>
 
 						<td>
-							<?php echo abs($item->total); ?>
+							<?php echo $item->total; ?>
 						</td>
 						
 						<td>

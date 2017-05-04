@@ -161,7 +161,7 @@ jQuery(window).load(function(){
 			<?php
 				if(!empty ($this->input->get('client', '', 'STRING')))
 				{
-					echo $this->form->renderField('primary');
+					echo $this->form->renderField('primary_gateway');
 				}
 				else
 				{?>

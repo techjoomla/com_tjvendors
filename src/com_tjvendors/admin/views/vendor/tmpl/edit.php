@@ -55,7 +55,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	}
 
 		jQuery(document).on("change","#jform_user_id", function () {
-			var user=document.getElementById('jform_user_id').value;
+			var user=document.getElementById('jform_user_id_id').value;
 			var userObject = {};
 			var client = "<?php echo $this->input->get('client', '', 'STRING'); ?>";
 			var vendor_id = "<?php echo $this->input->get('vendor_id', '', 'STRING'); ?>";
@@ -70,11 +70,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 				success:function(data) {
 					if (data.vendor_id)
 					{
-						document.location='index.php?option=com_tjvendors&view=vendor&layout=edit&client='+client+'&vendor_id='+data.vendor_id;
-					}
-					if(data.onEdit == "true")
-					{
-						document.location='index.php?option=com_tjvendors&view=vendor&layout=edit&client='+client;
+						alert("Already a vendor. Please choose a non vendor User");
 					}
 				},
 			});
@@ -88,7 +84,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 				type: "POST",
 				dataType: "json",
 				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.buildForm",
+				url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
 				success:function(data) {
 			jQuery('#payment_details').html(data);
 				},

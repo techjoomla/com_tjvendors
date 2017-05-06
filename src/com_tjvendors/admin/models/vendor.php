@@ -187,15 +187,14 @@ class TjvendorsModelVendor extends JModelAdmin
 	/**
 	 * Method to check duplicate user.
 	 *
-	 * @param   integer  $user  user name.
+	 * @param   integer  $user_id  user name.
 	 * 
 	 * @return   array rows
 	 *
 	 * @since    1.6
 	 */
-	public function checkDuplicateUser($user)
+	public function checkDuplicateUser($user_id)
 	{
-		$user_id = $this->getUserId($user);
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
@@ -216,7 +215,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	}
 
 	/**
-	 * Method to build Form.
+	 * Method to generate payment gateway fields.
 	 *
 	 * @param   string  $payment_gateway  payment gateway.
 	 * 
@@ -224,7 +223,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @since    1.6
 	 */
-	public function buildForm($payment_gateway)
+	public function generateGatewayFields($payment_gateway)
 	{
 		$form_path = JPATH_SITE . '/plugins/payment/' . $payment_gateway . '/' . $payment_gateway . '/form/' . $payment_gateway . '.xml';
 		$test = $payment_gateway . '_' . 'plugin';

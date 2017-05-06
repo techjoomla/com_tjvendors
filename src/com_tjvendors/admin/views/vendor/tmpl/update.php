@@ -53,7 +53,27 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			Joomla.submitform(task, document.getElementById('vendor-form'));
 		}
 	}
-
+jQuery(document).on("change","#jform_user_id", function () {
+			var user=document.getElementById('jform_user_id_id').value;
+			var userObject = {};
+			var client = "<?php echo $this->input->get('client', '', 'STRING'); ?>";
+			var vendor_id = "<?php echo $this->input->get('vendor_id', '', 'STRING'); ?>";
+			userObject["user"] = user;
+			userObject["vendor_id"] = vendor_id;
+			JSON.stringify(userObject) ;
+			jQuery.ajax({
+				type: "POST",
+				dataType: "json",
+				data: userObject,
+				url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
+				success:function(data) {
+					if (data.vendor_id)
+					{
+						alert("Already a vendor. Please choose a non vendor User");
+					}
+				},
+			});
+		});
 		jQuery(document).on("change","#jform_payment_gateway", function () {
 			var payment_gateway=document.getElementById('jform_payment_gateway').value;
 			var userObject = {};
@@ -63,7 +83,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 				type: "POST",
 				dataType: "json",
 				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.buildForm",
+				url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
 				success:function(data) {
 			jQuery('#payment_details').html(data);
 				},

@@ -8,8 +8,8 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="payout_limit_days" type="number" default="5" label="COM_TJVENDORS_PAYOUTS_BULK_LABEL" description=" COM_TJVENDORS_PAYOUTS_BULK_DESCRIPTION" rows="10" cols="5" />
-		 <field name="image_size" type="number" default="2" label="Enter the image size" description="Enter the image size in kb" rows="10" cols="5" />
+		<field name="payout_limit_days" type="number" default="5" label="COM_TJVENDORS_PAYOUTS_BULK_LABEL" description=" COM_TJVENDORS_PAYOUTS_BULK_DESCRIPTION"/>
+		<field name="image_size" type="number" default="2" label="Enter the image size" description="Enter the image size in kb"/>
 	</fieldset>
 </config>
 <!--

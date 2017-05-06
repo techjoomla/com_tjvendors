@@ -78,13 +78,13 @@ class TjvendorsControllerVendor extends JControllerForm
 	}
 
 	/**
-	 * Build a form
+	 * Build payment gateway fields
 	 * 
 	 * @return null
 	 * 
 	 * @since   1.6
 	 */
-	public function buildForm()
+	public function generateGatewayFields()
 	{
 		$input  = JFactory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');

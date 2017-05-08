@@ -134,7 +134,7 @@ class TjvendorsTablevendor extends JTable
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		$vendorId = $TjvendorsModelVendor->checkDuplicateUser($array['user_id']);
 
-		if (!empty($vendorId['vendor_id']) && $vendorId['vendor_id'] != $array['vendor_id'])
+		if (!empty($vendorId['vendor_id']))
 		{
 			$app->enqueueMessage(JText::_('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR'), 'warning');
 

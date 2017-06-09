@@ -20,37 +20,7 @@ $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 ?>
 <script type="text/javascript">
-	js = jQuery.noConflict();
-	js(document).ready(function ()
-	{
-	});
-
-	Joomla.submitbutton = function (task)
-	{
-		 if (task == 'vendor.cancel')
-		{
-			Joomla.submitform(task, document.getElementById('vendor-form'));
-		}
-		else
-		{
-			Joomla.submitform(task, document.getElementById('vendor-form'));
-		}
-	}
-	jQuery(document).on("change","#jformvendor_payment_gateway", function () {
-			var payment_gateway=document.getElementById('jformvendor_payment_gateway').value;
-			var userObject = {};
-			userObject["payment_gateway"] = payment_gateway;
-			JSON.stringify(userObject) ;
-			jQuery.ajax({
-				type: "POST",
-				dataType: "json",
-				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.buildForm",
-				success:function(data) {
-			jQuery('#payment_details').html(data);
-				},
-		   });
-		});
+	tjVSite.vendor.initVendorJs();
 </script>
 
 <?php 
@@ -69,11 +39,10 @@ if (JFactory::getUser()->id ){?>
 							<input type="hidden" name="jform[checked_out]" value="<?php echo $this->vendor->checked_out; ?>" />
 							<input type="hidden" name="jform[ordering]" value="<?php echo $this->vendor->ordering; ?>" />
 							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
-
 								<?php if (!empty($this->vendor->vendor_logo))
 									{ ?>
 										<div class="control-group">
-											<div class="controls "><img width="200px" src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
+											<div class="controls "><img class="span3 col-md-3 img-thumbnail pull-left marginb10" src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
 										</div>
 								<?php } ?>
 								<?php echo$this->form->renderField('vendor_title'); ?>
@@ -98,18 +67,7 @@ if (JFactory::getUser()->id ){?>
 						</fieldset>
 						<?php echo JHtml::_('bootstrap.endTab'); ?>
 					<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'desc', JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS')); ?>
-						<?php
-							if(!empty ($this->input->get('client', '', 'STRING')))
-							{
-								echo $this->form->renderField('primaryEmail');
-							}
-							else
-							{?>
-								<input type="hidden" name="jform[primaryEmail]" id="jform_primaryEmail" value="0" />
-							<?php
-							}
-							?>
-						<?php echo $this->form->renderField('paymentgateway');?>
+						<?php echo $this->form->renderField('payment_gateway');?>
 
 						<div id="payment_details"></div>
 					<?php echo JHtml::_('bootstrap.endTab'); ?> 

@@ -63,15 +63,8 @@ class TjvendorsControllerVendor extends JControllerForm
 	{
 		$input  = JFactory::getApplication()->input->post;
 		$user = $input->get('user', '', 'STRING');
-		$vendor_id = $input->get('vendor_id', '', 'STRING');
 		$model = $this->getModel('vendor');
 		$results = $model->checkDuplicateUser($user);
-
-		if (!empty($vendor_id))
-		{
-			$results['onEdit'] = "true";
-			$results['user'] = $user;
-		}
 
 		echo json_encode($results);
 		jexit();
@@ -88,8 +81,9 @@ class TjvendorsControllerVendor extends JControllerForm
 	{
 		$input  = JFactory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
+		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$model = $this->getModel('vendor');
-		$results = $model->buildForm($payment_gateway);
+		$results = $model->generateGatewayFields($payment_gateway);
 		echo json_encode($results);
 		jexit();
 	}

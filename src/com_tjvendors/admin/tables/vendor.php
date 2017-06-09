@@ -130,16 +130,6 @@ class TjvendorsTablevendor extends JTable
 
 		$files = $app->input->files->get('jform', array(), 'raw');
 		$array = $app->input->get('jform', array(), 'ARRAY');
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$vendorId = $TjvendorsModelVendor->checkDuplicateUser($array['user_id']);
-
-		if (!empty($vendorId['vendor_id']))
-		{
-			$app->enqueueMessage(JText::_('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR'), 'warning');
-
-			return false;
-		}
 
 		if (! empty($files['vendor_logo']))
 		{

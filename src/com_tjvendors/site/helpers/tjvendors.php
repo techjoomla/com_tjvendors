@@ -228,4 +228,36 @@ class TjvendorsHelpersTjvendors
 			}
 		}
 	}
+
+	/**
+	 * Get get paymentDetails
+	 *
+	 * @param   string  $vendor_id  integer
+	 * 
+	 * @param   string  $client     integer
+	 * 
+	 * @return res|integer
+	 */
+	public static function getPaymentDetails($vendor_id, $client)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
+		$db->setQuery($query);
+		$res = $db->loadObject();
+
+		return $res;
+	}
 }

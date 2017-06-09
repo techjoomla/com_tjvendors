@@ -44,11 +44,40 @@ class JFormFieldPaymentGateway extends JFormFieldList
 	 *
 	 * @since   11.4
 	 */
-	protected function getInput()
+	protected function getOptions()
 	{
 		$type = "payment";
-		$paymentPluginsDetails = JPluginHelper::getPlugin($type, $plugin = null);
+		$input = JFactory::getApplication()->input;
+		$client = $input->get('client', '', 'STRING');
+		$options = array();
+		$options[] = JHtml::_('select.option', "Select Payment Gateway", "Select Payment Gateway");
 
-		return JHtml::_('select.genericlist', $paymentPluginsDetails, "jform[vendor_payment_gateway]", 'class="input-medium" size="1"', "name", "name");
+		if (!empty($client))
+		{
+			$com_params = JComponentHelper::getParams($client);
+			$gateways = $com_params['gateways'];
+
+			foreach ($gateways as $detail)
+			{
+				$options[] = JHtml::_('select.option', $detail, $detail);
+			}
+		}
+		else
+		{
+			$gateways = JPluginHelper::getPlugin($type, $plugin = null);
+
+			foreach ($gateways as $detail)
+			{
+				$options[] = JHtml::_('select.option', $detail->name, $detail->name);
+			}
+		}
+
+		if (!$this->loadExternally)
+		{
+			// Merge any additional options in the XML definition.
+			$options = array_merge(parent::getOptions(), $options);
+		}
+
+		return $options;
 	}
 }

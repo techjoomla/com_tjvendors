@@ -80,6 +80,17 @@ else
 	<div id="j-main-container">
 <?php
 }?>
+<?php
+	if(empty($this->items))
+	{?>
+		<div class="clearfix">&nbsp;</div>
+			<div class="alert alert-no-items">
+				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
+			</div>
+	<?php
+	}
+	else
+	{?>
 	<div id="filter-bar" class="btn-toolbar">
 
 		<div class="filter-search btn-group pull-left">
@@ -161,17 +172,6 @@ else
 		
 	</div>
 	<table class="table table-striped" id="countryList">
-	<?php
-	if(empty($this->items))
-	{?>
-		<div class="clearfix">&nbsp;</div>
-			<div class="alert alert-no-items">
-				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
-			</div>
-	<?php
-	}
-	else
-	{?>
 		<table class="table table-striped" >
 			<thead>
 				<tr>

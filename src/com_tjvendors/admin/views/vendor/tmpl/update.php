@@ -22,78 +22,12 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 
 ?>
 <script type="text/javascript">
-	js = jQuery.noConflict();
-	js(document).ready(function ()
-	{
-	});
-
-	Joomla.submitbutton = function (task)
-	{
-		if(task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new' || task == 'vendor.save2copy')
-		{
-			var username = document.getElementById("jform_user_id").value;
-
-			if(username == 'Select a User.')
-			{
-				var msg = "<?php echo JText::_('COM_TJVENDORS_SELECT_USERNAME'); ?>";
-				alert(msg);
-				return false;
-			}
-			else
-			{
-				Joomla.submitform(task, document.getElementById('vendor-form'));
-			}
-		}
-		else if (task == 'vendor.cancel')
-		{
-			Joomla.submitform(task, document.getElementById('vendor-form'));
-		}
-		else
-		{
-			Joomla.submitform(task, document.getElementById('vendor-form'));
-		}
-	}
-jQuery(document).on("change","#jform_user_id", function () {
-			var user=document.getElementById('jform_user_id_id').value;
-			var userObject = {};
-			var client = "<?php echo $this->input->get('client', '', 'STRING'); ?>";
-			var vendor_id = "<?php echo $this->input->get('vendor_id', '', 'STRING'); ?>";
-			userObject["user"] = user;
-			userObject["vendor_id"] = vendor_id;
-			JSON.stringify(userObject) ;
-			jQuery.ajax({
-				type: "POST",
-				dataType: "json",
-				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
-				success:function(data) {
-					if (data.vendor_id)
-					{
-						alert("Already a vendor. Please choose a non vendor User");
-					}
-				},
-			});
-		});
-		jQuery(document).on("change","#jform_payment_gateway", function () {
-			var payment_gateway=document.getElementById('jform_payment_gateway').value;
-			var userObject = {};
-			userObject["payment_gateway"] = payment_gateway;
-			JSON.stringify(userObject) ;
-			jQuery.ajax({
-				type: "POST",
-				dataType: "json",
-				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
-				success:function(data) {
-			jQuery('#payment_details').html(data);
-				},
-		   });
-		});
-		jQuery(window).load(function()
-		{
-					jQuery('#jform_payment_gateway').trigger('change');
-		});
-	
+	var vendor_id = '<?php echo $this->item->vendor_id;?>';
+	var client = '<?php echo $this->client;?>';
+	var layout = '<?php echo "update";?>';
+	tjVAdmin.vendor.initVendorJs();
+</script>
+<script type="text/javascript">
 var _URL = window.URL || window.webkitURL;
 var jgiveAllowedMediaSize = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
 var allowedMediaSizeErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
@@ -169,7 +103,7 @@ jQuery(window).load(function(){
 						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
 						<?php if (!empty($this->item->vendor_logo)) : ?>
 							<div class="control-group">
-								<div class="controls "><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>"></div>
+								<div><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>" class="span3 col-md-3 img-thumbnail pull-left marginb10"></div>
 							</div>
 						<?php endif;
 					?>
@@ -178,17 +112,7 @@ jQuery(window).load(function(){
 		</div>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'name', JText::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS')); ?>
-			<?php
-				if(!empty ($this->input->get('client', '', 'STRING')))
-				{
-					echo $this->form->renderField('primary_gateway');
-				}
-				else
-				{?>
-					<input type="hidden" name="jform[primaryEmail]" id="jform_primaryEmail" value="0" />
-				<?php
-				}
-			 echo $this->form->renderField('payment_gateway');?>
+			<?php echo $this->form->renderField('payment_gateway');?>
 						<div id="payment_details"></div>
 					<input type="hidden" name="jform[primaryEmail]" id="jform_primaryEmail" value="0" />
 		<?php echo JHtml::_('bootstrap.endTab'); ?>

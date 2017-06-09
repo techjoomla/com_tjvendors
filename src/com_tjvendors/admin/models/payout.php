@@ -186,7 +186,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		// To get selected item
 		$item = $this->getItem($data['id']);
 		$data['debit'] = $data['total'];
-		$payableAmount = TjvendorsHelpersTjvendors::getTotalAmount($item->vendor_id, $item->currency);
+		$payableAmount = TjvendorsHelpersTjvendors::getTotalAmount($item->vendor_id, $item->currency, $item->client);
 		$data['total'] = $payableAmount['total'] - $data['debit'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
 		$data['client'] = $vendorDetail->client;

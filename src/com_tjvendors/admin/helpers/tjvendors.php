@@ -129,7 +129,7 @@ class TjvendorsHelpersTjvendors
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select('sum(CASE WHEN ' . $db->quoteName('credit') . ' >= 0 THEN ' . $db->quoteName('credit') . ' ELSE 0 END' . ') As credit');
+		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
 		$query->select('sum(' . $db->quoteName('debit') . ') As debit');
 
 		$query->from($db->quoteName('#__tjvendors_passbook'));
@@ -194,32 +194,6 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
-	 * Check For Duplicate users
-	 *
-	 * @return rows|object
-	 */
-	public static function checkDuplicateUser()
-	{
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from($db->quoteName('#__tjvendors_vendors'));
-
-		if (!empty($user_id))
-		{
-			$query->where($db->quoteName('user_id') . ' = ' . $user_id);
-		}
-
-		$db->setQuery($query);
-		$rows = $db->loadAssocList();
-
-		if ($rows)
-		{
-			return $rows;
-		}
-	}
-
-	/**
 	 * Get paid amount
 	 *
 	 * @param   string  $vendor_id     integer
@@ -238,7 +212,7 @@ class TjvendorsHelpersTjvendors
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select('sum(' . $db->quoteName('debit') . ')');
+		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 
 		if ($filterClient != '0')
@@ -260,7 +234,7 @@ class TjvendorsHelpersTjvendors
 			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
 
-		$query->where($db->quoteName('credit') . ' != 0');
+		$query->where($db->quoteName('debit') . ' > 0');
 
 		if ($bulkPayoutStatus == 0 && !empty($client))
 		{
@@ -268,17 +242,22 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$amount = $db->loadresult();
+		$paidDetails = $db->loadAssocList();
+		$amount = 0;
+
+		foreach ($paidDetails as $detail)
+		{
+			$entryStatus = json_decode($detail['params']);
+			$entryStatus->entry_status;
+
+			if ($entryStatus->entry_status == "debit_payout")
+			{
+				$amount = $amount + $detail['debit'];
+			}
+		}
 
 		return $amount;
 	}
-
-	/*public static function generatePayoutDetails($vendor_id,$currency,$result,$client)
-	{
-		$payoutDetails = array("vendor_id" => $vendor_id, "currency" => $currency, "total" => $result, "client" => $client);
-
-		return $payoutDetails;
-	}*/
 
 	/**
 	 * Get paid amount
@@ -341,10 +320,12 @@ class TjvendorsHelpersTjvendors
 	 * 
 	 * @param   string   $currency   integer
 	 * 
+	 * @param   string   $client     integer
+	 * 
 	 * @return client|array
 	 */
 
-	public static function getTotalAmount($vendor_id, $currency)
+	public static function getTotalAmount($vendor_id, $currency, $client)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -360,6 +341,11 @@ class TjvendorsHelpersTjvendors
 		if (!empty($currency))
 		{
 			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		if (!empty($client))
+		{
+			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
 		$query->select('*');
@@ -529,48 +515,65 @@ class TjvendorsHelpersTjvendors
 		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
 		$date = JFactory::getDate();
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
+		$payoutDate = $payout_date_limit->format('Y-m-d') . " 23:59:00";
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
-		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$subQuery = $db->getQuery(true);
+		$subQuery->select('max(' . $db->quoteName('id') . ')');
+		$subQuery->from($db->quoteName('#__tjvendors_passbook'));
 
 		if (!empty($vendor_id))
 		{
-			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+			$subQuery->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 		}
 
 		if (!empty($client))
 		{
-			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
 		if (!empty($currency))
 		{
-			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
 
-		$payout_entry = self::checkOrderPayout($vendor_id, $currency);
+		$payoutDetails = self::checkOrderPayout($vendor_id, $currency, $client);
 
-		if (empty($payout_entry))
+		if (!empty($payoutDetails))
 		{
-			$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
-		}
-		else
-		{
-			$query->where($db->quoteName('transaction_time') . ' > ' . $db->quote($payout_entry['transaction_time']));
-			$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
+			$status = $payoutDetails['status'];
+
+			if (!empty($status))
+			{
+				if ($status != "debit_payout")
+				{
+					$subQuery->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDate));
+				}
+				elseif($status == "debit_payout")
+				{
+					$subQuery->where($db->quoteName('transaction_time') . ' >= ' . $db->quote($payoutDetails['transaction_time']));
+					$subQuery->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDate));
+				}
+			}
+			else
+			{
+				$subQuery->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDate));
+			}
 		}
 
+		$query->select($db->quoteName('total'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quotename('id') . ' = (' . $subQuery . ')');
 		$db->setQuery($query);
 		$res = $db->loadResult();
 
 		if (!empty($res))
 		{
-			$result = array("payableAmount" => $res, "payout_date_limit" => $payout_date_limit);
+			$result = array("payableAmount" => $res, "payout_date_limit" => $payoutDate);
 		}
 		else
 		{
-			$result = array("payableAmount" => 0, "payout_date_limit" => $payout_date_limit);
+			$result = array("payableAmount" => 0, "payout_date_limit" => $payoutDate);
 		}
 
 		return $result;
@@ -582,18 +585,20 @@ class TjvendorsHelpersTjvendors
 	 * @param   integer  $vendor_id  integer
 	 * 
 	 * @param   integer  $currency   integer
+	 * 
+	 * @param   integer  $client     integer
 	 *
 	 * @return res|integer
 	 */
-	public static function checkOrderPayout($vendor_id, $currency)
+	public static function checkOrderPayout($vendor_id, $currency, $client)
 	{
 		$db = JFactory::getDbo();
 
 		// Create a new query object.
 		$query = $db->getQuery(true);
+		$subQuery = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('debit') . ' > 0 AND ' . $db->quoteName('credit') . '!= 0');
 
 		if (!empty($vendor_id))
 		{
@@ -605,20 +610,69 @@ class TjvendorsHelpersTjvendors
 			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
 
-		$db->setQuery($query);
-		$result = $db->loadAssoc();
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
 
-		return $result;
+		$query->where($db->quoteName('debit') . ' >0 ');
+		$db->setQuery($query);
+		$payoutDetails = $db->loadAssocList();
+		$amount = 0;
+
+		if (!empty($payoutDetails))
+		{
+			foreach ($payoutDetails as $detail)
+			{
+				$entryStatus = json_decode($detail['params']);
+
+				if ($entryStatus->entry_status == "debit_payout")
+				{
+					$status = $entryStatus->entry_status;
+					$payoutDetails = array("status" => $status, "transaction_time" => $detail['transaction_time']);
+				}
+
+				if ($entryStatus->entry_status == "debit_pending")
+				{
+					$status = $entryStatus->entry_status;
+					$payoutDetails = array("status" => $status, "transaction_time" => $detail['transaction_time']);
+				}
+			}
+
+			return $payoutDetails;
+		}
+		else
+		{
+			return null;
+		}
 	}
 
 	/**
-	 * Get get vendor_id
+	 * Get get currencies
 	 *
-	 * @param   string  $userId  integer
+	 * @param   string  $data  integer
 	 * 
-	 * @return res|integer
+	 * @return currencies|array
 	 */
-	public static function getUserId($userId)
+	public static function addVendor($data)
+	{
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables', 'vendor');
+		$vendorsDetail = $TjvendorsModelVendors->save($data);
+		$vendor_id = self::getVendorId($data['user_id']);
+
+		return $vendor_id;
+	}
+
+/**
+ * Get get userId
+ *
+ * @param   string  $userId  integer
+ * 
+ * @return res|integer
+ */
+	public static function getVendorId($userId)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -629,5 +683,84 @@ class TjvendorsHelpersTjvendors
 		$res = $db->loadResult();
 
 		return $res;
+	}
+
+/**
+ * Get get paymentDetails
+ *
+ * @param   string  $vendor_id  integer
+ * 
+ * @param   string  $client     integer
+ * 
+ * @return res|integer
+ */
+	public static function getPaymentDetails($vendor_id, $client)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
+		$db->setQuery($query);
+		$res = $db->loadObject();
+
+		return $res;
+	}
+
+	/**
+	 * Check for duplicate clients
+	 *
+	 * @param   integer  $vendor_id      required to give vendor specific result
+	 * 
+	 * @param   integer  $vendor_client  client taken from the form
+	 * 
+	 * @return vendor_client|string
+	 */
+	public static function checkForDuplicateClient($vendor_id,$vendor_client)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('client'));
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
+		$db->setQuery($query);
+		$result = $db->loadAssocList();
+
+		foreach ($result as $client)
+		{
+			if ($client['client'] == $vendor_client)
+			{
+				return $vendor_client;
+			}
+		}
+	}
+
+	/**
+	 * Get vendor for that user
+	 *
+	 * @return vendor
+	 */
+	public static function getvendor()
+	{
+		$user_id = jFactory::getuser()->id;
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('vendor_id'));
+		$query->from($db->quoteName('#__tjvendors_vendors'));
+		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
+		$db->setQuery($query);
+		$vendor = $db->loadResult();
+
+		return $vendor;
 	}
 }

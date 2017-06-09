@@ -142,7 +142,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$input  = JFactory::getApplication()->input;
 		$app  = JFactory::getApplication();
 		$method = $input->getItem('task', '', 'STRING');
-		$vendor_id = TjvendorsHelpersTjvendors::getUserId($data['user_id']);
+		$vendor_id = TjvendorsHelpersTjvendors::getVendorId($data['user_id']);
 
 		if (!empty($vendor_id))
 		{

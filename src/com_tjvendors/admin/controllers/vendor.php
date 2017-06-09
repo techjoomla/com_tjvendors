@@ -65,6 +65,25 @@ class TjvendorsControllerVendor extends JControllerForm
 		$user = $input->get('user', '', 'STRING');
 		$model = $this->getModel('vendor');
 		$results = $model->checkDuplicateUser($user);
+
+		echo json_encode($results);
+		jexit();
+	}
+
+	/**
+	 * Build payment gateway fields
+	 * 
+	 * @return null
+	 * 
+	 * @since   1.6
+	 */
+	public function generateGatewayFields()
+	{
+		$input  = JFactory::getApplication()->input->post;
+		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
+		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
+		$model = $this->getModel('vendor');
+		$results = $model->generateGatewayFields($payment_gateway);
 		echo json_encode($results);
 		jexit();
 	}

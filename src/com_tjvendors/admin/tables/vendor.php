@@ -1,13 +1,14 @@
 <?php
+
 /**
- * @version    SVN:
+ * @version    SVN: 
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
 // No direct access
-defined('_JEXEC') or die();
+defined('_JEXEC') or die;
 
 use Joomla\Utilities\ArrayHelper;
 
@@ -25,9 +26,7 @@ class TjvendorsTablevendor extends JTable
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendor',
-				array('typeAlias' => 'com_tjvendors.vendor')
-				);
+		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendor', array('typeAlias' => 'com_tjvendors.vendor'));
 
 		parent::__construct('#__tjvendors_vendors', 'vendor_id', $db);
 	}
@@ -59,11 +58,14 @@ class TjvendorsTablevendor extends JTable
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (! JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
+		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
 		{
-			$actions = JAccess::getActionsFromFile(JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml', "/access/section[@name='vendor']/");
+			$actions = JAccess::getActionsFromFile(
+				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',
+				"/access/section[@name='vendor']/"
+			);
 			$default_actions = JAccess::getAssetRules('com_tjvendors.vendor.' . $array['vendor_id'])->getData();
-			$array_jaccess = array();
+			$array_jaccess   = array();
 
 			foreach ($actions as $action)
 			{

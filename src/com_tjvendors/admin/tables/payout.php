@@ -124,36 +124,6 @@ class TjvendorsTablePayout extends JTable
 	}
 
 	/**
-	 * Method to checkDuplicateUser
-	 *
-	 * @return bool
-	 */
-	public function checkDuplicateUser()
-	{
-		// Start city validations
-		$db = JFactory::getDbo();
-
-		// Fetch all existed records
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName(array('vendor_id')))
-			->from($db->quoteName('#__tjvendors_passbook'))
-			->where($db->quoteName('vendor_id') . ' = ' . $this->vendor_id)
-			->where($db->quoteName('client') . " =  '$this->client'");
-		$db->setQuery($query);
-
-		$userexist = $this->_db->loadResult();
-
-		if ($userexist)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
-	}
-
-	/**
 	 * Method to set the publishing state for a row or list of rows in the database
 	 * table.  The method respects checked out rows by other users and will attempt
 	 * to checkin rows that it can after adjustments are made.

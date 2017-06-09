@@ -160,7 +160,7 @@ class TjvendorsModelPayout extends JModelAdmin
 				$data['credit'] = - $data['debit'];
 				$data['id'] = '';
 				$data['vendor_id'] = $vendorDetail->vendor_id;
-				$params = array("entry_status" => "debit_payout");
+				$params = array("customer_note" => "", "entry_status" => "debit_payout");
 				$data['params'] = json_encode($params);
 
 				if (parent::save($data))
@@ -186,14 +186,14 @@ class TjvendorsModelPayout extends JModelAdmin
 		// To get selected item
 		$item = $this->getItem($data['id']);
 		$data['debit'] = $data['total'];
-		$payableAmount = TjvendorsHelpersTjvendors::getTotalAmount($item->vendor_id, $item->currency);
+		$payableAmount = TjvendorsHelpersTjvendors::getTotalAmount($item->vendor_id, $item->currency, $item->client);
 		$data['total'] = $payableAmount['total'] - $data['debit'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
 		$data['client'] = $vendorDetail->client;
 		$data['transaction_id'] = $item->vendor_id . $client . $item->currency;
 		$data['id'] = '';
 		$data['vendor_id'] = $item->vendor_id;
-		$data['credit'] = - $data['debit'];
+		$data['credit'] = '0.00';
 		$params = array("customer_note" => "", "entry_status" => "debit_payout");
 		$data['params'] = json_encode($params);
 
@@ -203,9 +203,9 @@ class TjvendorsModelPayout extends JModelAdmin
 			{
 				if ($i == 1)
 				{
-					$data['credit'] = $data['total'];
+					$data['credit'] = '0.00';
 					$data['total'] = $data['total'];
-					$data['debit'] = '0';
+					$data['debit'] = '0.00';
 					$params = array("customer_note" => "", "entry_status" => "credit_remaining_payout");
 					$data['params'] = json_encode($params);
 				}

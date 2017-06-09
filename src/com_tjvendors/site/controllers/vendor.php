@@ -32,11 +32,6 @@ class TjvendorsControllerVendor extends JControllerForm
 
 		$this->vendor_client = $this->input->get('client', '', 'STRING');
 
-		if (empty($this->vendor_client))
-		{
-			$this->client = JFactory::getApplication()->input->get('jform', array(), 'array')['vendor_client'];
-		}
-
 		parent::__construct();
 	}
 
@@ -205,5 +200,22 @@ class TjvendorsControllerVendor extends JControllerForm
 		$this->setRedirect(
 		JRoute::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $input->get('client', '', 'STRING'), false)
 		);
+	}
+
+	/**
+	 * Build a form
+	 * 
+	 * @return null
+	 * 
+	 * @since   1.6
+	 */
+	public function generateGatewayFields()
+	{
+		$input  = JFactory::getApplication()->input->post;
+		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
+		$model = $this->getModel('vendor');
+		$results = $model->generateGatewayFields($payment_gateway);
+		echo json_encode($results);
+		jexit();
 	}
 }

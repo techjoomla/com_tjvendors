@@ -77,7 +77,17 @@ else
 {?>
 	<div id="j-main-container">
 <?php
-}?>
+}
+
+if(empty($this->items))
+	{?>
+			<div class="alert alert-no-items">
+				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
+			</div>
+	<?php
+	}
+	else
+	{?>
 <div class="alert alert-info">
 	<?php
 		$com_params = JComponentHelper::getParams('com_tjvendors');
@@ -139,17 +149,7 @@ else
 
 		
 	</div>
-	<?php
-	if(empty($this->items))
-	{?>
-		<div class="clearfix">&nbsp;</div>
-			<div class="alert alert-no-items">
-				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
-			</div>
-	<?php
-	}
-	else
-	{?>
+
 		<table class="table table-striped" id="payoutList">
 			<thead>
 				<tr>
@@ -206,11 +206,19 @@ else
 						{
 							$client=0;
 							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id,$item->currency, $client);
+							if(empty($paidAmount))
+							{
+								$paidAmount = '0';
+							}
 							echo $paidAmount;
 						}
 						else
 						{
 							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id,$item->currency, $filterClient);
+							if(empty($paidAmount))
+							{
+								$paidAmount = '0';
+							}
 							echo $paidAmount;
 						}
 						?>

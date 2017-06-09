@@ -145,19 +145,37 @@ if ( $user_id && !empty($this->vendor_id))
 						<th width="10%">
 							<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE');?>
 					   </th>
-					<?php }?>
-						<th width="5%">
-							<?php echo JText::_('COM_TJVENDORS_REPORTS_AMOUNT');?>
-					   </th>
+					<?php }
+						if($transactionType == "credit" || empty($transactionType))
+						{?>
+							<th class='left' width="10%">
+								<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
+							</th>
+					<?php
+						}
+						if($transactionType == "debit" || empty($transactionType))
+						{?>
+							<th class='left' width="10%">
+								<?php	echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
+							</th>
+					<?php
+						}
+					?>
 						<th width="10%">
 							<?php echo JHtml::_('grid.sort', 'Reference Order ID', 'pass.`reference_order_id`', $listDirn, $listOrder);?>
-					   </th>
+						</th>
 						<th width="15%">
 							<?php echo JHtml::_('grid.sort', 'Transaction Time', 'pass.`transaction_time`', $listDirn, $listOrder);?>
-					   </th>
+						</th>
 						<th width="10%">
 							<?php echo JHtml::_('grid.sort', 'Pending Amount', 'pass.`total`', $listDirn, $listOrder);?>
-					   </th>
+						</th>
+						<th>
+							<?php echo JText::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS'); ?>
+						</th>
+					<th>
+						<?php echo JText::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE'); ?>
+					</th>
 					</tr>
 			</thead>
 			<?php if($currency != '0'):?>
@@ -189,28 +207,28 @@ if ( $user_id && !empty($this->vendor_id))
 								<td>
 									<?php echo $this->pagination->getRowOffset($i);?>
 								</td>
-								<td align="center">
+								<td>
 									<?php echo $row->transaction_id;?>
 								</td>
 							<?php if($client == '0')
 								{?>
-								<td align="center">
+								<td>
 									<?php	echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($row->client));?>
 								</td>
 							<?php }
 								if($currency == '0')
 								{
 								?>
-								<td align="center">
+								<td>
 									<?php echo $row->currency;?>
 								</td>
 							<?php }
 								if($transactionType == '0')
 								{
 								?>
-								<td align="center">
+								<td>
 									<?php
-										if ($row->credit == 0)
+										if ($row->credit < 0)
 											{
 												echo "debit";
 											}
@@ -220,27 +238,51 @@ if ( $user_id && !empty($this->vendor_id))
 											}
 										?>
 								</td>
-							<?php }?>
-								<td align="center">
-									<?php
-										if ($row->credit == 0)
-										{
-											echo $row->debit;
-										}
-										else
-										{
-											echo $row->credit;
-										}
-									?>
-								</td>
-								<td align="center">
+							<?php }
+								if($transactionType == "credit" || empty($transactionType))
+						{ ?>
+							<td>
+								<?php
+									if($row->credit <='0')
+									{
+										echo "0";
+									}
+									else
+									{
+										echo $row->credit;
+									}
+								?>
+							</td>
+						<?php
+						}
+						if($transactionType == "debit" || empty($transactionType))
+						{
+						?>
+							<td>
+							<?php echo $row->debit;?>
+							</td>
+						<?php 
+						}
+						?>
+								<td>
 									<?php echo $row->reference_order_id;?>
 								</td>
-								<td align="center">
+								<td>
 									<?php echo $row->transaction_time;?>
 								</td>
-								<td align="center">
-									<?php echo $row->total;?>
+								<td>
+									<?php echo abs($row->total);?>
+								</td>
+								<td>
+								<?php
+									$status = json_decode($row->params, true);
+									echo $status['entry_status'];
+								?>
+								</td>
+								<td>
+								<?php 
+									echo $status['customer_note'];
+								?>
 								</td>
 							</tr>
 							<?php

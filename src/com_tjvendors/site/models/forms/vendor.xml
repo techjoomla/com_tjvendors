@@ -16,5 +16,6 @@
 		<field name="checked_out" type="hidden" />
 		<field name="ordering" type="hidden" />
 		<field name="currency" type="text" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY" rows="10" cols="5" />
+		<field name="payment_gateway" type="paymentgateway" filter="" label="COM_TJVENDORS_FORM_LBL_VENDOR_PAYMENT_GATEWAY"  />
 	</fieldset>
 </form>

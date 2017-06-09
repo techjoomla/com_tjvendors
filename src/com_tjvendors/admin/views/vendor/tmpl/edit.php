@@ -21,62 +21,12 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 //$document->addScript(JUri::root() . 'administrator/components/com_tjvendors/assets/js/vendor.js');
 
 ?>
-<script type="text/javascript">
-	js = jQuery.noConflict();
-	js(document).ready(function ()
-	{
-	});
-
-	Joomla.submitbutton = function (task)
-	{
-		if(task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new')
-		{
-			var username = document.getElementById("jform_user_id").value;
-
-			if(username == 'Select a User.')
-			{
-				var msg = "<?php echo JText::_('COM_TJVENDORS_SELECT_USERNAME'); ?>";
-				alert(msg);
-				return false;
-			}
-			else
-			{
-				Joomla.submitform(task, document.getElementById('vendor-form'));
-			}
-		}
-		else if (task == 'vendor.cancel')
-		{
-			Joomla.submitform(task, document.getElementById('vendor-form'));
-		}
-		else
-		{
-			Joomla.submitform(task, document.getElementById('vendor-form'));
-		}
-	}
-
-		jQuery(document).on("change","#jform_user_id", function () {
-			var user=document.getElementById('jform_user_id').value;
-			var userObject = {};
-			var client = "<?php echo $this->input->get('client', '', 'STRING'); ?>";
-			userObject["user"] = user;
-			JSON.stringify(userObject) ;
-			jQuery.ajax({
-				type: "POST",
-				dataType: "json",
-				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
-				success:function(data) {
-						if(data.vendor_id)
-						{
-								document.location='index.php?option=com_tjvendors&view=vendor&layout=edit&client='+client+'&vendor_id='+data.vendor_id;
-						}
-				},
-		   });
-		});
+<script>
 var _URL = window.URL || window.webkitURL;
 var jgiveAllowedMediaSize = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
-var allowedMediaSizeErrorMessage = "<?php echo JText::_("check size") . $this->params->get('image_size') . 'KB';?>";
-var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_JGIVE_IMAGE_SIZE_TIP");?>";
+var allowedMediaSizeErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
+var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
+var allowedImageTypeErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
 
 jQuery(window).load(function(){
 	jQuery("#jform_profile_image").change(function(e) {
@@ -95,14 +45,14 @@ jQuery(window).load(function(){
 
 				if (this.width < 445 || this.height < 265)
 				{
-					alert(allowedImageDimensionErrorMessage + Joomla.JText._('COM_JGIVE_CAMPAIGN_MAIN_IMAGE_DIMES_INFO') + this.width + "px X " + this.height + "px");
+					alert(allowedImageDimensionErrorMessage + this.width + "px X " + this.height + "px");
 				}
 
 			};
 
 			img.onerror = function()
 			{
-				alert(Joomla.JText._('COM_JGIVE_CAMPAIGN_MAIN_IMAGE_TYPE_VALIDATION') + file.type);
+				alert(allowedImageTypeErrorMessage + file.type);
 				jQuery("#jform_profile_image").val('');
 				return false;
 			};
@@ -112,6 +62,12 @@ jQuery(window).load(function(){
 	});
 });
 
+</script>
+<script type="text/javascript">
+	var vendor_id = '<?php echo $this->item->vendor_id;?>';
+	var client = '<?php echo $this->client;?>';
+	var layout = '<?php echo "default";?>';
+	tjVAdmin.vendor.initVendorJs();
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client='.$this->input->get('client', '', 'INTEGER').'&vendor_id=' . (int) $this->item->vendor_id); ?>"
@@ -180,7 +136,7 @@ jQuery(window).load(function(){
 							if(empty($this->item->vendor_logo)) :?>
 								<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/administrator/components/com_tjvendors/assets/images/default.png" />
 									<div class="control-group">
-											<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>"></div>
+											<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>" class="span3 col-md-3 img-thumbnail marginb10"></div>
 										</div>
 								
 							<?php endif;
@@ -198,6 +154,12 @@ jQuery(window).load(function(){
 			</div>
 		</div>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
+		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'name', JText::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS')); ?>
+			<?php echo $this->form->renderField('payment_gateway');?>
+
+			<div id="payment_details"></div>
+		<?php echo JHtml::_('bootstrap.endTab'); ?>
+
 		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>

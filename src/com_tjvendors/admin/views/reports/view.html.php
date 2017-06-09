@@ -51,6 +51,13 @@ class TjvendorsViewReports extends JViewLegacy
 		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
 		$vendor_id = $this->state->get('filter.vendor_id');
 		$client = $this->state->get('filter.vendor_client');
+
+		if ($client == '0')
+		{
+			$input = JFactory::getApplication()->input;
+			$client = $input->get('client', '', 'STRING');
+		}
+
 		$currency = $this->state->get('filter.currency');
 		$this->totalDetails = TjvendorsHelpersTjvendors::getTotalDetails($vendor_id, $client, $currency);
 

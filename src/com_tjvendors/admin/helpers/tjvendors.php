@@ -515,7 +515,7 @@ class TjvendorsHelpersTjvendors
 		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
 		$date = JFactory::getDate();
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
-		$payoutDate = $payout_date_limit->format('Y-m-d')." 23:59:00";
+		$payoutDate = $payout_date_limit->format('Y-m-d') . " 23:59:00";
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$subQuery = $db->getQuery(true);
@@ -538,9 +538,11 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$payoutDetails = self::checkOrderPayout($vendor_id, $currency, $client);
+
 		if (!empty($payoutDetails))
 		{
 			$status = $payoutDetails['status'];
+
 			if (!empty($status))
 			{
 				if ($status != "debit_payout")
@@ -558,6 +560,7 @@ class TjvendorsHelpersTjvendors
 				$subQuery->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDate));
 			}
 		}
+
 		$query->select($db->quoteName('total'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 		$query->where($db->quotename('id') . ' = (' . $subQuery . ')');
@@ -617,16 +620,18 @@ class TjvendorsHelpersTjvendors
 		$payoutDetails = $db->loadAssocList();
 		$amount = 0;
 
-		if(!empty($payoutDetails))
+		if (!empty($payoutDetails))
 		{
 			foreach ($payoutDetails as $detail)
 			{
 				$entryStatus = json_decode($detail['params']);
+
 				if ($entryStatus->entry_status == "debit_payout")
 				{
 					$status = $entryStatus->entry_status;
 					$payoutDetails = array("status" => $status, "transaction_time" => $detail['transaction_time']);
 				}
+
 				if ($entryStatus->entry_status == "debit_pending")
 				{
 					$status = $entryStatus->entry_status;

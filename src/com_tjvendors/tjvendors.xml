@@ -36,7 +36,7 @@
         <folder>helpers</folder>
         <folder>tables</folder>
     </files>
-    <media destination="com_tjvendors" folder="media">
+    <media destination="com_tjvendor" folder="media">
 		<folder>js</folder>
 	</media>
     <languages folder="site_language">

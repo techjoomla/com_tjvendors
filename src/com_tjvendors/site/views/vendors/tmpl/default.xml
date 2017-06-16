@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="vendor" option="View">
-		<message><![CDATA[Show single vendor form]]></message>
+	<layout title="reports" option="View">
+		<message><![CDATA[Show single vendor report]]></message>
 	</layout>
 	<fields name="request">
 		<fieldset name="request" addfieldpath="/administrator/components/com_categories/models/fields">

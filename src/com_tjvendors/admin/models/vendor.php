@@ -129,11 +129,11 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * Method to add vendor id after client is added to the table.
 	 *
 	 * @param   Array  $vendor_id        vendor id
-	 * 
+	 *
 	 * @param   Array  $payment_gateway  vendor id
-	 * 
+	 *
 	 * @param   Array  $paymentDetails   paymentDetails
-	 * 
+	 *
 	 * @return   mixed
 	 *
 	 * @since    1.6
@@ -166,7 +166,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * Method to check duplicate user.
 	 *
 	 * @param   integer  $user_id  user name.
-	 * 
+	 *
 	 * @return   array rows
 	 *
 	 * @since    1.6
@@ -196,7 +196,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * Method to generate payment gateway fields.
 	 *
 	 * @param   string  $payment_gateway  payment gateway.
-	 * 
+	 *
 	 * @return   array result
 	 *
 	 * @since    1.6

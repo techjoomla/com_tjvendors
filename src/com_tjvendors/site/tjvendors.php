@@ -14,7 +14,13 @@ jimport('joomla.application.component.controller');
 
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT);
 JLoader::register('TjvendorsController', JPATH_COMPONENT . '/controller.php');
+$TjvendorFrontHelper = JPATH_ROOT . '/components/com_tjvendors/helpers/fronthelper.php';
 
+if (!class_exists('TjvendorFrontHelper'))
+{
+	JLoader::register('TjvendorFrontHelper', $TjvendorFrontHelper);
+	JLoader::load('TjvendorFrontHelper');
+}
 
 // Execute the task.
 $controller = JControllerLegacy::getInstance('Tjvendors');

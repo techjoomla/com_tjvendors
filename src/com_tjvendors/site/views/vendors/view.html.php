@@ -38,12 +38,13 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->state		= $items_model->getState();
 		$this->filterForm		= $items_model->getFilterForm();
 		$this->activeFilters	= $items_model->getActiveFilters();
-		$this->currencies = TjvendorsHelpersTjvendors::getCurrencies();
-		$this->vendor_id = TjvendorsHelpersTjvendors::getvendor();
-		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients($this->user_id);
+		$TjvendorFrontHelper = new TjvendorFrontHelper;
+		$this->currencies = $TjvendorFrontHelper->getCurrencies();
+		$this->vendor_id = $TjvendorFrontHelper->getvendor();
+		$this->uniqueClients = $TjvendorFrontHelper->getUniqueClients($this->user_id);
 		$client = $this->state->get('filter.vendor_client', '');
 		$currency = $this->state->get('filter.currency', '');
-		$this->totalDetails = TjvendorsHelpersTjvendors::getTotalDetails($client, $this->user_id, $currency);
+		$this->totalDetails = $TjvendorFrontHelper->getTotalDetails($client, $this->user_id, $currency);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

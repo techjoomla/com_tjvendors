@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 JLoader::registerPrefix('Tjvendors', JPATH_SITE . '/components/com_tjvendors/');
+require_once JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
 
 /**
  * Class TjvendorsRouter
@@ -84,7 +85,8 @@ class TjvendorsRouter extends JComponentRouterBase
 
 		// View is always the first element of the array
 		$vars['view'] = array_shift($segments);
-		$model        = TjvendorsHelpersTjvendors::getModel($vars['view']);
+		$TjvendorFrontHelper = new TjvendorFrontHelper;
+		$model        = $TjvendorFrontHelper->getModel($vars['view']);
 
 		while (!empty($segments))
 		{

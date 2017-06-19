@@ -44,7 +44,8 @@ class TjvendorsViewVendor extends JViewLegacy
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		$this->vendor_id = TjvendorsHelpersTjvendors::getvendor();
 		$this->VendorDetail = $TjvendorsModelVendor->getItem($this->vendor_id);
-		$this->clientsForVendor = TjvendorsHelpersTjvendors::getClientsForVendor($this->vendor_id);
+		$TjvendorFrontHelper = new TjvendorFrontHelper;
+		$this->clientsForVendor = $TjvendorFrontHelper->getClientsForVendor($this->vendor_id);
 		$this->client = $this->input->get('client', '', 'STRING');
 		$app = JFactory::getApplication();
 		$app->setUserState("vendor.client", $this->client);

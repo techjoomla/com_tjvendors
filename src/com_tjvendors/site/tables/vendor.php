@@ -118,7 +118,7 @@ class TjvendorsTablevendor extends JTable
 	{
 		jimport('joomla.filesystem.file');
 
-// Validate and create alias if needed
+		// Validate and create alias if needed
 		$this->alias = trim($this->alias);
 
 		if (!$this->alias)

@@ -11,7 +11,6 @@
 defined('_JEXEC') or die();
 
 jimport('joomla.application.component.modeladmin');
-require_once JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
 /**
  * Tjvendors model.
  *
@@ -114,8 +113,8 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				if (!empty($client))
 				{
-					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
-					$gatewayDetails = $tjvendorsHelpersTjvendors->getPaymentDetails($this->item->vendor_id, $client);
+					$TjvendorFrontHelper = new TjvendorFrontHelper;
+					$gatewayDetails = $TjvendorFrontHelper->getPaymentDetails($this->item->vendor_id, $client);
 
 					if (!empty($gatewayDetails))
 					{
@@ -167,7 +166,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$db->setQuery($query);
 		$res = $db->loadResult();
-		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id),
+		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendorId),
 		$db->quoteName('payment_gateway') . ' = ' . $db->quote($payment_gateway),
 		$db->quoteName('params') . ' = ' . $db->quote($paymentDetails),
 		);
@@ -232,7 +231,8 @@ class TjvendorsModelVendor extends JModelAdmin
 
 				if (!empty($data['vendor_client']))
 				{
-					$checkForDuplicateClient = TjvendorsHelpersTjvendors::checkForDuplicateClient($data['vendor_id'], $data['vendor_client']);
+					$TjvendorFrontHelper = new TjvendorFrontHelper;
+					$checkForDuplicateClient = $TjvendorFrontHelper->checkForDuplicateClient($data['vendor_id'], $data['vendor_client']);
 
 					if ($checkForDuplicateClient != $data['vendor_client'])
 					{

@@ -108,7 +108,8 @@ class TjvendorsModelVendors extends JModelList
 		$query = $db->getQuery(true);
 		$client = $this->getState('filter.vendor_client', '');
 		$currency = $this->getState('filter.currency', '');
-		$vendor_id = TjvendorsHelpersTjvendors::getVendor();
+		$TjvendorFrontHelper = new TjvendorFrontHelper;
+		$vendor_id = $TjvendorFrontHelper->getVendor();
 		$columns = array('vendors.vendor_id');
 		$query->select($db->quoteName($columns));
 		$query->select('pass.*');

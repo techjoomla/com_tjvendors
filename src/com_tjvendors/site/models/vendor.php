@@ -154,7 +154,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * @param   Integer  $vendorId         used for inserting data for that vendor
 	 *
 	 * @param   Integer  $payment_gateway  used for inserting data for that vendor
-	 * 
+	 *
 	 * @param   Integer  $paymentDetails   payment details
 	 *
 	 * @return id
@@ -370,7 +370,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * Method to build Form.
 	 *
 	 * @param   string  $payment_gateway  payment gateway.
-	 * 
+	 *
 	 * @return   array result
 	 *
 	 * @since    1.6

@@ -88,7 +88,7 @@ class TjvendorsHelpersTjvendors
 
 	/**
 	 * Get array of unique Clients
-	 *  
+	 *
 	 * @return null|object
 	 */
 	public static function getUniqueClients()
@@ -112,13 +112,13 @@ class TjvendorsHelpersTjvendors
 
 	/**
 	 * Get array of unique Clients
-	 * 
+	 *
 	 * @param   string  $vendor_id  integer
-	 * 
+	 *
 	 * @param   string  $client     string
-	 * 
+	 *
 	 * @param   string  $currency   string
-	 *  
+	 *
 	 * @return null|object
 	 */
 	public static function getTotalDetails($vendor_id, $client, $currency)
@@ -162,10 +162,10 @@ class TjvendorsHelpersTjvendors
 
 	/**
 	 * Get array of unique Clients
-	 * 
+	 *
 	 * @param   string  $vendor_id  integer
-	 *  
-	 * @return clientsForVendor 
+	 *
+	 * @return clientsForVendor
 	 */
 	public static function getClientsForVendor($vendor_id)
 	{
@@ -197,11 +197,11 @@ class TjvendorsHelpersTjvendors
 	 * Get paid amount
 	 *
 	 * @param   string  $vendor_id     integer
-	 * 
+	 *
 	 * @param   string  $currency      integer
-	 * 
+	 *
 	 * @param   string  $filterClient  client from filter
-	 * 
+	 *
 	 * @return amount
 	 */
 	public static function getPaidAmount($vendor_id,$currency,$filterClient)
@@ -263,9 +263,9 @@ class TjvendorsHelpersTjvendors
 	 * Get paid amount
 	 *
 	 * @param   string  $vendor_id  integer
-	 * 
+	 *
 	 * @param   string  $currency   currency for that vendor
-	 * 
+	 *
 	 * @return amount
 	 */
 	public static function getTotalPendingAmount($vendor_id,$currency)
@@ -317,11 +317,11 @@ class TjvendorsHelpersTjvendors
 	 * Get total amount
 	 *
 	 * @param   integer  $vendor_id  integer
-	 * 
+	 *
 	 * @param   string   $currency   integer
-	 * 
+	 *
 	 * @param   string   $client     integer
-	 * 
+	 *
 	 * @return client|array
 	 */
 
@@ -361,11 +361,11 @@ class TjvendorsHelpersTjvendors
 	 * Get array of clients
 	 *
 	 * @param   integer  $vendor_id  integer
-	 * 
+	 *
 	 * @param   string   $currency   integer
-	 * 
+	 *
 	 * @param   string   $client     integer
-	 * 
+	 *
 	 * @return client|array
 	 */
 	public static function getPayoutDetail($vendor_id,$currency,$client)
@@ -404,7 +404,7 @@ class TjvendorsHelpersTjvendors
 	 * Get array of clients
 	 *
 	 * @param   string  $vendor_id  integer
-	 * 
+	 *
 	 * @return client|array
 	 */
 	public static function getClients($vendor_id)
@@ -429,11 +429,11 @@ class TjvendorsHelpersTjvendors
 	 * Get get unique Currency
 	 *
 	 * @param   string  $currency   integer
-	 * 
+	 *
 	 * @param   string  $vendor_id  integer
 	 *
 	 * @param   string  $client     integer
-	 * 
+	 *
 	 * @return boolean
 	 */
 
@@ -477,7 +477,7 @@ class TjvendorsHelpersTjvendors
 	 * Get get currencies
 	 *
 	 * @param   string  $vendor_id  integer
-	 * 
+	 *
 	 * @return currencies|array
 	 */
 	public static function getCurrencies($vendor_id)
@@ -502,11 +502,11 @@ class TjvendorsHelpersTjvendors
 	 * Get get vendor_id
 	 *
 	 * @param   integer  $vendor_id  integer
-	 * 
+	 *
 	 * @param   string   $client     string
-	 * 
+	 *
 	 * @param   string   $currency   string
-	 * 
+	 *
 	 * @return res|integer
 	 */
 	public static function getPayableAmount($vendor_id, $client, $currency)
@@ -583,9 +583,9 @@ class TjvendorsHelpersTjvendors
 	 * check order payout
 	 *
 	 * @param   integer  $vendor_id  integer
-	 * 
+	 *
 	 * @param   integer  $currency   integer
-	 * 
+	 *
 	 * @param   integer  $client     integer
 	 *
 	 * @return res|integer
@@ -651,7 +651,7 @@ class TjvendorsHelpersTjvendors
 	 * Get get currencies
 	 *
 	 * @param   string  $data  integer
-	 * 
+	 *
 	 * @return currencies|array
 	 */
 	public static function addVendor($data)
@@ -669,7 +669,7 @@ class TjvendorsHelpersTjvendors
  * Get get userId
  *
  * @param   string  $userId  integer
- * 
+ *
  * @return res|integer
  */
 	public static function getVendorId($userId)
@@ -689,9 +689,9 @@ class TjvendorsHelpersTjvendors
  * Get get paymentDetails
  *
  * @param   string  $vendor_id  integer
- * 
+ *
  * @param   string  $client     integer
- * 
+ *
  * @return res|integer
  */
 	public static function getPaymentDetails($vendor_id, $client)
@@ -721,9 +721,9 @@ class TjvendorsHelpersTjvendors
 	 * Check for duplicate clients
 	 *
 	 * @param   integer  $vendor_id      required to give vendor specific result
-	 * 
+	 *
 	 * @param   integer  $vendor_client  client taken from the form
-	 * 
+	 *
 	 * @return vendor_client|string
 	 */
 	public static function checkForDuplicateClient($vendor_id,$vendor_client)

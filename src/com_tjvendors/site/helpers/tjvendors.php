@@ -39,9 +39,9 @@ class TjvendorsHelpersTjvendors
 
 	/**
 	 * Get array of unique Clients
-	 *  
-	 * @param   string  $user_id  To give user specific clients for the filter  
-	 * 
+	 *
+	 * @param   string  $user_id  To give user specific clients for the filter
+	 *
 	 * @return null|object
 	 */
 	public static function getUniqueClients($user_id)
@@ -74,11 +74,11 @@ class TjvendorsHelpersTjvendors
 	 * Get array of pending payout amount
 	 *
 	 * @param   integer  $client    required to give vendor specific result
-	 *  
+	 *
 	 * @param   integer  $user_id   required to give user specific result
-	 * 
+	 *
 	 * @param   integer  $currency  required to give user specific result
-	 *   
+	 *
 	 * @return $totalDetails|array
 	 */
 	public static function getTotalDetails($client, $user_id, $currency)
@@ -122,7 +122,7 @@ class TjvendorsHelpersTjvendors
 	 * Get clients for vendors
 	 *
 	 * @param   integer  $vendor_id  required to give vendor specific result
-	 * 
+	 *
 	 * @return clientsForVendor|array
 	 */
 	public static function getClientsForVendor($vendor_id)
@@ -205,9 +205,9 @@ class TjvendorsHelpersTjvendors
 	 * Check for duplicate clients
 	 *
 	 * @param   integer  $vendor_id      required to give vendor specific result
-	 * 
+	 *
 	 * @param   integer  $vendor_client  client taken from the form
-	 * 
+	 *
 	 * @return vendor_client|string
 	 */
 	public static function checkForDuplicateClient($vendor_id,$vendor_client)
@@ -233,9 +233,9 @@ class TjvendorsHelpersTjvendors
 	 * Get get paymentDetails
 	 *
 	 * @param   string  $vendor_id  integer
-	 * 
+	 *
 	 * @param   string  $client     integer
-	 * 
+	 *
 	 * @return res|integer
 	 */
 	public static function getPaymentDetails($vendor_id, $client)

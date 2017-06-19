@@ -118,6 +118,41 @@ class TjvendorsTablevendor extends JTable
 	{
 		jimport('joomla.filesystem.file');
 
+// Validate and create alias if needed
+		$this->alias = trim($this->alias);
+
+		if (!$this->alias)
+		{
+			$this->alias = $this->vendor_title;
+		}
+
+		if ($this->alias)
+		{
+			if (JFactory::getConfig()->get('unicodeslugs') == 1)
+			{
+				$this->alias = JFilterOutput::stringURLUnicodeSlug($this->alias);
+			}
+			else
+			{
+				$this->alias = JFilterOutput::stringURLSafe($this->alias);
+			}
+		}
+
+		// Check if event with same alias is present
+		$table = JTable::getInstance('Vendor', 'TjVendorsTable', array('dbo', $db));
+
+		if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0))
+		{
+			$msg = JText::_('COM_TJVENDORS_SAVE_ALIAS_WARNING');
+
+			while ($table->load(array('alias' => $this->alias)))
+			{
+				$this->alias = JString::increment($this->alias, 'dash');
+			}
+
+			JFactory::getApplication()->enqueueMessage($msg, 'warning');
+		}
+
 		// If there is an ordering column and this is a new row then get the next ordering value
 		if (property_exists($this, 'ordering') && $this->vendor_id == 0)
 		{

@@ -86,12 +86,13 @@ jQuery(window).load(function(){
 					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 					<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 
-					<?php 
+					<?php
 						echo $this->form->renderField('user_id');
 						echo $this->form->renderField('client');
-						echo $this->form->renderField('vendor_title'); 
-						echo $this->form->renderField('vendor_description'); 
-						echo $this->form->renderField('vendor_logo'); 
+						echo $this->form->renderField('vendor_title');
+						echo $this->form->renderField('alias');
+						echo $this->form->renderField('vendor_description');
+						echo $this->form->renderField('vendor_logo');
 						?>
 						<div class="controls">
 						<div class="alert alert-warning">
@@ -99,7 +100,7 @@ jQuery(window).load(function(){
 						echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png');
 						?>
 						</div>
-						
+
 						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
 						<?php if (!empty($this->item->vendor_logo)) : ?>
 							<div class="control-group">

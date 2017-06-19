@@ -86,7 +86,7 @@ jQuery(window).load(function(){
 					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 					<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 
-					<?php 
+					<?php
 						if ($this->item->vendor_id != 0)
 						{
 							$input=JFactory::getApplication()->input;
@@ -116,7 +116,7 @@ jQuery(window).load(function(){
 						elseif($this->item->vendor_id==0)
 						{
 							 echo $this->form->renderField('user_id');
-							
+
 							if (!empty($this->item->vendor_id))
 							{
 								if(!empty($this->clientsForVendor))
@@ -130,15 +130,16 @@ jQuery(window).load(function(){
 								}
 							}
 							echo $this->form->renderField('client');
-							echo $this->form->renderField('vendor_title'); 
-							echo $this->form->renderField('vendor_description'); 
-							echo $this->form->renderField('vendor_logo'); 
+							echo $this->form->renderField('vendor_title');
+							echo $this->form->renderField('alias');
+							echo $this->form->renderField('vendor_description');
+							echo $this->form->renderField('vendor_logo');
 							if(empty($this->item->vendor_logo)) :?>
 								<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/administrator/components/com_tjvendors/assets/images/default.png" />
 									<div class="control-group">
 											<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>" class="span3 col-md-3 img-thumbnail marginb10"></div>
 										</div>
-								
+
 							<?php endif;
 							?>
 							<div class="controls">
@@ -147,7 +148,7 @@ jQuery(window).load(function(){
 							echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png');
 							?>
 							</div>
-							<?php 
+							<?php
 						}
 						?>
 				</fieldset>

@@ -72,56 +72,21 @@ class com_tjvendorsInstallerScript
 	{
 		$this->componentStatus = "update";
 		$this->installSqlFiles($parent);
+		$check = $this->checkTableExists('tj_vendors');
+
+		if ($check)
+		{
+			$this->updateData();
+		}
 	}
 
 	function installSqlFiles($parent)
 	{
 		$db = JFactory::getDBO();
 
-		// Install country table(#__tj_country) if it does not exists
-		$check = $this->checkTableExists('tj_vendors');
-
-		if (!$check)
-		{
-			// Lets create the table
-			$this->runSQL($parent, 'install.mysql.utf8.sql');
-		}
+		// Lets create the table
+		$this->runSQL($parent, 'install.mysql.utf8.sql');
 	}
-
-	function checkTableExists($table)
-	{
-		$db = JFactory::getDBO();
-		$config = JFactory::getConfig();
-
-		if (JVERSION >= '3.0')
-		{
-			$dbname = $config->get('db');
-			$dbprefix = $config->get('dbprefix');
-		}
-		else
-		{
-			$dbname = $config->getValue('config.db');
-			$dbprefix = $config->getvalue('config.dbprefix');
-		}
-
-		$query =" SELECT table_name
-		 FROM information_schema.tables
-		 WHERE table_schema='" . $dbname . "'
-		 AND table_name='" . $dbprefix . $table . "'";
-
-		$db->setQuery($query);
-		$check = $db->loadResult();
-
-		if ($check)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
 
 	function runSQL($parent,$sqlfile)
 	{
@@ -166,4 +131,78 @@ class com_tjvendorsInstallerScript
 			}
 		}
 	}
+
+	function updateData()
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__tj_vendors'));
+		$db->setQuery($query);
+		$oldVendorsData = $db->loadObjectList();
+
+		if (!empty($oldVendorsData))
+		{
+			foreach ($oldVendorsData as $oldData)
+			{
+				$newVendorData = new stdClass;
+				$newVendorData->user_id = $oldData->user_id;
+				$newVendorData->vendor_id = $oldData->id;
+				$newVendorData->state = 1;
+				$newVendorData->vendor_title = JFactory::getUser($oldData->user_id)->name;
+				// Insert the object into the user profile table.
+				$result = JFactory::getDbo()->insertObject('#__tjvendors_vendors', $newVendorData);
+
+				$newXrefData = new stdClass;
+				$newXrefData->vendor_id = $oldData->id;
+				$newXrefData->id = $oldData->id;
+				$newXrefData->client = 'com_jticketing';
+				$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $newXrefData);
+
+				$newFeeData = new stdClass;
+				$newFeeData->vendor_id = $oldData->id;
+				$newFeeData->id = $oldData->id;
+				$newFeeData->client = 'com_jticketing';
+				$newFeeData->currency = 'USD';
+				$newFeeData->percent_commission = $oldData->percent_commission;
+				$newFeeData->flat_commission = $oldData->flat_commission;
+				$result = JFactory::getDbo()->insertObject('#__tjvendors_fee', $newFeeData);
+			}
+		}
+	}
+
+	function checkTableExists($table)
+	{
+		$db = JFactory::getDBO();
+		$config = JFactory::getConfig();
+
+		if (JVERSION >= '3.0')
+		{
+			$dbname = $config->get('db');
+			$dbprefix = $config->get('dbprefix');
+		}
+		else
+		{
+			$dbname = $config->getValue('config.db');
+			$dbprefix = $config->getvalue('config.dbprefix');
+		}
+
+		$query =" SELECT table_name
+		 FROM information_schema.tables
+		 WHERE table_schema='" . $dbname . "'
+		 AND table_name='" . $dbprefix . $table . "'";
+
+		$db->setQuery($query);
+		$check = $db->loadResult();
+
+		if ($check)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
 }

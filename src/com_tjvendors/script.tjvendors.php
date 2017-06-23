@@ -17,11 +17,11 @@ jimport('joomla.application.component.controller');
 	/**
 	 * script for migration
 	 *
-	 * @package     TJvendor
+	 * @package  TJvendor
 	 *
-	 * @since       1.0
+	 * @since    1.0
 	 */
-class com_tjvendorsInstallerScript
+class Com_TjvendorsInstallerScript
 {
 	// Used to identify new install or update
 	private $componentStatus = "install";
@@ -100,7 +100,7 @@ class com_tjvendorsInstallerScript
 	}
 
 	/**
-	 * method to install the sq	l files
+	 * method to install the sql files
 	 *
 	 * @param   array  $parent  data
 	 *
@@ -130,7 +130,7 @@ class com_tjvendorsInstallerScript
 		// Obviously you may have to change the path and name if your installation SQL file ;)
 		if (method_exists($parent, 'extension_root'))
 		{
-			$sqlfile = $parent->getPath('extension_root') . '/administrator' . '/sql/' . $sqlfile;
+			$sqlfile = $parent->getPath('extension_root') . '/administrator/sql/' . $sqlfile;
 		}
 		else
 		{
@@ -180,6 +180,8 @@ class com_tjvendorsInstallerScript
 		{
 			foreach ($oldVendorsData as $oldData)
 			{
+				$com_params = JComponentHelper::getParams('com_jticketing');
+				$currency = $com_params->get('currency');
 				$newVendorData = new stdClass;
 				$newVendorData->user_id = $oldData->user_id;
 				$newVendorData->vendor_id = $oldData->id;
@@ -197,7 +199,7 @@ class com_tjvendorsInstallerScript
 				$newFeeData->vendor_id = $oldData->id;
 				$newFeeData->id = $oldData->id;
 				$newFeeData->client = 'com_jticketing';
-				$newFeeData->currency = 'USD';
+				$newFeeData->currency = $currency;
 				$newFeeData->percent_commission = $oldData->percent_commission;
 				$newFeeData->flat_commission = $oldData->flat_commission;
 				$result = JFactory::getDbo()->insertObject('#__tjvendors_fee', $newFeeData);
@@ -224,7 +226,7 @@ class com_tjvendorsInstallerScript
 
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('table_name'));
-		$query->from('information_schema.tables');
+		$query->from($db->quoteName('information_schema.tables'));
 		$query->where($db->quoteName('table_schema') . ' = ' . $db->quote($dbname));
 		$query->where($db->quoteName('table_name') . ' = ' . $db->quote($dbprefix . $table));
 		$db->setQuery($query);

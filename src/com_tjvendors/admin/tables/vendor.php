@@ -142,7 +142,7 @@ class TjvendorsTablevendor extends JTable
 		// Check if event with same alias is present
 		$table = JTable::getInstance('Vendor', 'TjVendorsTable', array('dbo', $db));
 
-		if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0))
+		if ($table->load(array('alias' => $this->alias)) && ($table->vendor_id != $this->vendor_id || $this->vendor_id == 0))
 		{
 			$msg = JText::_('COM_TJVENDORS_SAVE_ALIAS_WARNING');
 

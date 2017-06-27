@@ -36,12 +36,12 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	{
 		var txt;
 		var r = confirm("<?php echo JText::_('CONFIRM_MESSAGE_YES_NO'); ?>");
-		
-		if (r == true) 
+
+		if (r == true)
 		{
 			// Do nothing
-		} 
-		else 
+		}
+		else
 		{
 			return false;
 		}
@@ -67,6 +67,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 						echo $this->form->renderField('total');
 					}
 					?>
+					<?php echo $this->form->renderField('reference_order_id'); ?>
+					<?php echo $this->form->renderField('status'); ?>
 					<button class="validate btn btn-primary" id="pay-confirmation" onclick="return confirmationMsg()" >PAY</button>
 				</fieldset>
 			</div>

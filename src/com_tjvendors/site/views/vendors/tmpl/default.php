@@ -17,8 +17,8 @@ $listDirn      = $this->state->get('list.direction');
 
 ?>
 <script type="text/javascript">
-	
-	
+
+
 	jQuery(document).ready(function ()
 	{
 		jQuery('#clear-search-button').on('click', function ()
@@ -37,16 +37,16 @@ $listDirn      = $this->state->get('list.direction');
 		});
 	});
 </script>
-<?php 
+<?php
 $user_id = JFactory::getUser()->id;
 if ( $user_id && !empty($this->vendor_id))
 {?>
 	<form action="<?php
 		echo JRoute::_('index.php?option=com_tjvendors&view=vendors');
 	?>" method="post" id="adminForm" name="adminForm">
-			
+
 			<div btn-group pull-left hidden-phone>
-				
+
 				<div class="btn-group hidden-phone">
 					<?php
 						echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
@@ -63,7 +63,7 @@ if ( $user_id && !empty($this->vendor_id))
 					</button>
 				</div>
 			</div>
-			
+
 				<div class="btn-group pull-left hidden-phone">
 					<input type="text" name="filter_search" id="filter_search"placeholder="<?php echo JText::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_VENDOR_TITLE');?>"
 						value="<?php
@@ -99,7 +99,7 @@ if ( $user_id && !empty($this->vendor_id))
 						?>
 				</div>
 				<div class="btn-group hidden-phone">
-					<?php 
+					<?php
 					$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
 					$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
 					$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
@@ -135,15 +135,9 @@ if ( $user_id && !empty($this->vendor_id))
 					<?php }
 						if ($currency == '0')
 						{?>
-						
+
 						<th width="5%">
 							<?php echo JHtml::_('grid.sort', 'Currency', 'pass.`currency`', $listDirn, $listOrder); ?>
-					   </th>
-					<?php }
-						if ($transactionType == '0')
-						{?> 
-						<th width="10%">
-							<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE');?>
 					   </th>
 					<?php }
 						if($transactionType == "credit" || empty($transactionType))
@@ -223,22 +217,6 @@ if ( $user_id && !empty($this->vendor_id))
 									<?php echo $row->currency;?>
 								</td>
 							<?php }
-								if($transactionType == '0')
-								{
-								?>
-								<td>
-									<?php
-										if ($row->credit < 0)
-											{
-												echo "debit";
-											}
-											else
-											{
-												echo "credit";
-											}
-										?>
-								</td>
-							<?php }
 								if($transactionType == "credit" || empty($transactionType))
 						{ ?>
 							<td>
@@ -261,7 +239,7 @@ if ( $user_id && !empty($this->vendor_id))
 							<td>
 							<?php echo $row->debit;?>
 							</td>
-						<?php 
+						<?php
 						}
 						?>
 								<td>
@@ -275,13 +253,34 @@ if ( $user_id && !empty($this->vendor_id))
 								</td>
 								<td>
 								<?php
-									$status = json_decode($row->params, true);
-									echo $status['entry_status'];
+								$status = json_decode($row->params, true);
+								if($status['entry_status'] == "debit_payout")
+								{
+									if($row->status == 1)
+									{
+										echo "Payout Done";
+									}
+									else
+									{
+										echo "Payout Pending";
+									}
+								}
+								elseif($status['entry_status'] == "credit_for_ticket_buy")
+								{
+									echo "Credit Done";
+								}
 								?>
 								</td>
-								<td>
-								<?php 
-									echo $status['customer_note'];
+								<td class="center">
+								<?php
+									if(!empty($status['customer_note']))
+									{
+										echo $status['customer_note'];
+									}
+									else
+									{
+										echo "-";
+									}
 								?>
 								</td>
 							</tr>

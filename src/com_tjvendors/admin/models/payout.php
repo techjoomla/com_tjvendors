@@ -113,9 +113,10 @@ class TjvendorsModelPayout extends JModelAdmin
 		else
 		{
 			$payableAmount = TjvendorsHelpersTjvendors::getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
-			$this->item->total = $payableAmount['payableAmount'];
+			$this->item->total = $payableAmount;
 		}
 
+			$this->item->reference_order_id = '';
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
 			$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 			$vendorDetail = $TjvendorsModelVendor->getItem();
@@ -156,7 +157,8 @@ class TjvendorsModelPayout extends JModelAdmin
 				$data['total'] = $pending_amount['total'] - $data['debit'];
 				$data['transaction_time'] = JFactory::getDate()->toSql();
 				$data['client'] = $client['client'];
-				$data['transaction_id'] = $vendorDetail->vendor_id . $client['client'] . $vendorDetail->currency;
+				$transactionClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($item->client));
+				$data['transaction_id'] = $transactionClient . ' - ' . $vendorDetail->vendor_id . ' - ' . $vendorDetail->currency . ' - ';
 				$data['credit'] = - $data['debit'];
 				$data['id'] = '';
 				$data['vendor_id'] = $vendorDetail->vendor_id;
@@ -190,7 +192,8 @@ class TjvendorsModelPayout extends JModelAdmin
 		$data['total'] = $payableAmount['total'] - $data['debit'];
 		$data['transaction_time'] = JFactory::getDate()->toSql();
 		$data['client'] = $vendorDetail->client;
-		$data['transaction_id'] = $item->vendor_id . $client . $item->currency;
+		$transactionClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($item->client));
+		$data['transaction_id'] = $transactionClient . '-' . $vendorDetail->currency . '-' . $vendorDetail->vendor_id . '-';
 		$data['id'] = '';
 		$data['vendor_id'] = $item->vendor_id;
 		$data['credit'] = '0.00';
@@ -251,9 +254,9 @@ class TjvendorsModelPayout extends JModelAdmin
 
 	/**
 	 * Method to get the data that should be injected in the form.
-	 * 
+	 *
 	 * @param   array  $data  An optional array of data for the form to interogate.
-	 * 
+	 *
 	 * @return   mixed  The data for the form.
 	 *
 	 * @since    1.6
@@ -276,8 +279,8 @@ class TjvendorsModelPayout extends JModelAdmin
 	 * Method to add the amount when a product is purchased.
 	 *
 	 * @param   array  $data  data of order
-	 * 
-	 * @return   void 
+	 *
+	 * @return   void
 	 *
 	 * @since    1.6
 	 */
@@ -302,5 +305,30 @@ class TjvendorsModelPayout extends JModelAdmin
 		{
 			$this->fetchingData($data);
 		}
+	}
+
+	/**
+	 * Method to change payout status
+	 *
+	 * @param   integer  $payout_id   data of payout
+	 *
+	 * @param   integer  $paidUnpaid  payout status
+	 *
+	 * @return   void
+	 *
+	 * @since    1.6
+	 */
+	public function changePayoutStatus($payout_id, $paidUnpaid)
+	{
+		$object = new stdClass;
+
+		// Must be a valid primary key value.
+		$object->id = $payout_id;
+		$object->status = $paidUnpaid;
+
+		// Update their details in the users table using id as the primary key.
+		$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
+
+		return true;
 	}
 }

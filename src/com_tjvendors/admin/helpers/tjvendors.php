@@ -104,7 +104,8 @@ class TjvendorsHelpersTjvendors
 
 		foreach ($rows as $row)
 		{
-			$uniqueClient[] = array("vendor_client" => $row['client'], "client_value" => $row['client']);
+			$langClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($row['client']));
+			$uniqueClient[] = array("vendor_client" => $langClient, "client_value" => $row['client']);
 		}
 
 		return $uniqueClient;
@@ -151,7 +152,7 @@ class TjvendorsHelpersTjvendors
 
 		$db->setQuery($query);
 		$rows = $db->loadAssoc();
-		$totalDebitAmount = $rows['debit'];
+		$totalDebitAmount = self::getPaidAmount($vendor_id, $currency, $client);
 		$totalCreditAmount = $rows['credit'];
 		$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
 
@@ -234,8 +235,6 @@ class TjvendorsHelpersTjvendors
 			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
 
-		$query->where($db->quoteName('debit') . ' > 0');
-
 		if ($bulkPayoutStatus == 0 && !empty($client))
 		{
 			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
@@ -250,7 +249,7 @@ class TjvendorsHelpersTjvendors
 			$entryStatus = json_decode($detail['params']);
 			$entryStatus->entry_status;
 
-			if ($entryStatus->entry_status == "debit_payout")
+			if ($entryStatus->entry_status == "debit_payout" && $detail['status'] == 1)
 			{
 				$amount = $amount + $detail['debit'];
 			}
@@ -511,70 +510,31 @@ class TjvendorsHelpersTjvendors
 	 */
 	public static function getPayableAmount($vendor_id, $client, $currency)
 	{
-		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
-		$date = JFactory::getDate();
-		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
-		$payoutDate = $payout_date_limit->format('Y-m-d') . " 23:59:00";
 		$db = JFactory::getDbo();
+
+		// Create a new query object.
 		$query = $db->getQuery(true);
 		$subQuery = $db->getQuery(true);
-		$subQuery->select('max(' . $db->quoteName('id') . ')');
-		$subQuery->from($db->quoteName('#__tjvendors_passbook'));
+		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
+		$query->from($db->quoteName('#__tjvendors_passbook'));
 
 		if (!empty($vendor_id))
 		{
-			$subQuery->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
-		}
-
-		if (!empty($client))
-		{
-			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 		}
 
 		if (!empty($currency))
 		{
-			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
 		}
 
-		$payoutDetails = self::checkOrderPayout($vendor_id, $currency, $client);
-
-		if (!empty($payoutDetails))
+		if (!empty($client))
 		{
-			$status = $payoutDetails['status'];
-
-			if (!empty($status))
-			{
-				if ($status != "debit_payout")
-				{
-					$subQuery->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDate));
-				}
-				elseif($status == "debit_payout")
-				{
-					$subQuery->where($db->quoteName('transaction_time') . ' >= ' . $db->quote($payoutDetails['transaction_time']));
-					$subQuery->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDate));
-				}
-			}
-			else
-			{
-				$subQuery->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDate));
-			}
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
-		$query->select($db->quoteName('total'));
-		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quotename('id') . ' = (' . $subQuery . ')');
 		$db->setQuery($query);
-		$res = $db->loadResult();
-
-		if (!empty($res))
-		{
-			$result = array("payableAmount" => $res, "payout_date_limit" => $payoutDate);
-		}
-		else
-		{
-			$result = array("payableAmount" => 0, "payout_date_limit" => $payoutDate);
-		}
+		$result = $db->loadResult() - self::getPaidAmount($vendor_id, $currency, $client);
 
 		return $result;
 	}

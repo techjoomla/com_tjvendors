@@ -85,6 +85,9 @@ class TjvendorsModelReports extends JModelList
 		$client = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
 		$this->setState('filter.vendor_client', $client);
 
+		$paidUnpaid = $app->getUserStateFromRequest($this->context . '.filter.paidUnpaid', 'paidUnpaid', '0', 'string');
+		$this->setState('filter.paidUnpaid', $paidUnpaid);
+
 		$transactionType = $app->getUserStateFromRequest($this->context . '.filter.transactionType', 'transactionType', '0', 'string');
 		$this->setState('filter.transactionType', $transactionType);
 

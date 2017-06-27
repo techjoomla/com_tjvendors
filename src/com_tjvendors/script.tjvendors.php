@@ -1,22 +1,10 @@
 <?php
 /**
- * @package   AdminTools
- * @copyright Copyright (c)2010-2014 Nicholas K. Dionysopoulos
- * @license   GNU General Public License version 3, or later
- * @version   $Id$
- *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation, either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  You should have received a copy of the GNU General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * @version    SVN:
+ * @package    Com_Tjvendors
+ * @author     Techjoomla  <contact@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 
 defined('_JEXEC') or die();
@@ -25,12 +13,15 @@ jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 jimport('joomla.application.component.controller');
 
-if (!defined('DS'))
-{
-	define('DS',DIRECTORY_SEPARATOR);
-}
 
-class com_tjvendorsInstallerScript
+	/**
+	 * script for migration
+	 *
+	 * @package  TJvendor
+	 *
+	 * @since    1.0
+	 */
+class Com_TjvendorsInstallerScript
 {
 	// Used to identify new install or update
 	private $componentStatus = "install";
@@ -38,27 +29,37 @@ class com_tjvendorsInstallerScript
 	/**
 	 * method to run before an install/update/uninstall method
 	 *
+	 * @param   array  $type    data
+	 *
+	 * @param   array  $parent  data
+	 *
 	 * @return void
 	 */
-	function preflight($type, $parent)
+	public function preflight($type, $parent)
 	{
 	}
 
 	/**
 	 * Runs after install, update or discover_update
-	 * @param string $type install, update or discover_update
-	 * @param JInstaller $parent
+	 *
+	 * @param   array  $type    data
+	 *
+	 * @param   array  $parent  data
+	 *
+	 * @return void
 	 */
-	function postflight( $type, $parent )
+	public function postflight( $type, $parent )
 	{
 	}
 
 	/**
 	 * method to install the component
 	 *
+	 * @param   array  $parent  data
+	 *
 	 * @return void
 	 */
-	function install($parent)
+	public function install($parent)
 	{
 		$this->installSqlFiles($parent);
 	}
@@ -66,75 +67,74 @@ class com_tjvendorsInstallerScript
 	/**
 	 * method to update the component
 	 *
+	 * @param   array  $parent  data
+	 *
 	 * @return void
 	 */
-	function update($parent)
+	public function update($parent)
 	{
 		$this->componentStatus = "update";
 		$this->installSqlFiles($parent);
-	}
-
-	function installSqlFiles($parent)
-	{
-		$db = JFactory::getDBO();
-
-		// Install country table(#__tj_country) if it does not exists
 		$check = $this->checkTableExists('tj_vendors');
-
-		if (!$check)
-		{
-			// Lets create the table
-			$this->runSQL($parent, 'install.mysql.utf8.sql');
-		}
-	}
-
-	function checkTableExists($table)
-	{
-		$db = JFactory::getDBO();
-		$config = JFactory::getConfig();
-
-		if (JVERSION >= '3.0')
-		{
-			$dbname = $config->get('db');
-			$dbprefix = $config->get('dbprefix');
-		}
-		else
-		{
-			$dbname = $config->getValue('config.db');
-			$dbprefix = $config->getvalue('config.dbprefix');
-		}
-
-		$query =" SELECT table_name
-		 FROM information_schema.tables
-		 WHERE table_schema='" . $dbname . "'
-		 AND table_name='" . $dbprefix . $table . "'";
-
-		$db->setQuery($query);
-		$check = $db->loadResult();
 
 		if ($check)
 		{
-			return true;
-		}
-		else
-		{
-			return false;
+			$oldVendorsData = $this->getOldData();
+
+			if (empty($oldVendorsData))
+			{
+				$db = JFactory::getDbo();
+				$db->dropTable('#__tj_vendors', true);
+			}
+			else
+			{
+				$result = $this->updateData();
+
+				if ($result)
+				{
+					$db = JFactory::getDbo();
+					$db->dropTable('#__tj_vendors', true);
+				}
+			}
 		}
 	}
 
+	/**
+	 * method to install the sql files
+	 *
+	 * @param   array  $parent  data
+	 *
+	 * @return void
+	 */
+	public function installSqlFiles($parent)
+	{
+		$db = JFactory::getDBO();
 
-	function runSQL($parent,$sqlfile)
+		// Lets create the table
+		$this->runSQL($parent, 'install.mysql.utf8.sql');
+	}
+
+	/**
+	 * method to run the sql
+	 *
+	 * @param   array  $parent   data
+	 *
+	 * @param   array  $sqlfile  data
+	 *
+	 * @return void
+	 */
+	public function runSQL($parent,$sqlfile)
 	{
 		$db = JFactory::getDBO();
 
 		// Obviously you may have to change the path and name if your installation SQL file ;)
 		if (method_exists($parent, 'extension_root'))
 		{
-			$sqlfile = $parent->getPath('extension_root').DS.'administrator'.DS.'sql'.DS.$sqlfile;
+			$sqlfile = $parent->getPath('extension_root') . '/administrator/sql/' . $sqlfile;
 		}
 		else
 		{
-			$sqlfile = $parent->getParent()->getPath('extension_root').DS.'sql'.DS.$sqlfile;
+			$sqlfile = $parent->getParent()->getPath('extension_root') . '/sql/' . $sqlfile;
 		}
 
 		// Don't modify below this line
@@ -165,5 +165,96 @@ class com_tjvendorsInstallerScript
 				}
 			}
 		}
+	}
+
+	/**
+	 * method to migrate the old data
+	 *
+	 * @return void
+	 */
+	public function updateData()
+	{
+		$oldVendorsData = $this->getOldData();
+
+		if (!empty($oldVendorsData))
+		{
+			foreach ($oldVendorsData as $oldData)
+			{
+				$com_params = JComponentHelper::getParams('com_jticketing');
+				$currency = $com_params->get('currency');
+				$newVendorData = new stdClass;
+				$newVendorData->user_id = $oldData->user_id;
+				$newVendorData->vendor_id = $oldData->id;
+				$newVendorData->state = 1;
+				$newVendorData->vendor_title = JFactory::getUser($oldData->user_id)->name;
+				$result = JFactory::getDbo()->insertObject('#__tjvendors_vendors', $newVendorData);
+
+				$newXrefData = new stdClass;
+				$newXrefData->vendor_id = $oldData->id;
+				$newXrefData->id = $oldData->id;
+				$newXrefData->client = 'com_jticketing';
+				$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $newXrefData);
+
+				$newFeeData = new stdClass;
+				$newFeeData->vendor_id = $oldData->id;
+				$newFeeData->id = $oldData->id;
+				$newFeeData->client = 'com_jticketing';
+				$newFeeData->currency = $currency;
+				$newFeeData->percent_commission = $oldData->percent_commission;
+				$newFeeData->flat_commission = $oldData->flat_commission;
+				$result = JFactory::getDbo()->insertObject('#__tjvendors_fee', $newFeeData);
+			}
+
+			return true;
+		}
+	}
+
+	/**
+	 * method to check if the old table exists
+	 *
+	 * @param   string  $table  table name
+	 *
+	 * @return void
+	 */
+	public function checkTableExists($table)
+	{
+		$db = JFactory::getDBO();
+		$config = JFactory::getConfig();
+
+		$dbname = $config->get('db');
+		$dbprefix = $config->get('dbprefix');
+
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('table_name'));
+		$query->from($db->quoteName('information_schema.tables'));
+		$query->where($db->quoteName('table_schema') . ' = ' . $db->quote($dbname));
+		$query->where($db->quoteName('table_name') . ' = ' . $db->quote($dbprefix . $table));
+		$db->setQuery($query);
+		$check = $db->loadResult();
+
+		if ($check)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	/**
+	 * method to get old data
+	 *
+	 * @return void
+	 */
+	public function getOldData()
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__tj_vendors'));
+		$db->setQuery($query);
+
+		return $db->loadObjectList();
 	}
 }

@@ -109,13 +109,79 @@ class TjvendorFrontHelper
 
 		$db->setQuery($query);
 		$rows = $db->loadAssoc();
-		$totalDebitAmount = $rows['debit'];
+		$totalDebitAmount = self::getPaidAmount($user_id, $currency, $client);
 		$totalCreditAmount = $rows['credit'];
 		$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
 
 		$totalDetails = array("debitAmount" => $totalDebitAmount,"creditAmount" => $totalCreditAmount,"pendingAmount" => $totalpendingAmount);
 
 		return $totalDetails;
+	}
+
+	/**
+	 * Get paid amount
+	 *
+	 * @param   string  $user_id       integer
+	 *
+	 * @param   string  $currency      integer
+	 *
+	 * @param   string  $filterClient  client from filter
+	 *
+	 * @return amount
+	 */
+	public static function getPaidAmount($user_id, $currency, $filterClient)
+	{
+		$input = JFactory::getApplication()->input;
+		$urlClient = $input->get('client', '', 'STRING');
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$bulkPayoutStatus = $com_params->get('bulk_payout');
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+
+		if ($filterClient != '0')
+		{
+			$client = $filterClient;
+		}
+		else
+		{
+			$client = $urlClient;
+		}
+
+		$vendor_id = self::getVendor();
+
+		if (!empty($vendor_id))
+		{
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		}
+
+		if (!empty($currency))
+		{
+			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		if ($bulkPayoutStatus == 0 && !empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
+		$db->setQuery($query);
+		$paidDetails = $db->loadAssocList();
+		$amount = 0;
+
+		foreach ($paidDetails as $detail)
+		{
+			$entryStatus = json_decode($detail['params']);
+			$entryStatus->entry_status;
+
+			if ($entryStatus->entry_status == "debit_payout" && $detail['status'] == 1)
+			{
+				$amount = $amount + $detail['debit'];
+			}
+		}
+
+		return $amount;
 	}
 
 	/**

@@ -69,4 +69,23 @@ class TjvendorsControllerPayout extends JControllerForm
 		$model = $this->getModel('payout');
 		$results = $model->addCreditEntry();
 	}
+
+	/**
+	 * Change payout status.
+	 *
+	 * @return  null
+	 *
+	 * @since   1.6
+	 */
+	public function changePayoutStatus()
+	{
+		$input  = JFactory::getApplication()->input->post;
+		$payout_id = $input->get('payout_id', '', 'STRING');
+		$paidUnpaid = $input->get('paidUnpaid', '', 'STRING');
+		$model = $this->getModel('Payout');
+		$results = $model->changePayoutStatus($payout_id, $paidUnpaid);
+
+		echo json_encode($results);
+		jexit();
+	}
 }

@@ -54,9 +54,9 @@ class TjvendorsControllerVendor extends JControllerForm
 
 	/**
 	 * Check for duplicate users
-	 * 
+	 *
 	 * @return null
-	 * 
+	 *
 	 * @since   1.6
 	 */
 	public function checkDuplicateUser()
@@ -72,9 +72,9 @@ class TjvendorsControllerVendor extends JControllerForm
 
 	/**
 	 * Build payment gateway fields
-	 * 
+	 *
 	 * @return null
-	 * 
+	 *
 	 * @since   1.6
 	 */
 	public function generateGatewayFields()

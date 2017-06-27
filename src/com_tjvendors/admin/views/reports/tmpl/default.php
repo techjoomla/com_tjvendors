@@ -38,7 +38,7 @@ $client = $input->get('client', '', 'STRING');
 			jQuery('#adminForm').submit();
 		});
 	});
-	
+
 	jQuery(document).ready(function ()
 	{
 		jQuery('#clear-calendar').on('click', function ()
@@ -55,15 +55,25 @@ Joomla.submitbutton = function (task)
 			window.location = "index.php?option=com_tjvendors&view=vendors&client="+client;
 		}
 	}
+var client = '<?php echo $client;?>';
 </script>
 <?php
-// Joomla Component Creator code to allow adding non select list filters
-if (!empty($this->extra_sidebar))
+if(!empty($this->extra_sidebar))
 {
-	$this->sidebar .= $this->extra_sidebar;
+		$this->sidebar .= $this->extra_sidebar;
+?>
+	<div id="j-sidebar-container" class="span2">
+		<?php echo $this->sidebar; ?>
+	</div>
+	<div id="j-main-container" class="span10">
+<?php
+}
+else
+{?>
+	<div id="j-main-container">
+<?php
 }
 ?>
-
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . $this->input->get('vendor_id', '', 'STRING') . '&client=' . $this->input->get('client', '', 'STRING')); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
@@ -87,10 +97,9 @@ else
 			<div class="alert alert-no-items">
 				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 			</div>
-	<?php
+		<?php
 	}
-	else
-	{?>
+	?>
 	<div id="filter-bar" class="btn-toolbar">
 
 		<div class="filter-search btn-group pull-left">
@@ -121,7 +130,7 @@ else
 				echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox','onchange' => 'document.adminForm.submit()' ));
 			?>
 		</div>
-		
+
 		<div class="btn-group pull-left hidden-phone">
 			<button class="btn hasTooltip" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
 				<i class="icon-remove"></i>
@@ -136,44 +145,56 @@ else
 				<?php echo $this->pagination->getLimitBox(); ?>
 			</div>
 			<div class="btn-group pull-right hidden-phone">
-			<?php	
+			<?php
 			echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
 			echo $filterClient = $this->state->get('filter.vendor_client'); 	?>
 		</div>
 
 		<div class="btn-group pull-right hidden-phone">
-			<?php 
+			<?php
 			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
 			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
 			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
 			echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
 		</div>
 		<div class="btn-group pull-right hidden-phone">
-			<?php 
+			<?php
 				// Making custom filter list
 				$this->currencies = TjvendorsHelpersTjvendors::getCurrencies($this->state->get('filter.vendor_id'));
 				$currencyList[] = JText::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
 				foreach($this->currencies as $currency)
 				{
-					$currencyList[] = $currency; 
+					$currencyList[] = $currency;
 				}
 
 			 echo JHtml::_('select.genericlist', $currencyList, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));?>
 		</div>
 		<div class="btn-group pull-right hidden-phone">
-			<?php 
+			<?php
 				// Making custom filter list
 			 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
-			
+
 		</div>
 	</div>
 
-		
 	</div>
-	<table class="table table-striped" id="countryList">
-		<table class="table table-striped" >
+	<?php
+	if(!empty($this->items))
+	{
+		?>
+		<table class="table table-striped table-responsive" >
 			<thead>
+				<tr>
+						<div class="pull-left">
+							<div>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE') . "</h4>";?>
+							</div>
+							<div>
+								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE') . "</h4>"; ?>
+							</div>
+						</div>
+					</tr>
 				<tr>
 					<?php if (isset($this->items[0]->ordering)): ?>
 					<th width="1%" class="nowrap center hidden-phone">
@@ -205,17 +226,10 @@ else
 							<th class='left' width="5%">
 							<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
 							</th>
-					<?php 
+					<?php
 						}
 
 						$transactionType = $this->state->get('filter.transactionType');
-						if(empty($transactionType))
-						{?>
-							<th class='left' width="10%">
-								<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TYPE'); ?>
-							</th>
-					<?php
-						}
 
 						if($transactionType == "credit" || empty($transactionType))
 						{?>
@@ -243,19 +257,23 @@ else
 					<th class='left' width="10%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder); ?>
 					</th>
-					<th class='left' width="8%">
-						<?php echo JText::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS'); ?>
-					</th>
+
 					<th class='left' width="10%">
 						<?php echo JText::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE'); ?>
 					</th>
+					<th class='left' width="10%">
+						<?php echo JText::_('COM_TJVENDORS_REPORTS_STATUS'); ?>
+					</th>
 				</tr>
 			</thead>
-			<?php if($filterCurrency != '0'):?>
+
 			<tfoot>
 					<td colspan="5">
-						<?php echo $this->pagination->getListFooter();?>
-				   </td>
+						<div class="pull-left">
+							<?php echo $this->pagination->getListFooter();?>
+						</div>
+					</td>
+					<?php if($filterCurrency != '0'):?>
 					<td colspan="5">
 						<div class="pull-right">
 							<div>
@@ -269,10 +287,13 @@ else
 						   </div>
 						</div>
 					</td>
+					<?php endif;?>
 			</tfoot>
-			<?php endif;?>
 			<tbody>
-				<?php 
+				<?php
+				$options[] = array("type"=>JText::_('Paid'),"value" => "1");
+				$options[] = array("type"=>JText::_('Unpaid'),"value" => "0");
+				$doneOptions[] = array("type"=>JText::_('Credit Done'),"value" => "");
 				foreach ($this->items as $i => $item)
 				{
 					?>
@@ -298,21 +319,6 @@ else
 							<?php echo $item->currency; ?>
 						</td>
 						<?php }
-						if (empty($transactionType))
-						{?>
-						<td>
-							<?php 
-								if($item->credit < 0)
-								{
-									echo "debit";
-								}
-								else
-								{
-									echo "credit";
-								}
-							?>
-						</td>
-						<?php }
 						if($transactionType == "credit" || empty($transactionType))
 						{ ?>
 							<td>
@@ -335,7 +341,7 @@ else
 							<td>
 							<?php echo $item->debit;?>
 							</td>
-						<?php 
+						<?php
 						}
 						?>
 						<td>
@@ -345,21 +351,35 @@ else
 						<td>
 							<?php echo $item->total; ?>
 						</td>
-						
+
 						<td>
 							<?php echo $item->transaction_time; ?>
 						</td>
 						<?php
 							$status = json_decode($item->params, true);?>
-						<td>
-							<?php 
-								echo $status['entry_status'];
+						<td class="center">
+							<?php
+								if(!empty($status['customer_note']))
+								{
+									echo $status['customer_note'];
+								}
+								else
+								{
+									echo "-";
+								}
 							?>
 						</td>
 						<td>
-							<?php 
-								echo $status['customer_note'];
-							?>
+						<?php
+						if($status['entry_status'] == "debit_payout")
+						{
+							echo JHTML::_('select.genericlist', $options, "paidUnpaid", 'class="input-medium" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
+						}
+						elseif($status['entry_status'] == "credit_for_ticket_buy")
+						{
+							echo JHTML::_('select.genericlist', $doneOptions, "doneCredit", 'class="input-medium disable" size="1" onChange="document.adminForm.submit();"', 'value', 'type', $doneOptions);
+						}
+						?>
 						</td>
 					</tr>
 				<?php
@@ -367,7 +387,8 @@ else
 			</tbody>
 		</table>
 		<?php
-	}?>
+	}
+		?>
 		<input type="hidden" name="boxchecked" value="0"/>
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>

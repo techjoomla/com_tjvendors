@@ -125,7 +125,7 @@ if(empty($this->items))
 		<input id="limit" name="limit" type="hidden" value="0" default="0" />
 
 		<div class="btn-group pull-right hidden-phone">
-			
+
 			<?php
 			$com_params = JComponentHelper::getParams('com_tjvendors');
 			$bulkPayoutStatus = $com_params->get('bulk_payout');
@@ -142,12 +142,12 @@ if(empty($this->items))
 		</div>
 
 		<div class="btn-group pull-right hidden-phone">
-			<?php 
+			<?php
 				// Making custom filter list
 			 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
 
-		
+
 	</div>
 
 		<table class="table table-striped" id="payoutList">
@@ -164,7 +164,7 @@ if(empty($this->items))
 					<th width="8%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
-					
+
 					<th  width="5%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
 					</th>
@@ -182,26 +182,26 @@ if(empty($this->items))
 			</thead>
 
 			<tbody>
-				<?php 
+				<?php
 				foreach ($this->items as $i => $item)
 				{
 				?>
 					<tr class="row<?php echo $i % 2; ?>">
 						<?php if (isset($this->items[0]->state)){}?>
 
-						
+
 
 						<td>
 								<?php echo $this->escape($item->vendor_title); ?>
 						</td>
-						
+
 						<td>
 							<?php echo $item->currency; ?>
 						</td>
 
 						<td>
 						<?php
-							
+
 						if($bulkPayoutStatus!=0)
 						{
 							$client=0;
@@ -223,7 +223,7 @@ if(empty($this->items))
 						}
 						?>
 						</td>
-						
+
 						<td>
 						<?php
 						$com_params = JComponentHelper::getParams('com_tjvendors');
@@ -231,7 +231,8 @@ if(empty($this->items))
 						if($bulkPayoutStatus==0)
 						{
 							$result = TjvendorsHelpersTjvendors::getPayableAmount($item->vendor_id, $item->client, $item->currency);
-							echo $result['payableAmount'];
+							//~ echo $result['payableAmount'];
+							echo $result;
 						}
 						else
 						{

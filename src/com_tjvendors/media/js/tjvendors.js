@@ -16,6 +16,7 @@ var tjVAdmin =
 					jQuery(document).on("change","#jform_user_id", function () {
 						tjVAdmin.vendor.checkVendor();
 					});
+
 					jQuery(document).on("change","#jform_payment_gateway", function () {
 						tjVAdmin.vendor.generateGatewayFields();
 					});
@@ -46,6 +47,26 @@ var tjVAdmin =
 					}
 				}
 			},
+			changePayoutStatus: function(payout_id, ele){
+				var paidUnpaid1          = document.getElementById('paidUnpaid').value;
+				var userObject           = {};
+				userObject["payout_id"]  = payout_id;
+				userObject["paidUnpaid"] = jQuery(ele).val();
+
+				JSON.stringify(userObject) ;
+				jQuery.ajax({
+					type: "POST",
+					dataType: "json",
+					data: userObject,
+					url: "index.php?option=com_tjvendors&task=payout.changePayoutStatus",
+					success:function(data) {
+						if(data)
+						{
+							document.location='index.php?option=com_tjvendors&view=reports&client='+client;
+						}
+					},
+				});
+			},
 			checkVendor: function() {
 				var user=document.getElementById('jform_user_id_id').value;
 				var userObject = {};
@@ -65,7 +86,7 @@ var tjVAdmin =
 							{
 								error_html += "<br />" + Joomla.JText._('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR');
 								jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
-								
+
 								return vendorCheck = "exists";
 							}
 							else
@@ -90,8 +111,8 @@ var tjVAdmin =
 						jQuery('#payment_details').html(data);
 					},
 				});
-			},
-	},
+			}
+	}
 }
 
 var tjVSite =
@@ -133,7 +154,7 @@ var tjVSite =
 						jQuery('#payment_details').html(data);
 					},
 				});
-			},
+			}
 	}
 }
 

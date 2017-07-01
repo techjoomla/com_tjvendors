@@ -82,7 +82,7 @@ if(!empty($this->sidebar))
 	<div id="j-sidebar-container" class="span2">
 		<?php echo $this->sidebar; ?>
 	</div>
-	<div id="j-main-container" class="span10">
+	<div id="j-main-container" class="">
 <?php
 }
 else
@@ -122,12 +122,12 @@ else
 		</div>
 		<div class="btn-group pull-left hidden-phone">
 			<?php
-				echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));
+				echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
 			?>
 		</div>
 		<div class="btn-group pull-left hidden-phone">
 			<?php
-				echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox','onchange' => 'document.adminForm.submit()' ));
+				echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox','onchange' => 'document.adminForm.submit()'));
 			?>
 		</div>
 
@@ -136,48 +136,55 @@ else
 				<i class="icon-remove"></i>
 			</button>
 		</div>
-
-		<div class="btn-group pull-left hidden-phone">
-			<div class="btn-group pull-right hidden-phone">
-				<label for="limit" class="element-invisible">
-					<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
-				</label>
-				<?php echo $this->pagination->getLimitBox(); ?>
-			</div>
-			<div class="btn-group pull-right hidden-phone">
-			<?php
-			echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
-			echo $filterClient = $this->state->get('filter.vendor_client'); 	?>
-		</div>
-
-		<div class="btn-group pull-right hidden-phone">
-			<?php
-			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
-			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
-			$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
-			echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
-		</div>
-		<div class="btn-group pull-right hidden-phone">
-			<?php
-				// Making custom filter list
-				$this->currencies = TjvendorsHelpersTjvendors::getCurrencies($this->state->get('filter.vendor_id'));
-				$currencyList[] = JText::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
-				foreach($this->currencies as $currency)
-				{
-					$currencyList[] = $currency;
-				}
-
-			 echo JHtml::_('select.genericlist', $currencyList, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));?>
-		</div>
-		<div class="btn-group pull-right hidden-phone">
-			<?php
-				// Making custom filter list
-			 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
-		</div>
-
-		</div>
 	</div>
 
+		<div class="row-fluid btn-group pull-left hidden-phone">
+				<div class="btn-group hidden-phone">
+					<label for="limit" class="element-invisible">
+						<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+					</label>
+					<?php echo $this->pagination->getLimitBox(); ?>
+				</div>
+				<div class="btn-group hidden-phone">
+				<?php
+				echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
+				echo $filterClient = $this->state->get('filter.vendor_client'); 	?>
+				</div>
+
+			<div class="btn-group hidden-phone">
+				<?php
+				$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
+				$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
+				$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
+				echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
+			</div>
+			<div class="btn-group hidden-phone">
+				<?php
+					// Making custom filter list
+					$this->currencies = TjvendorsHelpersTjvendors::getCurrencies($this->state->get('filter.vendor_id'));
+					$currencyList[] = JText::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
+					foreach($this->currencies as $currency)
+					{
+						$currencyList[] = $currency;
+					}
+
+				 echo JHtml::_('select.genericlist', $currencyList, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));?>
+			</div>
+			<div class="btn-group hidden-phone">
+				<?php
+					// Making custom filter list
+				 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
+			</div>
+		</div>
+
+	<div class="pull-left alert alert-info">
+		<div>
+			<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE');?>
+		</div>
+		<div>
+			<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE'); ?>
+		</div>
+	</div>
 	</div>
 	<?php
 	if(!empty($this->items))
@@ -186,15 +193,8 @@ else
 		<table class="table table-striped table-responsive" >
 			<thead>
 				<tr>
-						<div class="pull-left">
-							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE') . "</h4>";?>
-							</div>
-							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE') . "</h4>"; ?>
-							</div>
-						</div>
-					</tr>
+
+				</tr>
 				<tr>
 					<?php if (isset($this->items[0]->ordering)): ?>
 					<th width="1%" class="nowrap center hidden-phone">
@@ -268,26 +268,36 @@ else
 			</thead>
 
 			<tfoot>
+			<td colspan="5">
+				<?php if($filterCurrency != '0'):?>
+					<div class="pull-right">
+						<tr>
+							<th colspan="8"></th>
+							<th colspan="12">
+									<?php echo JText::_('COM_TJVENDORS_REPORTS_TOTAL_CREDIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' .$this->totalDetails['creditAmount']. '&nbsp' . $filterCurrency;?>
+							</th>
+						</tr>
+						<tr>
+							<th colspan="8"></th>
+							<th colspan="12">
+									<?php echo JText::_('COM_TJVENDORS_REPORTS_TOTAL_DEBIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount']. '&nbsp' . $filterCurrency;?>
+							</th>
+						</tr>
+						<tr>
+							<th colspan="8"></th>
+							<th colspan="12">
+									<?php echo JText::_('COM_TJVENDORS_REPORTS_TOTAL_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount']. '&nbsp' . $filterCurrency?>
+							</th>
+						</tr>
+				</div>
+				<?php endif;?>
+			</td>
 					<td colspan="5">
 						<div class="pull-left">
 							<?php echo $this->pagination->getListFooter();?>
 						</div>
 					</td>
-					<?php if($filterCurrency != '0'):?>
-					<td colspan="5">
-						<div class="pull-right">
-							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_TOTAL_CREDIT_AMOUNT'). '&nbsp ' .$this->totalDetails['creditAmount']. '&nbsp' . $filterCurrency ."</h4>";?>
-							</div>
-							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_TOTAL_DEBIT_AMOUNT'). '&nbsp ' . $this->totalDetails['debitAmount']. '&nbsp' . $filterCurrency ."</h4>"; ?>
-							</div>
-							<div>
-								<?php echo "<h4>".JText::_('COM_TJVENDORS_REPORTS_TOTAL_PENDING_AMOUNT') . '&nbsp ' . $this->totalDetails['pendingAmount']. '&nbsp' . $filterCurrency ."</h4>";?>
-						   </div>
-						</div>
-					</td>
-					<?php endif;?>
+
 			</tfoot>
 			<tbody>
 				<?php

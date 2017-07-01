@@ -15,10 +15,8 @@ JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
 
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
-//$document->addScript(JUri::root() . 'administrator/components/com_tjvendors/assets/js/vendor.js');
+$lang = JFactory::getLanguage();
+$lang->load('plg_payment_paypal', JPATH_ADMINISTRATOR);
 
 ?>
 <script type="text/javascript">

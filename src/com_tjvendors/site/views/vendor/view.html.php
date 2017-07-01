@@ -42,7 +42,8 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->input = JFactory::getApplication()->input;
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$this->vendor_id = TjvendorsHelpersTjvendors::getvendor();
+		$TjvendorFrontHelper = new TjvendorFrontHelper;
+		$this->vendor_id = $TjvendorFrontHelper->getvendor();
 		$this->VendorDetail = $TjvendorsModelVendor->getItem($this->vendor_id);
 		$TjvendorFrontHelper = new TjvendorFrontHelper;
 		$this->clientsForVendor = $TjvendorFrontHelper->getClientsForVendor($this->vendor_id);

@@ -154,8 +154,6 @@ class TjvendorsModelReports extends JModelList
 				$query->where($db->quoteName('pass.currency') . ' = ' . $db->quote($currency));
 		}
 
-		$query->where("json_extract(pass.params, '$.entry_status') != 'credit_remaining_payout'");
-
 		$fromDate = $this->getState('filter.fromDate', '');
 		$toDate = $this->getState('filter.toDate', '');
 
@@ -194,6 +192,16 @@ class TjvendorsModelReports extends JModelList
 	public function getItems()
 	{
 		$items = parent::getItems();
+
+		foreach ($items as $i => $item)
+		{
+			$entry_status = json_decode($item->params);
+
+			if ($entry_status->entry_status == "credit_remaining_payout")
+			{
+				unset($items[$i]);
+			}
+		}
 
 		return $items;
 	}

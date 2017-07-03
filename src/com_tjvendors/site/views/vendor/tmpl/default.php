@@ -13,8 +13,20 @@ defined('_JEXEC') or die();
 
 	<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 <div class="vendor-cover row-fluid row">
-	<div class="span3 col-md-3 img-thumbnail pull-left">
-	<img alt="" src="<?php echo JUri::root() . $this->VendorDetail->vendor_logo; ?>" >
+		<?php
+		if(!empty($this->VendorDetail->vendor_logo))
+		{
+		?>
+	<div class="controls "><img  src="<?php echo JUri::root() . $this->VendorDetail->vendor_logo; ?>" class="span3 col-md-3 img-thumbnail marginb10"></div>
+<?php
+	}
+	else
+	{
+	?>
+	<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>" class="span3 col-md-3 img-thumbnail marginb10"></div>
+<?php
+	}
+?>
 	</div>
 	<div class="span9 col-xs-12">
 		<div>

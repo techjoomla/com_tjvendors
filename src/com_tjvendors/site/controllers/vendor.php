@@ -103,6 +103,8 @@ class TjvendorsControllerVendor extends JControllerForm
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
 
+		$data['user_id'] = JFactory::getUser()->id;
+
 		// Check for errors.
 		if ($data === false)
 		{
@@ -189,8 +191,8 @@ class TjvendorsControllerVendor extends JControllerForm
 	/**
 	 * Cancel description
 	 *
-	 * @param   integer  $key  The key 
-	 * 
+	 * @param   integer  $key  The key
+	 *
 	 * @return description
 	 */
 	public function cancel($key=null)
@@ -204,9 +206,9 @@ class TjvendorsControllerVendor extends JControllerForm
 
 	/**
 	 * Build a form
-	 * 
+	 *
 	 * @return null
-	 * 
+	 *
 	 * @since   1.6
 	 */
 	public function generateGatewayFields()

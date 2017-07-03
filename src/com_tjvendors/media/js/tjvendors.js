@@ -149,7 +149,7 @@ var tjVSite =
 					type: "POST",
 					dataType: "json",
 					data: userObject,
-					url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
+					url: "?option=com_tjvendors&task=vendor.generateGatewayFields",
 					success:function(data) {
 						jQuery('#payment_details').html(data);
 					},

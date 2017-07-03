@@ -119,7 +119,7 @@ class TjvendorsTablevendor extends JTable
 	{
 		jimport('joomla.filesystem.file');
 
-		// Validate and create alias if needed
+		$db = JFactory::getDbo();
 		$this->alias = trim($this->alias);
 
 		if (!$this->alias)

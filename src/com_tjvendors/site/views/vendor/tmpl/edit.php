@@ -55,7 +55,6 @@ if (JFactory::getUser()->id ){?>
 										<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 										<input type="hidden" name="jform[vendor_title]" value="<?php echo $this->VendorDetail->vendor_title; ?>" />
 										<input type="hidden" name="jform[vendor_description]" value="<?php echo $this->VendorDetail->vendor_description; ?>" />
-
 										<div>
 											<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
 												<span><?php echo JText::_('COM_TJVENDORS_CLIENT_APPROVAL'); ?></span>
@@ -67,7 +66,8 @@ if (JFactory::getUser()->id ){?>
 								<?php
 									}
 									elseif($this->vendor_id == 0)
-									{?>
+									{
+										?>
 										 <input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 										<?php echo$this->form->renderField('vendor_title'); ?>
 										<?php echo $this->form->renderField('alias'); ?>
@@ -92,15 +92,6 @@ if (JFactory::getUser()->id ){?>
 												</div>
 										<?php endif;
 										?>
-										<div>
-											<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-												<span><?php echo JText::_('JSUBMIT'); ?></span>
-											</button>
-
-											<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-												<?php echo JText::_('JCANCEL'); ?>
-											</button>
-										</div>
 								<?php
 									}
 								 ?>
@@ -113,7 +104,22 @@ if (JFactory::getUser()->id ){?>
 						<div id="payment_details"></div>
 					<?php echo JHtml::_('bootstrap.endTab'); ?>
 
-				<?php echo JHtml::_('bootstrap.endTabSet'); ?>
+				<?php echo JHtml::_('bootstrap.endTabSet');
+				if($this->vendor_id == 0)
+				{
+				?>
+				<div>
+					<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
+						<span><?php echo JText::_('JSUBMIT'); ?></span>
+					</button>
+
+					<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
+						<?php echo JText::_('JCANCEL'); ?>
+					</button>
+				</div>
+				<?php
+				}
+				?>
 			</div>
 		</div>
 

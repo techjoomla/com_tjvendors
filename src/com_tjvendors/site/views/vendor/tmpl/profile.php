@@ -44,7 +44,16 @@ if (JFactory::getUser()->id ){?>
 										<div class="control-group">
 											<div class="controls "><img class="span3 col-md-3 img-thumbnail pull-left marginb10" src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
 										</div>
-								<?php } ?>
+								<?php }
+									else
+									{
+										?>
+										<div class="control-group">
+											<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>" class="span3 col-md-3 img-thumbnail marginb10"></div>
+										</div>
+										<?php
+									}
+								 ?>
 								<?php echo$this->form->renderField('vendor_title'); ?>
 								<?php echo$this->form->renderField('alias'); ?>
 								<?php echo $this->form->renderField('vendor_description'); ?>
@@ -56,15 +65,6 @@ if (JFactory::getUser()->id ){?>
 								</div>
 									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
 
-								<div>
-									<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-										<span><?php echo JText::_('JSUBMIT'); ?></span>
-									</button>
-
-									<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-										<?php echo JText::_('JCANCEL'); ?>
-									</button>
-								</div>
 						</fieldset>
 						<?php echo JHtml::_('bootstrap.endTab'); ?>
 					<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'desc', JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS')); ?>
@@ -78,6 +78,15 @@ if (JFactory::getUser()->id ){?>
 		</div>
 		<input type="hidden" name="task" value="vendor.save"/>
 		<?php echo JHtml::_('form.token'); ?>
+		<div>
+			<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
+				<span><?php echo JText::_('JSUBMIT'); ?></span>
+			</button>
+
+			<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
+				<?php echo JText::_('JCANCEL'); ?>
+			</button>
+		</div>
 	</div>
 </form>
 <?php }

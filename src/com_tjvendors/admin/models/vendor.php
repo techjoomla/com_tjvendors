@@ -16,4 +16,3 @@ jimport('joomla.application.component.modeladmin');
  * @since  1.6
  */
 JLoader::import('com_tjvendors.models.vendor', JPATH_SITE . '/components');
-

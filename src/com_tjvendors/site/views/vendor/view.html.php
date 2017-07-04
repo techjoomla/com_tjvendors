@@ -40,12 +40,11 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->vendor  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		$TjvendorFrontHelper = new TjvendorFrontHelper;
 		$this->vendor_id = $TjvendorFrontHelper->getvendor();
 		$this->VendorDetail = $TjvendorsModelVendor->getItem($this->vendor_id);
-		$TjvendorFrontHelper = new TjvendorFrontHelper;
 		$this->clientsForVendor = $TjvendorFrontHelper->getClientsForVendor($this->vendor_id);
 		$this->client = $this->input->get('client', '', 'STRING');
 		$app = JFactory::getApplication();

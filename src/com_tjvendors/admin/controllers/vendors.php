@@ -58,4 +58,58 @@ class TjvendorsControllerVendors extends JControllerAdmin
 		$redirect = 'index.php?option=com_tjvendors&view=vendors&client=' . $client;
 		$this->setRedirect($redirect);
 	}
+
+	/**
+	 * Function to publish vendors
+	 *
+	 * @return  void
+	 */
+	public function publish()
+	{
+		$input = JFactory::getApplication()->input;
+		$post = $input->post;
+		$client = $input->get('client', '', 'STRING');
+		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$data = array('publish' => 1, 'unpublish' => 0, 'archive' => 2, 'trash' => -2, 'report' => -3);
+		$task = $this->getTask();
+		$value = JArrayHelper::getValue($data, $task, 0, 'int');
+
+		// Get some variables from the request
+
+		if (empty($cid))
+		{
+			JLog::add(JText::_($this->text_prefix . '_NO_ITEM_SELECTED'), JLog::WARNING, 'jerror');
+		}
+		else
+		{
+			// Get the model.
+			$model = $this->getModel('vendors');
+
+			// Make sure the item ids are integers
+			JArrayHelper::toInteger($cid);
+
+			// Publish the items.
+			try
+			{
+				$model->setItemState($cid, $value);
+
+				if ($value == 1)
+				{
+					$ntext = $this->text_prefix . '_N_ITEMS_PUBLISHED';
+				}
+				elseif ($value == 0)
+				{
+					$ntext = $this->text_prefix . '_N_ITEMS_UNPUBLISHED';
+				}
+
+				$this->setMessage(JText::plural($ntext, count($cid)));
+			}
+			catch (Exception $e)
+			{
+				$this->setMessage(JText::_('JLIB_DATABASE_ERROR_ANCESTOR_NODES_LOWER_STATE'), 'error');
+			}
+		}
+
+		$this->setRedirect('index.php?option=com_tjvendors&view=vendors&client=' . $client, $msg);
+	}
 }

@@ -24,7 +24,7 @@ class TjvendorsModelVendors extends JModelList
 	* @param   array  $config  An optional associative array of configuration settings.
 	*
 	* @see        JController
-	* @since      1.6
+	* @since      1.0
 	*/
 	public function __construct($config = array())
 	{
@@ -88,7 +88,7 @@ class TjvendorsModelVendors extends JModelList
 	 *
 	 * @return   JDatabaseQuery
 	 *
-	 * @since    1.6
+	 * @since    1.0
 	 */
 	protected function getListQuery()
 	{
@@ -149,7 +149,7 @@ class TjvendorsModelVendors extends JModelList
 	 *
 	 * @return   result
 	 *
-	 * @since    1.6
+	 * @since    1.0
 	 */
 	public function checkForAvailableRecords($vendor_id)
 	{
@@ -171,7 +171,7 @@ class TjvendorsModelVendors extends JModelList
 	 *
 	 * @return   JDatabaseQuery
 	 *
-	 * @since    1.6
+	 * @since    1.0
 	 */
 	public function deleteVendor($vendor_id)
 	{
@@ -187,12 +187,12 @@ class TjvendorsModelVendors extends JModelList
 	 * Build an SQL query to load the list data.
 	 *
 	 * @param   integer  $vendor_id  for deleting record of that vendor
-	 * 
+	 *
 	 * @param   string   $client     client from url
-	 * 
+	 *
 	 * @return   JDatabaseQuery
 	 *
-	 * @since    1.6
+	 * @since    1.0
 	 */
 	public function deleteClientFromVendor($vendor_id,$client)
 	{
@@ -214,5 +214,46 @@ class TjvendorsModelVendors extends JModelList
 		{
 			$this->deleteVendor($vendor_id);
 		}
+	}
+
+	/**
+	 * Method To plublish and unpublish vendors
+	 *
+	 * @param   Integer  $items  Id
+	 *
+	 * @param   Integer  $state  State
+	 *
+	 * @return  Boolean
+	 *
+	 * @since  1.0
+	 */
+	public function setItemState($items, $state)
+	{
+		$db = JFactory::getDBO();
+
+		if (is_array($items))
+		{
+			foreach ($items as $id)
+			{
+				$db    = JFactory::getDBO();
+				$updateState = new stdClass;
+
+				// Must be a valid primary key value.
+				$updateState->vendor_id = $id;
+				$updateState->state = $state;
+
+				// Update their details in the users table using id as the primary key.
+				$result = JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
+
+				if (!$db->execute())
+				{
+					$this->setError($this->_db->getErrorMsg());
+
+					return false;
+				}
+			}
+		}
+
+		return true;
 	}
 }

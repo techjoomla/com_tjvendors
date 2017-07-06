@@ -57,6 +57,9 @@ Joomla.submitbutton = function (task)
 	}
 var client = '<?php echo $client;?>';
 </script>
+<script type="text/javascript">
+	tjVAdmin.reports.initReportsJs();
+</script>
 <?php
 if(!empty($this->extra_sidebar))
 {

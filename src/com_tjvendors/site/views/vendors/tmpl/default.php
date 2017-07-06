@@ -37,6 +37,9 @@ $listDirn      = $this->state->get('list.direction');
 		});
 	});
 </script>
+<script type="text/javascript">
+	tjVSite.vendors.initVendorsJs();
+</script>
 <?php
 $user_id = JFactory::getUser()->id;
 if ( $user_id && !empty($this->vendor_id))

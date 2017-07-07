@@ -90,6 +90,8 @@ class TjvendorsControllerVendor extends JControllerForm
 		// Get the user data.
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
 
+		$data['user_id'] = JFactory::getUser()->id;
+
 		// Validate the posted data.
 		$form = $model->getForm();
 
@@ -102,8 +104,8 @@ class TjvendorsControllerVendor extends JControllerForm
 
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
-
-		$data['user_id'] = JFactory::getUser()->id;
+		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
+		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if ($data === false)
@@ -127,10 +129,17 @@ class TjvendorsControllerVendor extends JControllerForm
 			$app->setUserState('com_tjvendors.edit.vendor.data', $app->input->get('jform', array(), "ARRAY"));
 
 			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id');
-			$client = $app->getUserState('com_tjvendors.edit.vendor.client');
+			$id = $app->input->get('vendor_id', '', 'INTEGER');
+			$client = $app->input->get('client', '', 'STRING');
 
-			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
+			if ($id != 0)
+			{
+				$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&vendor_id=' . $id . '&client=' . $client, false));
+			}
+			else
+			{
+				$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
+			}
 
 			return false;
 		}
@@ -141,20 +150,28 @@ class TjvendorsControllerVendor extends JControllerForm
 		// Check for errors.
 		if ($return === false)
 		{
-			$input = JFactory::getApplication();
-			$vendor_id = $input->get('vendor_id', '', 'INTEGER');
-
 			// Save the data in the session.
 			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
 			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
-			$client = $app->getUserState('com_tjvendors.edit.vendor.client');
+			$id = $app->input->get('vendor_id', '', 'INTEGER');
+			$client = $app->input->get('client', '', 'STRING');
+			$id = $app->getUserState('com_tjvendors.edit.vendor.id', $data);
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
-			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $data['vendor_id'];
+			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $id;
+
+			if ($id != 0)
+			{
+				echo $layout = 'profile';
+			}
+			else
+			{
+				echo $layout = 'edit';
+			}
+
 			$this->setRedirect(
 					JRoute::_(
-					'index.php?option=com_tjvendors&view=vendor&status=register&layout=edit' . $dynamicLink, false
+					'index.php?option=com_tjvendors&view=vendor&layout=' . $layout . $dynamicLink, false
 					)
 					);
 

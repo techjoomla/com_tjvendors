@@ -237,7 +237,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		$form_path = JPATH_SITE . '/plugins/payment/' . $payment_gateway . '/' . $payment_gateway . '/form/' . $payment_gateway . '.xml';
 		$test = $payment_gateway . '_' . 'plugin';
-		$form = JForm::getInstance($test, $form_path);
+		$form = JForm::getInstance($test, $form_path, array('control' => 'jform[payment_fields]'));
 
 		if (!empty($vendor_id))
 		{
@@ -247,15 +247,10 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				foreach ($paymentDetailsArray as $key => $detail)
 				{
-					$paymentPrefix = 'payment_';
-
-					if (strpos($key, $paymentPrefix) !== false)
-					{
 						if ($key != "payment_gateway")
 						{
 							$paymentDetails[$key] = $detail;
 						}
-					}
 				}
 			}
 
@@ -286,25 +281,32 @@ class TjvendorsModelVendor extends JModelAdmin
 		$table = $this->getTable();
 		$input = JFactory::getApplication()->input;
 		$layout = $input->get('layout', '', 'STRING');
-		$paymentForm = $app->input->get('jform', array(), 'ARRAY');
+		$site = $app->isSite();
 
-		if (!empty($paymentForm))
+		if (!empty($data['paymentForm']))
 		{
-			foreach ($paymentForm as $key => $detail)
+			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
+			{
+				$paymentDetails[$key] = $field;
+			}
+
+			foreach ($data['paymentForm'] as $key => $detail)
 			{
 				$paymentPrefix = 'payment_';
 
 				if (strpos($key, $paymentPrefix) !== false)
 				{
-					$paymentDetails[$key] = $detail;
+					if ($key != 'payment_fields')
+					{
+						$paymentDetails[$key] = $detail;
+					}
 				}
 			}
 		}
 
 		if (!empty($paymentDetails))
 		{
-			$paymentDetails = json_encode($paymentDetails);
-			$data['paymentDetails'] = $paymentDetails;
+			$data['paymentDetails'] = json_encode($paymentDetails);
 		}
 
 		if (empty($data['vendor_client']))
@@ -325,7 +327,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$table->save($data);
 
-				if ($layout == "edit" && !empty($data['vendor_client']))
+				if ($layout == "edit" && !empty($data['vendor_client'] && $site != 1))
 				{
 					require_once JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
 					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
@@ -337,7 +339,7 @@ class TjvendorsModelVendor extends JModelAdmin
 						$client_entry = new stdClass;
 						$client_entry->client = $data['vendor_client'];
 						$client_entry->vendor_id = $data['vendor_id'];
-						$client_entry->payment_gateway = $paymentForm['payment_gateway'];
+						$client_entry->payment_gateway = $paymentDetails['payment_gateway'];
 						$client_entry->params = $data['paymentDetails'];
 
 						// Insert the object into the user profile table.
@@ -350,7 +352,7 @@ class TjvendorsModelVendor extends JModelAdmin
 						return false;
 					}
 				}
-				elseif ($layout == "update" && !empty($data['vendor_client']))
+				elseif (($layout == "update" && !empty($data['vendor_client'])) || ($site == 1 & $layout == "edit"))
 				{
 					$db = JFactory::getDbo();
 					$query = $db->getQuery(true);
@@ -358,7 +360,7 @@ class TjvendorsModelVendor extends JModelAdmin
 					// Fields to update.
 					$fields = array(
 						$db->quoteName('params') . ' = ' . $db->quote($data['paymentDetails']),
-						$db->quoteName('payment_gateway') . ' = ' . $db->quote($paymentForm['payment_gateway']),
+						$db->quoteName('payment_gateway') . ' = ' . $db->quote($paymentDetails['payment_gateway']),
 					);
 
 					// Conditions for which records should be updated.
@@ -387,12 +389,12 @@ class TjvendorsModelVendor extends JModelAdmin
 						$data['payment_gateway'] = $paymentForm['payment_gateway'];
 						}
 
-						$payment_gateway = $data['payment_gateway'];
+						$payment_gateway = $paymentDetails['payment_gateway'];
 						$client_entry = new stdClass;
 						$client_entry->client = $data['vendor_client'];
 						$client_entry->vendor_id = $data['vendor_id'];
 						$client_entry->payment_gateway = $payment_gateway;
-						$client_entry->params = $encodedPaymentDetails;
+						$client_entry->params = $data['paymentDetails'];
 
 						// Insert the object into the user profile table.
 						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);

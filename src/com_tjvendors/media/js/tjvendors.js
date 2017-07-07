@@ -112,9 +112,21 @@ var tjVAdmin =
 					},
 				});
 			}
+	},
+	reports: {
+		/*Initialize event js*/
+		initReportsJs: function() {
+			jQuery(document).ready(function() {
+				jQuery("#dates").blur(function() {
+						document.adminForm.submit();
+				});
+				jQuery("#date").blur(function() {
+						document.adminForm.submit();
+				});
+			});
+		}
 	}
 }
-
 var tjVSite =
 {
 	vendor: {
@@ -155,6 +167,19 @@ var tjVSite =
 					},
 				});
 			}
+	},
+	vendors: {
+		/*Initialize event js*/
+		initVendorsJs: function() {
+			jQuery(document).ready(function() {
+				jQuery("#dates").blur(function() {
+						document.adminForm.submit();
+				});
+				jQuery("#date").blur(function() {
+						document.adminForm.submit();
+				});
+			});
+		}
 	}
 }
 

@@ -139,6 +139,7 @@ class TjvendorsControllerVendor extends JControllerForm
 
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
+		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
 
 		// Check for errors.
 		if ($data === false)

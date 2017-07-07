@@ -281,6 +281,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$table = $this->getTable();
 		$input = JFactory::getApplication()->input;
 		$layout = $input->get('layout', '', 'STRING');
+		$site = $app->isSite();
 
 		if (!empty($data['paymentForm']))
 		{
@@ -326,7 +327,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$table->save($data);
 
-				if ($layout == "edit" && !empty($data['vendor_client']))
+				if ($layout == "edit" && !empty($data['vendor_client'] && $site != 1))
 				{
 					require_once JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
 					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
@@ -351,7 +352,7 @@ class TjvendorsModelVendor extends JModelAdmin
 						return false;
 					}
 				}
-				elseif ($layout == "update" && !empty($data['vendor_client']))
+				elseif (($layout == "update" && !empty($data['vendor_client'])) || ($site == 1 & $layout == "edit"))
 				{
 					$db = JFactory::getDbo();
 					$query = $db->getQuery(true);

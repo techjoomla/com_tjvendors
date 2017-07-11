@@ -327,7 +327,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$table->save($data);
 
-				if ($layout == "edit" && !empty($data['vendor_client'] && $site != 1))
+				if ($layout == "edit" && !empty($data['vendor_client']) && $site != 1)
 				{
 					require_once JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
 					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;

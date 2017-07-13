@@ -341,7 +341,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				{
 					if ($client == $data['vendor_client'])
 					{
-						echo $count = $count++;
+						$count++;
 					}
 				}
 

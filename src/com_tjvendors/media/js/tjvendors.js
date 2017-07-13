@@ -26,13 +26,16 @@ var tjVAdmin =
 				{
 					if(task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new')
 					{
+						var validData = document.formvalidator.isValid(document.getElementById('vendor-form'));
 						var username = document.getElementById("jform_user_id").value;
-
-						if(username == 'Select a User.')
+						if(username == '')
 						{
-							return false;
+							var error_html = "";
+							error_html += Joomla.JText._('COM_TJVENDOR_USER_ERROR');
+							jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
+
 						}
-						else
+						else if(validData == true)
 						{
 							Joomla.submitform(task, document.getElementById('vendor-form'));
 						}
@@ -79,7 +82,7 @@ var tjVAdmin =
 					data: userObject,
 					url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
 					success:function(data) {
-						if(data.vendor_id)
+						if(data)
 						{
 							var error_html = "";
 							if(layout === "update")
@@ -151,7 +154,15 @@ var tjVSite =
 
 				Joomla.submitbutton = function (task)
 				{
-					if (task == 'vendor.cancel')
+					if(task == 'vendor.save')
+					{
+						var validData = document.formvalidator.isValid(document.getElementById('vendor-form'));
+						if(validData == true)
+						{
+							Joomla.submitform(task, document.getElementById('vendor-form'));
+						}
+					}
+					else if (task == 'vendor.cancel')
 					{
 						Joomla.submitform(task, document.getElementById('vendor-form'));
 					}

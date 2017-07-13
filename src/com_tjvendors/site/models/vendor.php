@@ -237,35 +237,41 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		$form_path = JPATH_SITE . '/plugins/payment/' . $payment_gateway . '/' . $payment_gateway . '/form/' . $payment_gateway . '.xml';
 		$test = $payment_gateway . '_' . 'plugin';
-		$form = JForm::getInstance($test, $form_path, array('control' => 'jform[payment_fields]'));
 
-		if (!empty($vendor_id))
+		if (jFile::exists($form_path))
 		{
-			$paymentDetails = array();
+			$form = JForm::getInstance($test, $form_path, array('control' => 'jform[payment_fields]'));
 
-			if (!empty($paymentDetailsArray))
+			if (!empty($vendor_id))
 			{
-				foreach ($paymentDetailsArray as $key => $detail)
+				$paymentDetails = array();
+
+				if (!empty($paymentDetailsArray))
 				{
-						if ($key != "payment_gateway")
-						{
-							$paymentDetails[$key] = $detail;
-						}
+					foreach ($paymentDetailsArray as $key => $detail)
+					{
+							if ($key != "payment_gateway")
+							{
+								$paymentDetails[$key] = $detail;
+							}
+					}
 				}
+
+				$form->bind($paymentDetails);
 			}
 
-			$form->bind($paymentDetails);
+			$fieldSet = $form->getFieldset('payment_gateway');
+			$html = array();
+
+			foreach ($fieldSet as $field)
+			{
+				$html[] = $field->renderField();
+			}
+
+			return $html;
 		}
 
-		$fieldSet = $form->getFieldset('payment_gateway');
-		$html = array();
-
-		foreach ($fieldSet as $field)
-		{
-			$html[] = $field->renderField();
-		}
-
-		return $html;
+		return false;
 	}
 
 	/**
@@ -326,8 +332,20 @@ class TjvendorsModelVendor extends JModelAdmin
 			if ($data['vendor_id'])
 			{
 				$table->save($data);
+				require_once JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
+				$TjvendorFrontHelper = new TjvendorFrontHelper;
+				$vendorClients = $TjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
+				$count = 0;
 
-				if ($layout == "edit" && !empty($data['vendor_client']) && $site != 1)
+				foreach ($vendorClients as $client)
+				{
+					if ($client == $data['vendor_client'])
+					{
+						echo $count = $count++;
+					}
+				}
+
+				if ($layout == "edit" && (!empty($data['vendor_client']) && $site != 1 || $site == 1 && $count == 0))
 				{
 					require_once JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
 					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;

@@ -95,7 +95,7 @@ jQuery(window).load(function(){
 							<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
 						<?php echo $this->form->renderField('user_id');
 							echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
-							<a href="<?php echo JRoute::_(JURI::root() . '/administrator/index.php?option=com_tjvendors&view=vendor&layout=update&vendor_id='.$this->item->vendor_id);?>">
+							<a href="<?php echo JRoute::_(JURI::root() . '/administrator/index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id='.$this->item->vendor_id);?>">
 							<?php
 								echo $this->item->vendor_title."</a>";
 								echo " <br> ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');

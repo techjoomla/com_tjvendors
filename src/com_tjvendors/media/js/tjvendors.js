@@ -108,7 +108,17 @@ var tjVAdmin =
 					data: userObject,
 					url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
 					success:function(data) {
-						jQuery('#payment_details').html(data);
+						jQuery('#system-message-container,#payment_details').empty();
+						if(data)
+						{
+							jQuery('#payment_details').html(data);
+						}
+						else if(!data && payment_gateway != "")
+						{
+							var error_html = '';
+							error_html += Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+							jQuery("#system-message-container").html("<div id='fieldmessage' class='alert alert-warning'>" + error_html + "</div>");
+						}
 					},
 				});
 			}
@@ -163,7 +173,17 @@ var tjVSite =
 					data: userObject,
 					url: "?option=com_tjvendors&task=vendor.generateGatewayFields",
 					success:function(data) {
-						jQuery('#payment_details').html(data);
+						jQuery('#system-message-container,#payment_details').empty();
+						if(data)
+						{
+							jQuery('#payment_details').html(data);
+						}
+						else if(!data && payment_gateway != "")
+						{
+							var error_html = '';
+							error_html += Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+							jQuery("#system-message-container").html("<div id='fieldmessage' class='alert alert-warning'>" + error_html + "</div>");
+						}
 					},
 				});
 			}

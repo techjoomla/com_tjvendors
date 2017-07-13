@@ -68,6 +68,7 @@
         <fields name="params">
             <fieldset name="component">
                 <field name="image_size" default="2500"/>
+                <field name="payout_limit_days" default="0"/>
             </fieldset>
         </fields>
     </config>

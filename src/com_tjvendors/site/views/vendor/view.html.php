@@ -61,7 +61,6 @@ class TjvendorsViewVendor extends JViewLegacy
 				{
 					echo $link = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);
 					$app = JFactory::getApplication();
-					$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
 					$app->redirect($link);
 				}
 			}

@@ -24,18 +24,17 @@ var tjVAdmin =
 
 				Joomla.submitbutton = function (task)
 				{
-					if(task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new')
+					if (task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new')
 					{
 						var validData = document.formvalidator.isValid(document.getElementById('vendor-form'));
 						var username = document.getElementById("jform_user_id").value;
-						if(username == '')
-						{
-							var error_html = "";
-							error_html += Joomla.JText._('COM_TJVENDOR_USER_ERROR');
-							jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
 
+						if (username == '')
+						{
+							var jmsgs = [Joomla.JText._('COM_TJVENDOR_USER_ERROR')];
+							Joomla.renderMessages({'warning': jmsgs });
 						}
-						else if(validData == true)
+						else if (validData == true)
 						{
 							Joomla.submitform(task, document.getElementById('vendor-form'));
 						}
@@ -63,7 +62,8 @@ var tjVAdmin =
 					data: userObject,
 					url: "index.php?option=com_tjvendors&task=payout.changePayoutStatus",
 					success:function(data) {
-						if(data)
+
+						if (data)
 						{
 							document.location='index.php?option=com_tjvendors&view=reports&client='+client;
 						}
@@ -82,13 +82,13 @@ var tjVAdmin =
 					data: userObject,
 					url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
 					success:function(data) {
-						if(data)
+
+						if (data)
 						{
-							var error_html = "";
-							if(layout === "update")
+							if (layout === "update")
 							{
-								error_html += "<br />" + Joomla.JText._('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR');
-								jQuery("#system-message-container").html("<div class='alert alert-warning'>" + error_html + "</div>");
+								var jmsgs = [Joomla.JText._('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR')];
+								Joomla.renderMessages({'warning': jmsgs });
 
 								return vendorCheck = "exists";
 							}
@@ -112,14 +112,14 @@ var tjVAdmin =
 					url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
 					success:function(data) {
 						jQuery('#payment_details').empty();
-						if(data)
+
+						if (data)
 						{
 							jQuery('#payment_details').html(data);
 						}
-						else if(!data && payment_gateway != "" && layout != "update")
+						else if (!data && payment_gateway != "" && layout != "update")
 						{
-							var error_html = '';
-							error_html += Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+							var error_html = Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
 							jQuery("#payment_details").html("<div id='fieldmessage' class='alert alert-warning'>" + error_html + "</div>");
 						}
 					},
@@ -154,7 +154,7 @@ var tjVSite =
 
 				Joomla.submitbutton = function (task)
 				{
-					if(task == 'vendor.save')
+					if (task == 'vendor.save')
 					{
 						var validData = document.formvalidator.isValid(document.getElementById('vendor-form'));
 						if(validData == true)
@@ -185,15 +185,15 @@ var tjVSite =
 					url: "?option=com_tjvendors&task=vendor.generateGatewayFields",
 					success:function(data) {
 						jQuery('#payment_details').empty();
-						if(data)
+
+						if (data)
 						{
 							jQuery('#payment_details').html(data);
 						}
-						else if(!data && payment_gateway != "" && layout != "update")
+						else if (!data && payment_gateway != "" && layout != "profile")
 						{
-							var error_html = '';
-							error_html += Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
-							jQuery("#payment_details").html("<div id='fieldmessage' class='alert alert-warning'>" + error_html + "</div>");
+							var error_html = Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+							jQuery("#payment_details").html("<div class='alert alert-warning'>" + error_html + "</div>");
 						}
 					},
 				});

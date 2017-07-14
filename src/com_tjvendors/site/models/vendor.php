@@ -10,7 +10,9 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
-require_once JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
+JLoader::import('fronthelper', JPATH_SITE . '/components/com_tjvendors/helpers');
+JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
+
 /**
  * Tjvendors model.
  *
@@ -250,10 +252,10 @@ class TjvendorsModelVendor extends JModelAdmin
 				{
 					foreach ($paymentDetailsArray as $key => $detail)
 					{
-							if ($key != "payment_gateway")
-							{
-								$paymentDetails[$key] = $detail;
-							}
+						if ($key != "payment_gateway")
+						{
+							$paymentDetails[$key] = $detail;
+						}
 					}
 				}
 
@@ -332,7 +334,6 @@ class TjvendorsModelVendor extends JModelAdmin
 			if ($data['vendor_id'])
 			{
 				$table->save($data);
-				require_once JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
 				$TjvendorFrontHelper = new TjvendorFrontHelper;
 				$vendorClients = $TjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
 				$count = 0;
@@ -347,7 +348,6 @@ class TjvendorsModelVendor extends JModelAdmin
 
 				if ($layout == "edit" && (!empty($data['vendor_client']) && $site != 1 || $site == 1 && $count == 0))
 				{
-					require_once JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
 					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
 					$checkForDuplicateClient = $tjvendorsHelpersTjvendors->checkForDuplicateClient($data['vendor_id'], $data['vendor_client']);
 

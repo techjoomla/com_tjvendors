@@ -20,6 +20,7 @@ $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 ?>
 <script type="text/javascript">
+	var layout = '<?php echo "edit";?>';
 	tjVSite.vendor.initVendorJs();
 </script>
 

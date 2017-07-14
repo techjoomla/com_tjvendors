@@ -10,7 +10,9 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
-require_once JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
+JLoader::import('fronthelper', JPATH_SITE . '/components/com_tjvendors/helpers');
+JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
+
 /**
  * Tjvendors model.
  *
@@ -237,35 +239,41 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		$form_path = JPATH_SITE . '/plugins/payment/' . $payment_gateway . '/' . $payment_gateway . '/form/' . $payment_gateway . '.xml';
 		$test = $payment_gateway . '_' . 'plugin';
-		$form = JForm::getInstance($test, $form_path, array('control' => 'jform[payment_fields]'));
 
-		if (!empty($vendor_id))
+		if (jFile::exists($form_path))
 		{
-			$paymentDetails = array();
+			$form = JForm::getInstance($test, $form_path, array('control' => 'jform[payment_fields]'));
 
-			if (!empty($paymentDetailsArray))
+			if (!empty($vendor_id))
 			{
-				foreach ($paymentDetailsArray as $key => $detail)
+				$paymentDetails = array();
+
+				if (!empty($paymentDetailsArray))
 				{
+					foreach ($paymentDetailsArray as $key => $detail)
+					{
 						if ($key != "payment_gateway")
 						{
 							$paymentDetails[$key] = $detail;
 						}
+					}
 				}
+
+				$form->bind($paymentDetails);
 			}
 
-			$form->bind($paymentDetails);
+			$fieldSet = $form->getFieldset('payment_gateway');
+			$html = array();
+
+			foreach ($fieldSet as $field)
+			{
+				$html[] = $field->renderField();
+			}
+
+			return $html;
 		}
 
-		$fieldSet = $form->getFieldset('payment_gateway');
-		$html = array();
-
-		foreach ($fieldSet as $field)
-		{
-			$html[] = $field->renderField();
-		}
-
-		return $html;
+		return false;
 	}
 
 	/**
@@ -326,10 +334,20 @@ class TjvendorsModelVendor extends JModelAdmin
 			if ($data['vendor_id'])
 			{
 				$table->save($data);
+				$TjvendorFrontHelper = new TjvendorFrontHelper;
+				$vendorClients = $TjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
+				$count = 0;
 
-				if ($layout == "edit" && !empty($data['vendor_client']) && $site != 1)
+				foreach ($vendorClients as $client)
 				{
-					require_once JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
+					if ($client == $data['vendor_client'])
+					{
+						$count++;
+					}
+				}
+
+				if ($layout == "edit" && (!empty($data['vendor_client']) && $site != 1 || $site == 1 && $count == 0))
+				{
 					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
 					$checkForDuplicateClient = $tjvendorsHelpersTjvendors->checkForDuplicateClient($data['vendor_id'], $data['vendor_client']);
 

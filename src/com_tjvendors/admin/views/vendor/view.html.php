@@ -43,6 +43,8 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->input = JFactory::getApplication()->input;
 		$this->clientsForVendor = TjvendorsHelpersTjvendors::getClientsForVendor($this->item->vendor_id);
 		JText::script('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR');
+		JText::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+		JText::script('COM_TJVENDOR_USER_ERROR');
 		$this->client = $this->input->get('client', '', 'STRING');
 
 		if (empty($this->item->vendor_id))

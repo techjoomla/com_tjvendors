@@ -10,6 +10,13 @@
 defined('_JEXEC') or die();
 ?>
 <?php if (JFactory::getUser()->id && !empty($this->vendor_id) ){?>
+<div class="page-header">
+		<h2>
+			<?php
+				echo JText::_('COM_TJVENDOR_VENDOR_PROFILE');
+			?>
+		</h2>
+	</div>
 
 	<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 <div class="vendor-cover row-fluid row">

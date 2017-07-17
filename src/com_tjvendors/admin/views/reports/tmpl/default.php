@@ -96,7 +96,6 @@ else
 <?php
 	if(empty($this->items))
 	{?>
-		<div class="clearfix">&nbsp;</div>
 			<div class="alert alert-no-items">
 				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 			</div>

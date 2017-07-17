@@ -26,7 +26,14 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 
 <?php
 if (JFactory::getUser()->id ){?>
-
+	<div class="page-header">
+		<h2>
+			<?php
+				echo JText::_('COM_TJVENDOR_UPDATE_VENDOR');
+				echo ':&nbsp' . $this->vendor->vendor_title;
+			?>
+		</h2>
+	</div>
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 	<div class="form-horizontal">
@@ -43,7 +50,7 @@ if (JFactory::getUser()->id ){?>
 								<?php if (!empty($this->vendor->vendor_logo))
 									{ ?>
 										<div class="control-group">
-											<div class="controls "><img class="span3 col-md-3 img-thumbnail pull-left marginb10" src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
+											<div class="controls "><img class="span3 col-md-4 img-thumbnail pull-left marginb10 " src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
 										</div>
 								<?php }
 									else

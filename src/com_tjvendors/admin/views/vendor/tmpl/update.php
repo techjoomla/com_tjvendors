@@ -102,7 +102,7 @@ jQuery(window).load(function(){
 						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
 						<?php if (!empty($this->item->vendor_logo)) : ?>
 							<div class="control-group">
-								<div><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>" class="span3 col-md-3 img-thumbnail pull-left marginb10"></div>
+								<div><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>" class="span3 col-md-3 img-thumbnail pull-left marginb10 img-polaroid"></div>
 							</div>
 						<?php endif;
 					?>

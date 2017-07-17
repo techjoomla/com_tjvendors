@@ -26,7 +26,13 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 
 <?php
 if (JFactory::getUser()->id ){?>
-
+	<div class="page-header">
+		<h2>
+			<?php
+				echo JText::_('COM_TJVENDOR_CREATE_VENDOR');
+			?>
+		</h2>
+	</div>
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 	<div class="form-horizontal">
@@ -46,13 +52,17 @@ if (JFactory::getUser()->id ){?>
 									if($this->vendor_id !=0)
 									{
 										$client=$this->input->get('client', '', 'STRING');
+									?>
+										<div class="pull-left alert alert-info">
+									<?php
 										echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
-										<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $client . '&vendor_id='.$this->vendor_id);?>">
+										<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $client . '&vendor_id='.$this->vendor_id);?>"><strong>
 										<?php
-										echo $this->VendorDetail->vendor_title."</a>";
-										echo " <br> ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
+										echo $this->VendorDetail->vendor_title."</a></strong>";
+										echo " " . JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
 										echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
 										echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');?>
+										</div>
 										<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 										<input type="hidden" name="jform[vendor_title]" value="<?php echo $this->VendorDetail->vendor_title; ?>" />
 										<input type="hidden" name="jform[vendor_description]" value="<?php echo $this->VendorDetail->vendor_description; ?>" />

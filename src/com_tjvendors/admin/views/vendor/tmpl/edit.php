@@ -93,40 +93,21 @@ jQuery(window).load(function(){
 							<input type="hidden" name="jform[vendor_title]" id="jform_vendor_titile_hidden" value="<?php echo $this->item->vendor_title; ?>" />
 							<input type="hidden" name="jform[vendor_description]" id="jform_vendor_description_hidden" value="<?php echo $this->item->vendor_description; ?>" />
 							<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
-						<?php echo $this->form->renderField('user_id');
-							echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
-							<a href="<?php echo JRoute::_(JURI::root() . '/administrator/index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id='.$this->item->vendor_id);?>">
+						<?php echo $this->form->renderField('user_id');?>
+							<div class="pull-left alert alert-info">
+						<?php echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
+							<a href="<?php echo JRoute::_(JURI::root() . '/administrator/index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id='.$this->item->vendor_id);?>"><strong>
 							<?php
-								echo $this->item->vendor_title."</a>";
-								echo " <br> ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
+								echo $this->item->vendor_title."</a></strong>";
+								echo " ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
 								echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
 								echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
 							?>
-							<div>
-								<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-									<span><?php echo JText::_('JSUBMIT'); ?></span>
-								</button>
-								<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-									<span><?php echo JText::_('JCANCEL'); ?></span>
-								</button>
 							</div>
 					<?php }
 						elseif($this->item->vendor_id==0)
 						{
-							 echo $this->form->renderField('user_id');
-
-							if (!empty($this->item->vendor_id))
-							{
-								if(!empty($this->clientsForVendor))
-								{
-									echo "Is a Vendor for : ";
-									foreach ($this->clientsForVendor as $client)
-									{
-										echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
-									}
-									echo ".";
-								}
-							}
+							echo $this->form->renderField('user_id');
 							echo $this->form->renderField('client');
 							echo $this->form->renderField('vendor_title');
 							echo $this->form->renderField('alias');
@@ -135,7 +116,7 @@ jQuery(window).load(function(){
 							if(empty($this->item->vendor_logo)) :?>
 								<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/administrator/components/com_tjvendors/assets/images/default.png" />
 									<div class="control-group">
-											<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>" class="span3 col-md-3 img-thumbnail marginb10"></div>
+											<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>" class="span3 col-md-3 img-thumbnail marginb10 img-polaroid"></div>
 										</div>
 
 							<?php endif;
@@ -158,7 +139,21 @@ jQuery(window).load(function(){
 
 			<div id="payment_details"></div>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
-
+		<?php
+			if($this->item->vendor_id != 0)
+			{
+			?>
+				<div>
+					<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
+						<span><?php echo JText::_('JSUBMIT'); ?></span>
+					</button>
+					<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
+						<span><?php echo JText::_('JCANCEL'); ?></span>
+					</button>
+				</div>
+			<?php
+			}
+		?>
 		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>

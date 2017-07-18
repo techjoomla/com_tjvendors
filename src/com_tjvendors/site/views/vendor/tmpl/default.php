@@ -48,7 +48,7 @@ defined('_JEXEC') or die();
 			if (strlen($this->VendorDetail->vendor_description) > $long_desc_char)
 			{
 				echo substr(strip_tags($this->VendorDetail->vendor_description), 0, $long_desc_char);?>
-				<a href="#myModal" data-toggle="modal" data-target="#myModal">...Read more</a>
+				<a href="#myModal" data-toggle="modal" data-target="#myModal"><?php echo JText::_('COM_TJVENDOR_DESCRIPTION_READ_MORE');?></a>
 			<?php
 			}
 			else

@@ -40,9 +40,16 @@ $listDirn      = $this->state->get('list.direction');
 <script type="text/javascript">
 	tjVSite.vendors.initVendorsJs();
 </script>
+	<div class="page-header">
+		<h2>
+			<?php
+				echo JText::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS');
+			?>
+		</h2>
+	</div>
 <?php
 $user_id = JFactory::getUser()->id;
-if ( $user_id && !empty($this->vendor_id))
+if (!empty($this->vendor_id))
 {?>
 	<form action="<?php
 		echo JRoute::_('index.php?option=com_tjvendors&view=vendors');
@@ -117,9 +124,7 @@ if ( $user_id && !empty($this->vendor_id))
 						if (empty($this->items))
 						{?>
 							<div class="clearfix">&nbsp;</div>
-							<div class="alert alert-no-items">
-							<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?>
-							</div>
+							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pull-right alert alert-info jtleft"><?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?></div>
 						<?php }
 						else
 						{
@@ -323,6 +328,12 @@ if ( $user_id && !empty($this->vendor_id))
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
 		<?php echo JHtml::_('form.token');?>
 	</form>
+<?php
+}
+elseif(!$this->vendor_id &&  $user_id)
+{
+?>
+	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pull-right alert alert-info jtleft"><?php echo JText::_('COM_TJVENDOR_REPORTS_ERROR');?></div>
 <?php
 }
 else

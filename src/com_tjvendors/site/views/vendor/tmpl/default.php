@@ -9,7 +9,7 @@
 // No direct access
 defined('_JEXEC') or die();
 ?>
-<?php if (JFactory::getUser()->id && !empty($this->vendor_id) ){?>
+<?php if (!empty($this->vendor_id) ){?>
 <div class="page-header">
 		<h2>
 			<?php
@@ -35,22 +35,55 @@ defined('_JEXEC') or die();
 	}
 ?>
 	</div>
-	<div class="span9 col-xs-12">
+	<div class="span9 col-xs-6">
 		<div>
 			<h3>
 				<?php echo $this->VendorDetail->vendor_title; ?>
 			</h3>
 		</div>
 		<div>
-			<?php echo $this->VendorDetail->vendor_description; ?>
-		</div>
-		<div class="vendor-cover-button row-fluid span6">
-			<span class="vendor-action pull-left margint20"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&layout=profile&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
-		</div>
+		<?php
+			$long_desc_char = 250;
+
+			if (strlen($this->VendorDetail->vendor_description) > $long_desc_char)
+			{
+				echo substr(strip_tags($this->VendorDetail->vendor_description), 0, $long_desc_char);?>
+				<a href="#myModal" data-toggle="modal" data-target="#myModal">...Read more</a>
+			<?php
+			}
+			else
+			{
+				echo strip_tags($this->VendorDetail->vendor_description);
+			}
+		?>
+		<div class="modal fade" id="myModal" role="dialog">
+				<div class="modal-dialog">
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-body">
+							<p><?php echo $this->VendorDetail->vendor_description;?></p>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+	<div>
+		<span class="vendor-action pull-left margint20"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&layout=profile&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
 	</div>
 </div>
 
 <?php }
+elseif(JFactory::getUser()->id && !$this->vendor_id)
+{
+	$app = JFactory::getApplication();
+	$client = $app->input->get('client', '', 'STRING');
+	$link =JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
+	$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'warning');
+	$app->redirect($link);
+}
 else
 {
 	$link =JRoute::_('index.php?option=com_users');

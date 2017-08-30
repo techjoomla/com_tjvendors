@@ -107,8 +107,8 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		if ($bulkPayoutStatus != 0)
 		{
-			$payoutAmount = TjvendorsHelpersTjvendors::getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
-			$this->item->bulk_total = $payoutAmount['payableAmount'];
+			$payoutAmount = TjvendorsHelpersTjvendors::bulkPendingAmount($this->item->vendor_id, $this->item->currency);
+			$this->item->bulk_total = $payoutAmount;
 		}
 		else
 		{
@@ -146,20 +146,23 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		$client = $vendorDetail->client;
 
+		// To get selected item
+		$item = $this->getItem($data['id']);
+
 		if ($bulkPayoutStatus != 0)
 		{
 			$vendorClients = TjvendorsHelpersTjvendors::getClients($vendorDetail->vendor_id);
 
 			foreach ($vendorClients as $client)
 			{
-				$pending_amount = TjvendorsHelpersTjvendors::getPayoutDetail($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
-				$data['debit'] = $data['bulk_total'];
-				$data['total'] = $pending_amount['total'] - $data['debit'];
+				$pending_amount = TjvendorsHelpersTjvendors::getTotalAmount($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
+				$data['debit'] = $pending_amount['total'];
+				$data['total'] = 0;
 				$data['transaction_time'] = JFactory::getDate()->toSql();
 				$data['client'] = $client['client'];
-				$transactionClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($item->client));
-				$data['transaction_id'] = $transactionClient . ' - ' . $vendorDetail->vendor_id . ' - ' . $vendorDetail->currency . ' - ';
-				$data['credit'] = - $data['debit'];
+				$transactionClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($client['client']));
+				$data['transaction_id'] = $transactionClient . '-' . $vendorDetail->currency . '-' . $vendorDetail->vendor_id . '-';
+				$data['credit'] = 0;
 				$data['id'] = '';
 				$data['vendor_id'] = $vendorDetail->vendor_id;
 				$params = array("customer_note" => "", "entry_status" => "debit_payout");
@@ -185,8 +188,6 @@ class TjvendorsModelPayout extends JModelAdmin
 			return true;
 		}
 
-		// To get selected item
-		$item = $this->getItem($data['id']);
 		$data['debit'] = $data['total'];
 		$payableAmount = TjvendorsHelpersTjvendors::getTotalAmount($item->vendor_id, $item->currency, $item->client);
 		$data['total'] = $payableAmount['total'] - $data['debit'];
@@ -199,38 +200,6 @@ class TjvendorsModelPayout extends JModelAdmin
 		$data['credit'] = '0.00';
 		$params = array("customer_note" => "", "entry_status" => "debit_payout");
 		$data['params'] = json_encode($params);
-
-		if ($data['debit'] < $payableAmount['total'])
-		{
-			for ($i = 0; $i <= 1; $i++)
-			{
-				if ($i == 1)
-				{
-					$data['credit'] = '0.00';
-					$data['total'] = $data['total'];
-					$data['debit'] = '0.00';
-					$params = array("customer_note" => "", "entry_status" => "credit_remaining_payout");
-					$data['params'] = json_encode($params);
-				}
-
-				if (parent::save($data))
-				{
-					$id = (int) $this->getState($this->getName() . '.id');
-					$payout_update = new stdClass;
-
-					// Must be a valid primary key value.
-					$payout_update->id = $id;
-					$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
-
-					// Update their details in the users table using id as the primary key.
-					$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
-					$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
-						JFactory::getApplication()->enqueueMessage($message);
-				}
-			}
-
-			return true;
-		}
 
 		if (parent::save($data))
 		{
@@ -263,7 +232,7 @@ class TjvendorsModelPayout extends JModelAdmin
 	 */
 	public function fetchingData($data)
 	{
-		$payout_detail = TjvendorsHelpersTjvendors::getPayoutDetail($data['vendor_id'], $data['currency'], $data['client']);
+		$payout_detail = TjvendorsHelpersTjvendors::getTotalAmount($data['vendor_id'], $data['currency'], $data['client']);
 		$payout_id = $payout_detail['id'];
 		$object = new stdClass;
 

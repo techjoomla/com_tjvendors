@@ -71,6 +71,29 @@ class TjvendorsControllerVendor extends JControllerForm
 	}
 
 	/**
+	 * Vendor approval
+	 *
+	 * @return null
+	 *
+	 * @since   1.1
+	 */
+	public function vendorApprove()
+	{
+		$input  = JFactory::getApplication()->input;
+		$vendor_id = $input->post->get('vendor_id', '', 'INTEGER');
+		$vendorApprove = $input->post->get('vendorApprove', '', 'INTEGER');
+		$client = $input->get('client', '', 'STRING');
+		$model = $this->getModel('vendor');
+		$data['vendor_id'] = $vendor_id;
+		$data['vendor_client'] = $client;
+		$data['approved'] = $vendorApprove;
+		$result = $model->save($data);
+
+		echo json_encode($result);
+		jexit();
+	}
+
+	/**
 	 * Build payment gateway fields
 	 *
 	 * @return null
@@ -141,6 +164,45 @@ class TjvendorsControllerVendor extends JControllerForm
 		$data = $model->validate($form, $data);
 		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
 
+		if (!empty($data['paymentForm']))
+		{
+			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
+			{
+				$paymentDetails[$key] = $field;
+			}
+
+			foreach ($data['paymentForm'] as $key => $detail)
+			{
+				$paymentPrefix = 'payment_';
+
+				if (strpos($key, $paymentPrefix) !== false)
+				{
+					if ($key != 'payment_fields')
+					{
+						$paymentDetails[$key] = $detail;
+					}
+				}
+			}
+		}
+
+		if (!empty($paymentDetails))
+		{
+			$data['paymentDetails'] = json_encode($paymentDetails);
+			$data['gateway'] = $paymentDetails['payment_gateway'];
+		}
+
+		// On a clientless vendor registration
+		if (empty($data['vendor_client']))
+		{
+			$data['params'] = $data['paymentDetails'];
+			$data['payment_gateway'] = $paymentForm['payment_gateway'];
+		}
+		else
+		{
+			$data['payment_gateway'] = '';
+			$data['params'] = '';
+		}
+
 		// Check for errors.
 		if ($data === false)
 		{
@@ -180,7 +242,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		}
 
 		$msg      = JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR');
-		$id = $input->get('id');
+		$vendor_id = $input->get('vendor_id');
 
 		if (empty($id))
 		{
@@ -191,7 +253,7 @@ class TjvendorsControllerVendor extends JControllerForm
 
 		if ($task == 'apply')
 		{
-			$redirect = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&id=' . $id, false);
+			$redirect = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id=' . $vendor_id, false);
 			$app->redirect($redirect, $msg);
 		}
 

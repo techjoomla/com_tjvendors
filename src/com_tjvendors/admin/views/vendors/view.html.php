@@ -39,6 +39,12 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 		$this->input = JFactory::getApplication()->input;
+		$this->params = JComponentHelper::getParams('com_tjvendors');
+		JText::script('COM_TJVENDOR_VENDOR_APPROVAL');
+		JText::script('COM_TJVENDOR_VENDOR_DENIAL');
+
+		$this->vendorApproval = $this->params->get('vendor_approval');
+		$client = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -50,7 +56,11 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		$this->addToolbar();
 
-		$this->sidebar = JHtmlSidebar::render();
+		if (!empty($client))
+		{
+			$this->sidebar = JHtmlSidebar::render();
+		}
+
 		parent::display($tpl);
 	}
 

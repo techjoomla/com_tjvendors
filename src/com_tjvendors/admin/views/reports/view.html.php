@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * View class for a list of Tjvendors.
@@ -52,14 +53,9 @@ class TjvendorsViewReports extends JViewLegacy
 		$vendor_id = $this->state->get('filter.vendor_id');
 		$client = $this->state->get('filter.vendor_client');
 
-		if ($client == '0')
-		{
-			$input = JFactory::getApplication()->input;
-			$client = $input->get('client', '', 'STRING');
-		}
-
 		$currency = $this->state->get('filter.currency');
-		$this->totalDetails = TjvendorsHelpersTjvendors::getTotalDetails($vendor_id, $client, $currency);
+		$TjvendorFrontHelper = new TjvendorFrontHelper;
+		$this->totalDetails = $TjvendorFrontHelper->getTotalDetails($vendor_id, $client, $currency);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

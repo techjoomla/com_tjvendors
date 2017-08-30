@@ -41,7 +41,6 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->form  = $this->get('Form');
 		$this->params = JComponentHelper::getParams('com_tjvendors');
 		$this->input = JFactory::getApplication()->input;
-		$this->clientsForVendor = TjvendorsHelpersTjvendors::getClientsForVendor($this->item->vendor_id);
 		JText::script('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR');
 		JText::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
 		JText::script('COM_TJVENDOR_USER_ERROR');

@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * View class for a list of Tjvendors.
@@ -48,6 +49,8 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$vendorsDetail = $TjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
 		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$this->bulkPayoutStatus = $com_params->get('bulk_payout');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

@@ -80,28 +80,26 @@ else
 }
 
 if(empty($this->items))
-	{?>
-			<div class="alert alert-no-items">
-				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
-			</div>
+{?>
+	<div class="alert alert-no-items">
+		<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
+	</div>
 	<?php
-	}
-	else
-	{?>
-<div class="alert alert-info">
-	<?php
-		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$bulkPayoutStatus = $com_params->get('bulk_payout');
-		if($bulkPayoutStatus!=0)
-		{
-			echo JText::_('COM_TJVENDOR_PAYOUTS_BULK_PAYOUT_NOTICE');
-		}
-		else
-		{
-			echo JText::_('COM_TJVENDOR_PAYOUTS_SINGLE_CLIENT_PAYOUT_NOTICE');
-		}
+}
+else{
 	?>
-</div>
+	<div class="alert alert-info">
+		<?php
+			if($this->bulkPayoutStatus != 0)
+			{
+				echo JText::_('COM_TJVENDOR_PAYOUTS_BULK_PAYOUT_NOTICE');
+			}
+			else
+			{
+				echo JText::_('COM_TJVENDOR_PAYOUTS_SINGLE_CLIENT_PAYOUT_NOTICE');
+			}
+		?>
+	</div>
 	<div id="filter-bar" class="btn-toolbar">
 		<div class="filter-search btn-group pull-left">
 			<label for="filter_search" class="element-invisible">
@@ -127,16 +125,14 @@ if(empty($this->items))
 		<div class="btn-group pull-right hidden-phone">
 
 			<?php
-			$com_params = JComponentHelper::getParams('com_tjvendors');
-			$bulkPayoutStatus = $com_params->get('bulk_payout');
-			if($bulkPayoutStatus!=0)
+			if ($this->bulkPayoutStatus != 0)
 			{
 				echo JText::_('COM_TJVENDOR_PAYOUTS_BULK_PAYOUT_NOTICE');
 			}
 			else
 			{
 				echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
-				echo $filterClient = $this->state->get('filter.vendor_client');
+				$filterClient = $this->state->get('filter.vendor_client');
 			}
 			?>
 		</div>
@@ -146,11 +142,8 @@ if(empty($this->items))
 				// Making custom filter list
 			 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
-
-
 	</div>
-
-		<table class="table table-striped" id="payoutList">
+<table class="table table-striped" id="payoutList">
 			<thead>
 				<tr>
 					<?php if (isset($this->items[0]->ordering)): ?>
@@ -201,24 +194,29 @@ if(empty($this->items))
 
 						<td>
 						<?php
+						$TjvendorFrontHelper = new TjvendorFrontHelper;
 
-						if($bulkPayoutStatus!=0)
+						if ($this->bulkPayoutStatus != 0)
 						{
-							$client=0;
-							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id,$item->currency, $client);
-							if(empty($paidAmount))
+							$client= '';
+							$paidAmount = $TjvendorFrontHelper->getPaidAmount($item->vendor_id,$item->currency, $client);
+
+							if (empty($paidAmount))
 							{
 								$paidAmount = '0';
 							}
+
 							echo $paidAmount;
 						}
 						else
 						{
-							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id,$item->currency, $filterClient);
-							if(empty($paidAmount))
+							$paidAmount = $TjvendorFrontHelper->getPaidAmount($item->vendor_id,$item->currency, $filterClient);
+
+							if (empty($paidAmount))
 							{
 								$paidAmount = '0';
 							}
+
 							echo $paidAmount;
 						}
 						?>
@@ -226,18 +224,16 @@ if(empty($this->items))
 
 						<td>
 						<?php
-						$com_params = JComponentHelper::getParams('com_tjvendors');
-						$bulkPayoutStatus = $com_params->get('bulk_payout');
-						if($bulkPayoutStatus==0)
+						if($this->bulkPayoutStatus==0)
 						{
+
 							$result = TjvendorsHelpersTjvendors::getPayableAmount($item->vendor_id, $item->client, $item->currency);
-							//~ echo $result['payableAmount'];
 							echo $result;
 						}
 						else
 						{
-							$result = TjvendorsHelpersTjvendors::getPayableAmount($item->vendor_id, $item->client, $item->currency);
-							echo $result['payableAmount'];
+							$result = TjvendorsHelpersTjvendors::bulkPendingAmount($item->vendor_id, $item->currency);
+							echo $result;
 						}
 
 						?>

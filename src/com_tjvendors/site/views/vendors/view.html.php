@@ -44,7 +44,7 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->uniqueClients = $TjvendorFrontHelper->getUniqueClients($this->user_id);
 		$client = $this->state->get('filter.vendor_client', '');
 		$currency = $this->state->get('filter.currency', '');
-		$this->totalDetails = $TjvendorFrontHelper->getTotalDetails($client, $this->user_id, $currency);
+		$this->totalDetails = $TjvendorFrontHelper->getTotalDetails($this->vendor_id, $client, $currency);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
 // No direct access
-defined('_JEXEC') or die();
+defined('_JEXEC') or die;
 
 use Joomla\Utilities\ArrayHelper;
 
@@ -26,11 +26,9 @@ class TjvendorsTablevendor extends JTable
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendor',
-				array('typeAlias' => 'com_tjvendors.vendor')
-				);
+		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendor', array('typeAlias' => 'com_tjvendors.vendor'));
 
-		parent::__construct('#__tj_vendors', 'vendor_id', $db);
+		parent::__construct('#__tjvendors_vendors', 'vendor_id', $db);
 	}
 
 	/**
@@ -60,11 +58,14 @@ class TjvendorsTablevendor extends JTable
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (! JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
+		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
 		{
-			$actions = JAccess::getActionsFromFile(JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml', "/access/section[@name='vendor']/");
+			$actions = JAccess::getActionsFromFile(
+				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',
+				"/access/section[@name='vendor']/"
+			);
 			$default_actions = JAccess::getAssetRules('com_tjvendors.vendor.' . $array['vendor_id'])->getData();
-			$array_jaccess = array();
+			$array_jaccess   = array();
 
 			foreach ($actions as $action)
 			{
@@ -118,6 +119,41 @@ class TjvendorsTablevendor extends JTable
 	{
 		jimport('joomla.filesystem.file');
 
+		$db = JFactory::getDbo();
+		$this->alias = trim($this->alias);
+
+		if (!$this->alias)
+		{
+			$this->alias = $this->vendor_title;
+		}
+
+		if ($this->alias)
+		{
+			if (JFactory::getConfig()->get('unicodeslugs') == 1)
+			{
+				$this->alias = JFilterOutput::stringURLUnicodeSlug($this->alias);
+			}
+			else
+			{
+				$this->alias = JFilterOutput::stringURLSafe($this->alias);
+			}
+		}
+
+		// Check if event with same alias is present
+		$table = JTable::getInstance('Vendor', 'TjVendorsTable', array('dbo', $db));
+
+		if ($table->load(array('alias' => $this->alias)) && ($table->vendor_id != $this->vendor_id || $this->vendor_id == 0))
+		{
+			$msg = JText::_('COM_TJVENDORS_SAVE_ALIAS_WARNING');
+
+			while ($table->load(array('alias' => $this->alias)))
+			{
+				$this->alias = JString::increment($this->alias, 'dash');
+			}
+
+			JFactory::getApplication()->enqueueMessage($msg, 'warning');
+		}
+
 		// If there is an ordering column and this is a new row then get the next ordering value
 		if (property_exists($this, 'ordering') && $this->vendor_id == 0)
 		{
@@ -125,6 +161,8 @@ class TjvendorsTablevendor extends JTable
 		}
 
 		$app = JFactory::getApplication();
+		$vendor_id = $app->input->get('vendor_id');
+
 		$files = $app->input->files->get('jform', array(), 'raw');
 		$array = $app->input->get('jform', array(), 'ARRAY');
 
@@ -173,7 +211,8 @@ class TjvendorsTablevendor extends JTable
 
 				if ($fileSize > 26214400)
 				{
-					$app->enqueueMessage('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR', 'warning');
+					$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'), 'warning');
+					$this->setError(JText::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'));
 
 					return false;
 				}
@@ -185,11 +224,23 @@ class TjvendorsTablevendor extends JTable
 				$uploadPath = JPATH_ROOT . $filepath;
 				$fileTemp = $singleFile['tmp_name'];
 
+				if (!empty($extension))
+				{
+					if (($extension !== "png") && ($extension !== "jpg") && ($extension !== "jpeg"))
+					{
+						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+						$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+
+						return false;
+					}
+				}
+
 				if (! JFile::exists($uploadPath))
 				{
 					if (! JFile::upload($fileTemp, $uploadPath))
 					{
-						$app->enqueueMessage('COM_TJVENDOR_FILE_MOVING_ERROR', 'warning');
+						$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'), 'warning');
+						$this->setError(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'));
 
 						return false;
 					}
@@ -200,36 +251,6 @@ class TjvendorsTablevendor extends JTable
 		}
 
 		return parent::check();
-	}
-
-	/**
-	 * Method for checkDuplicateUser
-	 *
-	 * @return bool
-	 */
-	public function checkDuplicateUser()
-	{
-		// Start city validations
-		$db = JFactory::getDbo();
-
-		// Fetch all existed records
-		$query = $db->getQuery(true);
-		$query->select($db->qn(array('user_id')))
-			->from($db->qn('#__tj_vendors'))
-			->where($db->qn('user_id') . ' = ' . $this->user_id)
-			->where($db->qn('vendor_client') . " =  '$this->vendor_client'");
-		$db->setQuery($query);
-
-		$userexist = $this->_db->loadResult();
-
-		if ($userexist)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
 	}
 
 	/**
@@ -352,20 +373,5 @@ class TjvendorsTablevendor extends JTable
 		}
 
 		return $assetParentId;
-	}
-
-	/**
-	 * Delete a record by id
-	 *
-	 * @param   mixed  $pk  Primary key value to delete. Optional
-	 *
-	 * @return bool
-	 */
-	public function delete($pk = null)
-	{
-		$this->load($pk);
-		$result = parent::delete($pk);
-
-		return $result;
 	}
 }

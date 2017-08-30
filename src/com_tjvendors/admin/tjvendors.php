@@ -1,12 +1,11 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla  <contact@techjoomla.com>
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
-
 // No direct access
 defined('_JEXEC') or die;
 
@@ -24,3 +23,5 @@ JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT_ADMINISTRATOR);
 $controller = JControllerLegacy::getInstance('Tjvendors');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();
+$document = JFactory::getDocument();
+$document->addScript(JUri::root(true) . '/media/com_tjvendor/js/tjvendors.js');

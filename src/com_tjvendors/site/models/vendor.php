@@ -1,16 +1,17 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
-
 // No direct access.
-defined('_JEXEC') or die();
+defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
+JLoader::import('fronthelper', JPATH_SITE . '/components/com_tjvendors/helpers');
+JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
 
 /**
  * Tjvendors model.
@@ -75,8 +76,11 @@ class TjvendorsModelVendor extends JModelAdmin
 		$app = JFactory::getApplication();
 
 		// Get the form.
-		$form = $this->loadForm('com_tjvendors.vendor', 'vendor', array(
-			'control' => 'jform', 'load_data' => $loadData)
+		$form = $this->loadForm(
+			'com_tjvendors.vendor', 'vendor',
+			array('control' => 'jform',
+				'load_data' => $loadData
+			)
 		);
 
 		if (empty($form))
@@ -96,14 +100,32 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	protected function loadFormData()
 	{
-		// Check the session for previously entered form data.
+		$app = JFactory::getApplication();
+		$input = $app->input;
+		$client = $input->get('client', '', 'STRING');
+
 		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
+		$client = $app->getUserStateFromRequest('vendor.client', 'vendor.client');
 
 		if (empty($data))
 		{
 			if ($this->item === null)
 			{
 				$this->item = $this->getItem();
+			}
+
+			if (!empty($this->item->vendor_id))
+			{
+				if (!empty($client))
+				{
+					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
+					$gatewayDetails = $tjvendorsHelpersTjvendors->getPaymentDetails($this->item->vendor_id, $client);
+
+					if (!empty($gatewayDetails))
+					{
+						$this->item->payment_gateway = $gatewayDetails->payment_gateway;
+					}
+				}
 			}
 
 			$data = $this->item;
@@ -123,100 +145,135 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function getItem($pk = null)
 	{
-		if ($item = parent::getItem($pk))
-		{
-			// Do any procesing on fields here if needed
-		}
+		$item = parent::getItem($pk);
 
 		return $item;
 	}
 
 	/**
-	 * Method to duplicate an Vendor
+	 * Method for save vendor information
 	 *
-	 * @param   array  &$pks  An array of primary key IDs.
+	 * @param   Integer  $vendor_id        used for inserting data for that vendor
 	 *
-	 * @return  boolean  True if successful.
+	 * @param   Integer  $payment_gateway  used for inserting data for that vendor
 	 *
-	 * @throws  Exception
+	 * @param   Integer  $paymentDetails   payment details
+	 *
+	 * @return id
 	 */
-	public function duplicate(&$pks)
+	public function addMultiVendor($vendor_id,$payment_gateway, $paymentDetails)
 	{
-		$user = JFactory::getUser();
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('max(' . $db->quoteName('id') . ')');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$db->setQuery($query);
+		$res = $db->loadResult();
+		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id),
+		$db->quoteName('payment_gateway') . ' = ' . $db->quote($payment_gateway),
+		$db->quoteName('params') . ' = ' . $db->quote($paymentDetails),
+		);
 
-		// Access checks.
-		if (! $user->authorise('core.create', 'com_tjvendors'))
-		{
-			throw new Exception(JText::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
-		}
+		// Conditions for which records should be updated.
+		$conditions = array($db->quoteName('id') . ' = ' . $res);
 
-		$dispatcher = JEventDispatcher::getInstance();
-		$context = $this->option . '.' . $this->name;
+		$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);
+		$db->setQuery($query);
 
-		// Include the plugins for the save events.
-		JPluginHelper::importPlugin($this->events_map['save']);
-
-		$table = $this->getTable();
-
-		foreach ($pks as $pk)
-		{
-			if ($table->load($pk, true))
-			{
-				// Reset the id to create a new record.
-				$table->vendor_id = 0;
-
-				if (! $table->check())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the before save event.
-				$result = $dispatcher->trigger($this->event_before_save, array($context, &$table, true));
-
-				if (in_array(false, $result, true) || ! $table->store())
-				{
-					throw new Exception($table->getError());
-				}
-
-				// Trigger the after save event.
-				$dispatcher->trigger($this->event_after_save, array($context, &$table, true));
-			}
-			else
-			{
-				throw new Exception($table->getError());
-			}
-		}
-
-		// Clean cache
-		$this->cleanCache();
+		$result = $db->execute();
 
 		return true;
 	}
 
 	/**
-	 * Prepare and sanitise the table prior to saving.
+	 * Method to check duplicate user.
 	 *
-	 * @param   JTable  $table  Table Object
+	 * @param   integer  $user_id  user name.
 	 *
-	 * @return void
+	 * @return   array rows
 	 *
 	 * @since    1.6
 	 */
-	protected function prepareTable($table)
+	public function checkDuplicateUser($user_id)
 	{
-		jimport('joomla.filter.output');
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('*');
+		$query->from($db->quoteName('#__tjvendors_vendors'));
 
-		if (empty($table->vendor_id))
+		if (!empty($user_id))
 		{
-			// Set ordering to the last item if not set
-			if (@$table->ordering === '')
-			{
-				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__tj_vendors');
-				$max = $db->loadResult();
-				$table->ordering = $max + 1;
-			}
+			$query->where($db->quoteName('user_id') . ' = ' . $user_id);
 		}
+
+		$db->setQuery($query);
+		$rows = $db->loadAssoc();
+
+		if ($rows)
+		{
+			return $rows;
+		}
+	}
+
+	/**
+	 * Method to generate payment gateway fields.
+	 *
+	 * @param   string  $payment_gateway  payment gateway.
+	 *
+	 * @return   array result
+	 *
+	 * @since    1.6
+	 */
+	public function generateGatewayFields($payment_gateway)
+	{
+		$app = JFactory::getApplication();
+		$client = $app->getUserStateFromRequest('vendor.client', 'vendor.client');
+		$vendor_id = $app->getUserStateFromRequest('vendor.vendor_id', 'vendor.vendor_id');
+		$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
+		$vendorDetails = $tjvendorsHelpersTjvendors->getPaymentDetails($vendor_id, $client);
+
+		if (!empty($vendorDetails))
+		{
+			$paymentDetailsArray = json_decode($vendorDetails->params);
+		}
+
+		$form_path = JPATH_SITE . '/plugins/payment/' . $payment_gateway . '/' . $payment_gateway . '/form/' . $payment_gateway . '.xml';
+		$test = $payment_gateway . '_' . 'plugin';
+
+		if (jFile::exists($form_path))
+		{
+			$form = JForm::getInstance($test, $form_path, array('control' => 'jform[payment_fields]'));
+
+			if (!empty($vendor_id))
+			{
+				$paymentDetails = array();
+
+				if (!empty($paymentDetailsArray))
+				{
+					foreach ($paymentDetailsArray as $key => $detail)
+					{
+						if ($key != "payment_gateway")
+						{
+							$paymentDetails[$key] = $detail;
+						}
+					}
+				}
+
+				$form->bind($paymentDetails);
+			}
+
+			$fieldSet = $form->getFieldset('payment_gateway');
+			$html = array();
+
+			foreach ($fieldSet as $field)
+			{
+				$html[] = $field->renderField();
+			}
+
+			return $html;
+		}
+
+		return false;
 	}
 
 	/**
@@ -228,46 +285,144 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$table = $this->getTable();
-		$db = JFactory::getDBO();
-		$input = JFactory::getApplication()->input;
 		$app = JFactory::getApplication();
-		$client = $input->get('client', '', 'STRING');
+		$table = $this->getTable();
+		$input = JFactory::getApplication()->input;
+		$layout = $input->get('layout', '', 'STRING');
+		$site = $app->isSite();
 
-		$data['vendor_client'] = ! empty($client) ? $client : $data['vendor_client'];
-
-		// Bind data
-		if (! $table->bind($data))
+		if (!empty($data['paymentForm']))
 		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		// Validate
-		if (! $table->check())
-		{
-			$this->setError($table->getError());
-
-			return false;
-		}
-
-		if ($data['vendor_id'] == 0)
-		{
-			if (! $table->checkDuplicateUser())
+			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
 			{
-				$app->enqueueMessage(JText::_('COM_TJVENDORS_EXIST_RECORDS'), 'warning');
+				$paymentDetails[$key] = $field;
+			}
 
-				return false;
+			foreach ($data['paymentForm'] as $key => $detail)
+			{
+				$paymentPrefix = 'payment_';
+
+				if (strpos($key, $paymentPrefix) !== false)
+				{
+					if ($key != 'payment_fields')
+					{
+						$paymentDetails[$key] = $detail;
+					}
+				}
 			}
 		}
 
-		if ($data['user_vendor_id'] != 0)
+		if (!empty($paymentDetails))
 		{
-			// Attempt to save data
-			if (parent::save($data))
+			$data['paymentDetails'] = json_encode($paymentDetails);
+		}
+
+		if (empty($data['vendor_client']))
+		{
+			$data['params'] = $data['paymentDetails'];
+			$data['payment_gateway'] = $paymentForm['payment_gateway'];
+		}
+		else
+		{
+			$data['payment_gateway'] = '';
+			$data['params'] = '';
+		}
+
+		if ($data['user_id'] != 0)
+		{
+			// To check if editing in registration form
+			if ($data['vendor_id'])
 			{
+				$table->save($data);
+				$TjvendorFrontHelper = new TjvendorFrontHelper;
+				$vendorClients = $TjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
+				$count = 0;
+
+				foreach ($vendorClients as $client)
+				{
+					if ($client == $data['vendor_client'])
+					{
+						$count++;
+					}
+				}
+
+				if ($layout == "edit" && (!empty($data['vendor_client']) && $site != 1 || $site == 1 && $count == 0))
+				{
+					$tjvendorsHelpersTjvendors = new TjvendorsHelpersTjvendors;
+					$checkForDuplicateClient = $tjvendorsHelpersTjvendors->checkForDuplicateClient($data['vendor_id'], $data['vendor_client']);
+
+					if ($checkForDuplicateClient != $data['vendor_client'])
+					{
+						$vendor_id = (int) $this->getState($this->getName() . '.id');
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
+						$client_entry->payment_gateway = $paymentDetails['payment_gateway'];
+						$client_entry->params = $data['paymentDetails'];
+
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+					}
+					else
+					{
+						$app->enqueueMessage(JText::_('COM_TJVENDORS_DUPLICATE_CLIENT_ERROR'), 'warning');
+
+						return false;
+					}
+				}
+				elseif (($layout == "update" && !empty($data['vendor_client'])) || ($site == 1 & $layout == "edit"))
+				{
+					$db = JFactory::getDbo();
+					$query = $db->getQuery(true);
+
+					// Fields to update.
+					$fields = array(
+						$db->quoteName('params') . ' = ' . $db->quote($data['paymentDetails']),
+						$db->quoteName('payment_gateway') . ' = ' . $db->quote($paymentDetails['payment_gateway']),
+					);
+
+					// Conditions for which records should be updated.
+						$conditions = array(
+						$db->quoteName('vendor_id') . ' = ' . $db->quote($data['vendor_id']),
+						$db->quoteName('client') . ' = ' . $db->quote($data['vendor_client'])
+					);
+
+					$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);
+					$db->setQuery($query);
+					$result = $db->execute();
+				}
+
 				return true;
+			}
+			else
+			{
+				if ($table->save($data) === true)
+				{
+					$data['vendor_id'] = $table->vendor_id;
+
+					if (!empty($data['vendor_client']))
+					{
+						if (!empty($paymentForm['payment_gateway']))
+						{
+						$data['payment_gateway'] = $paymentForm['payment_gateway'];
+						}
+
+						$payment_gateway = $paymentDetails['payment_gateway'];
+						$client_entry = new stdClass;
+						$client_entry->client = $data['vendor_client'];
+						$client_entry->vendor_id = $data['vendor_id'];
+						$client_entry->payment_gateway = $payment_gateway;
+						$client_entry->params = $data['paymentDetails'];
+
+						// Insert the object into the user profile table.
+						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+						$this->addMultiVendor($data['vendor_id'], $payment_gateway, $data['paymentDetails']);
+					}
+
+					return true;
+				}
+
+				return false;
 			}
 		}
 		else
@@ -324,7 +479,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			$query = $db->getQuery(true);
 
 			$query->select("*");
-			$query->from($db->qn("#__tj_vendors"));
+			$query->from($db->qn("#__tjvendors_vendors"));
 			$query->where($db->qn("user_id") . " = " . $user->id);
 
 			if (! empty($client))
@@ -340,7 +495,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$query = $db->getQuery(true);
 				$query->select("*");
-				$query->from($db->qn("#__tj_vendors"));
+				$query->from($db->qn("#__tjvendors_vendors"));
 				$query->where($db->qn("user_id") . " = " . $user->id);
 				$query->where($db->qn("vendor_client") . "  = ''");
 

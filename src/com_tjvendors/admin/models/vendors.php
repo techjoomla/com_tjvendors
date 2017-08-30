@@ -1,11 +1,12 @@
 <?php
 /**
- * @version    CVS: 1.0.0
+ * @version    SVN:
  * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @author     Techjoomla <contact@techjoomla.com>
+ * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @license    GNU General Public License version 2 or later.
  */
+// No direct access
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
@@ -23,7 +24,7 @@ class TjvendorsModelVendors extends JModelList
 	* @param   array  $config  An optional associative array of configuration settings.
 	*
 	* @see        JController
-	* @since      1.6
+	* @since      1.0
 	*/
 	public function __construct($config = array())
 	{
@@ -31,8 +32,9 @@ class TjvendorsModelVendors extends JModelList
 		{
 			$config['filter_fields'] = array(
 				'vendor_id', 'a.`vendor_id`',
-				'user_id', 'a.`user_id`',
-				'vendor_client', 'a.`vendor_client`',
+				'vendor_title', 'a.`vendor_title`',
+				'ordering', 'a.`ordering`',
+				'state', 'a.`state`',
 			);
 		}
 
@@ -82,47 +84,35 @@ class TjvendorsModelVendors extends JModelList
 	}
 
 	/**
-	 * Method to get a store id based on model configuration state.
-	 *
-	 * This is necessary because the model is used by the component and
-	 * different modules that might need different sets of data or different
-	 * ordering requirements.
-	 *
-	 * @param   string  $id  A prefix for the store id.
-	 *
-	 * @return   string A store id.
-	 *
-	 * @since    1.6
-	 */
-	protected function getStoreId($id = '')
-	{
-		// Compile the store id.
-		$id .= ':' . $this->getState('filter.search');
-		$id .= ':' . $this->getState('filter.state');
-
-		return parent::getStoreId($id);
-	}
-
-	/**
 	 * Build an SQL query to load the list data.
 	 *
 	 * @return   JDatabaseQuery
 	 *
-	 * @since    1.6
+	 * @since    1.0
 	 */
 	protected function getListQuery()
 	{
+		// Get client
+		$input  = JFactory::getApplication()->input;
+		$client = $input->get('client', '', 'STRING');
+
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
+		$subQuery = $db->getQuery(true);
 
-		// Select the required fields from the table.
-		$query->select($this->getState('list.select', 'DISTINCT a.*'));
-		$query->from('`#__tj_vendors` AS a');
+		$subQuery->select('vendor_id')
+			->from($db->quoteName('#__vendor_client_xref'));
 
-		// Join over the user field 'user_id'
-		$query->select('`user_id`.name AS `user_id`');
-		$query->join('LEFT', '#__users AS `user_id` ON `user_id`.id = a.`user_id`');
+			if (!empty($client))
+			{
+				$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
+			}
+
+		// Create the base select statement.
+		$query->select('*')
+			->from($db->quoteName('#__tjvendors_vendors', 'a'))
+			->where($db->quoteName('vendor_id') . ' IN (' . $subQuery . ')');
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
@@ -131,14 +121,12 @@ class TjvendorsModelVendors extends JModelList
 		{
 			if (stripos($search, 'id:') === 0)
 			{
-				$query->where('a.vendor_id = ' . (int) substr($search, 3));
+				$query->where($db->quoteName('a.vendor_id') . ' = ' . (int) substr($search, 3));
 			}
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(user_id.name LIKE ' . $search .
-							'OR a.percent_commission LIKE' . $search .
-							'OR a.flat_commission LIKE' . $search . ')');
+				$query->where('(' . $db->quoteName('a.vendor_id') . ' LIKE ' . $search . 'OR' . $db->quoteName('a.vendor_title') . ' LIKE ' . $search . ')');
 			}
 		}
 
@@ -155,44 +143,117 @@ class TjvendorsModelVendors extends JModelList
 	}
 
 	/**
-	 * Get an array of data items
+	 * Build an SQL query check for available data
 	 *
-	 * @return mixed Array of data items on success, false on failure.
+	 * @param   integer  $vendor_id  for checking data for that vendor
+	 *
+	 * @return   result
+	 *
+	 * @since    1.0
 	 */
-	public function getItems()
+	public function checkForAvailableRecords($vendor_id)
 	{
-		$items = parent::getItems();
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query ->select('COUNT(*)');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$db->setQuery($query);
+		$result = $db->loadResult();
 
-		return $items;
+		return $result;
 	}
 
 	/**
-	 * Method for delete vendors
+	 * Build an SQL query to delete vendor data
 	 *
-	 * @param   Integer  $tj_vendors_id  Id
+	 * @param   integer  $vendor_id  for deleting record of that vendor
 	 *
-	 * @return flag
+	 * @return   JDatabaseQuery
+	 *
+	 * @since    1.0
 	 */
-	public function deleteVendor($tj_vendors_id)
+	public function deleteVendor($vendor_id)
 	{
-		$tjvendorsid = implode(',', $tj_vendors_id);
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->delete($db->quoteName('#__tjvendors_vendors'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$db->setQuery($query);
+		$result = $db->execute();
+	}
 
-		if ($tjvendorsid)
-		{
-			$db = JFactory::getDBO();
-			$query = "DELETE FROM #__tj_vendors where vendor_id IN (" . $tjvendorsid . ")";
-			$this->_db->setQuery($query);
+	/**
+	 * Build an SQL query to load the list data.
+	 *
+	 * @param   integer  $vendor_id  for deleting record of that vendor
+	 *
+	 * @param   string   $client     client from url
+	 *
+	 * @return   JDatabaseQuery
+	 *
+	 * @since    1.0
+	 */
+	public function deleteClientFromVendor($vendor_id,$client)
+	{
+		$db = $this->getDbo();
+		$query = $db->getQuery(true);
+		$query->delete($db->quoteName('#__vendor_client_xref'));
+			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 
-			if (!$this->_db->execute())
+			if (!empty($client))
 			{
-				$this->setError($this->_db->getErrorMsg());
-
-				return false;
+				$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 			}
-			else
+
+			$db->setQuery($query);
+		$result = $db->execute();
+		$availability = $this->checkForAvailableRecords($vendor_id, $client);
+
+		if ($availability == 0)
+		{
+			$this->deleteVendor($vendor_id);
+		}
+	}
+
+	/**
+	 * Method To plublish and unpublish vendors
+	 *
+	 * @param   Integer  $items  Id
+	 *
+	 * @param   Integer  $state  State
+	 *
+	 * @return  Boolean
+	 *
+	 * @since  1.0
+	 */
+	public function setItemState($items, $state)
+	{
+		$db = JFactory::getDBO();
+
+		if (is_array($items))
+		{
+			foreach ($items as $id)
 			{
-				return true;
+				$db    = JFactory::getDBO();
+				$updateState = new stdClass;
+
+				// Must be a valid primary key value.
+				$updateState->vendor_id = $id;
+				$updateState->state = $state;
+
+				// Update their details in the users table using id as the primary key.
+				$result = JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
+
+				if (!$db->execute())
+				{
+					$this->setError($this->_db->getErrorMsg());
+
+					return false;
+				}
 			}
 		}
+
+		return true;
 	}
 }

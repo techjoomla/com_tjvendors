@@ -89,7 +89,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		$data['approved'] = $vendorApprove;
 		$result = $model->save($data);
 
-		echo json_encode($result);
+		echo new JResponseJson($result, JText::_('COM_TJVENDORS_VENDOR_APPROVAL_ERROR'), true);
 		jexit();
 	}
 

@@ -126,6 +126,37 @@ var tjVAdmin =
 				});
 			}
 	},
+	vendors: {
+		vendorApprove: function(vendor_id, ele){
+				vendorApprove = jQuery(ele).val();
+				var userObject = {};
+				userObject["vendor_id"]  = vendor_id;
+				userObject["vendorApprove"] = vendorApprove;
+				userObject["client"] = client;
+
+				JSON.stringify(userObject) ;
+				jQuery.ajax({
+					type: "POST",
+					dataType: "json",
+					data: userObject,
+					url: "index.php?option=com_tjvendors&task=vendor.vendorApprove",
+					success:function(data) {
+						alert(data);
+							jQuery('#system-message-container').empty();
+							if (vendorApprove == '1')
+							{
+								var jmsgs = [Joomla.JText._('COM_TJVENDOR_VENDOR_APPROVAL')];
+								Joomla.renderMessages({'success': jmsgs });
+							}
+							else
+							{
+								var jmsgs = [Joomla.JText._('COM_TJVENDOR_VENDOR_DENIAL')];
+								Joomla.renderMessages({'success': jmsgs });
+							}
+					},
+				});
+		},
+	},
 	reports: {
 		/*Initialize event js*/
 		initReportsJs: function() {

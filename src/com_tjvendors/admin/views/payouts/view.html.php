@@ -45,8 +45,8 @@ class TjvendorsViewPayouts extends JViewLegacy
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
-		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
-		$vendorsDetail = $TjvendorsModelVendors->getItems();
+		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
+		$vendorsDetail = $tjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
 		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
 		$com_params = JComponentHelper::getParams('com_tjvendors');

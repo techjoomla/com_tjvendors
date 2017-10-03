@@ -26,18 +26,18 @@ $controller->redirect();
 $document = JFactory::getDocument();
 $document->addScript(JUri::root(true) . '/media/com_tjvendor/js/tjvendors.js');
 
-$TjvendorFrontHelper = JPATH_ROOT . '/components/com_tjvendors/helpers/fronthelper.php';
+$tjvendorFrontHelper = JPATH_ROOT . '/components/com_tjvendors/helpers/fronthelper.php';
 
 if (!class_exists('TjvendorFrontHelper'))
 {
-	JLoader::register('TjvendorFrontHelper', $TjvendorFrontHelper);
+	JLoader::register('TjvendorFrontHelper', $tjvendorFrontHelper);
 	JLoader::load('TjvendorFrontHelper');
 }
 
-$TjvendorsHelpersTjvendors = JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
+$tjvendorsHelpersTjvendors = JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
 
 if (!class_exists('TjvendorsHelpersTjvendors'))
 {
-	JLoader::register('TjvendorsHelpersTjvendors', $TjvendorsHelpersTjvendors);
+	JLoader::register('TjvendorsHelpersTjvendors', $tjvendorsHelpersTjvendors);
 	JLoader::load('TjvendorsHelpersTjvendors');
 }

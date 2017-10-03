@@ -159,7 +159,7 @@ class TjvendorFrontHelper
 	 */
 	public static function getvendor()
 	{
-		$user_id = jFactory::getuser()->id;
+		$user_id = JFactory::getuser()->id;
 		$vendorDetails = JTable::getInstance('vendor', 'TjvendorsTable', array());
 		$vendorDetails->load(array('user_id' => $user_id));
 
@@ -371,8 +371,8 @@ class TjvendorFrontHelper
 		$entry_data['currency'] = $currency;
 		$entry_data['client'] = $order_data['client'];
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
-		$TjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
-			$vendorDetail = $TjvendorsModelPayout->addCreditEntry($entry_data);
+		$tjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
+			$vendorDetail = $tjvendorsModelPayout->addCreditEntry($entry_data);
 	}
 
 	/**

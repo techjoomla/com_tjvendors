@@ -46,16 +46,16 @@ class TjvendorsViewReports extends JViewLegacy
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
-		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
-		$vendorsDetail = $TjvendorsModelVendors->getItems();
+		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
+		$vendorsDetail = $tjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
 		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
 		$vendor_id = $this->state->get('filter.vendor_id');
 		$client = $this->state->get('filter.vendor_client');
 
 		$currency = $this->state->get('filter.currency');
-		$TjvendorFrontHelper = new TjvendorFrontHelper;
-		$this->totalDetails = $TjvendorFrontHelper->getTotalDetails($vendor_id, $client, $currency);
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$this->totalDetails = $tjvendorFrontHelper->getTotalDetails($vendor_id, $client, $currency);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

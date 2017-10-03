@@ -330,9 +330,9 @@ class TjvendorsHelpersTjvendors
 	public static function addVendor($data)
 	{
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables', 'vendor');
-		$vendorsDetail = $TjvendorsModelVendors->save($data);
+		$vendorsDetail = $tjvendorsModelVendors->save($data);
 		JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
 		$db = JFactory::getDbo();
 		$table = JTable::getInstance('vendor', 'TJVendorsTable', array());

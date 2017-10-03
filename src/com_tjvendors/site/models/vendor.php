@@ -117,8 +117,8 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				if (!empty($client))
 				{
-					$TjvendorFrontHelper = new TjvendorFrontHelper;
-					$gatewayDetails = $TjvendorFrontHelper->getPaymentDetails($this->item->vendor_id, $client);
+					$tjvendorFrontHelper = new TjvendorFrontHelper;
+					$gatewayDetails = $tjvendorFrontHelper->getPaymentDetails($this->item->vendor_id, $client);
 
 					if (!empty($gatewayDetails))
 					{
@@ -228,8 +228,8 @@ class TjvendorsModelVendor extends JModelAdmin
 		$app = JFactory::getApplication();
 		$client = $app->getUserStateFromRequest('vendor.client', 'vendor.client');
 		$vendor_id = $app->getUserStateFromRequest('vendor.vendor_id', 'vendor.vendor_id');
-		$TjvendorFrontHelper = new TjvendorFrontHelper;
-		$vendorDetails = $TjvendorFrontHelper->getPaymentDetails($vendor_id, $client);
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$vendorDetails = $tjvendorFrontHelper->getPaymentDetails($vendor_id, $client);
 
 		if (!empty($vendorDetails))
 		{
@@ -291,8 +291,8 @@ class TjvendorsModelVendor extends JModelAdmin
 			if ($data['vendor_id'])
 			{
 				$table->save($data);
-				$TjvendorFrontHelper = new TjvendorFrontHelper;
-				$vendorClients = $TjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
+				$tjvendorFrontHelper = new TjvendorFrontHelper;
+				$vendorClients = $tjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
 				$count = 0;
 
 				foreach ($vendorClients as $client)
@@ -397,55 +397,5 @@ class TjvendorsModelVendor extends JModelAdmin
 	public function getClient()
 	{
 		return $this->vendor_client;
-	}
-
-	/**
-	 * This function will return the vendor details based on current user and client.
-	 *
-	 * @param   INT     $user    User id
-	 * @param   STRING  $client  Component client
-	 *
-	 * @return void
-	 *
-	 * @since    1.6
-	 */
-	public function getVendorDetails($user = "", $client = "")
-	{
-		$result = array();
-		$user = empty($user) ? JFactory::getUser() : JFactory::getUser($user);
-
-		if ($user->id)
-		{
-			// Load vendor details based on client
-			$db = JFactory::getDbo();
-			$query = $db->getQuery(true);
-
-			$query->select("*");
-			$query->from($db->qn("#__tjvendors_vendors"));
-			$query->where($db->qn("user_id") . " = " . $user->id);
-
-			if (! empty($client))
-			{
-				$query->where($db->qn("vendor_client") . " = " . $db->q($client));
-			}
-
-			$db->setQuery($query);
-			$result = $db->loadAssoc();
-
-			// Load default entry if available
-			if (empty($result) && !empty($client))
-			{
-				$query = $db->getQuery(true);
-				$query->select("*");
-				$query->from($db->qn("#__tjvendors_vendors"));
-				$query->where($db->qn("user_id") . " = " . $user->id);
-				$query->where($db->qn("vendor_client") . "  = ''");
-
-				$db->setQuery($query);
-				$result = $db->loadAssoc();
-			}
-		}
-
-		return $result;
 	}
 }

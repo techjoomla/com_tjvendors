@@ -194,12 +194,12 @@ else{
 
 						<td>
 						<?php
-						$TjvendorFrontHelper = new TjvendorFrontHelper;
+						$tjvendorFrontHelper = new TjvendorFrontHelper;
 
 						if ($this->bulkPayoutStatus != 0)
 						{
 							$client= '';
-							$paidAmount = $TjvendorFrontHelper->getPaidAmount($item->vendor_id,$item->currency, $client);
+							$paidAmount = $tjvendorFrontHelper->getPaidAmount($item->vendor_id,$item->currency, $client);
 
 							if (empty($paidAmount))
 							{
@@ -210,7 +210,7 @@ else{
 						}
 						else
 						{
-							$paidAmount = $TjvendorFrontHelper->getPaidAmount($item->vendor_id,$item->currency, $filterClient);
+							$paidAmount = $tjvendorFrontHelper->getPaidAmount($item->vendor_id,$item->currency, $filterClient);
 
 							if (empty($paidAmount))
 							{

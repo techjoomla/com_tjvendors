@@ -118,8 +118,8 @@ class TjvendorsModelPayout extends JModelAdmin
 
 			$this->item->reference_order_id = '';
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-			$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-			$vendorDetail = $TjvendorsModelVendor->getItem();
+			$tjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+			$vendorDetail = $tjvendorsModelVendor->getItem();
 			$this->item->vendor_title = $vendorDetail->vendor_title;
 		}
 
@@ -142,9 +142,9 @@ class TjvendorsModelPayout extends JModelAdmin
 
 			$input  = JFactory::getApplication()->input;
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
-			$TjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
+			$tjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
 
-			$vendorDetail = $TjvendorsModelPayout->getItem();
+			$vendorDetail = $tjvendorsModelPayout->getItem();
 
 			$client = $vendorDetail->client;
 

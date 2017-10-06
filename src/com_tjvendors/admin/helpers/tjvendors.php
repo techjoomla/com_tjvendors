@@ -102,7 +102,8 @@ class TjvendorsHelpersTjvendors
 
 		foreach ($rows as $row)
 		{
-			$langClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($row['client']));
+			$tjvendorFrontHelper = new TjvendorFrontHelper;
+			$langClient = $tjvendorFrontHelper->getClientName($row['client']);
 			$uniqueClient[] = array("vendor_client" => $langClient, "client_value" => $row['client']);
 		}
 
@@ -295,6 +296,7 @@ class TjvendorsHelpersTjvendors
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
 
+		// Query to get the credit amount
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('SUM(' . $db->quoteName('CREDIT') . ')');
@@ -306,6 +308,7 @@ class TjvendorsHelpersTjvendors
 		$db->setQuery($query);
 		$credit = $db->loadResult();
 
+		// Query to get debit data
 		$query = $db->getQuery(true);
 		$query->select('SUM(' . $db->quoteName('debit') . ')');
 		$query->from($db->quoteName('#__tjvendors_passbook'));

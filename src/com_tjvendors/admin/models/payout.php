@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * Tjvendors model.
@@ -139,6 +140,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		{
 			$com_params = JComponentHelper::getParams('com_tjvendors');
 			$bulkPayoutStatus = $com_params->get('bulk_payout');
+			$tjvendorFrontHelper = new TjvendorFrontHelper;
 
 			$input  = JFactory::getApplication()->input;
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
@@ -162,7 +164,7 @@ class TjvendorsModelPayout extends JModelAdmin
 					$data['total'] = 0;
 					$data['transaction_time'] = JFactory::getDate()->toSql();
 					$data['client'] = $client['client'];
-					$transactionClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($client['client']));
+					$transactionClient = $tjvendorFrontHelper->getClientName($client['client']);
 					$data['transaction_id'] = $transactionClient . '-' . $vendorDetail->currency . '-' . $vendorDetail->vendor_id . '-';
 					$data['credit'] = 0;
 					$data['id'] = '';
@@ -195,7 +197,7 @@ class TjvendorsModelPayout extends JModelAdmin
 			$data['total'] = $payableAmount['total'] - $data['debit'];
 			$data['transaction_time'] = JFactory::getDate()->toSql();
 			$data['client'] = $vendorDetail->client;
-			$transactionClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($item->client));
+			$transactionClient = $tjvendorFrontHelper->getClientName($client['client']);
 			$data['transaction_id'] = $transactionClient . '-' . $vendorDetail->currency . '-' . $vendorDetail->vendor_id . '-';
 			$data['id'] = '';
 			$data['vendor_id'] = $item->vendor_id;
@@ -233,7 +235,7 @@ class TjvendorsModelPayout extends JModelAdmin
 	 *
 	 * @since    1.6
 	 */
-	public function fetchingData($data)
+	public function updatingCreditData($data)
 	{
 		$payout_detail = TjvendorsHelpersTjvendors::getTotalAmount($data['vendor_id'], $data['currency'], $data['client']);
 		$payout_id = $payout_detail['id'];
@@ -275,7 +277,7 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		if ($result)
 		{
-			$this->fetchingData($data);
+			$this->updatingCreditData($data);
 		}
 	}
 

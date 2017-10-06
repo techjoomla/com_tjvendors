@@ -106,15 +106,8 @@ class TjvendorsViewVendor extends JViewLegacy
 		}
 
 		$canDo = TjvendorsHelpersTjvendors::getActions();
-
-		if (JVERSION >= '3.0')
-		{
-			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle,  'pencil-2');
-		}
-		else
-		{
-			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle, 'course.png');
-		}
+		$clientTitle = TjvendorFrontHelper::getClientName($this->client);
+		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 
 		// If not checked out, can save the item.
 		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create'))))

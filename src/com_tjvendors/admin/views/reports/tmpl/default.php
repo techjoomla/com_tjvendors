@@ -321,7 +321,7 @@ else
 					<?php if (empty($filterClient))
 						{?>
 						<td>
-					<?php echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($item->client));?>
+					<?php echo TjvendorFrontHelper::getClientName($this->client);?>
 						</td>
 					<?php }
 

@@ -66,6 +66,8 @@ class TjvendorFrontHelper
 
 		foreach ($result as $i)
 		{
+			$tjvendorFrontHelper = new TjvendorFrontHelper;
+			$client = $tjvendorFrontHelper->getClientName($i['client']);
 			$client = JText::_('COM_TJVENDORS_VENDOR_CLIENT_' . strtoupper($i['client']));
 			$clients[] = $client;
 		}
@@ -437,5 +439,23 @@ class TjvendorFrontHelper
 		}
 
 		return $amount;
+	}
+
+	/**
+	 * Get client name 
+	 *
+	 * @param   string  $client  client
+	 *
+	 * @return  $clientName
+	 */
+	public static function getClientName($client)
+	{
+		$clientName = strtoupper($client);
+
+		// Need to load the menu language file as mod_menu hasn't been loaded yet.
+		$lang = JFactory::getLanguage();
+		$lang->load($client, JPATH_ADMINISTRATOR, null, false, true);
+
+		return JText::_($clientName);
 	}
 }

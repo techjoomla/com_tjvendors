@@ -10,6 +10,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * View class for a list of Tjvendors.
@@ -41,6 +42,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 		$this->input = JFactory::getApplication()->input;
+		$this->client = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -72,14 +74,9 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		JToolBarHelper::custom('vendorfees.back', 'chevron-left.png', '', 'Back', false);
 		JToolBarHelper::addNew('vendorfee.add');
 
-		if (JVERSION >= '3.0')
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'book');
-		}
-		else
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'vendors.png');
-		}
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
+		JToolbarHelper::title($clientTitle . ' : ' . JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'list.png');
 
 		if ($canDo->get('core.edit.state'))
 		{

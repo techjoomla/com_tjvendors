@@ -65,21 +65,23 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		JFactory::getApplication()->input->set('hidemainmenu', true);
 
 		$user  = JFactory::getUser();
-		$isNew = ($this->item->id == 0);
+		$isNew = ($this->item->vendor_id == 0);
 
 		$input = JFactory::getApplication()->input;
-		$this->full_client = $input->get('client', '', 'STRING');
+		$this->client = $input->get('client', '', 'STRING');
 
 		if ($isNew)
 		{
-			$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMMISSION');
+			$viewTitle = JText::_('COM_TJVENDOR_NEW_USER_SPECIFIC_COMMISSION');
 		}
 		else
 		{
 			$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMMISSION');
 		}
 
-		JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle,  'pencil-2');
+		$clientTitle = TjvendorFrontHelper::getClientName($this->client);
+		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
+
 		JToolBarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');
 		JToolBarHelper::save('vendorfee.save', 'JTOOLBAR_SAVE');
 

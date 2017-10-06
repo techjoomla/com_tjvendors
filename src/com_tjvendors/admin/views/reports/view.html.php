@@ -87,14 +87,9 @@ class TjvendorsViewReports extends JViewLegacy
 		$canDo = TjvendorsHelpersTjvendors::getActions();
 		JToolBarHelper::custom('back', 'chevron-left.png', '', 'Back', false);
 
-		if (JVERSION >= '3.0')
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'book');
-		}
-		else
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'reports.png');
-		}
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
+		JToolbarHelper::title($clientTitle . ' : ' . JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'list.png');
 
 		if ($canDo->get('core.admin'))
 		{

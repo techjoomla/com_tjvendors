@@ -82,14 +82,9 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$canDo = TjvendorsHelpersTjvendors::getActions();
 		JToolBarHelper::custom('back', 'chevron-left.png', '', 'Back', false);
 
-		if (JVERSION >= '3.0')
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'book');
-		}
-		else
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'payouts.png');
-		}
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
+		JToolbarHelper::title($clientTitle . ' : ' . JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'list.png');
 
 		if ($canDo->get('core.admin'))
 		{

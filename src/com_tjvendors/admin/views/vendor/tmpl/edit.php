@@ -100,7 +100,8 @@ jQuery(window).load(function(){
 							<?php
 								echo $this->item->vendor_title."</a></strong>";
 								echo " ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
-								echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
+								$tjvendorFrontHelper = new TjvendorFrontHelper();
+								echo $clientTitle = $tjvendorFrontHelper->getClientName($client);
 								echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
 							?>
 							</div>

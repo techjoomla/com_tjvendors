@@ -41,11 +41,10 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$TjvendorFrontHelper = new TjvendorFrontHelper;
-		$this->vendor_id = $TjvendorFrontHelper->getvendor();
-		$this->VendorDetail = $TjvendorsModelVendor->getItem($this->vendor_id);
-		$this->clientsForVendor = $TjvendorFrontHelper->getClientsForVendor($this->vendor_id);
+		$tjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$this->vendor_id = $tjvendorFrontHelper->getvendor();
+		$this->VendorDetail = $tjvendorsModelVendor->getItem($this->vendor_id);
 		$this->client = $this->input->get('client', '', 'STRING');
 		$app = JFactory::getApplication();
 		$app->setUserState("vendor.client", $this->client);
@@ -55,14 +54,17 @@ class TjvendorsViewVendor extends JViewLegacy
 
 		if (!empty($this->vendor_id) && $this->layout == "edit")
 		{
-			foreach ($this->clientsForVendor as $client)
+			if (!empty($this->clientsForVendor))
 			{
-				if ($client == $this->client)
+				foreach ($this->clientsForVendor as $client)
 				{
-					$link = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);
-					$app = JFactory::getApplication();
-					$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
-					$app->redirect($link);
+					if ($client == $this->client)
+					{
+						$link = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);
+						$app = JFactory::getApplication();
+						$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
+						$app->redirect($link);
+					}
 				}
 			}
 		}

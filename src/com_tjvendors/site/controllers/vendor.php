@@ -82,6 +82,8 @@ class TjvendorsControllerVendor extends JControllerForm
 	{
 		// Check for request forgeries.
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		$params = JComponentHelper::getParams('com_tjvendors');
+		$vendorApproval = $params->get('vendor_approval');
 
 		// Initialise variables.
 		$app = JFactory::getApplication();
@@ -106,6 +108,54 @@ class TjvendorsControllerVendor extends JControllerForm
 		$data = $model->validate($form, $data);
 		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
 		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
+
+		if (!empty($data['paymentForm']))
+		{
+			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
+			{
+				$paymentDetails[$key] = $field;
+			}
+
+			foreach ($data['paymentForm'] as $key => $detail)
+			{
+				$paymentPrefix = 'payment_';
+
+				if (strpos($key, $paymentPrefix) !== false)
+				{
+					if ($key != 'payment_fields')
+					{
+						$paymentDetails[$key] = $detail;
+					}
+				}
+			}
+		}
+
+		if (!empty($paymentDetails))
+		{
+			$data['paymentDetails'] = json_encode($paymentDetails);
+			$data['gateway'] = $paymentDetails['payment_gateway'];
+		}
+
+		// On a clientless vendor registration
+		if (empty($data['vendor_client']))
+		{
+			$data['params'] = $data['paymentDetails'];
+			$data['payment_gateway'] = $paymentForm['payment_gateway'];
+		}
+		else
+		{
+			$data['payment_gateway'] = '';
+			$data['params'] = '';
+		}
+
+		if ($vendorApproval)
+		{
+			$data['approved'] = 0;
+		}
+		else
+		{
+			$data['approved'] = 1;
+		}
 
 		// Check for errors.
 		if ($data === false)

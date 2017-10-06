@@ -10,6 +10,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * View class for a list of Tjvendors.
@@ -39,6 +40,12 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 		$this->input = JFactory::getApplication()->input;
+		$this->params = JComponentHelper::getParams('com_tjvendors');
+		JText::script('COM_TJVENDOR_VENDOR_APPROVAL');
+		JText::script('COM_TJVENDOR_VENDOR_DENIAL');
+
+		$this->vendorApproval = $this->params->get('vendor_approval');
+		$client = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -50,7 +57,11 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		$this->addToolbar();
 
-		$this->sidebar = JHtmlSidebar::render();
+		if (!empty($client))
+		{
+			$this->sidebar = JHtmlSidebar::render();
+		}
+
 		parent::display($tpl);
 	}
 
@@ -70,14 +81,9 @@ class TjvendorsViewVendors extends JViewLegacy
 		$canDo = TjvendorsHelpersTjvendors::getActions();
 		JToolBarHelper::addNew('vendor.add');
 
-		if (JVERSION >= '3.0')
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'book');
-		}
-		else
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
-		}
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
+		JToolbarHelper::title($clientTitle . ' : ' . JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'list.png');
 
 		if ($canDo->get('core.edit') && isset($this->items[0]))
 		{

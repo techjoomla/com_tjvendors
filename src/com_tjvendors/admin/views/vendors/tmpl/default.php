@@ -112,7 +112,9 @@ if ($saveOrder)
 	}
 
 </script>
-
+<script type="text/javascript">
+	var client = "<?php echo $this->input->get('client', '', 'STRING'); ?>";
+</script>
 <?php
 
 // Joomla Component Creator code to allow adding non select list filters
@@ -193,10 +195,15 @@ else
 						<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
 					</th>
 					<?php endif?>
-					
+
 					<th width="5%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'a.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
+					<?php	if ($this->vendorApproval) :?>
+					<th width="2%">
+						<?php echo JText::_('COM_TJVENDORS_VENDORS_VENDOR_APPROVE'); ?>
+					</th>
+					<?php endif?>
 					<th width="5%">
 						<?php echo JText::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
 					</th>
@@ -214,6 +221,8 @@ else
 			</tfoot>
 			<tbody>
 				<?php
+				$options[] = array("type"=>JText::_('Approve'),"value" => "1");
+				$options[] = array("type"=>JText::_('UnApproved'),"value" => "0");
 				foreach ($this->items as $i => $item)
 				{
 					$ordering   = ($listOrder == 'a.ordering');
@@ -266,12 +275,19 @@ else
 							</td>
 							<?php endif; ?>
 
-							
+
 							<td>
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' .$this->input->get('client', '', 'STRING').'&vendor_id=' . (int) $item->vendor_id );?>">
 									<?php echo $this->escape($item->vendor_title); ?>
 								</a>
 							</td>
+							<?php	if ($this->vendorApproval) :?>
+							<td>
+								<?php
+								echo JHTML::_('select.genericlist', $options, "vendorApprove", 'class="input-medium" size="1" onChange="tjVAdmin.vendors.vendorApprove(' . $item->vendor_id . ',this);"', 'value', 'type', $item->approved);
+								?>
+							</td>
+							<?php endif;?>
 							<td>
 
 								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_FEE'); ?></a> |

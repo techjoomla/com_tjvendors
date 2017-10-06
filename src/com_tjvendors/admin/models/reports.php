@@ -34,7 +34,6 @@ class TjvendorsModelReports extends JModelList
 				'total', 'pass.`total`',
 				'currency', 'pass.`currency`',
 				'vendor_title', 'vendors.`vendor_title`',
-				'client', 'vendors.`vendor_client`',
 				'transaction_id', 'pass.`transaction_id`',
 				'transaction_time', 'pass.`transaction_time`',
 			);

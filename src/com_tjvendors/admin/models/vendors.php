@@ -31,10 +31,10 @@ class TjvendorsModelVendors extends JModelList
 		if (empty($config['filter_fields']))
 		{
 			$config['filter_fields'] = array(
-				'vendor_id', 'a.`vendor_id`',
-				'vendor_title', 'a.`vendor_title`',
-				'ordering', 'a.`ordering`',
-				'state', 'a.`state`',
+				'vendor_id', 'v.`vendor_id`',
+				'vendor_title', 'v.`vendor_title`',
+				'ordering', 'v.`ordering`',
+				'state', 'v.`state`',
 			);
 		}
 
@@ -63,7 +63,7 @@ class TjvendorsModelVendors extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'a.vendor_id';
+			$orderCol = 'v.vendor_id';
 		}
 
 		$this->setState('list.ordering', $orderCol);
@@ -80,7 +80,7 @@ class TjvendorsModelVendors extends JModelList
 		$this->setState('params', $params);
 
 		// List state information.
-		parent::populateState('a.vendor_id', 'asc');
+		parent::populateState('v.vendor_id', 'asc');
 	}
 
 	/**
@@ -99,20 +99,13 @@ class TjvendorsModelVendors extends JModelList
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
-		$subQuery = $db->getQuery(true);
-
-		$subQuery->select('vendor_id')
-			->from($db->quoteName('#__vendor_client_xref'));
-
-			if (!empty($client))
-			{
-				$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
-			}
 
 		// Create the base select statement.
-		$query->select('*')
-			->from($db->quoteName('#__tjvendors_vendors', 'a'))
-			->where($db->quoteName('vendor_id') . ' IN (' . $subQuery . ')');
+		$query->select('v.*, vx.approved');
+		$query->from($db->quoteName('#__tjvendors_vendors', 'v'));
+		$query->join('LEFT', $db->quoteName('#__vendor_client_xref', 'vx') .
+		'ON (' . $db->quoteName('v.vendor_id') . ' = ' . $db->quoteName('vx.vendor_id') . ')');
+		$query->where($db->quoteName('vx.client') . ' = ' . $db->quote($client));
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');
@@ -121,12 +114,12 @@ class TjvendorsModelVendors extends JModelList
 		{
 			if (stripos($search, 'id:') === 0)
 			{
-				$query->where($db->quoteName('a.vendor_id') . ' = ' . (int) substr($search, 3));
+				$query->where($db->quoteName('v.vendor_id') . ' = ' . (int) substr($search, 3));
 			}
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(' . $db->quoteName('a.vendor_id') . ' LIKE ' . $search . 'OR' . $db->quoteName('a.vendor_title') . ' LIKE ' . $search . ')');
+				$query->where('(' . $db->quoteName('v.vendor_id') . ' LIKE ' . $search . 'OR' . $db->quoteName('a.vendor_title') . ' LIKE ' . $search . ')');
 			}
 		}
 

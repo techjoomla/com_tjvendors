@@ -291,6 +291,9 @@ class TjvendorsModelVendor extends JModelAdmin
 		$layout = $input->get('layout', '', 'STRING');
 		$site = $app->isSite();
 
+		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
+		$tjvendorTriggerVendor = new TjvendorTriggerVendor;
+
 		if (!empty($data['paymentForm']))
 		{
 			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
@@ -392,6 +395,9 @@ class TjvendorsModelVendor extends JModelAdmin
 					$result = $db->execute();
 				}
 
+				/* Trigger on Vendor Edit / update*/
+				$tjvendorTriggerVendor->onAfterVendorSave($data, false);
+
 				return true;
 			}
 			else
@@ -418,6 +424,9 @@ class TjvendorsModelVendor extends JModelAdmin
 						$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
 						$this->addMultiVendor($data['vendor_id'], $payment_gateway, $data['paymentDetails']);
 					}
+
+					/* Send mail on vendor creation */
+					$tjvendorTriggerVendor->onAfterVendorSave($data, true);
 
 					return true;
 				}

@@ -60,7 +60,8 @@ if (JFactory::getUser()->id ){?>
 										<?php
 										echo $this->VendorDetail->vendor_title."</a></strong>";
 										echo " " . JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
-										echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
+										$tjvendorFrontHelper = new TjvendorFrontHelper;
+										echo $client = $tjvendorFrontHelper->getClientName($client);
 										echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');?>
 										</div>
 										<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />

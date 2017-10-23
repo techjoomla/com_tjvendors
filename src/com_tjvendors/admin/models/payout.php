@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * Tjvendors model.
@@ -107,8 +108,8 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		if ($bulkPayoutStatus != 0)
 		{
-			$payoutAmount = TjvendorsHelpersTjvendors::getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
-			$this->item->bulk_total = $payoutAmount['payableAmount'];
+			$payoutAmount = TjvendorsHelpersTjvendors::bulkPendingAmount($this->item->vendor_id, $this->item->currency);
+			$this->item->bulk_total = $payoutAmount;
 		}
 		else
 		{
@@ -118,8 +119,8 @@ class TjvendorsModelPayout extends JModelAdmin
 
 			$this->item->reference_order_id = '';
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-			$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-			$vendorDetail = $TjvendorsModelVendor->getItem();
+			$tjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+			$vendorDetail = $tjvendorsModelVendor->getItem();
 			$this->item->vendor_title = $vendorDetail->vendor_title;
 		}
 
@@ -135,101 +136,74 @@ class TjvendorsModelPayout extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$bulkPayoutStatus = $com_params->get('bulk_payout');
-
-		$input  = JFactory::getApplication()->input;
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
-		$TjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
-
-		$vendorDetail = $TjvendorsModelPayout->getItem();
-
-		$client = $vendorDetail->client;
-
-		if ($bulkPayoutStatus != 0)
+		if (!isset($data['adaptive_payout']))
 		{
-			$vendorClients = TjvendorsHelpersTjvendors::getClients($vendorDetail->vendor_id);
+			$com_params = JComponentHelper::getParams('com_tjvendors');
+			$bulkPayoutStatus = $com_params->get('bulk_payout');
+			$tjvendorFrontHelper = new TjvendorFrontHelper;
 
-			foreach ($vendorClients as $client)
+			$input  = JFactory::getApplication()->input;
+			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
+			$tjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
+
+			$vendorDetail = $tjvendorsModelPayout->getItem();
+
+			$client = $vendorDetail->client;
+
+			// To get selected item
+			$item = $this->getItem($data['id']);
+
+			if ($bulkPayoutStatus != 0)
 			{
-				$pending_amount = TjvendorsHelpersTjvendors::getPayoutDetail($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
-				$data['debit'] = $data['bulk_total'];
-				$data['total'] = $pending_amount['total'] - $data['debit'];
-				$data['transaction_time'] = JFactory::getDate()->toSql();
-				$data['client'] = $client['client'];
-				$transactionClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($item->client));
-				$data['transaction_id'] = $transactionClient . ' - ' . $vendorDetail->vendor_id . ' - ' . $vendorDetail->currency . ' - ';
-				$data['credit'] = - $data['debit'];
-				$data['id'] = '';
-				$data['vendor_id'] = $vendorDetail->vendor_id;
-				$params = array("customer_note" => "", "entry_status" => "debit_payout");
-				$data['params'] = json_encode($params);
+				$vendorClients = TjvendorsHelpersTjvendors::getClients($vendorDetail->vendor_id);
 
-				if (parent::save($data))
+				foreach ($vendorClients as $client)
 				{
-					$id = (int) $this->getState($this->getName() . '.id');
-					$payout_update = new stdClass;
-
-					// Must be a valid primary key value.
-					$payout_update->id = $id;
-					$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
-
-					// Update their details in the users table using id as the primary key.
-					$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
-				}
-
-				$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
-				JFactory::getApplication()->enqueueMessage($message);
-			}
-
-			return true;
-		}
-
-		// To get selected item
-		$item = $this->getItem($data['id']);
-		$data['debit'] = $data['total'];
-		$payableAmount = TjvendorsHelpersTjvendors::getTotalAmount($item->vendor_id, $item->currency, $item->client);
-		$data['total'] = $payableAmount['total'] - $data['debit'];
-		$data['transaction_time'] = JFactory::getDate()->toSql();
-		$data['client'] = $vendorDetail->client;
-		$transactionClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($item->client));
-		$data['transaction_id'] = $transactionClient . '-' . $vendorDetail->currency . '-' . $vendorDetail->vendor_id . '-';
-		$data['id'] = '';
-		$data['vendor_id'] = $item->vendor_id;
-		$data['credit'] = '0.00';
-		$params = array("customer_note" => "", "entry_status" => "debit_payout");
-		$data['params'] = json_encode($params);
-
-		if ($data['debit'] < $payableAmount['total'])
-		{
-			for ($i = 0; $i <= 1; $i++)
-			{
-				if ($i == 1)
-				{
-					$data['credit'] = '0.00';
-					$data['total'] = $data['total'];
-					$data['debit'] = '0.00';
-					$params = array("customer_note" => "", "entry_status" => "credit_remaining_payout");
+					$pending_amount = TjvendorsHelpersTjvendors::getTotalAmount($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
+					$data['debit'] = $pending_amount['total'];
+					$data['total'] = 0;
+					$data['transaction_time'] = JFactory::getDate()->toSql();
+					$data['client'] = $client['client'];
+					$transactionClient = $tjvendorFrontHelper->getClientName($client['client']);
+					$data['transaction_id'] = $transactionClient . '-' . $vendorDetail->currency . '-' . $vendorDetail->vendor_id . '-';
+					$data['credit'] = 0;
+					$data['id'] = '';
+					$data['vendor_id'] = $vendorDetail->vendor_id;
+					$params = array("customer_note" => "", "entry_status" => "debit_payout");
 					$data['params'] = json_encode($params);
-				}
 
-				if (parent::save($data))
-				{
-					$id = (int) $this->getState($this->getName() . '.id');
-					$payout_update = new stdClass;
+					if (parent::save($data))
+					{
+						$id = (int) $this->getState($this->getName() . '.id');
+						$payout_update = new stdClass;
 
-					// Must be a valid primary key value.
-					$payout_update->id = $id;
-					$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
+						// Must be a valid primary key value.
+						$payout_update->id = $id;
+						$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
 
-					// Update their details in the users table using id as the primary key.
-					$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+						// Update their details in the users table using id as the primary key.
+						$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+					}
+
 					$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
-						JFactory::getApplication()->enqueueMessage($message);
+					JFactory::getApplication()->enqueueMessage($message);
 				}
+
+				return true;
 			}
 
-			return true;
+			$data['debit'] = $data['total'];
+			$payableAmount = TjvendorsHelpersTjvendors::getTotalAmount($item->vendor_id, $item->currency, $item->client);
+			$data['total'] = $payableAmount['total'] - $data['debit'];
+			$data['transaction_time'] = JFactory::getDate()->toSql();
+			$data['client'] = $vendorDetail->client;
+			$transactionClient = $tjvendorFrontHelper->getClientName($client['client']);
+			$data['transaction_id'] = $transactionClient . '-' . $vendorDetail->currency . '-' . $vendorDetail->vendor_id . '-';
+			$data['id'] = '';
+			$data['vendor_id'] = $item->vendor_id;
+			$data['credit'] = '0.00';
+			$params = array("customer_note" => "", "entry_status" => "debit_payout");
+			$data['params'] = json_encode($params);
 		}
 
 		if (parent::save($data))
@@ -261,9 +235,9 @@ class TjvendorsModelPayout extends JModelAdmin
 	 *
 	 * @since    1.6
 	 */
-	public function fetchingData($data)
+	public function updatingCreditData($data)
 	{
-		$payout_detail = TjvendorsHelpersTjvendors::getPayoutDetail($data['vendor_id'], $data['currency'], $data['client']);
+		$payout_detail = TjvendorsHelpersTjvendors::getTotalAmount($data['vendor_id'], $data['currency'], $data['client']);
 		$payout_id = $payout_detail['id'];
 		$object = new stdClass;
 
@@ -303,7 +277,7 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		if ($result)
 		{
-			$this->fetchingData($data);
+			$this->updatingCreditData($data);
 		}
 	}
 

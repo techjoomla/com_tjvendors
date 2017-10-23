@@ -237,7 +237,10 @@ if (!empty($this->vendor_id))
 							<?php if($client == '0')
 								{?>
 								<td>
-									<?php	echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($row->client));?>
+									<?php
+											$tjvendorFrontHelper = new TjvendorFrontHelper;
+											echo $client = $tjvendorFrontHelper->getClientName($row->client);
+									?>
 								</td>
 							<?php }
 								if($currency == '0')

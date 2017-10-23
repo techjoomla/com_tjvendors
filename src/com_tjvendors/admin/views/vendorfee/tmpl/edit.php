@@ -54,10 +54,10 @@ method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form"
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
 
-					<?php 
+					<?php
 						if($this->item->vendor_id == 0)
 						{
-							echo $this->form->renderField('user_id');
+							echo $this->form->renderField('vendor_title');
 							echo $this->form->renderField('currency');
 						}
 						else

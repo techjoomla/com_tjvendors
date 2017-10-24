@@ -1,9 +1,9 @@
 <?php
 /**
  * @version    SVN:<SVN_ID>
- * @package    JGive
+ * @package    TJ-vendors
  * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (c) 2009-2015 TechJoomla. All rights reserved
+ * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved
  * @license    GNU General Public License version 2, or later
  */
 
@@ -11,12 +11,10 @@
 defined('_JEXEC') or die('Restricted access');
 JLoader::import('components.com_tjvendors.helpers.mails', JPATH_SITE);
 
-// JLoader::import('components.com_jgive.helpers.donations', JPATH_SITE);
-
 /**
- * Jgive triggers class for vendor.
+ * TJ-vendors triggers class for vendors.
  *
- * @since  1.6
+ * @since  2.1
  */
 class TjvendorTriggerVendor
 {
@@ -27,13 +25,8 @@ class TjvendorTriggerVendor
 	 */
 	public function __construct()
 	{
-		$app    = JFactory::getApplication();
-		$this->menu   = $app->getMenu();
-		$this->tjvendorsparams = JComponentHelper::getParams('com_tjvendors');
-		$this->siteConfig = JFactory::getConfig();
-		$this->sitename = $this->siteConfig->get('sitename');
+		$app = JFactory::getApplication();
 		$this->user = JFactory::getUser();
-		$this->tjnotifications = new Tjnotifications;
 		$this->tjvendorMailsHelper = new TjvendorMailsHelper;
 	}
 
@@ -63,6 +56,19 @@ class TjvendorTriggerVendor
 		}
 
 		return;
+	}
+
+	/**
+	 * Trigger for vendor payout
+	 *
+	 * @param   int  $vendorDetails  Vendor Details
+	 *
+	 * @return  void
+	 */
+	public function onAfterVendorPayoutSave($payoutDetails)
+	{
+		/* Send mail on Vendor create */
+		return $this->tjvendorMailsHelper->onAfterPayoutCreate((object) $payoutDetails);
 	}
 
 	/**

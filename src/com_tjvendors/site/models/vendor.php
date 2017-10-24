@@ -357,6 +357,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 					// Insert the object into the user profile table.
 					JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+					$tjvendorTriggerVendor->onAfterVendorSave($data, true);
 
 					return true;
 				}

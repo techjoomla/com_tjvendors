@@ -61,7 +61,7 @@ class TjvendorTriggerVendor
 	/**
 	 * Trigger for vendor payout
 	 *
-	 * @param   int  $vendorDetails  Vendor Details
+	 * @param   int  $payoutDetails  Vendor payouts Details
 	 *
 	 * @return  void
 	 */

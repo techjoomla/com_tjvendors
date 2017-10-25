@@ -108,7 +108,9 @@ class TjvendorMailsHelper
 		$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
 
 		// Find admin has approved vendor, and add a new key
+
 /*
+ *
 		if (Add condition if approved from admin only)
 		$approvalkey = "approvalOnVendorMailToOwner";
 		$promoterEmailObj = new stdClass;

@@ -67,29 +67,7 @@ class TjvendorTriggerVendor
 	 */
 	public function onAfterVendorPayoutSave($payoutDetails)
 	{
-		/* Send mail on Vendor create */
+		/* Send mail on Vendor Payout create */
 		return $this->tjvendorMailsHelper->onAfterPayoutCreate((object) $payoutDetails);
 	}
-
-	/**
-	 * Trigger for Campaign state change
-	 *
-	 * @param   int  $campaignDetails  Campaign Details
-	 * @param   int  $isPublished      isPublished = 1 / !isPublished = 0
-	 *
-	 * @return  void
-	 */
-/*
-	public function onCampaignStateChange($campaignDetails, $isPublished)
-	{
-		switch ($isPublished)
-		{
-			case 1:
-				$this->jGiveMailsHelper->onAfterCampaignStateChange($campaignDetails);
-				break;
-		}
-
-		return;
-	}
-*/
 }

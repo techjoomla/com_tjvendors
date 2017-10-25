@@ -61,7 +61,7 @@ class TjvendorMailsHelper
 
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
-		$vendorDetails->adminname = JText::_('COM_JGIVE_SITEADMIN');
+		$vendorDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
 		$replacements->info = $vendorDetails;
 		$replacements->vendorer = $vendorer;
 
@@ -96,7 +96,7 @@ class TjvendorMailsHelper
 
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
-		$vendorDetails->adminname = JText::_('COM_JGIVE_SITEADMIN');
+		$vendorDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
 		$replacements->info = $vendorDetails;
 		$replacements->vendorer = JFactory::getUser($vendorDetails->user_id);
 
@@ -134,7 +134,7 @@ class TjvendorMailsHelper
 		$vendorkey = "vendorPayoutMailToPromoter";
 
 		$payoutDetails->sitename = $this->sitename;
-		$payoutDetails->adminname = JText::_('COM_JGIVE_SITEADMIN');
+		$payoutDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
 
 		$replacements = new stdClass;
 		$replacements->info = $payoutDetails;

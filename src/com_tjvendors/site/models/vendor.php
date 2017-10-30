@@ -288,6 +288,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$db = JFactory::getDbo();
 		$input = JFactory::getApplication()->input;
 		$layout = $input->get('layout', '', 'STRING');
+		$app = JFactory::getApplication();
 		$site = $app->isSite();
 
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);

@@ -36,6 +36,9 @@ class TjvendorMailsHelper
 		$this->siteinfo = new stdClass;
 		$this->siteinfo->sitename	= $this->sitename;
 		$this->siteinfo->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
+
+		JLoader::import('components.com_tjvendors.helpers.fronthelper', JPATH_SITE);
+		$this->tjvendorFrontHelper = new TjvendorFrontHelper;
 	}
 
 	/**
@@ -58,6 +61,15 @@ class TjvendorMailsHelper
 		$vendorer = JFactory::getUser($vendorDetails->user_id);
 		$promoterEmailObj->email = $vendorer->email;
 		$promoterRecipients[] = $promoterEmailObj;
+
+		$allVendors = 'index.php?option=com_tjvendors&view=vendors&client=com_jgive';
+		$allVendorsLink = JUri::root() . 'administrator/' . substr(JRoute::_($allVendors), strlen(JUri::base(true)) + 1);
+		$vendorDetails->allVendors = $allVendorsLink;
+
+		$vendorItemID = $this->tjvendorFrontHelper->getItemId('index.php?option=com_tjvendors&view=vendor&layout=edit');
+		$myVendor = 'index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $vendorDetails->vendor_client . '&vendor_id=19&Itemid=' . $vendorItemID;
+		$myVendorLink = JUri::root() . substr(JRoute::_($myVendor), strlen(JUri::base(true)) + 1);
+		$vendorDetails->myVendor = $myVendorLink;
 
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
@@ -107,18 +119,25 @@ class TjvendorMailsHelper
 		// Mail to site admin
 		$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
 
+		$vendor_approval = $this->tjvendorsparams->get('vendor_approval');
+
 		// Find admin has approved vendor, and add a new key
+		if ($vendor_approval && $vendorDetails->approved == 1)
+		{
+			JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+			$vendorData = JTable::getInstance('Vendor', 'TjvendorsTable');
+			$vendorData->load(array('vendor_id' => $vendorDetails->vendor_id));
+			$vendorUserDetails = JFactory::getUser($vendorData->user_id);
 
-/*
- *
-		if (Add condition if approved from admin only)
-		$approvalkey = "approvalOnVendorMailToOwner";
-		$promoterEmailObj = new stdClass;
-		$promoterEmailObj->email = $vendorDetails->email;
-		$promoterRecipients[] = $promoterEmailObj;
+			$approvalkey = "approvalOnVendorMailToOwner";
+			$promoterEmailObj = new stdClass;
+			$promoterEmailObj->email = $vendorUserDetails->email;
+			$promoterRecipients[] = $promoterEmailObj;
+			$replacements->vendorUser = $vendorUserDetails;
 
-		$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
-*/
+			$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
+		}
+
 		return;
 	}
 

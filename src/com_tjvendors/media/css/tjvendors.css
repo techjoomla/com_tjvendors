@@ -1,0 +1,99 @@
+/* BEM Format
+ Page cover Ex: pin-cover
+ Block: 	Ex: pin
+ Element: 	Ex: pin__input
+ Modifiesr: Ex: pin__input--btn */
+
+/*----TJvendor css---*/
+#tvwrap .date .input-group-btn {
+width:auto;
+}
+
+#tvwrap .date__field {
+min-width:100px;
+}
+
+#tvwrap .hide__desc {
+display:none;
+}
+
+#tvwrap .search .search__icon {
+background-color:#ddd;
+padding:12px;
+}
+
+#tvwrap .tab___container {
+background:#fff;
+border:1px solid #333;
+border-top:none;
+clear:both;
+float:left;
+overflow:auto;
+width:100%;
+}
+
+#tvwrap ul.tabs {
+height:32px;
+list-style:none;
+padding:0;
+width:100%;
+}
+
+#tvwrap ul.tabs li {
+cursor:pointer;
+float:left;
+height:31px;
+line-height:31px;
+overflow:hidden;
+padding:0 21px;
+position:relative;
+}
+
+#tvwrap ul.tabs li.active {
+border-bottom:2px solid #999;
+}
+
+/*--Bootstrap Overrides-- */
+#tvwrap .date .icon-calendar:before {
+content:"\f073";
+}
+
+#tvwrap .date .input-append,#tvwrap .search__field {
+display:inline-flex;
+margin-right:4px;
+}
+
+/*----Reusable css--*/
+#tvwrap .mt-0{
+	margin-top:0;
+}
+#tvwrap .mt-10{
+	margin-top:10px;
+}
+#tvwrap .mb-15{
+	margin-bottom:15px;;
+}
+#tvwrap .pr-0{
+	padding-right:0;
+}
+
+/*----Media Query for Tab css--*/
+@media screen and (max-width: 480px) {
+	#tvwrap .tabs {
+	display: none;
+	}
+	#tvwrap .tab__heading {
+	background-color: #dddddd;
+	border: 1px solid #c5bebe;
+	margin: 10px 0;
+	padding: 5px 20px;
+	display: block;
+	cursor: pointer;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	}
+}

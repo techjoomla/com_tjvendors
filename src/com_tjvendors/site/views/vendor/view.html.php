@@ -51,6 +51,9 @@ class TjvendorsViewVendor extends JViewLegacy
 		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);
 		$this->layout = $this->input->get('layout', '', 'STRING');
 		JText::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+		JText::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
+		JText::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
+
 
 		if (!empty($this->vendor_id) && $this->layout == "edit")
 		{

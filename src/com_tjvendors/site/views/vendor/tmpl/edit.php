@@ -23,7 +23,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	var layout = '<?php echo "edit";?>';
 	tjVSite.vendor.initVendorJs();
 </script>
-
+<div id="tvwrap">
 <?php
 if (JFactory::getUser()->id ){?>
 	<div class="page-header">
@@ -35,11 +35,15 @@ if (JFactory::getUser()->id ){?>
 	</div>
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
-	<div class="form-horizontal">
-		<div class="row-fluid">
-			<div class="form-horizontal">
-				<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'name')); ?>
-					<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'name', JText::_('COM_TJVENDORS_VENDOR_REGISTRATION_DETAILS')); ?>
+		<div class="row">
+			<div class="col-sm-12" id="tj-edit-form">
+				<ul class="tabs mb-15 hidden-xs">
+				  <li class="active" rel="tab1"><a><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
+				  <li rel="tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></li>
+				</ul>
+					<div class="tab__container">
+					  <h4 class="tab_active tab__heading visible-xs" rel="tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?><i class="fa fa-angle-double-down pull-right" aria-hidden="true"></i></h4>
+					  <div id="tab1" class="tab__content">
 						<fieldset class="adminform">
 							<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id; ?>" />
 							<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->vendor->checked_out_time; ?>" />
@@ -72,27 +76,27 @@ if (JFactory::getUser()->id ){?>
 									elseif($this->vendor_id == 0)
 									{
 										?>
-										 <input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
+									<div class="row">
+									  <div class="col-sm-6">
 										<?php echo$this->form->renderField('vendor_title'); ?>
 										<?php echo $this->form->renderField('alias'); ?>
-										<?php echo $this->form->renderField('vendor_description'); ?>
-										<?php echo $this->form->renderField('vendor_logo'); ?>
-										<div class="controls">
-											<div class="alert alert-warning">
-												<?php echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png'); ?>
-											</div>
-										</div>
-											<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
+										<?php echo $this->form->renderField('vendor_description'); ?>	
+									 </div>
+									  <div class="col-sm-6">
+										<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
 										<?php if (!empty($this->vendor->vendor_logo))
 											{ ?>
-												<div class="control-group">
-													<div class="controls "><img src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
+												<div class="form-group">
+													<div class="controls ">
+													 <img src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>">
+													</div>
 												</div>
 										<?php }
 										if(empty($this->vendor->vendor_logo)):?>
 											<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/administrator/components/com_tjvendors/assets/images/default.png" />
-											<div class="control-group">
-													<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>"></div>
+											<div class="form-group">
+												<div class="controls ">
+													<img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>">
 												</div>
 										<?php endif;
 										?>
@@ -100,49 +104,55 @@ if (JFactory::getUser()->id ){?>
 									}
 								 ?>
 						</fieldset>
-					<?php echo JHtml::_('bootstrap.endTab'); ?>
+					</div>
 
-					<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'desc', JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS')); ?>
-						<?php echo $this->form->renderField('payment_gateway');?>
+					<h4 class="tab__heading visible-xs" rel="tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?><i class="fa fa-angle-double-down pull-right" aria-hidden="true"></i></h4>
+					<div id="tab2" class="tab__content">
 
 						<div id="payment_details"></div>
 					<?php echo JHtml::_('bootstrap.endTab'); ?>
 
-				<?php echo JHtml::_('bootstrap.endTabSet');
+					</div>
+				</div>
+				<?php
 				if($this->vendor_id == 0)
 				{
 				?>
 				<div>
-					<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-						<span><?php echo JText::_('JSUBMIT'); ?></span>
-					</button>
-
-					<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-						<?php echo JText::_('JCANCEL'); ?>
-					</button>
-				</div>
-				<?php
-				}
-				else
-				{?>
-					<div>
-						<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-							<span><?php echo JText::_('COM_TJVENDORS_CLIENT_APPROVAL'); ?></span>
-						</button>
-						<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-						<?php echo JText::_('COM_TJVENDORS_CLIENT_REJECTION'); ?>
-					</button>
-					</div>
-				<?php
-				}
-				?>
+					
 			</div>
 		</div>
+	</div>
+		
+		<div class="mt-10">	
+			<button type="button" class="btn btn-default btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
+				<span><?php echo JText::_('JSUBMIT'); ?></span>
+			</button>
 
+			<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
+				<?php echo JText::_('JCANCEL'); ?>
+			</button>
+		</div>
+		
+			<?php
+			}
+			else
+			{?>
+		<div class="mt-10">
+			<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
+				<span><?php echo JText::_('COM_TJVENDORS_CLIENT_APPROVAL'); ?></span>
+			</button>
+			<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
+				<?php echo JText::_('COM_TJVENDORS_CLIENT_REJECTION'); ?>
+			</button>
+		</div>
+			<?php
+			}
+		?>
 		<input type="hidden" name="task" value="vendor.save"/>
 		<?php echo JHtml::_('form.token'); ?>
-	</div>
-</form>
+	</form>
+ </div>
 <?php }
 else
 {
@@ -150,4 +160,7 @@ else
 	$app = JFactory::getApplication();
 	$app->redirect($link);
 }
-
+?>
+<script>
+	tjVSite.vendor.tabToAccordion();
+</script>

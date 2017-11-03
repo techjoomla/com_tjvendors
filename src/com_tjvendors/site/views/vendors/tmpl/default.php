@@ -40,13 +40,12 @@ $listDirn      = $this->state->get('list.direction');
 <script type="text/javascript">
 	tjVSite.vendors.initVendorsJs();
 </script>
-	<div class="page-header">
+<div id="tvwrap">
 		<h2>
 			<?php
 				echo JText::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS');
 			?>
-		</h2>
-	</div>
+		</h2>		
 <?php
 $user_id = JFactory::getUser()->id;
 if (!empty($this->vendor_id))
@@ -54,93 +53,118 @@ if (!empty($this->vendor_id))
 	<form action="<?php
 		echo JRoute::_('index.php?option=com_tjvendors&view=vendors');
 	?>" method="post" id="adminForm" name="adminForm">
-	<div id="j-main-container">
-
-			<div class="btn-group pull-left hidden-phone">
-				<div class="row">
-					<div class="col-lg-4">
-						<div class="input-group">
+	<div id="j-main-container" class="vendor-report">
+			<!-----"vendor-report" is a page cover class--->
+			<div class="row">
+					<div class="col-xs-12 col-md-7 date">
+						<div class="btn-group input-group">
 							<span class="input-group-btn">
-								<?php echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));?>
+								<?php echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()' ));?>
 							</span>
 							<span class="input-group-btn">
-								<?php echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()' ));?>
+								<?php echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()' ));?>
 							</span>
 							<span class="">
-								<button class="btn btn-default" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
+								<button class="btn btn-primary" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
 									<i class="fa fa-remove"></i>
 								</button>
 							</span>
 						</div>
 					</div>
-					<div class="col-lg-5">
-						<div class="input-group">
-							<span class="input-group-btn">
-								<button class="btn btn-default" type="submit"><?php echo JText::_('COM_TJVENDORS_SEARCH');?></button>
-							</span>
-							<input type="text" class="form-control" name="filter_search" id="filter_search"placeholder="<?php echo JText::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_CURRENCY');?>"
-								value="<?php echo $this->escape($this->state->get('filter.search')); ?>"title="<?php echo JText::_('JSEARCH_FILTER');?>"/>
-							<span class="input-group-btn">
-								<button class="btn btn-default" id="clear-search-button" type="button" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR');?>">
+					<div class="col-xs-12 col-md-5 search">
+						<div class="input-group pull-right">
+							<span class="pull-left search__field" id="searchPayoutReport" style="display:none;">
+								<input 
+									type="text" 
+									onchange="document.adminForm.submit();" 
+									class="form-control payoutInputBox" 
+									name="filter_search" 
+									id="filter_search" 
+									placeholder="<?php echo JText::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_CURRENCY');?>"
+									value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+									title="<?php echo JText::_('JSEARCH_FILTER');?>"/>
+								<button 
+									class="btn" 
+									onclick="this.form.submit();" 
+									type="submit"> 
+									<i class="fa fa-search"></i>
+								</button>
+								<button 
+									class="btn" 
+									onclick="document.getElementById('filter_search').value='';this.form.submit();" 
+									id="clear-search-button" 
+									type="button" 
+									title="<?php echo JText::_('JSEARCH_FILTER_CLEAR');?>">
 									<i class="fa fa-remove"></i>
 								</button>
 							</span>
+							<a id="searchVenueBtn"  href="javascript:void(0)" onclick="tjVSite.vendors.toggleDiv('searchPayoutReport');" title="<?php echo JText::_('COM_JTICKETING_SEARCH_EVENT')?>">
+								<i class="fa fa-search search__icon"></i>
+							</a>
 						</div>
-					</div>
+					</div>				
 				</div>
-			</div>
-
-				<div class="btn-group pull-left hidden-phone row">
-					<div class="">
-						<div class="col-lg-6">
-							<div class="input-group">
-								<span class="input-group-btn">
-									<?php echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
-									$currency = $this->state->get('filter.currency');?>
-								</span>
-								<span class="input-group-btn">
-									<?php echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client", "client", $this->state->get('filter.vendor_client'));
+				<hr>
+				<div class="row">
+						<div class="col-xs-12 btn-group">
+							<ul class="input-group list-inline pull-right">
+								<li>
+									<div  class="input-group-btn hidden-xs ">
+										<?php echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
+										$currency = $this->state->get('filter.currency');?>
+									</div>
+								</li>
+								<li>
+									<div  class="input-group-btn">
+										<?php echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client", "client", $this->state->get('filter.vendor_client'));
 										$client = $this->state->get('filter.vendor_client');?>
-								</span>
-								<span class="input-group-btn">
+									</div>
+								</li>
+								<li>
+									<div  class="input-group-btn hidden-xs ">
 									<?php $transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
 											$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
 											$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
 											echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));
 											$transactionType = $this->state->get('filter.transactionType'); ?>
-								</span>
-								<span class="input-group-btn">
-									<label for="limit" class="element-invisible">
-										<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
-									</label>
-									<?php echo $this->pagination->getLimitBox(); ?>
-								</span>
-							</div>
+									</div>
+								</li>
+								<li class="pr-0">
+									<div  class="input-group-btn hidden-xs ">
+										<label for="limit" >
+											<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+										</label>
+										<?php echo $this->pagination->getLimitBox(); ?>
+									</div>
+								</li>
+							</ul>
 						</div>
-					</div>
 				</div>
-		</div>
+				<div class="row">
 					<?php
 						if (empty($this->items))
 						{?>
-							<div class="clearfix">&nbsp;</div>
-							<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pull-right alert alert-info jtleft"><?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?></div>
+							<div class="col-xs-12">
+								<div class="alert alert-info">
+								 <?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?>
+								</div>
+							</div>
 						<?php }
 						else
 						{
-						?>
+						?>		   
+						<div class="col-xs-12">
+							<div class="alert alert-info">
+								<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE');?>
+								<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE'); ?>
+							</div>															
+						</div>
+				</div>
+	<div class="row">
+	 <div class="col-xs-12">		 
+	  <div id="no-more-tables">
 		<table class="table table-striped table-hover">
 			<thead>
-					<tr>
-						<div class="pull-left alert alert-info">
-							<div>
-								<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE');?>
-							</div>
-							<div>
-								<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE'); ?>
-							</div>
-						</div>
-					</tr>
 					<tr>
 						<th width="1%">
 							<?php echo "Sr.No";?>
@@ -198,19 +222,16 @@ if (!empty($this->vendor_id))
 			<?php if($currency != '0'):?>
 					<div class="pull-right">
 						<tr>
-							<th colspan="8"></th>
 							<th colspan="12">
 									<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' .$this->totalDetails['creditAmount']. '&nbsp' . $currency;?>
 							</th>
 						</tr>
 						<tr>
-							<th colspan="8"></th>
 							<th colspan="12">
 									<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount']. '&nbsp' . $currency;?>
 							</th>
 						</tr>
 						<tr>
-							<th colspan="8"></th>
 							<th colspan="12">
 									<?php echo JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount']. '&nbsp' . $currency?>
 							</th>
@@ -218,7 +239,7 @@ if (!empty($this->vendor_id))
 					</div>
 				<?php endif;?>
 				</td>
-				<td colspan="5">
+				<td colspan="7">
 					<?php echo $this->pagination->getListFooter();?>
 				</td>
 			</tfoot>
@@ -322,6 +343,10 @@ if (!empty($this->vendor_id))
 					?>
 			</tbody>
 		</table>
+	   </div>
+	  </div>
+   </div>
+ 
 	<?php
 	}
 	?>
@@ -336,7 +361,7 @@ if (!empty($this->vendor_id))
 elseif(!$this->vendor_id &&  $user_id)
 {
 ?>
-	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 pull-right alert alert-info jtleft"><?php echo JText::_('COM_TJVENDOR_REPORTS_ERROR');?></div>
+	<div class="alert alert-info"><?php echo JText::_('COM_TJVENDOR_REPORTS_ERROR');?></div>
 <?php
 }
 else
@@ -345,3 +370,6 @@ else
 	$app = JFactory::getApplication();
 	$app->redirect($link);
 }?>
+
+ </div>
+</div>

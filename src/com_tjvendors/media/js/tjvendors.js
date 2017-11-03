@@ -7,6 +7,42 @@
  */
 var tjVAdmin = {
 	vendor: {
+		/*For Read More/Read Less */
+			readMore: function()
+			{
+				var showChar = 300;
+				var ellipsestext = "";
+				var moretext = [Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_MORE')];				
+				var lesstext = [Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_LESS')];
+				jQuery('.profile__content').each(function () 
+				{
+					var content = jQuery(this).html();
+					if (content.length > showChar)
+					{
+						var show_content = content.substr(0, showChar);
+						var hide_content = content.substr(showChar, content.length - showChar);
+						var html = show_content + '<span class="moreelipses">' + ellipsestext + '</span><span><span class="hide__desc">' + hide_content + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+						jQuery(this).html(html);
+					}
+				});
+
+				jQuery(".morelink").click(function () 
+				{
+					if (jQuery(this).hasClass("less"))
+					{
+						jQuery(this).removeClass("less");
+						jQuery(this).html(moretext);
+					}
+					else
+					{
+						jQuery(this).addClass("less");
+						jQuery(this).html(lesstext);
+					}
+					jQuery(this).parent().prev().toggle();
+					jQuery(this).prev().toggle();
+					return false;
+				});
+			},
 		/*Initialize event js*/
 		initVendorJs: function () {
 			jQuery(document).ready(function () {
@@ -204,6 +240,46 @@ var tjVSite = {
 			});
 		}
 	},
+	tabToAccordion: function(){
+				jQuery(".tab__content").hide();
+				jQuery(".tab__content:first").show();
+
+			  /* if in tab mode */
+				jQuery("ul.tabs li").click(function() {
+					
+				  jQuery(".tab__content").hide();
+				  var activeTab = jQuery(this).attr("rel"); 
+				 jQuery("#"+activeTab).fadeIn();		
+					
+				  jQuery("ul.tabs li").removeClass("active");
+				  jQuery(this).addClass("active");
+
+				  jQuery(".tab__heading").removeClass("tab_active");
+				  jQuery(".tab__heading[rel^='"+activeTab+"']").addClass("tab_active");
+				  
+				});
+				/* if in drawer mode */
+				jQuery(".tab__heading").click(function() {
+				  
+				  jQuery(".tab__content").hide();
+				  var tab_activeTab = jQuery(this).attr("rel"); 
+				  jQuery("#"+tab_activeTab).fadeIn();
+				  
+				  jQuery(".tab__heading").removeClass("tab_active");
+				  jQuery(this).addClass("tab_active");
+				  
+				  jQuery("ul.tabs li").removeClass("active");
+				  jQuery("ul.tabs li[rel^='"+tab_activeTab+"']").addClass("active");
+				});
+				
+				
+				/* Extra class "tab_last" 
+				   to add border to right side
+				   of last tab */
+				jQuery('ul.tabs li').last().addClass("tab_last");
+				
+			}
+	},
 	vendors: {
 		/*Initialize event js*/
 		initVendorsJs: function () {
@@ -215,6 +291,18 @@ var tjVSite = {
 					document.adminForm.submit();
 				});
 			});
-		}
+		},
+		
+		toggleDiv: function(spanId)
+		{
+			if ( jQuery(window).width() < 767 ){
+				jQuery("#"+spanId).toggle( "slow" );
+			  }
+			  else {
+				 jQuery("#"+spanId).toggle();
+			  }
+			jQuery(".report_search_input").toggleClass( "active" );
+		},
+		
 	}
 }

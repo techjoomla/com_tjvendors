@@ -65,16 +65,16 @@ margin-right:4px;
 
 /*----Reusable css--*/
 #tvwrap .mt-0{
-	margin-top:0;
+margin-top:0;
 }
 #tvwrap .mt-10{
-	margin-top:10px;
+margin-top:10px;
 }
 #tvwrap .mb-15{
-	margin-bottom:15px;;
+margin-bottom:15px;;
 }
 #tvwrap .pr-0{
-	padding-right:0;
+padding-right:0;
 }
 
 /*----Media Query for Tab css--*/

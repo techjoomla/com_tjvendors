@@ -15,7 +15,7 @@ jimport('techjoomla.tjnotifications.tjnotifications');
  *
  * @since  2.1
  */
-class TjvendorMailsHelper
+class TjvendorsMailsHelper
 {
 	/**
 	 * Method acts as a consturctor

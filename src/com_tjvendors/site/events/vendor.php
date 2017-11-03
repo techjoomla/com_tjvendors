@@ -16,7 +16,7 @@ JLoader::import('components.com_tjvendors.helpers.mails', JPATH_SITE);
  *
  * @since  2.1
  */
-class TjvendorTriggerVendor
+class TjvendorsTriggerVendor
 {
 	/**
 	 * Method acts as a consturctor
@@ -27,7 +27,7 @@ class TjvendorTriggerVendor
 	{
 		$app = JFactory::getApplication();
 		$this->user = JFactory::getUser();
-		$this->tjvendorMailsHelper = new TjvendorMailsHelper;
+		$this->tjvendorsMailsHelper = new TjvendorsMailsHelper;
 	}
 
 	/**
@@ -45,13 +45,13 @@ class TjvendorTriggerVendor
 			/* New Vendor is created */
 			case true:
 					/* Send mail on Vendor create */
-					$this->tjvendorMailsHelper->onAfterVendorCreate((object) $vendorDetails);
+					$this->tjvendorsMailsHelper->onAfterVendorCreate((object) $vendorDetails);
 				break;
 
 			/* Vendor is editted */
 			case false:
 					/* Send mail on Vendor edit */
-					$this->tjvendorMailsHelper->onAfterVendorEdit((object) $vendorDetails);
+					$this->tjvendorsMailsHelper->onAfterVendorEdit((object) $vendorDetails);
 				break;
 		}
 

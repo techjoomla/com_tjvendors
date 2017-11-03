@@ -307,7 +307,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$paymentPrefix = 'payment_';
 
-				// to seprate out the payment gateway fields from rest of the payment form data
+				// To seprate out the payment gateway fields from rest of the payment form data
 				if (strpos($key, $paymentPrefix) !== false)
 				{
 					if ($key != 'payment_fields')

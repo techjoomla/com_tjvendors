@@ -57,17 +57,4 @@ class TjvendorTriggerVendor
 
 		return;
 	}
-
-	/**
-	 * Trigger for vendor payout
-	 *
-	 * @param   int  $payoutDetails  Vendor payouts Details
-	 *
-	 * @return  void
-	 */
-	public function onAfterVendorPayoutSave($payoutDetails)
-	{
-		/* Send mail on Vendor Payout create */
-		return $this->tjvendorMailsHelper->onAfterPayoutCreate((object) $payoutDetails);
-	}
 }

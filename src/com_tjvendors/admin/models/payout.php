@@ -218,11 +218,6 @@ class TjvendorsModelPayout extends JModelAdmin
 			// Update their details in the users table using id as the primary key.
 			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
 
-			/* Trigger on Vendor payout save*/
-			JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
-			$tjvendorTriggerVendor = new TjvendorTriggerVendor;
-			$tjvendorTriggerVendor->onAfterVendorPayoutSave($data, false);
-
 			$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
 			JFactory::getApplication()->enqueueMessage($message);
 

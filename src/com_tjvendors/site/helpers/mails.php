@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package    TJvendors
  * @author     TechJoomla | <extensions@techjoomla.com>
@@ -138,37 +137,6 @@ class TjvendorMailsHelper
 
 			$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
 		}
-
-		return;
-	}
-
-	/**
-	 * Send mails when vendor payout is generated
-	 *
-	 * @param   OBJECT  $payoutDetails  vendor payout details
-	 *
-	 * @return void
-	 */
-	public function onAfterPayoutCreate($payoutDetails)
-	{
-		$vendorkey = "vendorPayoutMailToPromoter";
-
-		$payoutDetails->sitename = $this->sitename;
-		$payoutDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
-
-		$replacements = new stdClass;
-		$replacements->info = $payoutDetails;
-		$replacements->vendorer = JFactory::getUser($payoutDetails->user_id);
-
-		$ccMail = $this->siteConfig->get('mailfrom');
-		$options = new JRegistry;
-		$options->set('info', $payoutDetails);
-
-		$promoterEmailObj = new stdClass;
-		$promoterEmailObj->email = $payoutDetails->email;
-		$promoterRecipients[] = $promoterEmailObj;
-
-		$this->tjnotifications->send($this->client, $vendorkey, $promoterRecipients, $replacements, $options);
 
 		return;
 	}

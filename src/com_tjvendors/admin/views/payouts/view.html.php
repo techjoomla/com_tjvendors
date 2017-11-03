@@ -80,7 +80,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 
 		$state = $this->get('State');
 		$canDo = TjvendorsHelpersTjvendors::getActions();
-		JToolBarHelper::custom('back', 'chevron-left.png', '', 'Back', false);
+		JToolBarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);

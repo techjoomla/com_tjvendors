@@ -442,7 +442,7 @@ class TjvendorFrontHelper
 	}
 
 	/**
-	 * Get client name 
+	 * Get client name
 	 *
 	 * @param   string  $client  client
 	 *
@@ -457,5 +457,33 @@ class TjvendorFrontHelper
 		$lang->load($client, JPATH_ADMINISTRATOR, null, false, true);
 
 		return JText::_($clientName);
+	}
+
+	/**
+	 * Function to get Item id
+	 *
+	 * @param   STRING  $link  URL
+	 *
+	 * @return  INT  Item id
+	 *
+	 * @since  1.0.0
+	 */
+	public function getItemId($link)
+	{
+		$mainframe = JFactory::getApplication();
+
+		if ($mainframe->issite())
+		{
+			$JSite = new JSite;
+			$menu  = $JSite->getMenu();
+			$menuItem = $menu->getItems('link', $link, true);
+
+			if ($menuItem)
+			{
+				return $itemid = $menuItem->id;
+			}
+		}
+
+		return false;
 	}
 }

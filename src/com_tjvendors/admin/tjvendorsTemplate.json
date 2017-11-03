@@ -1,0 +1,258 @@
+{
+  "template1": {
+    "id": "",
+    "client": "com_tjvendors",
+    "key": "createVendorMailToAdmin",
+    "title": "Vendor Creation email to Admin (Approval Off)",
+    "email_body": "<p>Dear Admin,<br /><br />A new vendor <strong>{info.vendor_title}</strong> has registered on the site by {vendorer.name}.<br /><a href='{info.allVendors}'>Click here</a> to see all the vendors.<br /><br />This is system generated email, please do not reply. Many thanks from {info.sitename}</p>",
+    "sms_body": "",
+    "push_body": "",
+    "web_body": "",
+    "email_subject": "New vendor \"{info.vendor_title}\" has registered on {info.sitename}",
+    "sms_subject": "",
+    "push_subject": "",
+    "web_subject": "",
+    "email_status": 1,
+    "sms_status": 0,
+    "push_status": 0,
+    "web_status": 0,
+    "user_control": 1,
+    "core": 1,
+    "replacement_tags": [
+      {
+        "name": "info.vendor_title",
+        "description": "Vendor title"
+      },
+      {
+        "name": "{vendorer.name}",
+        "description": "Vendorer name"
+      },
+      {
+        "name": "info.allVendors",
+        "description": "Link to all vender view. (Admin user only)"
+      },
+      {
+        "name": "info.sitename",
+        "description": "Sitename"
+      },
+      {
+        "name": "info.adminname",
+        "description": "Siteadmin"
+      }
+    ]
+  },
+ "template2": {
+    "id": "",
+    "client": "com_tjvendors",
+    "key": "createVendorMailToOwner",
+    "title": "Your vendor registration at \"{info.sitename}\" is complete",
+    "email_body": "<p>Dear {vendorer.name},<br /><br />Thank you for registering as a vendor, <strong>{info.vendor_title}</strong> is now published at {info.sitename}. You can edit your vendor information <a href='{info.myVendor}'>here</a>.<br /><br />This is system generated email, please do not reply. Many thanks from {info.sitename}</p>",
+    "sms_body": "",
+    "push_body": "",
+    "web_body": "",
+    "email_subject": "Your vendor registration at \"{info.sitename}\" is complete",
+    "sms_subject": "",
+    "push_subject": "",
+    "web_subject": "",
+    "email_status": 1,
+    "sms_status": 0,
+    "push_status": 0,
+    "web_status": 0,
+    "user_control": 1,
+    "core": 1,
+    "replacement_tags": [
+      {
+        "name": "info.vendor_title",
+        "description": "Vendor title"
+      },
+      {
+        "name": "{vendorer.name}",
+        "description": "Vendorer name"
+      },
+      {
+        "name": "info.allVendors",
+        "description": "Link to all vender view. (Admin user only)"
+      },
+      {
+        "name": "info.myVendor",
+        "description": "Vendor - edit view"
+      },
+      {
+        "name": "info.sitename",
+        "description": "Sitename"
+      },
+      {
+        "name": "info.adminname",
+        "description": "Siteadmin"
+      }
+    ]
+  },
+ "template3": {
+    "id": "",
+    "client": "com_tjvendors",
+    "key": "createVendorMailToAdminWaitingForApproval",
+    "title": "Vendor Creation email to Admin (approval On)",
+    "email_body": "<p>Dear Admin,<br /><br />A new vendor named <strong>{info.vendor_title}</strong> has registered on the site by {vendorer.name}. <a href='{info.allVendors}'>Click here</a> to see all the vendors.<br />Note that you need to approve this vendor before they go live on the site.<br /><br />This is system generated email, please do not reply. Many thanks from {info.sitename}.</p>",
+    "sms_body": "",
+    "push_body": "",
+    "web_body": "",
+    "email_subject": "Vendor \"{info.vendor_title}\" needs approval at {info.sitename}",
+    "sms_subject": "",
+    "push_subject": "",
+    "web_subject": "",
+    "email_status": 1,
+    "sms_status": 0,
+    "push_status": 0,
+    "web_status": 0,
+    "user_control": 1,
+    "core": 1,
+    "replacement_tags": [
+      {
+        "name": "info.vendor_title",
+        "description": "Vendor title"
+      },
+      {
+        "name": "{vendorer.name}",
+        "description": "Vendorer name"
+      },
+      {
+        "name": "info.allVendors",
+        "description": "Link to all vender view. (Admin user only)"
+      },
+      {
+        "name": "info.sitename",
+        "description": "Sitename"
+      },
+      {
+        "name": "info.adminname",
+        "description": "Siteadmin"
+      }
+    ]
+  },
+ "template4": {
+    "id": "",
+    "client": "com_tjvendors",
+    "key": "createVendorMailToOwnerWaitingForApproval",
+    "title": "Vendor Creation email to Vendor Owner (approval On)",
+    "email_body": "<p>Dear {vendorer.name},<br /><br />You have created a new vendor <strong>{info.vendor_title}</strong>. Your vendor profile is under going approval process. Once your administrator approves you can proceed further.<br />Please wait for approval email.<br /><br />This is system generated email, please do not reply. Many thanks from {info.sitename}</p>",
+    "sms_body": "",
+    "push_body": "",
+    "web_body": "",
+    "email_subject": "Your vendor registration for \"{info.vendor_title}\" at {info.sitename} is pending for approval",
+    "sms_subject": "",
+    "push_subject": "",
+    "web_subject": "",
+    "email_status": 1,
+    "sms_status": 0,
+    "push_status": 0,
+    "web_status": 0,
+    "user_control": 1,
+    "core": 1,
+    "replacement_tags": [
+      {
+        "name": "info.vendor_title",
+        "description": "Vendor title"
+      },
+      {
+        "name": "{vendorer.name}",
+        "description": "Vendorer name"
+      },
+      {
+        "name": "info.allVendors",
+        "description": "Link to all vender view. (Admin user only)"
+      },
+      {
+        "name": "info.myVendor",
+        "description": "Vendor - edit view"
+      },
+      {
+        "name": "info.sitename",
+        "description": "Sitename"
+      },
+      {
+        "name": "info.adminname",
+        "description": "Siteadmin"
+      }
+    ]
+  },
+ "template5": {
+    "id": "",
+    "client": "com_tjvendors",
+    "key": "approvalOnVendorMailToOwner",
+    "title": "Admin approves Vendor (approval On)",
+    "email_body": "<p>Dear {vendorUser.name},<br /><br />Your vendor profile <strong>{info.vendor_title}</strong> has been approved by admin. Now you can further continue.<br /><br />This is system generated email, please do not reply. Many thanks from {info.sitename}</p>",
+    "sms_body": "",
+    "push_body": "",
+    "web_body": "",
+    "email_subject": "Your vendor registration for \"{info.vendor_title}\" at {info.sitename} has been approved!",
+    "sms_subject": "",
+    "push_subject": "",
+    "web_subject": "",
+    "email_status": 1,
+    "sms_status": 0,
+    "push_status": 0,
+    "web_status": 0,
+    "user_control": 1,
+    "core": 1,
+    "replacement_tags": [
+      {
+        "name": "info.vendor_title",
+        "description": "Vendor title"
+      },
+      {
+        "name": "{vendorUser.name}",
+        "description": "Vendorer name"
+      },
+      {
+        "name": "info.sitename",
+        "description": "Sitename"
+      },
+      {
+        "name": "info.adminname",
+        "description": "Siteadmin"
+      }
+    ]
+  },
+ "template6": {
+    "id": "",
+    "client": "com_tjvendors",
+    "key": "editVendorMailToAdmin",
+    "title": "Edit Vendor profile mail to admin",
+    "email_body": "<p>Dear Admin,<br /><br />The user {vendorer.name} has made changes to vendor <strong>{info.vendor_title}</strong>.<br /><br />Vendor details are -<br /><strong>Vendor title</strong> - {info.vendor_title}<br /><strong>User</strong> - {vendorer.name}<br /><strong>Client</strong> - {info.vendor_client}<br /><br />This is system generated email, please do not reply. Many thanks from {info.sitename}</p>",
+    "sms_body": "",
+    "push_body": "",
+    "web_body": "",
+    "email_subject": "Vendor \"{info.vendor_title}\" has been edited on {info.sitename}",
+    "sms_subject": "",
+    "push_subject": "",
+    "web_subject": "",
+    "email_status": 1,
+    "sms_status": 0,
+    "push_status": 0,
+    "web_status": 0,
+    "user_control": 1,
+    "core": 1,
+    "replacement_tags": [
+      {
+        "name": "info.vendor_title",
+        "description": "Vendor title"
+      },
+      {
+        "name": "{vendorer.name}",
+        "description": "Vendorer name"
+      },
+      {
+        "name": "info.vendor_client",
+        "description": "Vendor client"
+      },
+      {
+        "name": "info.sitename",
+        "description": "Sitename"
+      },
+      {
+        "name": "info.adminname",
+        "description": "Siteadmin"
+      }
+    ]
+  }
+}

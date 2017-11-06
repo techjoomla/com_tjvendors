@@ -79,12 +79,6 @@ $listDirn      = $this->state->get('list.direction');
 								title="<?php echo JText::_('JSEARCH_FILTER');?>"/>
 							<button
 								class="btn"
-								onclick="this.form.submit();"
-								type="submit">
-								<i class="fa fa-search"></i>
-							</button>
-							<button
-								class="btn"
 								onclick="document.getElementById('filter_search').value='';this.form.submit();"
 								id="clear-search-button"
 								type="button"

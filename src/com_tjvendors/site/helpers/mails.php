@@ -102,6 +102,7 @@ class TjvendorsMailsHelper
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
 		$vendorDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
+		$vendorDetails->vendorClient = $this->tjvendorFrontHelper->getClientName($vendorDetails->vendor_client);
 		$replacements->info = $vendorDetails;
 		$replacements->vendorer = JFactory::getUser($vendorDetails->user_id);
 

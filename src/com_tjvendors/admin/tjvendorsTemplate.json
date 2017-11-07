@@ -218,7 +218,7 @@
     "client": "com_tjvendors",
     "key": "editVendorMailToAdmin",
     "title": "Edit Vendor profile mail to admin",
-    "email_body": "<p>Dear Admin,<br /><br />The user {vendorer.name} has made changes to vendor <strong>{info.vendor_title}</strong>.<br /><br />Vendor details are -<br /><strong>Vendor title</strong> - {info.vendor_title}<br /><strong>User</strong> - {vendorer.name}<br /><strong>Client</strong> - {info.vendor_client}<br /><br />This is system generated email, please do not reply. Many thanks from {info.sitename}</p>",
+    "email_body": "<p>Dear Admin,<br /><br />The user {vendorer.name} has made changes to vendor <strong>{info.vendor_title}</strong>.<br /><br />Vendor details are -<br /><strong>Vendor title</strong> - {info.vendor_title}<br /><strong>User</strong> - {vendorer.name}<br /><strong>Client</strong> - {info.vendorClient}<br /><br />This is system generated email, please do not reply. Many thanks from {info.sitename}</p>",
     "sms_body": "",
     "push_body": "",
     "web_body": "",
@@ -242,7 +242,7 @@
         "description": "Vendorer name"
       },
       {
-        "name": "info.vendor_client",
+        "name": "info.vendorClient",
         "description": "Vendor client"
       },
       {

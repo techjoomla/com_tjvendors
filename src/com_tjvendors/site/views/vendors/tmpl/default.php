@@ -38,8 +38,9 @@ $listDirn      = $this->state->get('list.direction');
 </script>
 <div id="tvwrap">
 	<h2>
-		<?phpecho JText::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS');
-		?>
+		<?php
+			echo JText::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS');
+			?>
 	</h2>
 <?php
 	$user_id = JFactory::getUser()->id;
@@ -53,10 +54,14 @@ $listDirn      = $this->state->get('list.direction');
 				<div class="col-xs-12 col-md-7 date">
 					<div class="btn-group input-group">
 						<span class="input-group-btn">
-							<?php echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()' ));?>
+							<?php
+								echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()' ));
+								?>
 						</span>
 						<span class="input-group-btn">
-							<?php echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()' ));?>
+							<?php
+								echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()' ));
+								?>
 						</span>
 						<span>
 							<button class="btn btn-primary" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
@@ -98,13 +103,15 @@ $listDirn      = $this->state->get('list.direction');
 					<ul class="input-group list-inline pull-right">
 						<li>
 							<div  class="input-group-btn hidden-xs ">
-								<?php echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
+								<?php
+									echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
 								$currency = $this->state->get('filter.currency');?>
 							</div>
 						</li>
 						<li>
 							<div  class="input-group-btn">
-								<?php echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client", "client", $this->state->get('filter.vendor_client'));
+								<?php
+									echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client", "client", $this->state->get('filter.vendor_client'));
 								$client = $this->state->get('filter.vendor_client');?>
 							</div>
 						</li>
@@ -120,7 +127,9 @@ $listDirn      = $this->state->get('list.direction');
 						<li class="pr-0">
 							<div  class="input-group-btn hidden-xs ">
 								<label for="limit" >
-									<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+									<?php
+										echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC');
+										?>
 								</label>
 								<?php echo $this->pagination->getLimitBox(); ?>
 							</div>
@@ -133,11 +142,13 @@ $listDirn      = $this->state->get('list.direction');
 				if (empty($this->items))
 				{
 				?>
-					<div class="col-xs-12">
-						<div class="alert alert-info">
-						 <?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?>
-						</div>
+				<div class="col-xs-12">
+					<div class="alert alert-info">
+					 <?php
+						echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS');
+						?>
 					</div>
+				</div>
 			<?php
 				}
 				else
@@ -145,8 +156,12 @@ $listDirn      = $this->state->get('list.direction');
 				?>
 					<div class="col-xs-12">
 						<div class="alert alert-info">
-							<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE');?>
-							<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE'); ?>
+							<?php
+								echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE');
+								?>
+							<?php
+								echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE');
+								?>
 						</div>
 					</div>
 			</div>
@@ -162,7 +177,7 @@ $listDirn      = $this->state->get('list.direction');
 									<th width="5%">
 										<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder);?>
 									</th>
-								<?php if($client == '0')
+								<?php if ($client == '0')
 									{
 									?>
 										<th width="5%">
@@ -178,7 +193,7 @@ $listDirn      = $this->state->get('list.direction');
 										</th>
 								<?php
 									}
-									if($transactionType == "credit" || empty($transactionType))
+									if ($transactionType == "credit" || empty($transactionType))
 									{
 									?>
 										<th class='left' width="10%">
@@ -186,11 +201,11 @@ $listDirn      = $this->state->get('list.direction');
 										</th>
 									<?php
 									}
-									if($transactionType == "debit" || empty($transactionType))
+									if ($transactionType == "debit" || empty($transactionType))
 									{
 									?>
 										<th class='left' width="10%">
-											<?php	echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
+											<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
 										</th>
 									<?php
 									}
@@ -214,7 +229,7 @@ $listDirn      = $this->state->get('list.direction');
 							</thead>
 							<tfoot>
 								<td colspan="5">
-								<?php if($currency != '0'):?>
+								<?php if ($currency != '0'):?>
 									<div class="pull-right">
 										<tr>
 											<th colspan="12">
@@ -250,48 +265,48 @@ $listDirn      = $this->state->get('list.direction');
 										<td>
 											<?php echo $row->transaction_id;?>
 										</td>
-									<?php if($client == '0')
+									<?php if ($client == '0')
 										{
 										?>
-											<td>
-												<?php
-													$tjvendorFrontHelper = new TjvendorFrontHelper;
-													echo $client = $tjvendorFrontHelper->getClientName($row->client);
-												?>
-											</td>
-									<?php
-										}
-										if($currency == '0')
-										{
-										?>
-											<td>
-												<?php echo $row->currency;?>
-											</td>
-									<?php
-										}
-										if($transactionType == "credit" || empty($transactionType))
-										{
-										?>
-											<td>
+										<td>
 											<?php
-												if($row->credit <='0')
-												{
-													echo "0";
-												}
-												else
-												{
-													echo $row->credit;
-												}
-												?>
-											</td>
+												$tjvendorFrontHelper = new TjvendorFrontHelper;
+												echo $client = $tjvendorFrontHelper->getClientName($row->client);
+											?>
+										</td>
 									<?php
 										}
-										if($transactionType == "debit" || empty($transactionType))
+										if ($currency == '0')
 										{
 										?>
-											<td>
-												<?php echo $row->debit;?>
-											</td>
+										<td>
+											<?php echo $row->currency;?>
+										</td>
+									<?php
+										}
+										if ($transactionType == "credit" || empty($transactionType))
+										{
+										?>
+										<td>
+										<?php
+											if ($row->credit <='0')
+											{
+												echo "0";
+											}
+											else
+											{
+												echo $row->credit;
+											}
+											?>
+										</td>
+									<?php
+										}
+										if ($transactionType == "debit" || empty($transactionType))
+										{
+										?>
+										<td>
+											<?php echo $row->debit;?>
+										</td>
 									<?php
 										}
 										?>
@@ -307,26 +322,26 @@ $listDirn      = $this->state->get('list.direction');
 										<td>
 										<?php
 											$status = json_decode($row->params, true);
-											if($status['entry_status'] == "debit_payout")
+											if ($status['entry_status'] == "debit_payout")
 											{
-												if($row->status == 1)
+												if ($row->status == 1)
 												{
-													echo "Payout Done";
+												echo "Payout Done";
 												}
 												else
 												{
-													echo "Payout Pending";
+												echo "Payout Pending";
 												}
 											}
-											elseif($status['entry_status'] == "credit_for_ticket_buy")
+											elseif ($status['entry_status'] == "credit_for_ticket_buy")
 											{
-												echo "Credit Done";
+											echo "Credit Done";
 											}
 											?>
 										</td>
 										<td class="center">
 										<?php
-											if(!empty($status['customer_note']))
+											if (!empty($status['customer_note']))
 											{
 												echo $status['customer_note'];
 											}
@@ -357,7 +372,7 @@ $listDirn      = $this->state->get('list.direction');
 		</form>
 		<?php
 			}
-			elseif(!$this->vendor_id &&  $user_id)
+			elseif (!$this->vendor_id &&  $user_id)
 			{
 			?>
 				<div class="alert alert-info"><?php echo JText::_('COM_TJVENDOR_REPORTS_ERROR');?></div>

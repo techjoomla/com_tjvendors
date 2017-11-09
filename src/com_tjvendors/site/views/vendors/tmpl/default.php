@@ -102,7 +102,7 @@ $listDirn      = $this->state->get('list.direction');
 				<div class="col-xs-12 btn-group">
 					<ul class="input-group list-inline pull-right">
 						<li>
-							<div  class="input-group-btn hidden-xs ">
+							<div  class="input-group-btn hidden-xs">
 								<?php
 									echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
 								$currency = $this->state->get('filter.currency');?>
@@ -116,7 +116,7 @@ $listDirn      = $this->state->get('list.direction');
 							</div>
 						</li>
 						<li>
-							<div  class="input-group-btn hidden-xs ">
+							<div  class="input-group-btn hidden-xs">
 							<?php $transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
 								$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
 								$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
@@ -125,13 +125,13 @@ $listDirn      = $this->state->get('list.direction');
 							</div>
 						</li>
 						<li class="pr-0">
-							<div  class="input-group-btn hidden-xs ">
+							<div  class="input-group-btn hidden-xs">
 								<label for="limit" >
 									<?php
 										echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC');
 										?>
 								</label>
-								<?php echo $this->pagination->getLimitBox(); ?>
+								<?php echo $this->pagination->getLimitBox();?>
 							</div>
 						</li>
 					</ul>

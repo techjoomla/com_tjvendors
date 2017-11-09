@@ -52,6 +52,7 @@
             <filename>controller.php</filename>
             <filename>index.html</filename>
             <filename>tjvendors.php</filename>
+            <filename>tjvendorsTemplate.json</filename>
             <folder>controllers</folder>
             <folder>assets</folder>
             <folder>helpers</folder>

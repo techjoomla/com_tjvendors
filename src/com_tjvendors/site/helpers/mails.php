@@ -99,25 +99,16 @@ class TjvendorsMailsHelper
 	 */
 	public function onAfterVendorEdit($vendorDetails)
 	{
-		$adminkey = "editVendorMailToAdmin";
-
-		$adminEmailObj = new stdClass;
-
-		$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');
-		$adminRecipients = self::createRecipient($adminEmail);
-
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
 		$vendorDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
+		$vendorDetails->vendorClient = $this->tjvendorFrontHelper->getClientName($vendorDetails->vendor_client);
 		$replacements->info = $vendorDetails;
 		$replacements->vendorer = JFactory::getUser($vendorDetails->user_id);
 
 		$ccMail = $this->siteConfig->get('mailfrom');
 		$options = new JRegistry;
 		$options->set('info', $vendorDetails);
-
-		// Mail to site admin
-		$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
 
 		$vendor_approval = $this->tjvendorsparams->get('vendor_approval');
 
@@ -133,9 +124,21 @@ class TjvendorsMailsHelper
 			$promoterEmailObj = new stdClass;
 			$promoterEmailObj->email = $vendorUserDetails->email;
 			$promoterRecipients[] = $promoterEmailObj;
-			$replacements->vendorUser = $vendorUserDetails;
+			$replacements->vendor_user = $vendorUserDetails;
+			$replacements->vendor_data = $vendorData;
+			$options->set('vendor_data', $vendorData);
 
 			$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
+		}
+		else
+		{
+			$adminEmailObj = new stdClass;
+			$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');
+			$adminRecipients = self::createRecipient($adminEmail);
+
+			$adminkey = "editVendorMailToAdmin";
+
+			$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
 		}
 
 		return;

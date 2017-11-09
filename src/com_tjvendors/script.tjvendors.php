@@ -50,6 +50,8 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function postflight( $type, $parent )
 	{
+		// Write template file for email template
+		$this->_insertTjNotificationTemplates();
 	}
 
 	/**
@@ -256,5 +258,45 @@ class Com_TjvendorsInstallerScript
 		$db->setQuery($query);
 
 		return $db->loadObjectList();
+	}
+
+	/**
+	 * Installed Notifications
+	 * method to install default email templates
+	 *
+	 * @return  void
+	 */
+	public function _insertTjNotificationTemplates()
+	{
+		jimport('joomla.application.component.model');
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
+
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('key'));
+		$query->from($db->quoteName('#__tj_notification_templates'));
+		$query->where($db->quoteName('client') . ' = ' . $db->quote("com_tjvendors"));
+		$db->setQuery($query);
+		$existingKeys = $db->loadColumn();
+
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/models');
+		$notificationsModel = JModelLegacy::getInstance('Notification', 'TJNotificationsModel');
+
+		$filePath = JPATH_ADMINISTRATOR . '/components/com_tjvendors/tjvendorsTemplate.json';
+		$str = file_get_contents($filePath);
+		$json = json_decode($str, true);
+
+		$app   = JFactory::getApplication();
+
+		if (count($json) != 0)
+		{
+			foreach ($json as $template => $array)
+			{
+				if (!in_array($array['key'], $existingKeys))
+				{
+					$notificationsModel->createTemplates($array);
+				}
+			}
+		}
 	}
 }

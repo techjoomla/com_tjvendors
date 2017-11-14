@@ -5,8 +5,10 @@
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
-var tjVAdmin = {
-	vendor: {
+
+var tjVAdmin =
+{
+	vendor:{
 		/*For Read More/Read Less */
 			readMore: function()
 			{
@@ -14,7 +16,7 @@ var tjVAdmin = {
 				var ellipsestext = "";
 				var moretext = [Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_MORE')];				
 				var lesstext = [Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_LESS')];
-				jQuery('.profile__content').each(function () 
+				jQuery('.profile__content').each(function ()
 				{
 					var content = jQuery(this).html();
 					if (content.length > showChar)
@@ -26,7 +28,7 @@ var tjVAdmin = {
 					}
 				});
 
-				jQuery(".morelink").click(function () 
+				jQuery(".morelink").click(function ()
 				{
 					if (jQuery(this).hasClass("less"))
 					{
@@ -241,43 +243,43 @@ var tjVSite = {
 		}
 	},
 	tabToAccordion: function(){
-				jQuery(".tab__content").hide();
-				jQuery(".tab__content:first").show();
+				jQuery(".tab-content").hide();
+				jQuery(".tab-content:first").show();
 
 			  /* if in tab mode */
-				jQuery("ul.tabs li").click(function() {
-					
-				  jQuery(".tab__content").hide();
-				  var activeTab = jQuery(this).attr("rel"); 
-				 jQuery("#"+activeTab).fadeIn();		
-					
-				  jQuery("ul.tabs li").removeClass("active");
+				jQuery("ul.nav-tabs li").click(function() {
+
+				  jQuery(".tab-content").hide();
+				  var activeTab = jQuery(this).attr("rel");
+				 jQuery("#"+activeTab).fadeIn();
+
+				  jQuery("ul.nav-tabs li").removeClass("active");
 				  jQuery(this).addClass("active");
 
 				  jQuery(".tab__heading").removeClass("tab_active");
 				  jQuery(".tab__heading[rel^='"+activeTab+"']").addClass("tab_active");
-				  
+
 				});
 				/* if in drawer mode */
 				jQuery(".tab__heading").click(function() {
-				  
-				  jQuery(".tab__content").hide();
-				  var tab_activeTab = jQuery(this).attr("rel"); 
+
+				  jQuery(".tab-content").hide();
+				  var tab_activeTab = jQuery(this).attr("rel");
 				  jQuery("#"+tab_activeTab).fadeIn();
-				  
+
 				  jQuery(".tab__heading").removeClass("tab_active");
 				  jQuery(this).addClass("tab_active");
-				  
-				  jQuery("ul.tabs li").removeClass("active");
-				  jQuery("ul.tabs li[rel^='"+tab_activeTab+"']").addClass("active");
+
+				  jQuery("ul.nav-tabs li").removeClass("active");
+				  jQuery("ul.nav-tabs li[rel^='"+tab_activeTab+"']").addClass("active");
 				});
-				
-				
-				/* Extra class "tab_last" 
+
+
+				/* Extra class "tab_last"
 				   to add border to right side
 				   of last tab */
-				jQuery('ul.tabs li').last().addClass("tab_last");
-				
+				jQuery('ul.nav-tabs li').last().addClass("tab_last");
+
 			}
 	},
 	vendors: {

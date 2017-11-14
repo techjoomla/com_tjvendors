@@ -18,7 +18,7 @@ defined('_JEXEC') or die();
 			?>
 	</h2>
 	<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
-	<div class="profile row" id="tvwrap">
+	<div class="profile row" id="tjv-wrapper">
 		<div class="col-sm-12">
 			<h3 class="mt-0">
 				<?php echo $this->VendorDetail->vendor_title; ?>

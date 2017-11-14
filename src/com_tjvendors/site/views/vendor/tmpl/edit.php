@@ -23,7 +23,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	var layout = '<?php echo "edit";?>';
 	tjVSite.vendor.initVendorJs();
 </script>
-<div id="tvwrap">
+<div id="tjv-wrapper">
 <?php
 	if (JFactory::getUser()->id )
 	{
@@ -37,15 +37,15 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 		method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 		<div class="row">
 			<div class="col-sm-12" id="tj-edit-form">
-				<ul class="tabs mb-15 hidden-xs">
-				  <li class="active" rel="tab1"><a><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
-				  <li rel="tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></li>
+				<ul class="nav nav-tabs mb-15 hidden-xs">
+				  <li class="active" rel="tab1"><a data-toggle="tab" href="#tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
+				  <li rel="tab2"><a data-toggle="tab" href="#tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
 				</ul>
 				<!----Tab Container Start----->
 				<div class="tab__container">
 					<!----Tab 1 Start----->
-					<h4 class="tab_active tab__heading visible-xs" rel="tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?><i class="fa fa-angle-double-down pull-right" aria-hidden="true"></i></h4>
-					<div id="tab1" class="tab__content">
+					<h4 class="tab_active tab__heading p-10 visible-xs" rel="tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?><i class="fa fa-angle-double-down pull-right" aria-hidden="true"></i></h4>
+					<div id="tab1" class="tab-content">
 						<fieldset class="adminform">
 							<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id; ?>" />
 							<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->vendor->checked_out_time; ?>" />
@@ -120,8 +120,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<!----Tab 1 End----->
 
 					<!----Tab 2 Start----->
-					<h4 class="tab__heading visible-xs" rel="tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?><i class="fa fa-angle-double-down pull-right" aria-hidden="true"></i></h4>
-					<div id="tab2" class="tab__content">
+					<h4 class="tab__heading p-10 visible-xs" rel="tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?><i class="fa fa-angle-double-down pull-right" aria-hidden="true"></i></h4>
+					<div id="tab2" class="tab-content">
 						<div id="payment_details"></div>
 							<?php echo JHtml::_('bootstrap.endTab'); ?>
 					</div>

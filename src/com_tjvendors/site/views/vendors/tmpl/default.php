@@ -36,7 +36,7 @@ $listDirn      = $this->state->get('list.direction');
 <script type="text/javascript">
 	tjVSite.vendors.initVendorsJs();
 </script>
-<div id="tvwrap">
+<div id="tjv-wrapper">
 	<h2>
 		<?php
 			echo JText::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS');

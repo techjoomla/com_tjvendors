@@ -31,6 +31,5 @@ $options['relative'] = true;
 JHtml::_('script', 'com_tjvendor/tjvendors.js', $options);
 
 // Frontend css
-$options['relative'] = true;
 JHtml::_('stylesheet', 'com_tjvendor/tjvendors.css', $options);
 $document->addStyleSheet($root_url . 'media/techjoomla_strapper/vendors/no-more-tables/no-more-tables.css');

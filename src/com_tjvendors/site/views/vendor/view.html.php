@@ -54,7 +54,6 @@ class TjvendorsViewVendor extends JViewLegacy
 		JText::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
 		JText::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
 
-
 		if (!empty($this->vendor_id) && $this->layout == "edit")
 		{
 			if (!empty($this->clientsForVendor))

@@ -27,8 +27,10 @@ $controller = JControllerLegacy::getInstance('Tjvendors');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();
 $document = JFactory::getDocument();
-$document->addScript(JUri::root(true) . '/media/com_tjvendor/js/tjvendors.js');
+$options['relative'] = true;
+JHtml::_('script', 'com_tjvendor/tjvendors.js', $options);
 
 // Frontend css
-$document->addStyleSheet($root_url . 'media/com_tjvendor/css/tjvendors.css');
+$options['relative'] = true;
+JHtml::_('stylesheet', 'com_tjvendor/tjvendors.css', $options);
 $document->addStyleSheet($root_url . 'media/techjoomla_strapper/vendors/no-more-tables/no-more-tables.css');

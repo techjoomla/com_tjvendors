@@ -14,8 +14,8 @@ var tjVAdmin =
 			{
 				var showChar = 300;
 				var ellipsestext = "";
-				var moretext = [Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_MORE')];
-				var lesstext = [Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_LESS')];
+				var moretext = Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_MORE');
+				var lesstext = Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_LESS');
 				jQuery('.profile__content').each(function ()
 				{
 					var content = jQuery(this).html();
@@ -284,16 +284,13 @@ var tjVSite = {
 
 		},
 	},
-		vendors:
+	vendors:
 		{
 			/*Initialize event js*/
 			initVendorsJs: function() {
 				jQuery(document).ready(function() {
-					jQuery("#dates").blur(function() {
-							document.adminForm.submit();
-					});
-					jQuery("#date").blur(function() {
-							document.adminForm.submit();
+					jQuery("#dates, #date").blur(function() {
+						jQuery('#adminForm').submit();
 					});
 				});
 			},

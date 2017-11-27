@@ -122,8 +122,15 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<!----Tab 2 Start----->
 					<h4 class="tab__heading p-10 visible-xs" rel="tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?><i class="fa fa-angle-double-down pull-right" aria-hidden="true"></i></h4>
 					<div id="tab2" class="tab-content">
-						<div id="payment_details"></div>
-							<?php echo JHtml::_('bootstrap.endTab'); ?>
+						<div class="row">
+							<div class="form-group col-xs-12 col-sm-6 col-md-4">
+								<?php echo $this->form->renderField('payment_gateway');?>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-xs-12 col-sm-6 col-md-4" id="payment_details">
+							</div>
+						</div>
 					</div>
 					<?php
 						if($this->vendor_id == 0)

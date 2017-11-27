@@ -56,6 +56,34 @@ class TjvendorsHelpersTjvendors
 				}
 			}
 		}
+
+		$currentComponent = $input->get('extension', '', 'STRING');
+
+		if ($currentComponent == 'com_tjvendors')
+		{
+			$notifications  = '';
+
+			$app = JFactory::getApplication();
+			$queue        = $app->input->get('layout');
+			$option = $app->input->get('option');
+
+			switch ($vName)
+			{
+				case 'notifications':
+					$notifications = true;
+					break;
+			}
+
+			JHtmlSidebar::addEntry(
+									JText::_('COM_JGIVE_EMAIL_TEMPLATE'), 'index.php?option=com_tjnotifications&extension=com_jgive',
+									$notifications
+			);
+
+
+			// Load bootsraped filter
+
+			JHtml::_('bootstrap.tooltip');
+		}
 	}
 
 	/**

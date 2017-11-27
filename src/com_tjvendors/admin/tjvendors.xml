@@ -32,6 +32,7 @@
         <filename>router.php</filename>
         <folder>views</folder>
         <folder>models</folder>
+        <folder>events</folder>
         <folder>controllers</folder>
         <folder>helpers</folder>
         <folder>tables</folder>
@@ -45,12 +46,16 @@
     </languages>
     <administration>
         <menu>COM_TJVENDORS</menu>
+        <submenu>
+			<menu link="option=com_tjnotifications&amp;extension=com_tjvendors" img="../.../../media/com_jgive/images/icon-16-campaigns.png">COM_TJVENDORS_TJNOTIFICATIONS_MENU</menu>
+        </submenu>
         <files folder="admin">
             <filename>access.xml</filename>
             <filename>config.xml</filename>
             <filename>controller.php</filename>
             <filename>index.html</filename>
             <filename>tjvendors.php</filename>
+            <filename>tjvendorsTemplate.json</filename>
             <folder>controllers</folder>
             <folder>assets</folder>
             <folder>helpers</folder>

@@ -227,12 +227,12 @@ else{
 						if($this->bulkPayoutStatus==0)
 						{
 
-							$result = TjvendorsHelpersTjvendors::getPayableAmount($item->vendor_id, $item->client, $item->currency);
+							$result = TjvendorsHelpers::getPayableAmount($item->vendor_id, $item->client, $item->currency);
 							echo $result;
 						}
 						else
 						{
-							$result = TjvendorsHelpersTjvendors::bulkPendingAmount($item->vendor_id, $item->currency);
+							$result = TjvendorsHelpers::bulkPendingAmount($item->vendor_id, $item->currency);
 							echo $result;
 						}
 

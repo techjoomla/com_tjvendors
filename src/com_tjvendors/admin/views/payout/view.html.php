@@ -82,7 +82,7 @@ class TjvendorsViewPayout extends JViewLegacy
 			$checkedOut = false;
 		}
 
-		$canDo = TjvendorsHelpersTjvendors::getActions();
+		$canDo = TjvendorsHelpers::getActions();
 		$clientTitle = TjvendorFrontHelper::getClientName($this->client);
 		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 

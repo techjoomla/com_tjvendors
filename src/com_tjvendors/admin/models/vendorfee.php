@@ -143,7 +143,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$data['vendor_id'] = $input->get('vendor_id', '', 'INTEGER');
 		$app  = JFactory::getApplication();
 
-		$uniqueCurrency = TjvendorsHelpersTjvendors::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client']);
+		$uniqueCurrency = TjvendorsHelpers::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client']);
 
 		if (!empty($uniqueCurrency))
 		{

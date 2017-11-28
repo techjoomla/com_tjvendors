@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  *
  * @since  1.6
  */
-class TjvendorsHelpersTjvendors
+class TjvendorsHelpers
 {
 	/**
 	 * Configure the Linkbar.

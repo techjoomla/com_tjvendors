@@ -70,6 +70,7 @@
                 <field name="bulk_payout" default="0"/>
                 <field name="payout_limit_days" default="0"/>
                 <field name="image_size" default="2500"/>
+                <field name="vendor_approval" default="0"/>
             </fieldset>
         </fields>
     </config>

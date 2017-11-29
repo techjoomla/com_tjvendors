@@ -79,7 +79,6 @@ class TjvendorsHelper
 				$notifications
 			);
 
-
 			// Load bootsraped filter
 
 			JHtml::_('bootstrap.tooltip');

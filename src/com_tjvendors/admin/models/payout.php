@@ -108,12 +108,12 @@ class TjvendorsModelPayout extends JModelAdmin
 
 		if ($bulkPayoutStatus != 0)
 		{
-			$payoutAmount = TjvendorsHelpers::bulkPendingAmount($this->item->vendor_id, $this->item->currency);
+			$payoutAmount = TjvendorsHelper::bulkPendingAmount($this->item->vendor_id, $this->item->currency);
 			$this->item->bulk_total = $payoutAmount;
 		}
 		else
 		{
-			$payableAmount = TjvendorsHelpers::getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
+			$payableAmount = TjvendorsHelper::getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
 			$this->item->total = $payableAmount;
 		}
 
@@ -155,11 +155,11 @@ class TjvendorsModelPayout extends JModelAdmin
 
 			if ($bulkPayoutStatus != 0)
 			{
-				$vendorClients = TjvendorsHelpers::getClients($vendorDetail->vendor_id);
+				$vendorClients = TjvendorsHelper::getClients($vendorDetail->vendor_id);
 
 				foreach ($vendorClients as $client)
 				{
-					$pending_amount = TjvendorsHelpers::getTotalAmount($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
+					$pending_amount = TjvendorsHelper::getTotalAmount($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
 					$data['debit'] = $pending_amount['total'];
 					$data['total'] = 0;
 					$data['transaction_time'] = JFactory::getDate()->toSql();
@@ -193,7 +193,7 @@ class TjvendorsModelPayout extends JModelAdmin
 			}
 
 			$data['debit'] = $data['total'];
-			$payableAmount = TjvendorsHelpers::getTotalAmount($item->vendor_id, $item->currency, $item->client);
+			$payableAmount = TjvendorsHelper::getTotalAmount($item->vendor_id, $item->currency, $item->client);
 			$data['total'] = $payableAmount['total'] - $data['debit'];
 			$data['transaction_time'] = JFactory::getDate()->toSql();
 			$data['client'] = $vendorDetail->client;
@@ -238,7 +238,7 @@ class TjvendorsModelPayout extends JModelAdmin
 	 */
 	public function updatingCreditData($data)
 	{
-		$payout_detail = TjvendorsHelpers::getTotalAmount($data['vendor_id'], $data['currency'], $data['client']);
+		$payout_detail = TjvendorsHelper::getTotalAmount($data['vendor_id'], $data['currency'], $data['client']);
 		$payout_id = $payout_detail['id'];
 		$object = new stdClass;
 

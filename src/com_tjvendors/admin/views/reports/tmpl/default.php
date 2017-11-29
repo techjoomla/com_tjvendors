@@ -163,7 +163,7 @@ else
 			<div class="btn-group hidden-phone">
 				<?php
 					// Making custom filter list
-					$this->currencies = TjvendorsHelpers::getCurrencies($this->state->get('filter.vendor_id'));
+					$this->currencies = TjvendorsHelper::getCurrencies($this->state->get('filter.vendor_id'));
 					$currencyList[] = JText::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
 					foreach($this->currencies as $currency)
 					{

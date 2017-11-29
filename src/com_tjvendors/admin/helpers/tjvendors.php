@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  *
  * @since  1.6
  */
-class TjvendorsHelpers
+class TjvendorsHelper
 {
 	/**
 	 * Configure the Linkbar.
@@ -75,8 +75,8 @@ class TjvendorsHelpers
 			}
 
 			JHtmlSidebar::addEntry(
-									JText::_('COM_JGIVE_EMAIL_TEMPLATE'), 'index.php?option=com_tjnotifications&extension=com_jgive',
-									$notifications
+				JText::_('COM_TJVENDORS_TJNOTIFICATIONS_MENU'), 'index.php?option=com_tjnotifications&extension=com_tjvendors',
+				$notifications
 			);
 
 

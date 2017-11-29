@@ -53,7 +53,7 @@ class TjvendorsViewVendors extends JViewLegacy
 			throw new Exception(implode("\n", $errors));
 		}
 
-		TjvendorsHelpers::addSubmenu('vendors');
+		TjvendorsHelper::addSubmenu('vendors');
 
 		$this->addToolbar();
 
@@ -78,7 +78,7 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
-		$canDo = TjvendorsHelpers::getActions();
+		$canDo = TjvendorsHelper::getActions();
 		JToolBarHelper::addNew('vendor.add');
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;

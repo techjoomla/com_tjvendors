@@ -62,37 +62,41 @@ if (!empty($this->extra_sidebar))
 }
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER').'&client=' . $this->input->get('client', '', 'STRING')); ?>"
-method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
 <?php
-if(!empty($this->sidebar))
-{?>
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
-	</div>
-	<div id="j-main-container" class="span10">
+	if (!empty($this->sidebar))
+	{
+	?>
+		<div id="j-sidebar-container" class="span2">
+			<?php echo $this->sidebar; ?>
+		</div>
+		<div id="j-main-container" class="span10">
 <?php
-}
-else
-{?>
-	<div id="j-main-container">
-<?php
-}
-
-if(empty($this->items))
-	{?>
-			<div class="alert alert-no-items">
-				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
-			</div>
-	<?php
 	}
 	else
-	{?>
+	{
+	?>
+		<div id="j-main-container">
+<?php
+	}
+
+if(empty($this->items))
+{
+	?>
+		<div class="alert alert-no-items">
+			<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
+		</div>
+<?php
+	}
+	else
+	{
+	?>
 <div class="alert alert-info">
 	<?php
 		$com_params = JComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
-		if($bulkPayoutStatus!=0)
+
+		if ($bulkPayoutStatus!=0)
 		{
 			echo JText::_('COM_TJVENDOR_PAYOUTS_BULK_PAYOUT_NOTICE');
 		}
@@ -100,17 +104,14 @@ if(empty($this->items))
 		{
 			echo JText::_('COM_TJVENDOR_PAYOUTS_SINGLE_CLIENT_PAYOUT_NOTICE');
 		}
-	?>
+		?>
 </div>
 	<div id="filter-bar" class="btn-toolbar">
 		<div class="filter-search btn-group pull-left">
 			<label for="filter_search" class="element-invisible">
 				<?php echo JText::_('JSEARCH_FILTER'); ?>
 			</label>
-			<input type="text" name="filter_search" id="filter_search"
-				placeholder="<?php echo JText::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_VENDOR_TITLE'); ?>"
-				value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-				title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
+			<input type="text" name="filter_search" id="filter_search" placeholder="<?php echo JText::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_VENDOR_TITLE'); ?>" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
 		</div>
 
 		<div class="btn-group pull-left">
@@ -126,10 +127,11 @@ if(empty($this->items))
 
 		<div class="btn-group pull-right hidden-phone">
 
-			<?php
+		<?php
 			$com_params = JComponentHelper::getParams('com_tjvendors');
 			$bulkPayoutStatus = $com_params->get('bulk_payout');
-			if($bulkPayoutStatus!=0)
+
+			if ($bulkPayoutStatus!=0)
 			{
 				echo JText::_('COM_TJVENDOR_PAYOUTS_BULK_PAYOUT_NOTICE');
 			}
@@ -144,10 +146,9 @@ if(empty($this->items))
 		<div class="btn-group pull-right hidden-phone">
 			<?php
 				// Making custom filter list
-			 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
+				 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));
+				?>
 		</div>
-
-
 	</div>
 
 		<table class="table table-striped" id="payoutList">
@@ -162,11 +163,11 @@ if(empty($this->items))
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th width="8%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
+						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE');?>
 					</th>
 
 					<th  width="5%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
 					</th>
 					<th width="10%">
 						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_PAID_UPTO');  ?>
@@ -182,78 +183,79 @@ if(empty($this->items))
 			</thead>
 
 			<tbody>
-				<?php
+			<?php
 				foreach ($this->items as $i => $item)
 				{
 				?>
 					<tr class="row<?php echo $i % 2; ?>">
-						<?php if (isset($this->items[0]->state)){}?>
-
-
-
+					<?php
+						if (isset($this->items[0]->state)){}
+						?>
 						<td>
-								<?php echo $this->escape($item->vendor_title); ?>
+							<?php echo htmlspecialchars($item->vendor_title, ENT_COMPAT, 'UTF-8');?>
 						</td>
 
 						<td>
-							<?php echo $item->currency; ?>
+							<?php echo htmlspecialchars($item->currency, ENT_COMPAT, 'UTF-8');?>
 						</td>
 
 						<td>
-						<?php
-
-						if($bulkPayoutStatus!=0)
+					<?php
+						if ($bulkPayoutStatus != 0)
 						{
-							$client=0;
-							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id,$item->currency, $client);
-							if(empty($paidAmount))
+							$client = 0;
+							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id, $item->currency, $client);
+
+							if (empty($paidAmount))
 							{
 								$paidAmount = '0';
 							}
-							echo $paidAmount;
+
+							echo htmlspecialchars($paidAmount, ENT_COMPAT, 'UTF-8');
 						}
 						else
 						{
-							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id,$item->currency, $filterClient);
-							if(empty($paidAmount))
+							$paidAmount = TjvendorsHelpersTjvendors::getPaidAmount($item->vendor_id, $item->currency, $filterClient);
+
+							if (empty($paidAmount))
 							{
 								$paidAmount = '0';
 							}
-							echo $paidAmount;
+
+							echo htmlspecialchars($paidAmount, ENT_COMPAT, 'UTF-8');
 						}
 						?>
 						</td>
-
 						<td>
-						<?php
+					<?php
 						$com_params = JComponentHelper::getParams('com_tjvendors');
 						$bulkPayoutStatus = $com_params->get('bulk_payout');
-						if($bulkPayoutStatus==0)
+
+						if ($bulkPayoutStatus == 0)
 						{
 							$result = TjvendorsHelpersTjvendors::getPayableAmount($item->vendor_id, $item->client, $item->currency);
-							//~ echo $result['payableAmount'];
-							echo $result;
+							echo htmlspecialchars($result, ENT_COMPAT, 'UTF-8');
 						}
 						else
 						{
 							$result = TjvendorsHelpersTjvendors::getPayableAmount($item->vendor_id, $item->client, $item->currency);
-							echo $result['payableAmount'];
+							echo htmlspecialchars($result['payableAmount'], ENT_COMPAT, 'UTF-8');
 						}
-
 						?>
 						</td>
-
 						<td>
-							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&id=' .$item->id. '&client=' .$this->input->get('client', '', 'STRING'));?>"
+							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' . $item->vendor_id . '&id=' . $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>"
 							<button class="validate btn btn-primary">PAY</button>
 						</td>
 					</tr>
-				<?php
-				}?>
+			<?php
+				}
+				?>
 			</tbody>
 		</table>
-		<?php
-	}?>
+<?php
+	}
+	?>
 		<input type="hidden" name="boxchecked" value="0"/>
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>

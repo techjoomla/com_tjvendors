@@ -49,7 +49,7 @@ if (JFactory::getUser()->id ){?>
 
 								<?php
 								$input = JFactory::getApplication()->input;
-									if($this->vendor_id !=0)
+									if ($this->vendor_id != 0)
 									{
 										$client=$this->input->get('client', '', 'STRING');
 									?>
@@ -57,8 +57,8 @@ if (JFactory::getUser()->id ){?>
 									<?php
 										echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
 										<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $client . '&vendor_id='.$this->vendor_id);?>"><strong>
-										<?php
-										echo $this->VendorDetail->vendor_title."</a></strong>";
+									<?php
+										echo htmlspecialchars($this->VendorDetail->vendor_title, ENT_COMPAT, 'UTF-8') . "</a></strong>";
 										echo " " . JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
 										echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
 										echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');?>
@@ -83,9 +83,9 @@ if (JFactory::getUser()->id ){?>
 										</div>
 											<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
 										<?php if (!empty($this->vendor->vendor_logo))
-											{ ?>
+											{ echo "fb";?>
 												<div class="control-group">
-													<div class="controls "><img src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
+													<div class="controls "><img src="<?php echo JUri::root() . htmlspecialchars($this->vendor->vendor_logo, ENT_COMPAT, 'UTF-8'); ?>"></div>
 												</div>
 										<?php }
 										if(empty($this->vendor->vendor_logo)):?>

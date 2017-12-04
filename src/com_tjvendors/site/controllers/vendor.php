@@ -89,7 +89,6 @@ class TjvendorsControllerVendor extends JControllerForm
 
 		// Get the user data.
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
-
 		$data['user_id'] = JFactory::getUser()->id;
 
 		// Validate the posted data.
@@ -102,10 +101,12 @@ class TjvendorsControllerVendor extends JControllerForm
 			return false;
 		}
 
-		// Validate the posted data.
-		$data = $model->validate($form, $data);
+		$all_jform_data = $data;
 		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
 		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
+
+		// Validate the posted data.
+		$data = $model->validate($form, $data);
 
 		// Check for errors.
 		if ($data === false)
@@ -126,7 +127,7 @@ class TjvendorsControllerVendor extends JControllerForm
 				}
 			}
 			// Save the data in the session.
-			$app->setUserState('com_tjvendors.edit.vendor.data', $app->input->get('jform', array(), "ARRAY"));
+			$app->setUserState('com_tjvendors.edit.vendor.data', $all_jform_data);
 
 			// Redirect back to the edit screen.
 			$id = $app->input->get('vendor_id', '', 'INTEGER');
@@ -144,6 +145,9 @@ class TjvendorsControllerVendor extends JControllerForm
 			return false;
 		}
 
+		$paymentData = array_diff_key($all_jform_data, $data);
+		$data['paymentForm'] = $paymentData;
+
 		// Attempt to save the data.
 		$return = $model->save($data);
 
@@ -151,12 +155,12 @@ class TjvendorsControllerVendor extends JControllerForm
 		if ($return === false)
 		{
 			// Save the data in the session.
-			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
+			$app->setUserState('com_tjvendors.edit.vendor.data', $all_jform_data);
 
 			// Redirect back to the edit screen.
-			$id = $app->input->get('vendor_id', '', 'INTEGER');
 			$client = $app->input->get('client', '', 'STRING');
-			$id = $app->getUserState('com_tjvendors.edit.vendor.id', $data);
+
+			$id = $app->getUserState('com_tjvendors.edit.vendor.id');
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
 			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $id;
 

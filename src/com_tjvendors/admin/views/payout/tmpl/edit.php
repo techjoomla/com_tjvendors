@@ -58,14 +58,15 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
 					<?php echo $this->form->renderField('vendor_title'); ?>
 					<?php echo $this->form->renderField('currency'); ?>
-					<?php if($this->bulkPayoutStatus!=0)
-					{
-						echo $this->form->renderField('bulk_total');
-					}
-					else
-					{
-						echo $this->form->renderField('total');
-					}
+					<?php
+						if($this->bulkPayoutStatus!=0)
+						{
+							echo $this->form->renderField('bulk_total');
+						}
+						else
+						{
+							echo $this->form->renderField('total');
+						}
 					?>
 					<?php echo $this->form->renderField('reference_order_id'); ?>
 					<?php echo $this->form->renderField('status'); ?>

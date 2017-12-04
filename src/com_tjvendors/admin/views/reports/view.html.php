@@ -54,8 +54,7 @@ class TjvendorsViewReports extends JViewLegacy
 
 		if ($client == '0')
 		{
-			$input = JFactory::getApplication()->input;
-			$client = $input->get('client', '', 'STRING');
+			$client = $this->input->get('client', '', 'STRING');
 		}
 
 		$currency = $this->state->get('filter.currency');

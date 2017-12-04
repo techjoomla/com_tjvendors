@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    SVN: 
+ * @version    SVN:
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -101,7 +101,7 @@ $sortFields = $this->getSortFields();
 
 </script>
 
-<?php 
+<?php
 
 // Joomla Component Creator code to allow adding non select list filters
 if (!empty($this->extra_sidebar))
@@ -113,7 +113,7 @@ if (!empty($this->extra_sidebar))
 <form
 action="
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id.'&client=' . $this->input->get('client', '', 'STRING')); ?>" 
+echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id.'&client=' . $this->input->get('client', '', 'STRING')); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
@@ -129,7 +129,7 @@ else
 {
 	?>
 	<div id="j-main-container">
-<?php 
+<?php
 }?>
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="filter-search btn-group pull-left">
@@ -137,7 +137,7 @@ else
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</label>
 				<input type="text" name="filter_search" id="filter_search"
-					
+
 					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_VENDOR_FEE'); ?>"
 					value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
 					title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
@@ -196,7 +196,7 @@ else
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
-					<?php 
+					<?php
 					if (isset($this->items[0]->ordering))
 					{
 					?>
@@ -249,7 +249,7 @@ else
 						{
 							?>
 							<td class="order nowrap center hidden-phone">
-								<?php
+							<?php
 								if ($canChange)
 								{
 									$disableClassName = '';
@@ -265,50 +265,51 @@ else
 										<i class="icon-menu"></i>
 									</span>
 									<input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order "/>
-								<?php
+							<?php
 								}
 								else
 								{
-									?>
+								?>
 									<span class="sortable-handler inactive">
 										<i class="icon-menu"></i>
 									</span>
-								<?php
-								}?>
+							<?php
+								}
+								?>
 							</td>
-						<?php
-						}?>
+					<?php
+						}
+						?>
 
-							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
-							</td>
-							<td>
-								<?php echo $item->vendor_id; ?>
-							</td>
-							<td>
-									<?php echo $item->vendor_title; ?>
-							</td>
-							<td>
-								<a href="
-								<?php 
-								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->client . '&fee_id=' . $item->id);?>">
-								<?php echo $item->currency; ?>
-								</a>
-							</td>
-							<td>
-								<?php echo $item->percent_commission . " %";?>
-							</td>
-							<td>
-								<?php echo $item->flat_commission; ?>
-							</td>
-						</tr>
-				<?php
+						<td class="hidden-phone">
+							<?php echo JHtml::_('grid.id', $i, $item->id); ?>
+						</td>
+						<td>
+							<?php echo htmlspecialchars($item->vendor_id, ENT_COMPAT, 'UTF-8');?>
+						</td>
+						<td>
+							<?php echo htmlspecialchars($item->vendor_title, ENT_COMPAT, 'UTF-8');?>
+						</td>
+						<td>
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->client . '&fee_id=' . $item->id);?>">
+								<?php echo htmlspecialchars($item->currency, ENT_COMPAT, 'UTF-8');?>
+							</a>
+						</td>
+						<td>
+							<?php echo htmlspecialchars($item->percent_commission, ENT_COMPAT, 'UTF-8') . " %";?>
+						</td>
+						<td>
+							<?php echo htmlspecialchars($item->flat_commission, ENT_COMPAT, 'UTF-8');?>
+						</td>
+					</tr>
+			<?php
 				}
 				?>
 			</tbody>
 		</table>
-		<?php
-		}?>
+	<?php
+		}
+		?>
 			<input type="hidden" name="task" value=""/>
 			<input type="hidden" name="boxchecked" value="0"/>
 			<input type="hidden" name="vendor_id" value="<?php echo $this->vendor_id;?>"/>

@@ -193,7 +193,7 @@ else
 						<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
 					</th>
 					<?php endif?>
-					
+
 					<th width="5%">
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'a.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
@@ -213,7 +213,7 @@ else
 				</tr>
 			</tfoot>
 			<tbody>
-				<?php
+			<?php
 				foreach ($this->items as $i => $item)
 				{
 					$ordering   = ($listOrder == 'a.ordering');
@@ -221,13 +221,14 @@ else
 					$canEdit    = $user->authorise('core.edit', 'com_tjvendors');
 					$canCheckin = $user->authorise('core.manage', 'com_tjvendors');
 					$canChange  = $user->authorise('core.edit.state', 'com_tjvendors');
-					?>
+				?>
 					<tr class="row<?php echo $i % 2; ?>">
 					<?php
 						if (isset($this->items[0]->ordering))
-						{?>
+						{
+						?>
 							<td class="order nowrap center hidden-phone">
-								<?php
+							<?php
 								if ($canChange)
 								{
 									$disableClassName = '';
@@ -243,52 +244,62 @@ else
 										<i class="icon-menu"></i>
 									</span>
 									<input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order "/>
-								<?php
+							<?php
 								}
 								else
-								{?>
+								{
+								?>
 									<span class="sortable-handler inactive">
 										<i class="icon-menu"></i>
 									</span>
-								<?php
-								}?>
+							<?php
+								}
+								?>
 							</td>
+					<?php
+						}
+						?>
+
+						<td class="hidden-phone">
+							<?php echo JHtml::_('grid.id', $i, $item->vendor_id); ?>
+						</td>
 						<?php
-						}?>
+							if (isset($this->items[0]->state)) :
+							?>
 
-							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->vendor_id); ?>
-							</td>
-							<?php if (isset($this->items[0]->state)) : ?>
-							<?php $class = ($canChange) ? 'active' : 'disabled'; ?>
-							<td >
-								<?php echo JHtml::_('jgrid.published', $item->state, $i, 'vendors.', $canChange, 'cb'); ?>
-							</td>
-							<?php endif; ?>
+						<?php
+							$class = ($canChange) ? 'active' : 'disabled';
+							?>
+						<td >
+							<?php echo JHtml::_('jgrid.published', $item->state, $i, 'vendors.', $canChange, 'cb'); ?>
+						</td>
 
-							
-							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' .$this->input->get('client', '', 'STRING').'&vendor_id=' . (int) $item->vendor_id );?>">
-									<?php echo $this->escape($item->vendor_title); ?>
-								</a>
-							</td>
-							<td>
+						<?php
+							endif;
+							?>
+						<td>
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' .$this->input->get('client', '', 'STRING').'&vendor_id=' . (int) $item->vendor_id );?>">
+								<?php echo htmlspecialchars($item->vendor_title, ENT_COMPAT, 'UTF-8');?>
+							</a>
+						</td>
+						<td>
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_FEE'); ?></a> |
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_PAYOUTS'); ?></a> |
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_REPORTS'); ?></a>
 
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_FEE'); ?></a> |
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_PAYOUTS'); ?></a> |
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_REPORTS'); ?></a>
-
-							</td>
-							<td >
-								<?php echo $item->vendor_id; ?>
-							</td>
-						</tr>
-				<?php
-				}?>
+						</td>
+						<td >
+							<?php echo htmlspecialchars($item->vendor_id, ENT_COMPAT, 'UTF-8');?>
+						</td>
+					</tr>
+			<?php
+				}
+				?>
 			</tbody>
 		</table>
-		<?php
-		}?>
+	<?php
+		}
+		?>
 			<input type="hidden" name="task" value=""/>
 			<input type="hidden" name="boxchecked" value="0"/>
 			<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>

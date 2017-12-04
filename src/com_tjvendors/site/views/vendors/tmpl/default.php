@@ -151,7 +151,7 @@ if (!empty($this->vendor_id))
 					<?php if($client == '0')
 						{?>
 						<th width="5%">
-							<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder);?>
+							<?php echo JText::_('COM_TJVENDORS_REPORTS_CLIENT');?>
 						</th>
 					<?php }
 						if ($currency == '0')

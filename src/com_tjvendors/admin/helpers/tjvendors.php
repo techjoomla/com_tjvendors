@@ -99,7 +99,17 @@ class TjvendorsHelpersTjvendors
 		$query->select('distinct' . $columns);
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$db->setQuery($query);
-		$rows = $db->loadAssocList();
+
+		try
+		{
+			$rows = $db->loadAssocList();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
+
 		$uniqueClient[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT');
 
 		foreach ($rows as $row)
@@ -151,7 +161,17 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$rows = $db->loadAssoc();
+
+		try
+		{
+			$rows = $db->loadAssoc();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
+
 		$totalDebitAmount = self::getPaidAmount($vendor_id, $currency, $client);
 		$totalCreditAmount = $rows['credit'];
 		$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
@@ -181,7 +201,16 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$result = $rows = $db->loadAssocList();
+
+		try
+		{
+			$result = $rows = $db->loadAssocList();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
 
 		if (!empty($result))
 		{
@@ -241,7 +270,17 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$paidDetails = $db->loadAssocList();
+
+		try
+		{
+			$paidDetails = $db->loadAssocList();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
+
 		$amount = 0;
 
 		foreach ($paidDetails as $detail)
@@ -305,7 +344,17 @@ class TjvendorsHelpersTjvendors
 			$query->from($db->quotename('#__tjvendors_passbook'));
 			$query->where($db->quotename('id') . ' = (' . $subQuery . ')');
 			$db->setQuery($query);
-			$result = $db->loadresult();
+
+			try
+			{
+				$result = $db->loadresult();
+			}
+
+			catch (Exception $e)
+			{
+				echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			}
+
 			$totalAmount = $totalAmount + $result;
 		}
 
@@ -351,7 +400,16 @@ class TjvendorsHelpersTjvendors
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 		$query->where($db->quoteName('id') . ' = (' . $subQuery . ')');
 		$db->setQuery($query);
-		$result = $db->loadAssoc();
+
+		try
+		{
+			$result = $db->loadAssoc();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
 
 		return $result;
 	}
@@ -394,7 +452,16 @@ class TjvendorsHelpersTjvendors
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 		$query->where($db->quoteName('id') . ' IN (' . $subQuery . ')');
 		$db->setQuery($query);
-		$payoutDetail = $db->loadAssoc();
+
+		try
+		{
+			$payoutDetail = $db->loadAssoc();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
 
 		return $payoutDetail;
 	}
@@ -419,7 +486,16 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$clients = $db->loadAssocList();
+
+		try
+		{
+			$clients = $db->loadAssocList();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
 
 		return $clients;
 	}
@@ -454,7 +530,16 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$currencies = $db->loadAssocList();
+
+		try
+		{
+			$currencies = $db->loadAssocList();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
 
 		foreach ($currencies as $i)
 		{
@@ -492,7 +577,16 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$currencies = $db->loadAssocList();
+
+		try
+		{
+			$currencies = $db->loadAssocList();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
 
 		return $currencies;
 	}
@@ -534,7 +628,18 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$result = $db->loadResult() - self::getPaidAmount($vendor_id, $currency, $client);
+
+		try
+		{
+			$creditSum = $db->loadResult();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
+
+		$result = $creditSum - self::getPaidAmount($vendor_id, $currency, $client);
 
 		return $result;
 	}
@@ -577,7 +682,17 @@ class TjvendorsHelpersTjvendors
 
 		$query->where($db->quoteName('debit') . ' >0 ');
 		$db->setQuery($query);
-		$payoutDetails = $db->loadAssocList();
+
+		try
+		{
+			$payoutDetails = $db->loadAssocList();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
+
 		$amount = 0;
 
 		if (!empty($payoutDetails))
@@ -640,7 +755,16 @@ class TjvendorsHelpersTjvendors
 		$query->from($db->quoteName('#__tjvendors_vendors'));
 		$query->where($db->quoteName('user_id') . ' = ' . $db->quote($userId));
 		$db->setQuery($query);
-		$res = $db->loadResult();
+
+		try
+		{
+			$res = $db->loadResult();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
 
 		return $res;
 	}
@@ -672,7 +796,16 @@ class TjvendorsHelpersTjvendors
 		}
 
 		$db->setQuery($query);
-		$res = $db->loadObject();
+
+		try
+		{
+			$res = $db->loadObject();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
 
 		return $res;
 	}
@@ -694,9 +827,18 @@ class TjvendorsHelpersTjvendors
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
 		$db->setQuery($query);
-		$result = $db->loadAssocList();
 
-		foreach ($result as $client)
+		try
+		{
+			$rows = $db->loadAssocList();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
+
+		foreach ($rows as $client)
 		{
 			if ($client['client'] == $vendor_client)
 			{
@@ -719,7 +861,16 @@ class TjvendorsHelpersTjvendors
 		$query->from($db->quoteName('#__tjvendors_vendors'));
 		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
 		$db->setQuery($query);
-		$vendor = $db->loadResult();
+
+		try
+		{
+			$vendor = $db->loadResult();
+		}
+
+		catch (Exception $e)
+		{
+			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+		}
 
 		return $vendor;
 	}

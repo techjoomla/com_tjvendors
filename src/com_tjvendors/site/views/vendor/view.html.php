@@ -36,7 +36,8 @@ class TjvendorsViewVendor extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$this->state = $this->get('State');
-		$this->user_id = jFactory::getuser()->id;
+		$user = JFactory::getUser();
+		$this->user_id = $user->id;
 		$this->vendor  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
@@ -71,6 +72,32 @@ class TjvendorsViewVendor extends JViewLegacy
 		if (count($errors = $this->get('Errors')))
 		{
 			throw new Exception(implode("\n", $errors));
+		}
+
+		if (empty($this->vendor->vendor_id))
+		{
+			$authorised = $user->authorise('core.create', 'com_tjvendors');
+		}
+		else
+		{
+			$authorisedOwn = $user->authorise('core.edit.own', 'com_tjvendors');
+
+			if ($authorisedOwn)
+			{
+				$authorised = true;
+
+				if ($this->vendor->user_id != $user->id)
+				{
+					$authorised = false;
+				}
+			}
+		}
+
+		if ($authorised !== true)
+		{
+			JError::raiseWarning(403, JText::_('JERROR_ALERTNOAUTHOR'));
+
+			return false;
 		}
 
 		parent::display($tpl);

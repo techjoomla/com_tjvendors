@@ -59,7 +59,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<?php echo $this->form->renderField('vendor_title'); ?>
 					<?php echo $this->form->renderField('currency'); ?>
 					<?php
-						if($this->bulkPayoutStatus!=0)
+						if ($this->bulkPayoutStatus!=0)
 						{
 							echo $this->form->renderField('bulk_total');
 						}

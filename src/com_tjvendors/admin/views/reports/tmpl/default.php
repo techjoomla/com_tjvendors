@@ -370,9 +370,9 @@ var client = '<?php echo $client;?>';
 					if (empty($filterCurrency))
 					{
 					?>
-					<td>
-						<?php echo htmlspecialchars($item->currency, ENT_COMPAT, 'UTF-8');?>
-					</td>
+						<td>
+							<?php echo htmlspecialchars($item->currency, ENT_COMPAT, 'UTF-8');?>
+						</td>
 				<?php
 					}
 
@@ -393,7 +393,7 @@ var client = '<?php echo $client;?>';
 						</td>
 				<?php
 					}
-					if($transactionType == "debit" || empty($transactionType))
+					if ($transactionType == "debit" || empty($transactionType))
 					{
 					?>
 						<td>
@@ -419,7 +419,7 @@ var client = '<?php echo $client;?>';
 
 					<td class="center">
 						<?php
-							if(!empty($status['customer_note']))
+							if (!empty($status['customer_note']))
 							{
 								echo htmlspecialchars($status['customer_note'], ENT_COMPAT, 'UTF-8');
 							}
@@ -430,16 +430,16 @@ var client = '<?php echo $client;?>';
 							?>
 					</td>
 					<td>
-				<?php
-					if($status['entry_status'] == "debit_payout")
-					{
-						echo JHTML::_('select.genericlist', $options, "paidUnpaid", 'class="input-medium" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
-					}
-					elseif($status['entry_status'] == "credit_for_ticket_buy")
-					{
-						echo JHTML::_('select.genericlist', $doneOptions, "doneCredit", 'class="input-medium disable" size="1" onChange="document.adminForm.submit();"', 'value', 'type', $doneOptions);
-					}
-					?>
+					<?php
+						if ($status['entry_status'] == "debit_payout")
+						{
+							echo JHTML::_('select.genericlist', $options, "paidUnpaid", 'class="input-medium" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
+						}
+						elseif ($status['entry_status'] == "credit_for_ticket_buy")
+						{
+							echo JHTML::_('select.genericlist', $doneOptions, "doneCredit", 'class="input-medium disable" size="1" onChange="document.adminForm.submit();"', 'value', 'type', $doneOptions);
+						}
+						?>
 					</td>
 					</tr>
 			<?php

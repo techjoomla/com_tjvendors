@@ -110,27 +110,24 @@ if (!empty($this->extra_sidebar))
 }
 
 ?>
-<form
-action="
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id.'&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id.'&client=' . $this->input->get('client', '', 'STRING')); ?>"
-method="post" name="adminForm" id="adminForm">
-<?php
-if (!empty($this->sidebar))
-{
+	if (!empty($this->sidebar))
+	{
 	?>
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
-	</div>
-	<div id="j-main-container" class="span10">
+		<div id="j-sidebar-container" class="span2">
+			<?php echo $this->sidebar; ?>
+		</div>
+		<div id="j-main-container" class="span10">
 <?php
-}
-else
-{
+	}
+	else
+	{
 	?>
-	<div id="j-main-container">
+		<div id="j-main-container">
 <?php
-}?>
+	}
+	?>
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="filter-search btn-group pull-left">
 				<label for="filter_search" class="element-invisible">
@@ -179,32 +176,36 @@ else
 			</div>
 		</div>
 		<div class="clearfix"></div>
+
 		<?php
-		if (empty($this->items))
-		{
+			if (empty($this->items))
+			{
 			?>
 			<div class="clearfix">&nbsp;</div>
 				<div class="alert alert-no-items">
 					<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 				</div>
 		<?php
-		}
-		else
-		{
+			}
+			else
+			{
 			?>
 
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
 					<?php
-					if (isset($this->items[0]->ordering))
-					{
-					?>
-					<th width="1%" class="nowrap center hidden-phone">
-					<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
-					</th>
+						if (isset($this->items[0]->ordering))
+						{
+						?>
+							<th width="1%" class="nowrap center hidden-phone">
+						<?php
+							echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING');
+							?>
+							</th>
 					<?php
-					}?>
+						}
+						?>
 					<th width="1%" class="hidden-phone">
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
@@ -235,19 +236,19 @@ else
 			</tfoot>
 			<tbody>
 				<?php
-				foreach ($this->items as $i => $item)
-				{
-					$ordering   = ($listOrder == 'a.ordering');
-					$canCreate  = $user->authorise('core.create', 'com_tjvendors');
-					$canEdit    = $user->authorise('core.edit', 'com_tjvendors');
-					$canCheckin = $user->authorise('core.manage', 'com_tjvendors');
-					$canChange  = $user->authorise('core.edit.state', 'com_tjvendors');
+					foreach ($this->items as $i => $item)
+					{
+						$ordering   = ($listOrder == 'a.ordering');
+						$canCreate  = $user->authorise('core.create', 'com_tjvendors');
+						$canEdit    = $user->authorise('core.edit', 'com_tjvendors');
+						$canCheckin = $user->authorise('core.manage', 'com_tjvendors');
+						$canChange  = $user->authorise('core.edit.state', 'com_tjvendors');
 					?>
 					<tr class="row<?php echo $i % 2; ?>">
 					<?php
 						if (isset($this->items[0]->ordering))
 						{
-							?>
+						?>
 							<td class="order nowrap center hidden-phone">
 							<?php
 								if ($canChange)

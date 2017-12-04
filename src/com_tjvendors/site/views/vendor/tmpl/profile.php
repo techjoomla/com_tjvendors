@@ -102,11 +102,11 @@ if (JFactory::getUser()->id ){?>
 		</div>
 	</div>
 </form>
-<?php }
+<?php
+}
 else
 {
 	$link =JRoute::_('index.php?option=com_users');
 	$app = JFactory::getApplication();
 	$app->redirect($link);
 }
-

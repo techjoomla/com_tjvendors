@@ -80,7 +80,7 @@ if (!empty($this->extra_sidebar))
 <?php
 	}
 
-if(empty($this->items))
+if (empty($this->items))
 {
 	?>
 		<div class="alert alert-no-items">

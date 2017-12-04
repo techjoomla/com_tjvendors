@@ -48,7 +48,8 @@ if (JFactory::getUser()->id ){?>
 							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
 
 								<?php
-								$input = JFactory::getApplication()->input;
+									$input = JFactory::getApplication()->input;
+
 									if ($this->vendor_id != 0)
 									{
 										$client=$this->input->get('client', '', 'STRING');
@@ -70,7 +71,7 @@ if (JFactory::getUser()->id ){?>
 									}
 									elseif($this->vendor_id == 0)
 									{
-										?>
+									?>
 										 <input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 										<?php echo$this->form->renderField('vendor_title'); ?>
 										<?php echo $this->form->renderField('alias'); ?>
@@ -81,23 +82,28 @@ if (JFactory::getUser()->id ){?>
 												<?php echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png'); ?>
 											</div>
 										</div>
-											<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
-										<?php if (!empty($this->vendor->vendor_logo))
-											{ echo "fb";?>
+										<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
+										<?php
+											if (!empty($this->vendor->vendor_logo))
+											{
+											?>
 												<div class="control-group">
 													<div class="controls "><img src="<?php echo JUri::root() . htmlspecialchars($this->vendor->vendor_logo, ENT_COMPAT, 'UTF-8'); ?>"></div>
 												</div>
-										<?php }
-										if(empty($this->vendor->vendor_logo)):?>
+										<?php
+											}
+
+											if (empty($this->vendor->vendor_logo)):?>
 											<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/administrator/components/com_tjvendors/assets/images/default.png" />
 											<div class="control-group">
-													<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>"></div>
-												</div>
-										<?php endif;
-										?>
+												<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>"></div>
+											</div>
+										<?php
+											endif;
+											?>
 								<?php
 									}
-								 ?>
+									?>
 						</fieldset>
 					<?php echo JHtml::_('bootstrap.endTab'); ?>
 
@@ -107,8 +113,10 @@ if (JFactory::getUser()->id ){?>
 						<div id="payment_details"></div>
 					<?php echo JHtml::_('bootstrap.endTab'); ?>
 
-				<?php echo JHtml::_('bootstrap.endTabSet');
-				if($this->vendor_id == 0)
+			<?php
+				echo JHtml::_('bootstrap.endTabSet');
+
+				if ($this->vendor_id == 0)
 				{
 				?>
 				<div>
@@ -120,10 +128,11 @@ if (JFactory::getUser()->id ){?>
 						<?php echo JText::_('JCANCEL'); ?>
 					</button>
 				</div>
-				<?php
+			<?php
 				}
 				else
-				{?>
+				{
+				?>
 					<div>
 						<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
 							<span><?php echo JText::_('COM_TJVENDORS_CLIENT_APPROVAL'); ?></span>
@@ -132,7 +141,7 @@ if (JFactory::getUser()->id ){?>
 						<?php echo JText::_('COM_TJVENDORS_CLIENT_REJECTION'); ?>
 					</button>
 					</div>
-				<?php
+			<?php
 				}
 				?>
 			</div>
@@ -142,7 +151,8 @@ if (JFactory::getUser()->id ){?>
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
-<?php }
+<?php
+}
 else
 {
 	$link =JRoute::_('index.php?option=com_users');

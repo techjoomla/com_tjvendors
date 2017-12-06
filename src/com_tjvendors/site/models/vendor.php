@@ -188,7 +188,13 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($result))
+		{
+			return false;
 		}
 
 		return $vendor_id;
@@ -224,7 +230,13 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($rows))
+		{
+			return false;
 		}
 
 		if ($rows)

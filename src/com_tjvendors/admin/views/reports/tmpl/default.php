@@ -393,6 +393,7 @@ var client = '<?php echo $client;?>';
 						</td>
 				<?php
 					}
+
 					if ($transactionType == "debit" || empty($transactionType))
 					{
 					?>

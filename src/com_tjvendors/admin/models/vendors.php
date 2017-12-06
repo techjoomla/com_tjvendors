@@ -169,7 +169,13 @@ class TjvendorsModelVendors extends JModelList
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($result))
+		{
+			return false;
 		}
 
 		return $result;
@@ -199,7 +205,13 @@ class TjvendorsModelVendors extends JModelList
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($result))
+		{
+			return false;
 		}
 	}
 
@@ -235,7 +247,13 @@ class TjvendorsModelVendors extends JModelList
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($result))
+		{
+			return false;
 		}
 
 		$availability = $this->checkForAvailableRecords($vendor_id, $client);

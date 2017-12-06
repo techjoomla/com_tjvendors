@@ -67,7 +67,13 @@ class TjvendorFrontHelper
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($result))
+		{
+			return false;
 		}
 
 		foreach ($result as $i)
@@ -121,10 +127,15 @@ class TjvendorFrontHelper
 		{
 			$rows = $db->loadAssoc();
 		}
-
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-warning">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($rows))
+		{
+			return false;
 		}
 
 		$totalDebitAmount = self::getPaidAmount($user_id, $currency, $client);
@@ -193,7 +204,13 @@ class TjvendorFrontHelper
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($paidDetails))
+		{
+			return false;
 		}
 
 		$amount = 0;
@@ -240,7 +257,13 @@ class TjvendorFrontHelper
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($result))
+		{
+			return false;
 		}
 
 		if (!empty($result))
@@ -276,7 +299,13 @@ class TjvendorFrontHelper
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($vendor))
+		{
+			return false;
 		}
 
 		return $vendor;
@@ -310,7 +339,13 @@ class TjvendorFrontHelper
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($result))
+		{
+			return false;
 		}
 
 		foreach ($result as $i)
@@ -346,7 +381,13 @@ class TjvendorFrontHelper
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($result))
+		{
+			return false;
 		}
 
 		foreach ($result as $client)
@@ -393,7 +434,13 @@ class TjvendorFrontHelper
 
 		catch (Exception $e)
 		{
-			echo JText::_('COM_TJVENDORS_DB_EXCEPTION') . $e->getMessage();
+			echo '<div class="alert alert-error">
+					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+		}
+
+		if (empty($res))
+		{
+			return false;
 		}
 
 		return $res;

@@ -43,7 +43,9 @@ class TjvendorsViewVendors extends JViewLegacy
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			throw new Exception(implode("\n", $errors));
+			JError::raiseError(500, implode('<br />', $errors));
+
+			return false;
 		}
 
 		TjvendorsHelpersTjvendors::addSubmenu('vendors');

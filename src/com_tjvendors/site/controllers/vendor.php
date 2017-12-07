@@ -160,17 +160,17 @@ class TjvendorsControllerVendor extends JControllerForm
 			// Redirect back to the edit screen.
 			$client = $app->input->get('client', '', 'STRING');
 
-			$id = $app->getUserState('com_tjvendors.edit.vendor.id');
+			$id = $app->getUserState('com_tjvendors.edit.vendor.data.vendor_id');
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
 			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $id;
 
 			if ($id != 0)
 			{
-				echo $layout = 'profile';
+				$layout = 'profile';
 			}
 			else
 			{
-				echo $layout = 'edit';
+				$layout = 'edit';
 			}
 
 			$this->setRedirect(

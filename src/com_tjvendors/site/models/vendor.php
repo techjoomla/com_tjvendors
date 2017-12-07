@@ -317,26 +317,45 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$app = JFactory::getApplication();
 		$user = JFactory::getUser();
+		$TjvendorFrontHelper = new TjvendorFrontHelper;
 		$table = $this->getTable();
 		$input = $app->input;
 		$layout = $input->get('layout', '', 'STRING');
 		$site = $app->isSite();
-		$id = (!empty($data['vendor_id'])) ? $data['vendor_id'] : (int) $this->getState('vendor.vendor_id');
 
-		if ($id)
+		if (!$user->authorise('core.admin'))
 		{
-			$authorised = $user->authorise('core.edit', 'com_tjvendors') || $authorised = $user->authorise('core.edit', 'com_tjvendors');
-		}
-		else
-		{
-			$authorised = $user->authorise('core.create', 'com_tjvendors');
-		}
+			$vendor_id = $TjvendorFrontHelper->getvendor();
 
-		if ($authorised !== true)
-		{
-			JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+			if ($vendor_id)
+			{
+				if ($user->authorise('core.edit.own', 'com_tjvendors'))
+				{
+					if ($user->id == $data['user_id'] && $vendor_id == $data['vendor_id'])
+					{
+						$authorised = true;
+					}
+					else
+					{
+						$authorised = false;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				$authorised = $user->authorise('core.create', 'com_tjvendors');
+			}
 
-			return false;
+			if ($authorised !== true)
+			{
+				JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+
+				return false;
+			}
 		}
 
 		if (!empty($data['paymentForm']))

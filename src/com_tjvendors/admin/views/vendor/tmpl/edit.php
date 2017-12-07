@@ -67,8 +67,7 @@ jQuery(window).load(function(){
 	var layout = '<?php echo "default";?>';
 	tjVAdmin.vendor.initVendorJs();
 </script>
-
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client='.$this->input->get('client', '', 'INTEGER').'&vendor_id=' . (int) $this->item->vendor_id); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client=' . $this->client .'&vendor_id=' . (int) $this->item->vendor_id); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 	<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 	<div class="form-horizontal">

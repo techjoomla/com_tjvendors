@@ -267,57 +267,26 @@ else
 							if (isset($this->items[0]->state)) :
 							?>
 
-						<?php
-							if ($this->canEdit || ($this->canEditOwn   && $item->user_id == $this->userId))
-							{
-								$class = 1;
-							}
-							else
-							{
-								$class = '';
-							}
-							?>
 						<td >
-							<?php echo JHtml::_('jgrid.published', $item->state, $i, 'vendors.', $class, 'cb'); ?>
+							<?php echo JHtml::_('jgrid.published', $item->state, $i, 'vendors.', 'active', 'cb'); ?>
 						</td>
 
 						<?php
 							endif;
 							?>
 						<td>
-							<?php
-								if ($this->canEdit || ($this->canEditOwn   && $item->user_id == $this->userId))
-								{
-								?>
-									<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' .$this->input->get('client', '', 'STRING').'&vendor_id=' . (int) $item->vendor_id );?>">
-										<?php echo htmlspecialchars($item->vendor_title, ENT_COMPAT, 'UTF-8');?>
-									</a>
-							<?php
-								}
-								else
-								{
-										echo htmlspecialchars($item->vendor_title, ENT_COMPAT, 'UTF-8');
-								}
-								?>
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' .$this->input->get('client', '', 'STRING').'&vendor_id=' . (int) $item->vendor_id );?>">
+								<?php echo htmlspecialchars($item->vendor_title, ENT_COMPAT, 'UTF-8');?>
+							</a>
 						</td>
 
-							<?php
-								if ($this->canEdit || ($this->canEditOwn   && $item->user_id == $this->userId))
-								{
-								?>
-									<td >
-										<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_FEE'); ?></a> |
+						<td >
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_FEE'); ?></a> |
 
-										<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_PAYOUTS'); ?></a> |
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_PAYOUTS'); ?></a> |
 
-										<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_REPORTS'); ?></a>
-									</td>
-							<?php
-								}
-								else
-								{
-									echo '<td>' . JText::_('COM_TJVENDORS_VENDORS_EDIT_DENIAL') . '</td>';
-								}?>
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_REPORTS'); ?></a>
+						</td>
 
 						<td >
 							<?php echo htmlspecialchars($item->vendor_id, ENT_COMPAT, 'UTF-8');?>

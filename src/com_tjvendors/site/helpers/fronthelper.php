@@ -64,11 +64,10 @@ class TjvendorFrontHelper
 		{
 			$result = $db->loadAssocList();
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($result))
@@ -129,8 +128,8 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-warning">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($rows))
@@ -201,11 +200,10 @@ class TjvendorFrontHelper
 		{
 			$paidDetails = $db->loadAssocList();
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($paidDetails))
@@ -254,11 +252,10 @@ class TjvendorFrontHelper
 		{
 			$result = $db->loadAssocList();
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($result))
@@ -296,11 +293,10 @@ class TjvendorFrontHelper
 		{
 			$vendor = $db->loadResult();
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($vendor))
@@ -336,11 +332,10 @@ class TjvendorFrontHelper
 		{
 			$result = $db->loadAssocList();
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($result))
@@ -378,11 +373,10 @@ class TjvendorFrontHelper
 		{
 			$result = $db->loadAssocList();
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($result))
@@ -431,11 +425,10 @@ class TjvendorFrontHelper
 		{
 			$res = $db->loadObject();
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($res))

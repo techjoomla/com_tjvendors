@@ -136,7 +136,7 @@ class TjvendorsModelPayout extends JModelAdmin
 	public function save($data)
 	{
 		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$bulkPayoutStatus = $com_params->get('bulk_payout', '', 0);
+		$bulkPayoutStatus = $com_params->get('bulk_payout', 0, INT);
 
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
 		$TjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
@@ -324,11 +324,10 @@ class TjvendorsModelPayout extends JModelAdmin
 			// Insert the object into the passbook table.
 			$result = JFactory::getDbo()->insertObject('#__tjvendors_passbook', $creditEntry);
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($result))
@@ -368,10 +367,10 @@ class TjvendorsModelPayout extends JModelAdmin
 
 			return true;
 		}
-
 		catch (Exception $e)
 		{
-			return false;
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 	}
 }

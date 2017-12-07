@@ -185,11 +185,10 @@ class TjvendorsModelVendor extends JModelAdmin
 		{
 			$result = $db->execute();
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($result))
@@ -227,11 +226,10 @@ class TjvendorsModelVendor extends JModelAdmin
 		{
 			$rows = $db->loadAssoc();
 		}
-
 		catch (Exception $e)
 		{
-			echo '<div class="alert alert-error">
-					<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE') . ' </div>';
+			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
+			JFactory::getApplication()->enqueueMessage($message, 'error');
 		}
 
 		if (empty($rows))

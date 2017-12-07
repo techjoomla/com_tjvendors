@@ -326,8 +326,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		}
 		catch (Exception $e)
 		{
-			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
-			JFactory::getApplication()->enqueueMessage($message, 'error');
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (empty($result))
@@ -369,8 +368,7 @@ class TjvendorsModelPayout extends JModelAdmin
 		}
 		catch (Exception $e)
 		{
-			$message = '<strong>' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING') . '!</strong> ' . JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE');
-			JFactory::getApplication()->enqueueMessage($message, 'error');
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 	}
 }

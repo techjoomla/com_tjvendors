@@ -136,7 +136,7 @@ class TjvendorsModelVendorFees extends JModelList
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
 
-		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC', '')))
+		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC')))
 		{
 			$orderDirn = 'DESC';
 		}

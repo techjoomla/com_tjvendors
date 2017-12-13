@@ -210,7 +210,7 @@ if (!empty($this->extra_sidebar))
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 					<th class='left'>
-						<?php echo JText::_('COM_TJVENDORS_VENDORS_ID'); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'b.`id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
 						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_FEE_TITLE'); ?>
@@ -286,7 +286,7 @@ if (!empty($this->extra_sidebar))
 							<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 						</td>
 						<td>
-							<?php echo htmlspecialchars($item->vendor_id, ENT_COMPAT, 'UTF-8');?>
+							<?php echo htmlspecialchars($item->id, ENT_COMPAT, 'UTF-8');?>
 						</td>
 						<td>
 							<?php echo htmlspecialchars($item->vendor_title, ENT_COMPAT, 'UTF-8');?>

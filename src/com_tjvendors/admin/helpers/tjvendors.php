@@ -575,7 +575,7 @@ class TjvendorsHelpersTjvendors
 
 		if (empty($currencies))
 		{
-			return false;
+			return true;
 		}
 
 		foreach ($currencies as $i)

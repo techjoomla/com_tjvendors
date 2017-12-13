@@ -47,25 +47,30 @@ if (JFactory::getUser()->id ){?>
 							<input type="hidden" name="jform[checked_out]" value="<?php echo $this->vendor->checked_out; ?>" />
 							<input type="hidden" name="jform[ordering]" value="<?php echo $this->vendor->ordering; ?>" />
 							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
-								<?php if (!empty($this->vendor->vendor_logo))
-									{ ?>
+								<?php
+									if (!empty($this->vendor->vendor_logo))
+									{
+									?>
 										<div class="control-group">
-											<div class="controls "><img class="span3 col-md-4 img-thumbnail pull-left marginb10 " src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>"></div>
+											<div class="controls "><img class="span3 col-md-4 img-thumbnail pull-left marginb10 " src="<?php echo JUri::root() . htmlspecialchars($this->vendor->vendor_logo, ENT_COMPAT, 'UTF-8'); ?>"></div>
 										</div>
-								<?php }
+								<?php
+									}
 									else
 									{
-										?>
+									?>
 										<div class="control-group">
 											<div class="controls "><img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>" class="span3 col-md-3 img-thumbnail marginb10"></div>
 										</div>
-										<?php
+								<?php
 									}
-								 ?>
+									?>
+
 								<?php echo$this->form->renderField('vendor_title'); ?>
 								<?php echo$this->form->renderField('alias'); ?>
 								<?php echo $this->form->renderField('vendor_description'); ?>
 								<?php echo $this->form->renderField('vendor_logo'); ?>
+
 								<div class="controls">
 									<div class="alert alert-warning">
 										<?php echo sprintf(JText::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png'); ?>
@@ -97,11 +102,11 @@ if (JFactory::getUser()->id ){?>
 		</div>
 	</div>
 </form>
-<?php }
+<?php
+}
 else
 {
 	$link =JRoute::_('index.php?option=com_users');
 	$app = JFactory::getApplication();
 	$app->redirect($link);
 }
-

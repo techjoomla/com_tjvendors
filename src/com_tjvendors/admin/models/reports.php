@@ -32,9 +32,11 @@ class TjvendorsModelReports extends JModelList
 			$config['filter_fields'] = array(
 				'id', 'pass.`id`',
 				'total', 'pass.`total`',
+				'credit', 'pass.`credit`',
+				'debit', 'pass.`debit`',
+				'reference_order_id', 'pass.`reference_order_id`',
 				'currency', 'pass.`currency`',
 				'vendor_title', 'vendors.`vendor_title`',
-				'client', 'vendors.`vendor_client`',
 				'transaction_id', 'pass.`transaction_id`',
 				'transaction_time', 'pass.`transaction_time`',
 			);
@@ -176,6 +178,11 @@ class TjvendorsModelReports extends JModelList
 		if ($orderCol && $orderDirn)
 		{
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+		}
+
+		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC')))
+		{
+			$orderDirn = 'DESC';
 		}
 
 		return $query;

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    SVN: 
+ * @version    SVN:
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -135,6 +135,11 @@ class TjvendorsModelVendorFees extends JModelList
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
+
+		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC')))
+		{
+			$orderDirn = 'DESC';
+		}
 
 		if ($orderCol && $orderDirn)
 		{

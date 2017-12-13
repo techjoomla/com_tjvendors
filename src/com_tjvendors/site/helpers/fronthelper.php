@@ -60,7 +60,19 @@ class TjvendorFrontHelper
 		$db->setQuery($query);
 		$clients[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENTS');
 
-		$result = $db->loadAssocList();
+		try
+		{
+			$result = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		foreach ($result as $i)
 		{
@@ -108,7 +120,21 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
-		$rows = $db->loadAssoc();
+
+		try
+		{
+			$rows = $db->loadAssoc();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($rows))
+		{
+			return false;
+		}
+
 		$totalDebitAmount = self::getPaidAmount($user_id, $currency, $client);
 		$totalCreditAmount = $rows['credit'];
 		$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
@@ -167,7 +193,21 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
-		$paidDetails = $db->loadAssocList();
+
+		try
+		{
+			$paidDetails = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($paidDetails))
+		{
+			return false;
+		}
+
 		$amount = 0;
 
 		foreach ($paidDetails as $detail)
@@ -204,7 +244,20 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
-		$result = $db->loadAssocList();
+
+		try
+		{
+			$result = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		if (!empty($result))
 		{
@@ -231,7 +284,20 @@ class TjvendorFrontHelper
 		$query->from($db->quoteName('#__tjvendors_vendors'));
 		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
 		$db->setQuery($query);
-		$vendor = $db->loadResult();
+
+		try
+		{
+			$vendor = $db->loadResult();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($vendor))
+		{
+			return false;
+		}
 
 		return $vendor;
 	}
@@ -257,7 +323,19 @@ class TjvendorFrontHelper
 		$db->setQuery($query);
 		$currencies[] = JText::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
 
-		$result = $db->loadAssocList();
+		try
+		{
+			$result = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		foreach ($result as $i)
 		{
@@ -284,7 +362,20 @@ class TjvendorFrontHelper
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
 		$db->setQuery($query);
-		$result = $db->loadAssocList();
+
+		try
+		{
+			$result = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		foreach ($result as $client)
 		{
@@ -322,7 +413,20 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
-		$res = $db->loadObject();
+
+		try
+		{
+			$res = $db->loadObject();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($res))
+		{
+			return false;
+		}
 
 		return $res;
 	}

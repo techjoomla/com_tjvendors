@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    SVN: 
+ * @version    SVN:
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -101,7 +101,7 @@ $sortFields = $this->getSortFields();
 
 </script>
 
-<?php 
+<?php
 
 // Joomla Component Creator code to allow adding non select list filters
 if (!empty($this->extra_sidebar))
@@ -110,34 +110,31 @@ if (!empty($this->extra_sidebar))
 }
 
 ?>
-<form
-action="
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id.'&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id.'&client=' . $this->input->get('client', '', 'STRING')); ?>" 
-method="post" name="adminForm" id="adminForm">
-<?php
-if (!empty($this->sidebar))
-{
+	if (!empty($this->sidebar))
+	{
 	?>
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
-	</div>
-	<div id="j-main-container" class="span10">
+		<div id="j-sidebar-container" class="span2">
+			<?php echo $this->sidebar; ?>
+		</div>
+		<div id="j-main-container" class="span10">
 <?php
-}
-else
-{
+	}
+	else
+	{
 	?>
-	<div id="j-main-container">
-<?php 
-}?>
+		<div id="j-main-container">
+<?php
+	}
+	?>
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="filter-search btn-group pull-left">
 				<label for="filter_search" class="element-invisible">
 					<?php echo JText::_('JSEARCH_FILTER'); ?>
 				</label>
 				<input type="text" name="filter_search" id="filter_search"
-					
+
 					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_VENDOR_FEE'); ?>"
 					value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
 					title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
@@ -179,37 +176,41 @@ else
 			</div>
 		</div>
 		<div class="clearfix"></div>
+
 		<?php
-		if (empty($this->items))
-		{
+			if (empty($this->items))
+			{
 			?>
 			<div class="clearfix">&nbsp;</div>
 				<div class="alert alert-no-items">
 					<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 				</div>
 		<?php
-		}
-		else
-		{
+			}
+			else
+			{
 			?>
 
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
-					<?php 
-					if (isset($this->items[0]->ordering))
-					{
-					?>
-					<th width="1%" class="nowrap center hidden-phone">
-					<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
-					</th>
 					<?php
-					}?>
+						if (isset($this->items[0]->ordering))
+						{
+						?>
+							<th width="1%" class="nowrap center hidden-phone">
+						<?php
+							echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING');
+							?>
+							</th>
+					<?php
+						}
+						?>
 					<th width="1%" class="hidden-phone">
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 					<th class='left'>
-						<?php echo JText::_('COM_TJVENDORS_VENDORS_ID'); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'b.`id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
 						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_FEE_TITLE'); ?>
@@ -235,21 +236,21 @@ else
 			</tfoot>
 			<tbody>
 				<?php
-				foreach ($this->items as $i => $item)
-				{
-					$ordering   = ($listOrder == 'a.ordering');
-					$canCreate  = $user->authorise('core.create', 'com_tjvendors');
-					$canEdit    = $user->authorise('core.edit', 'com_tjvendors');
-					$canCheckin = $user->authorise('core.manage', 'com_tjvendors');
-					$canChange  = $user->authorise('core.edit.state', 'com_tjvendors');
+					foreach ($this->items as $i => $item)
+					{
+						$ordering   = ($listOrder == 'a.ordering');
+						$canCreate  = $user->authorise('core.create', 'com_tjvendors');
+						$canEdit    = $user->authorise('core.edit', 'com_tjvendors');
+						$canCheckin = $user->authorise('core.manage', 'com_tjvendors');
+						$canChange  = $user->authorise('core.edit.state', 'com_tjvendors');
 					?>
 					<tr class="row<?php echo $i % 2; ?>">
 					<?php
 						if (isset($this->items[0]->ordering))
 						{
-							?>
+						?>
 							<td class="order nowrap center hidden-phone">
-								<?php
+							<?php
 								if ($canChange)
 								{
 									$disableClassName = '';
@@ -265,50 +266,51 @@ else
 										<i class="icon-menu"></i>
 									</span>
 									<input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order "/>
-								<?php
+							<?php
 								}
 								else
 								{
-									?>
+								?>
 									<span class="sortable-handler inactive">
 										<i class="icon-menu"></i>
 									</span>
-								<?php
-								}?>
+							<?php
+								}
+								?>
 							</td>
-						<?php
-						}?>
+					<?php
+						}
+						?>
 
-							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
-							</td>
-							<td>
-								<?php echo $item->vendor_id; ?>
-							</td>
-							<td>
-									<?php echo $item->vendor_title; ?>
-							</td>
-							<td>
-								<a href="
-								<?php 
-								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->client . '&fee_id=' . $item->id);?>">
-								<?php echo $item->currency; ?>
-								</a>
-							</td>
-							<td>
-								<?php echo $item->percent_commission . " %";?>
-							</td>
-							<td>
-								<?php echo $item->flat_commission; ?>
-							</td>
-						</tr>
-				<?php
+						<td class="hidden-phone">
+							<?php echo JHtml::_('grid.id', $i, $item->id); ?>
+						</td>
+						<td>
+							<?php echo htmlspecialchars($item->id, ENT_COMPAT, 'UTF-8');?>
+						</td>
+						<td>
+							<?php echo htmlspecialchars($item->vendor_title, ENT_COMPAT, 'UTF-8');?>
+						</td>
+						<td>
+							<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->client . '&fee_id=' . $item->id);?>">
+								<?php echo htmlspecialchars($item->currency, ENT_COMPAT, 'UTF-8');?>
+							</a>
+						</td>
+						<td>
+							<?php echo htmlspecialchars($item->percent_commission, ENT_COMPAT, 'UTF-8') . " %";?>
+						</td>
+						<td>
+							<?php echo htmlspecialchars($item->flat_commission, ENT_COMPAT, 'UTF-8');?>
+						</td>
+					</tr>
+			<?php
 				}
 				?>
 			</tbody>
 		</table>
-		<?php
-		}?>
+	<?php
+		}
+		?>
 			<input type="hidden" name="task" value=""/>
 			<input type="hidden" name="boxchecked" value="0"/>
 			<input type="hidden" name="vendor_id" value="<?php echo $this->vendor_id;?>"/>

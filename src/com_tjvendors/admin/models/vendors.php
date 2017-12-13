@@ -134,10 +134,12 @@ class TjvendorsModelVendors extends JModelList
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
 
-		if ($orderCol && $orderDirn)
+		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC')))
 		{
-			$query->order($db->escape($orderCol . ' ' . $orderDirn));
+			$orderDirn = 'DESC';
 		}
+
+		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 
 		return $query;
 	}
@@ -159,7 +161,20 @@ class TjvendorsModelVendors extends JModelList
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 		$db->setQuery($query);
-		$result = $db->loadResult();
+
+		try
+		{
+			$result = $db->loadResult();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		return $result;
 	}
@@ -180,7 +195,20 @@ class TjvendorsModelVendors extends JModelList
 		$query->delete($db->quoteName('#__tjvendors_vendors'));
 		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 		$db->setQuery($query);
-		$result = $db->execute();
+
+		try
+		{
+			$result = $db->execute();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -207,7 +235,21 @@ class TjvendorsModelVendors extends JModelList
 			}
 
 			$db->setQuery($query);
-		$result = $db->execute();
+
+		try
+		{
+			$result = $db->execute();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
+
 		$availability = $this->checkForAvailableRecords($vendor_id, $client);
 
 		if ($availability == 0)

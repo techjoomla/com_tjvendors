@@ -43,7 +43,9 @@ class TjvendorsViewVendors extends JViewLegacy
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			throw new Exception(implode("\n", $errors));
+			JError::raiseError(500, implode('<br />', $errors));
+
+			return false;
 		}
 
 		TjvendorsHelpersTjvendors::addSubmenu('vendors');
@@ -65,9 +67,13 @@ class TjvendorsViewVendors extends JViewLegacy
 	{
 		$input = JFactory::getApplication()->input;
 		$this->client = $input->get('client', '', 'STRING');
-
+		$this->userId = JFactory::getUser()->id;
 		$state = $this->get('State');
 		$canDo = TjvendorsHelpersTjvendors::getActions();
+		$this->canEdit = $canDo->get('core.edit');
+		$this->canEditState = $canDo->get('core.edit.state');
+		$this->canAdmin = $canDo->get('core.admin');
+		$this->canEditOwn = $canDo->get('core.edit.own');
 		JToolBarHelper::addNew('vendor.add');
 
 		if (JVERSION >= '3.0')
@@ -79,12 +85,12 @@ class TjvendorsViewVendors extends JViewLegacy
 			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
 		}
 
-		if ($canDo->get('core.edit') && isset($this->items[0]))
+		if ($this->canEdit && isset($this->items[0]))
 		{
 			JToolBarHelper::editList('vendor.edit', 'JTOOLBAR_EDIT');
 		}
 
-		if ($canDo->get('core.edit.state'))
+		if ($this->canEditState)
 		{
 			if (isset($this->items[0]->state))
 			{
@@ -100,7 +106,7 @@ class TjvendorsViewVendors extends JViewLegacy
 			}
 		}
 
-		if ($canDo->get('core.admin'))
+		if ($this->canAdmin)
 		{
 			JToolBarHelper::preferences('com_tjvendors');
 		}

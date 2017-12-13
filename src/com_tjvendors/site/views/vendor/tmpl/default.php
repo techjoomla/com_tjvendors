@@ -38,7 +38,7 @@ defined('_JEXEC') or die();
 	<div class="span9 col-xs-6">
 		<div>
 			<h3>
-				<?php echo $this->VendorDetail->vendor_title; ?>
+				<?php echo htmlspecialchars($this->VendorDetail->vendor_title, ENT_COMPAT, 'UTF-8');?>
 			</h3>
 		</div>
 		<div>
@@ -47,21 +47,26 @@ defined('_JEXEC') or die();
 
 			if (strlen($this->VendorDetail->vendor_description) > $long_desc_char)
 			{
-				echo substr(strip_tags($this->VendorDetail->vendor_description), 0, $long_desc_char);?>
+				$description = substr(strip_tags($this->VendorDetail->vendor_description), 0, $long_desc_char);
+				echo htmlspecialchars($description, ENT_COMPAT, 'UTF-8');
+			?>
 				<a href="#myModal" data-toggle="modal" data-target="#myModal"><?php echo JText::_('COM_TJVENDOR_DESCRIPTION_READ_MORE');?></a>
 			<?php
 			}
 			else
 			{
-				echo strip_tags($this->VendorDetail->vendor_description);
+				$description = strip_tags($this->VendorDetail->vendor_description);
+				echo htmlspecialchars($description, ENT_COMPAT, 'UTF-8');
 			}
-		?>
-		<div class="modal fade" id="myModal" role="dialog">
+			?>
+			<div class="modal fade" id="myModal" role="dialog">
 				<div class="modal-dialog">
 					<!-- Modal content-->
 					<div class="modal-content">
 						<div class="modal-body">
-							<p><?php echo $this->VendorDetail->vendor_description;?></p>
+							<p>
+								<?php echo htmlspecialchars($this->VendorDetail->vendor_description, ENT_COMPAT, 'UTF-8');?>
+							</p>
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -69,25 +74,29 @@ defined('_JEXEC') or die();
 					</div>
 				</div>
 			</div>
+		</div>
+		<div>
+			<span class="vendor-action pull-left margint20">
+				<a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&layout=profile&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>">
+					<?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?>
+				</a>
+			</span>
+		</div>
 	</div>
-	<div>
-		<span class="vendor-action pull-left margint20"><a class="btn btn-primary" href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&layout=profile&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>"><?php echo JText::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a></span>
-	</div>
-</div>
 
-<?php }
-elseif(JFactory::getUser()->id && !$this->vendor_id)
-{
-	$app = JFactory::getApplication();
-	$client = $app->input->get('client', '', 'STRING');
-	$link =JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
-	$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'warning');
-	$app->redirect($link);
-}
-else
-{
-	$link =JRoute::_('index.php?option=com_users');
-	$app = JFactory::getApplication();
-	$app->redirect($link);
-} ?>
-
+<?php
+	}
+	elseif (JFactory::getUser()->id && !$this->vendor_id)
+	{
+		$app = JFactory::getApplication();
+		$client = $app->input->get('client', '', 'STRING');
+		$link =JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
+		$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'warning');
+		$app->redirect($link);
+	}
+	else
+	{
+		$link =JRoute::_('index.php?option=com_users');
+		$app = JFactory::getApplication();
+		$app->redirect($link);
+	}

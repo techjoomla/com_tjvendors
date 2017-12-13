@@ -136,9 +136,8 @@ class TjvendorsModelPayout extends JModelAdmin
 	public function save($data)
 	{
 		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$bulkPayoutStatus = $com_params->get('bulk_payout');
+		$bulkPayoutStatus = $com_params->get('bulk_payout', 0, INT);
 
-		$input  = JFactory::getApplication()->input;
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
 		$TjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
 
@@ -174,8 +173,10 @@ class TjvendorsModelPayout extends JModelAdmin
 					$payout_update->id = $id;
 					$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
 
-					// Update their details in the users table using id as the primary key.
-					$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+					$payoutTable                   = $this->getTable();
+					$payoutTable->transaction_id   = $data['transaction_id'] . $payout_update->id;
+					$payoutTable->id               = $id;
+					$payoutTable->store();
 				}
 
 				$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
@@ -223,7 +224,11 @@ class TjvendorsModelPayout extends JModelAdmin
 					$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
 
 					// Update their details in the users table using id as the primary key.
-					$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+					$payoutTable                   = $this->getTable();
+					$payoutTable->transaction_id   = $data['transaction_id'] . $payout_update->id;
+					$payoutTable->id               = $id;
+					$payoutTable->store();
+
 					$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
 						JFactory::getApplication()->enqueueMessage($message);
 				}
@@ -240,9 +245,11 @@ class TjvendorsModelPayout extends JModelAdmin
 			// Must be a valid primary key value.
 			$payout_update->id = $id;
 			$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
+			$payoutTable                   = $this->getTable();
+			$payoutTable->transaction_id   = $data['transaction_id'] . $payout_update->id;
+			$payoutTable->id               = $id;
+			$payoutTable->store();
 
-			// Update their details in the users table using id as the primary key.
-			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
 			$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
 				JFactory::getApplication()->enqueueMessage($message);
 
@@ -271,8 +278,21 @@ class TjvendorsModelPayout extends JModelAdmin
 		$object->id = $payout_id;
 		$object->transaction_id = $data['transaction_id'] . $object->id;
 
-		// Update their details in the users table using id as the primary key.
-		$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
+		try
+		{
+			// Update their details in the users table using id as the primary key.
+			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
+		}
+
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 	}
 
 	/**
@@ -298,8 +318,20 @@ class TjvendorsModelPayout extends JModelAdmin
 		$creditEntry->transaction_id = $data['transaction_id'];
 		$creditEntry->params = $data['params'];
 
-		// Insert the object into the user profile table.
-		$result = JFactory::getDbo()->insertObject('#__tjvendors_passbook', $creditEntry);
+		try
+		{
+			// Insert the object into the passbook table.
+			$result = JFactory::getDbo()->insertObject('#__tjvendors_passbook', $creditEntry);
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		if ($result)
 		{
@@ -326,9 +358,16 @@ class TjvendorsModelPayout extends JModelAdmin
 		$object->id = $payout_id;
 		$object->status = $paidUnpaid;
 
-		// Update their details in the users table using id as the primary key.
-		$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
+		try
+		{
+			// Update their details in the users table using id as the primary key.
+			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
 
-		return true;
+			return true;
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
 	}
 }

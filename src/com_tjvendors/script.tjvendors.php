@@ -50,6 +50,7 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function postflight( $type, $parent )
 	{
+		$this->deFaultPermissionsFix();
 	}
 
 	/**
@@ -256,5 +257,36 @@ class Com_TjvendorsInstallerScript
 		$db->setQuery($query);
 
 		return $db->loadObjectList();
+	}
+
+	/**
+	 * Add default ACL permissions if already set by administrator
+	 *
+	 * @return  void
+	 */
+	public function deFaultPermissionsFix()
+	{
+		$db = JFactory::getDbo();
+		$columnArray = array('id', 'rules');
+		$query = $db->getQuery(true);
+
+		$query->select($db->quoteName($columnArray));
+		$query->from($db->quoteName('#__assets'));
+		$query->where($db->quoteName('name') . ' = ' . $db->quote('com_tjvendors'));
+		$db->setQuery($query);
+
+		try
+		{
+			$result = $db->loadobject();
+			$obj = new Stdclass;
+			$obj->id = $result->id;
+			$obj->rules = '{"core.edit.own":{"1":1,"2":1,"7":1},"core.edit":{"7":0},"core.create":{"7":1,"2":1},"core.delete":{"7":1,"2":1},"core.edit.state":{"7":1,"2":1}}';
+
+			$db->updateObject('#__assets', $obj, 'id');
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
 	}
 }

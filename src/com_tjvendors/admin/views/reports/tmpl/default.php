@@ -175,9 +175,13 @@ var client = '<?php echo $client;?>';
 				$this->currencies = TjvendorsHelpersTjvendors::getCurrencies($this->state->get('filter.vendor_id'));
 				$currencyList[] = JText::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
 
-				foreach ($this->currencies as $currency)
+				if (!empty($this->currencies))
 				{
-					$currencyList[] = $currency;
+					foreach ($this->currencies as $currency)
+					{
+						$currencyList[] = $currency;
+					}
+
 				}
 
 			 echo JHtml::_('select.genericlist', $currencyList, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));?>

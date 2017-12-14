@@ -29,7 +29,7 @@ class TjvendorsViewVendors extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$this->user_id = JFactory::getUser()->id;
-		$this->input = JFactory::getApplication()->input;
+		$app = JFactory::getApplication();
 
 		// Get data from the model
 		$items_model = JModelLegacy::getInstance('vendors', 'TjvendorsModel');

@@ -96,10 +96,16 @@ if (!empty($this->vendor_id))
 									<?php echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
 									$currency = $this->state->get('filter.currency');?>
 								</span>
+								<?php
+								if ($this->vendorClient == '')
+								{?>
 								<span class="input-group-btn">
 									<?php echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client", "client", $this->state->get('filter.vendor_client'));
 										$client = $this->state->get('filter.vendor_client');?>
 								</span>
+								<?php
+								}
+								?>
 								<span class="input-group-btn">
 									<?php $transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
 											$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
@@ -149,7 +155,7 @@ if (!empty($this->vendor_id))
 												<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder);?>
 											</th>
 										<?php
-											if ($client == '0')
+											if ($this->vendorClient == '')
 											{
 											?>
 											<th width="5%">
@@ -247,7 +253,7 @@ if (!empty($this->vendor_id))
 												<?php echo htmlspecialchars($row->transaction_id, ENT_COMPAT, 'UTF-8');?>
 											</td>
 										<?php
-											if ($client == '0')
+											if ($this->vendorClient == '')
 											{
 											?>
 											<td>

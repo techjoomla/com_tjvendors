@@ -29,7 +29,7 @@ class TjvendorsViewVendors extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$this->user_id = JFactory::getUser()->id;
-		$this->input = JFactory::getApplication()->input;
+		$app = JFactory::getApplication();
 
 		// Get data from the model
 		$items_model = JModelLegacy::getInstance('vendors', 'TjvendorsModel');
@@ -42,6 +42,7 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->currencies = $TjvendorFrontHelper->getCurrencies();
 		$this->vendor_id = $TjvendorFrontHelper->getvendor();
 		$this->uniqueClients = $TjvendorFrontHelper->getUniqueClients($this->user_id);
+		$this->vendorClient = $app->getUserStateFromRequest('client', 'client', '');
 		$client = $this->state->get('filter.vendor_client', '');
 		$currency = $this->state->get('filter.currency', '');
 		$this->totalDetails = $TjvendorFrontHelper->getTotalDetails($client, $this->user_id, $currency);

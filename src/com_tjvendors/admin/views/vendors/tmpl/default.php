@@ -183,7 +183,7 @@ else
 				<tr>
 					<?php if (isset($this->items[0]->ordering)) :?>
 					<th width="1%" class="nowrap center hidden-phone">
-						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'v.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 					</th>
 					<?php endif;?>
 					<th width="1%" class="hidden-phone">
@@ -192,12 +192,12 @@ else
 
 					<?php if (isset($this->items[0]->state)) :?>
 					<th width="1%" >
-						<?php echo JHtml::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?>
+						<?php echo JText::_('JSTATUS');?>
 					</th>
 					<?php endif?>
 
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'a.`vendor_title`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'v.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 					<?php	if ($this->vendorApproval) :?>
 					<th width="2%">
@@ -208,7 +208,7 @@ else
 						<?php echo JText::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
 					</th>
 					<th width="5%" >
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'a.`vendor_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'v.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>

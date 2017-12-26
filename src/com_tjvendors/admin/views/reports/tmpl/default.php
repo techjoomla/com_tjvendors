@@ -305,7 +305,8 @@ else
 				<?php
 				$options[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_PAID'),"value" => "1");
 				$options[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_UNPAID'),"value" => "0");
-				$doneOptions[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_CREDIT_DONE'),"value" => "");
+				$doneOptions = JText::_('COM_TJVENDORS_STATUS_CREDIT_DONE');
+
 				foreach ($this->items as $i => $item)
 				{
 					?>
@@ -382,14 +383,18 @@ else
 							?>
 						</td>
 						<td>
-						<?php
+					<?php
 						if($status['entry_status'] == "debit_payout")
 						{
 							echo JHTML::_('select.genericlist', $options, "paidUnpaid", 'class="input-medium" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
 						}
 						elseif($status['entry_status'] == "credit_for_ticket_buy")
 						{
-							echo JHTML::_('select.genericlist', $doneOptions, "doneCredit", 'class="input-medium disable" size="1" onChange="document.adminForm.submit();"', 'value', 'type', $doneOptions);
+						?>
+							<select disabled class="span12">
+								<option value=""><?php echo $doneOptions; ?></option>
+							</select>
+					<?php
 						}
 						?>
 						</td>

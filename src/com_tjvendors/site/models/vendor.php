@@ -179,7 +179,14 @@ class TjvendorsModelVendor extends JModelAdmin
 		$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);
 		$db->setQuery($query);
 
-		$result = $db->execute();
+		try
+		{
+			$result = $db->execute();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
 
 		return true;
 	}
@@ -206,7 +213,20 @@ class TjvendorsModelVendor extends JModelAdmin
 		}
 
 		$db->setQuery($query);
-		$rows = $db->loadAssoc();
+
+		try
+		{
+			$rows = $db->loadAssoc();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($rows))
+		{
+			return false;
+		}
 
 		if ($rows)
 		{
@@ -286,13 +306,50 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$table = $this->getTable();
 		$db = JFactory::getDbo();
+		$user = JFactory::getUser();
 		$input = JFactory::getApplication()->input;
 		$layout = $input->get('layout', '', 'STRING');
 		$app = JFactory::getApplication();
 		$site = $app->isSite();
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
 
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
 		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
+
+		if (!$user->authorise('core.admin'))
+		{
+			$vendor_id = $tjvendorFrontHelper->getvendor();
+
+			if ($vendor_id)
+			{
+				if ($user->authorise('core.edit.own', 'com_tjvendors'))
+				{
+					if ($user->id == $data['user_id'] && $vendor_id == $data['vendor_id'])
+					{
+						$authorised = true;
+					}
+					else
+					{
+						$authorised = false;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				$authorised = $user->authorise('core.create', 'com_tjvendors');
+			}
+
+			if ($authorised !== true)
+			{
+				JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+
+				return false;
+			}
+		}
 
 		/* Check if there is data in the payment form */
 		if (!empty($data['paymentForm']))

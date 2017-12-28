@@ -159,6 +159,9 @@ class TjvendorsControllerVendor extends JControllerForm
 			return false;
 		}
 
+		$all_jform_data = $data;
+		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
+
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
 		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
@@ -222,26 +225,32 @@ class TjvendorsControllerVendor extends JControllerForm
 			}
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
-			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&id=' . $id, false));
+			$app->setUserState('com_tjvendors.edit.vendor.data', $all_jform_data);
+
+			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false));
 
 			return false;
 		}
 
+		$paymentData = array_diff_key($all_jform_data, $data);
+		$data['paymentForm'] = $paymentData;
 		$return = $model->save($data);
 
 		// Check for errors.
 		if ($return === false)
 		{
+			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
+
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
 			$this->setMessage(JText::sprintf('COM_TJVENDORS_VENDOR_ERROR_MSG_SAVE', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&id=' . $id, false));
+			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false));
 
 			return false;
 		}
 
 		$msg      = JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR');
-		$vendor_id = $input->get('vendor_id');
+		$id = $input->get('id');
 
 		if (empty($id))
 		{
@@ -252,7 +261,7 @@ class TjvendorsControllerVendor extends JControllerForm
 
 		if ($task == 'apply')
 		{
-			$redirect = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id=' . $vendor_id, false);
+			$redirect = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id=' . $id, false);
 			$app->redirect($redirect, $msg);
 		}
 

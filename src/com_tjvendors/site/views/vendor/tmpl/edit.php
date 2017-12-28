@@ -64,7 +64,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 											?>
 											<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $client . '&vendor_id='.$this->vendor_id);?>"><strong>
 										<?php
-											echo $this->VendorDetail->vendor_title."</a></strong>";
+											echo htmlspecialchars($this->VendorDetail->vendor_title, ENT_COMPAT, 'UTF-8') ."</a></strong>";
 											echo " " . JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
 											$tjvendorFrontHelper = new TjvendorFrontHelper;
 											echo $client = $tjvendorFrontHelper->getClientName($client);

@@ -6,6 +6,7 @@
  * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
+
 // No direct access
 defined('_JEXEC') or die;
 

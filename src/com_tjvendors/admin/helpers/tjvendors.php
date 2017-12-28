@@ -28,7 +28,6 @@ class TjvendorsHelper
 		$input = JFactory::getApplication()->input;
 		$full_client = $input->get('client', '', 'STRING');
 		$full_client = explode('.', $full_client);
-
 		$component = $full_client[0];
 		$eName = str_replace('com_', '', $component);
 		$file = JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');

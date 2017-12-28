@@ -119,7 +119,7 @@ class TjvendorsModelVendors extends JModelList
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(' . $db->quoteName('v.vendor_id') . ' LIKE ' . $search . 'OR' . $db->quoteName('a.vendor_title') . ' LIKE ' . $search . ')');
+				$query->where('(' . $db->quoteName('v.vendor_id') . ' LIKE ' . $search . 'OR' . $db->quoteName('v.vendor_title') . ' LIKE ' . $search . ')');
 			}
 		}
 

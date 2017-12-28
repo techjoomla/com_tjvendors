@@ -66,7 +66,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 										<?php
 											echo $this->VendorDetail->vendor_title."</a></strong>";
 											echo " " . JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
-											echo JText::_("COM_TJVENDORS_VENDOR_CLIENT_".strtoupper($client));
+											$tjvendorFrontHelper = new TjvendorFrontHelper;
+											echo $client = $tjvendorFrontHelper->getClientName($client);
 											echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
 											?>
 									</div>

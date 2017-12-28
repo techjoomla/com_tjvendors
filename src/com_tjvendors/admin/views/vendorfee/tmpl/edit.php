@@ -17,32 +17,7 @@ JHtml::_('behavior.keepalive');
 
 ?>
 <script type="text/javascript">
-
-	Joomla.submitbutton = function (task)
-	{
-		if(task == 'vendorfee.apply' || task == 'vendorfee.save')
-		{
-				var percent_commission = document.getElementById("jform_percent_commission").value;
-				if (percent_commission < 0 || percent_commission > 100)
-				{
-						alert("<?php echo JText::_('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC');?>");
-				}
-				else
-				{
-
-				Joomla.submitform(task, document.getElementById('vendorfee-form'));
-			}
-		}
-		else if (task == 'vendorfee.cancel')
-		{
-			Joomla.submitform(task, document.getElementById('vendorfee-form'));
-		}
-		else
-		{
-			Joomla.submitform(task, document.getElementById('vendorfee-form'));
-		}
-	}
-
+	tjVAdmin.fee.initFeeJs();
 </script>
 
 <form action="

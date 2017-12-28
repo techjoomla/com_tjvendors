@@ -180,6 +180,45 @@ var tjVAdmin =
 			});
 		},
 	},
+
+	fee: {
+		/*Initialize event js*/
+		initFeeJs: function () {
+			Joomla.submitbutton = function (task)
+			{console.log(task);
+				if(task == 'vendorfee.apply' || task == 'vendorfee.save')
+				{
+						var percent_commission = document.getElementById("jform_percent_commission").value;
+						var flat_commission = document.getElementById("jform_flat_commission").value;
+
+						if (percent_commission > 100)
+						{
+							//~ var jmsgs = Joomla.JText._('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC');
+							Joomla.renderMessages({
+								'warning': Joomla.JText._('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC')
+							});
+							//~ alert("<?php echo JText::_('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC');?>");
+						}
+						else if(percent_commission < 0 || flat_commission < 0)
+						{
+							Joomla.renderMessages({
+								'warning': Joomla.JText._('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR')
+							});
+							//~ alert("<?php echo JText::_('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR');?>");
+						}
+						else
+						{
+							Joomla.submitform(task, document.getElementById('vendorfee-form'));
+						}
+				}
+				else if (task == 'vendorfee.cancel')
+				{
+					Joomla.submitform(task, document.getElementById('vendorfee-form'));
+				}
+			}
+		}
+	},
+
 	reports: {
 		/*Initialize event js*/
 		initReportsJs: function () {

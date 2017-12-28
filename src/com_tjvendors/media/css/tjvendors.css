@@ -1,0 +1,58 @@
+/* BEM Format
+ Page cover Ex: pin-cover
+ Block: 	Ex: pin
+ Element: 	Ex: pin__input
+ Modifier:	Ex: pin__input--btn */
+
+/*----TJvendor css---*/
+#tjv-wrapper .date .input-group-btn {
+width:auto;
+}
+
+#tjv-wrapper .date__field {
+min-width:100px;
+}
+
+#tjv-wrapper .search .search__icon {
+background-color:#ddd;
+padding:12px;
+}
+
+#tjv-wrapper ul.tabs li.active {
+border-bottom:2px solid #999;
+}
+
+/*--Bootstrap Overrides-- */
+#tjv-wrapper .date .icon-calendar:before {
+content:"\f073";
+}
+
+#tjv-wrapper .date .input-append,#tjv-wrapper .search__field {
+display:inline-flex;
+margin-right:4px;
+}
+
+/*----Reusable css--*/
+#tjv-wrapper .mt-0{
+margin-top:0;
+}
+#tjv-wrapper .mt-10{
+margin-top:10px;
+}
+#tjv-wrapper .mb-15{
+margin-bottom:15px;;
+}
+#tjv-wrapper .pr-0{
+padding-right:0;
+}
+#tjv-wrapper .p-10{
+padding:10px;
+}
+/*----Media Query for Tab css--*/
+@media screen and (max-width: 480px) {
+	#tjv-wrapper .tab__heading {
+	background-color:#ddd;
+	border:1px solid #c5bebe;
+	cursor:pointer;
+	}
+}

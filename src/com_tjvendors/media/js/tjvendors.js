@@ -5,8 +5,46 @@
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
-var tjVAdmin = {
-	vendor: {
+
+var tjVAdmin =
+{
+	vendor:{
+		/*For Read More/Read Less */
+			readMore: function()
+			{
+				var showChar = 300;
+				var ellipsestext = "";
+				var moretext = Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_MORE');
+				var lesstext = Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_LESS');
+				jQuery('.profile__content').each(function ()
+				{
+					var content = jQuery(this).html();
+					if (content.length > showChar)
+					{
+						var show_content = content.substr(0, showChar);
+						var hide_content = content.substr(showChar, content.length - showChar);
+						var html = show_content + '<span class="moreelipses">' + ellipsestext + '</span><span><span class="hide__desc">' + hide_content + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+						jQuery(this).html(html);
+					}
+				});
+
+				jQuery(".morelink").click(function ()
+				{
+					if (jQuery(this).hasClass("less"))
+					{
+						jQuery(this).removeClass("less");
+						jQuery(this).html(moretext);
+					}
+					else
+					{
+						jQuery(this).addClass("less");
+						jQuery(this).html(lesstext);
+					}
+					jQuery(this).parent().prev().toggle();
+					jQuery(this).prev().toggle();
+					return false;
+				});
+			},
 		/*Initialize event js*/
 		initVendorJs: function () {
 			jQuery(document).ready(function () {
@@ -142,6 +180,45 @@ var tjVAdmin = {
 			});
 		},
 	},
+
+	fee: {
+		/*Initialize event js*/
+		initFeeJs: function () {
+			Joomla.submitbutton = function (task)
+			{console.log(task);
+				if(task == 'vendorfee.apply' || task == 'vendorfee.save')
+				{
+						var percent_commission = document.getElementById("jform_percent_commission").value;
+						var flat_commission = document.getElementById("jform_flat_commission").value;
+
+						if (percent_commission > 100)
+						{
+							//~ var jmsgs = Joomla.JText._('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC');
+							Joomla.renderMessages({
+								'warning': Joomla.JText._('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC')
+							});
+							//~ alert("<?php echo JText::_('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC');?>");
+						}
+						else if(percent_commission < 0 || flat_commission < 0)
+						{
+							Joomla.renderMessages({
+								'warning': Joomla.JText._('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR')
+							});
+							//~ alert("<?php echo JText::_('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR');?>");
+						}
+						else
+						{
+							Joomla.submitform(task, document.getElementById('vendorfee-form'));
+						}
+				}
+				else if (task == 'vendorfee.cancel')
+				{
+					Joomla.submitform(task, document.getElementById('vendorfee-form'));
+				}
+			}
+		}
+	},
+
 	reports: {
 		/*Initialize event js*/
 		initReportsJs: function () {
@@ -153,11 +230,12 @@ var tjVAdmin = {
 					document.adminForm.submit();
 				});
 			});
-		}
+		},
 	}
 }
 var tjVSite = {
-	vendor: {
+	vendor:
+	{
 		/*Initialize event js*/
 		initVendorJs: function () {
 			jQuery(document).ready(function () {
@@ -202,19 +280,69 @@ var tjVSite = {
 					}
 				},
 			});
-		}
-	},
-	vendors: {
-		/*Initialize event js*/
-		initVendorsJs: function () {
-			jQuery(document).ready(function () {
-				jQuery("#dates").blur(function () {
-					document.adminForm.submit();
-				});
-				jQuery("#date").blur(function () {
-					document.adminForm.submit();
-				});
+		},
+
+		tabToAccordion: function()
+		{
+			jQuery(".tab-content").hide();
+			jQuery(".tab-content:first").show();
+
+		  /* if in tab mode */
+			jQuery("ul.nav-tabs li").click(function() {
+
+			  jQuery(".tab-content").hide();
+			  var activeTab = jQuery(this).attr("rel");
+			 jQuery("#"+activeTab).fadeIn();
+
+			  jQuery("ul.nav-tabs li").removeClass("active");
+			  jQuery(this).addClass("active");
+
+			  jQuery(".tab__heading").removeClass("tab_active");
+			  jQuery(".tab__heading[rel^='"+activeTab+"']").addClass("tab_active");
+
 			});
+			/* if in drawer mode */
+			jQuery(".tab__heading").click(function() {
+
+			  jQuery(".tab-content").hide();
+			  var tab_activeTab = jQuery(this).attr("rel");
+			  jQuery("#"+tab_activeTab).fadeIn();
+
+			  jQuery(".tab__heading").removeClass("tab_active");
+			  jQuery(this).addClass("tab_active");
+
+			  jQuery("ul.nav-tabs li").removeClass("active");
+			  jQuery("ul.nav-tabs li[rel^='"+tab_activeTab+"']").addClass("active");
+			});
+
+
+			/* Extra class "tab_last"
+			   to add border to right side
+			   of last tab */
+			jQuery('ul.nav-tabs li').last().addClass("tab_last");
+
+		},
+	},
+	vendors:
+		{
+			/*Initialize event js*/
+			initVendorsJs: function() {
+				jQuery(document).ready(function() {
+					jQuery("#dates, #date").blur(function() {
+						jQuery('#adminForm').submit();
+					});
+				});
+			},
+
+			toggleDiv: function(spanId)
+			{
+				if ( jQuery(window).width() < 767 ){
+					jQuery("#"+spanId).toggle( "slow" );
+				  }
+				  else {
+					 jQuery("#"+spanId).toggle();
+				  }
+				jQuery(".report_search_input").toggleClass( "active" );
+			},
 		}
-	}
 }

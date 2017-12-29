@@ -26,6 +26,11 @@ class TjvendorsViewReports extends JViewLegacy
 
 	protected $state;
 
+	protected $vendor_details;
+
+	protected $uniqueClients;
+
+	protected $totalDetails;
 	/**
 	 * Display the view
 	 *

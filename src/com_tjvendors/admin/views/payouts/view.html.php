@@ -26,6 +26,12 @@ class TjvendorsViewPayouts extends JViewLegacy
 
 	protected $state;
 
+	protected $vendor_details;
+
+	protected $uniqueClients;
+
+	protected $bulkPayoutStatus;
+
 	/**
 	 * Display the view
 	 *

@@ -198,6 +198,11 @@ class TjvendorsModelReports extends JModelList
 			$query->order($db->escape($orderCol . ' ' . $orderDirn));
 		}
 
+		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC')))
+		{
+			$orderDirn = 'DESC';
+		}
+
 		return $query;
 	}
 

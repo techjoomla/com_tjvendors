@@ -6,7 +6,6 @@
  * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
-
 // No direct access
 defined('_JEXEC') or die;
 
@@ -29,6 +28,7 @@ class TjvendorsHelper
 		$input = JFactory::getApplication()->input;
 		$full_client = $input->get('client', '', 'STRING');
 		$full_client = explode('.', $full_client);
+
 		$component = $full_client[0];
 		$eName = str_replace('com_', '', $component);
 		$file = JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
@@ -47,6 +47,8 @@ class TjvendorsHelper
 				{
 					$lang = JFactory::getLanguage();
 
+					// Loading language file from the administrator/language directory then
+					// Loading language file from the administrator/components/*extension*/language directory
 					$lang->load($component, JPATH_BASE, null, false, false)
 					|| $lang->load($component, JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component), null, false, false)
 					|| $lang->load($component, JPATH_BASE, $lang->getDefault(), false, false)
@@ -55,33 +57,6 @@ class TjvendorsHelper
 					call_user_func(array($cName, 'addSubmenu'), $vName . (isset($section) ? '.' . $section : ''));
 				}
 			}
-		}
-
-		$currentComponent = $input->get('extension', '', 'STRING');
-
-		if ($currentComponent == 'com_tjvendors')
-		{
-			$notifications  = false;
-
-			// $app = JFactory::getApplication();
-			// $queue        = $app->input->get('layout');
-			// $option = $app->input->get('option');
-
-			switch ($vName)
-			{
-				case 'notifications':
-					$notifications = true;
-					break;
-			}
-
-			JHtmlSidebar::addEntry(
-				JText::_('COM_TJVENDORS_TJNOTIFICATIONS_MENU'), 'index.php?option=com_tjnotifications&extension=com_tjvendors',
-				$notifications
-			);
-
-			// Load bootsraped filter
-
-			JHtml::_('bootstrap.tooltip');
 		}
 	}
 
@@ -124,7 +99,21 @@ class TjvendorsHelper
 		$query->select('distinct' . $columns);
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$db->setQuery($query);
-		$rows = $db->loadAssocList();
+
+		try
+		{
+			$rows = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($rows))
+		{
+			return false;
+		}
+
 		$uniqueClient[] = array("vendor_client" => JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT'), "client_value" => '');
 
 		foreach ($rows as $row)
@@ -178,7 +167,20 @@ class TjvendorsHelper
 		$query->where($db->quoteName('id') . ' = (' . $subQuery . ')');
 
 		$db->setQuery($query);
-		$result = $db->loadAssoc();
+
+		try
+		{
+			$result = $db->loadAssoc();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		return $result;
 	}
@@ -226,7 +228,20 @@ class TjvendorsHelper
 		}
 
 		$db->setQuery($query);
-		$clients = $db->loadAssocList();
+
+		try
+		{
+			$clients = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($clients))
+		{
+			return false;
+		}
 
 		return $clients;
 	}
@@ -261,7 +276,15 @@ class TjvendorsHelper
 		}
 
 		$db->setQuery($query);
-		$currencies = $db->loadAssocList();
+
+		try
+		{
+			$currencies = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
 
 		foreach ($currencies as $i)
 		{
@@ -299,7 +322,20 @@ class TjvendorsHelper
 		}
 
 		$db->setQuery($query);
-		$currencies = $db->loadAssocList();
+
+		try
+		{
+			$currencies = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($currencies))
+		{
+			return false;
+		}
 
 		return $currencies;
 	}

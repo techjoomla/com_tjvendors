@@ -407,7 +407,7 @@ class TjvendorFrontHelper
 		}
 
 		$entry_data['vendor_id'] = $order_data['vendor_id'];
-		$totalAmount = TjvendorsHelpersTjvendors::getTotalAmount($entry_data['vendor_id'], $currency, $order_data['client']);
+		$totalAmount = TjvendorsHelper::getTotalAmount($entry_data['vendor_id'], $currency, $order_data['client']);
 		$entry_data['reference_order_id'] = $order_data['order_id'];
 		$entry_data['transaction_id'] = $order_data['client_name'] . '-' . $currency . '-' . $entry_data['vendor_id'] . '-';
 		$entry_data['transaction_time'] = JFactory::getDate()->toSql();

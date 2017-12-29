@@ -32,6 +32,7 @@
         <filename>router.php</filename>
         <folder>views</folder>
         <folder>models</folder>
+        <folder>events</folder>
         <folder>controllers</folder>
         <folder>helpers</folder>
         <folder>tables</folder>
@@ -52,6 +53,7 @@
             <filename>controller.php</filename>
             <filename>index.html</filename>
             <filename>tjvendors.php</filename>
+            <filename>tjvendorsTemplate.json</filename>
             <folder>controllers</folder>
             <folder>assets</folder>
             <folder>helpers</folder>
@@ -71,6 +73,7 @@
                 <field name="bulk_payout" default="0"/>
                 <field name="payout_limit_days" default="0"/>
                 <field name="image_size" default="2500"/>
+                <field name="vendor_approval" default="0"/>
             </fieldset>
         </fields>
     </config>

@@ -34,10 +34,10 @@ if (!class_exists('TjvendorFrontHelper'))
 	JLoader::load('TjvendorFrontHelper');
 }
 
-$tjvendorsHelpersTjvendors = JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
+$tjvendorsHelper = JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
 
-if (!class_exists('TjvendorsHelpersTjvendors'))
+if (!class_exists('TjvendorsHelper'))
 {
-	JLoader::register('TjvendorsHelpersTjvendors', $tjvendorsHelpersTjvendors);
-	JLoader::load('TjvendorsHelpersTjvendors');
+	JLoader::register('TjvendorsHelper', $tjvendorsHelper);
+	JLoader::load('TjvendorsHelper');
 }

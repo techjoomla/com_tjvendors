@@ -26,6 +26,12 @@ class TjvendorsViewPayouts extends JViewLegacy
 
 	protected $state;
 
+	protected $vendor_details;
+
+	protected $uniqueClients;
+
+	protected $bulkPayoutStatus;
+
 	/**
 	 * Display the view
 	 *
@@ -48,7 +54,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
 		$vendorsDetail = $tjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
-		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
+		$this->uniqueClients = TjvendorsHelper::getUniqueClients();
 		$com_params = JComponentHelper::getParams('com_tjvendors');
 		$this->bulkPayoutStatus = $com_params->get('bulk_payout');
 
@@ -58,7 +64,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 			throw new Exception(implode("\n", $errors));
 		}
 
-		TjvendorsHelpersTjvendors::addSubmenu('payouts');
+		TjvendorsHelper::addSubmenu('payouts');
 
 		$this->addToolbar();
 
@@ -79,7 +85,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$this->client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
-		$canDo = TjvendorsHelpersTjvendors::getActions();
+		$canDo = TjvendorsHelper::getActions();
 		JToolBarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;

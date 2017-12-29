@@ -6,6 +6,7 @@
  * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
+
 // No direct access
 defined('_JEXEC') or die;
 
@@ -14,7 +15,7 @@ defined('_JEXEC') or die;
  *
  * @since  1.6
  */
-class TjvendorsHelpersTjvendors
+class TjvendorsHelper
 {
 	/**
 	 * Configure the Linkbar.
@@ -28,7 +29,6 @@ class TjvendorsHelpersTjvendors
 		$input = JFactory::getApplication()->input;
 		$full_client = $input->get('client', '', 'STRING');
 		$full_client = explode('.', $full_client);
-
 		$component = $full_client[0];
 		$eName = str_replace('com_', '', $component);
 		$file = JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
@@ -55,6 +55,33 @@ class TjvendorsHelpersTjvendors
 					call_user_func(array($cName, 'addSubmenu'), $vName . (isset($section) ? '.' . $section : ''));
 				}
 			}
+		}
+
+		$currentComponent = $input->get('extension', '', 'STRING');
+
+		if ($currentComponent == 'com_tjvendors')
+		{
+			$notifications  = false;
+
+			// $app = JFactory::getApplication();
+			// $queue        = $app->input->get('layout');
+			// $option = $app->input->get('option');
+
+			switch ($vName)
+			{
+				case 'notifications':
+					$notifications = true;
+					break;
+			}
+
+			JHtmlSidebar::addEntry(
+				JText::_('COM_TJVENDORS_TJNOTIFICATIONS_MENU'), 'index.php?option=com_tjnotifications&extension=com_tjvendors',
+				$notifications
+			);
+
+			// Load bootsraped filter
+
+			JHtml::_('bootstrap.tooltip');
 		}
 	}
 

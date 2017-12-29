@@ -26,6 +26,11 @@ class TjvendorsViewReports extends JViewLegacy
 
 	protected $state;
 
+	protected $vendor_details;
+
+	protected $uniqueClients;
+
+	protected $totalDetails;
 	/**
 	 * Display the view
 	 *
@@ -49,7 +54,7 @@ class TjvendorsViewReports extends JViewLegacy
 		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
 		$vendorsDetail = $tjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
-		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
+		$this->uniqueClients = TjvendorsHelper::getUniqueClients();
 		$vendor_id = $this->state->get('filter.vendor_id');
 		$client = $this->state->get('filter.vendor_client');
 
@@ -63,7 +68,7 @@ class TjvendorsViewReports extends JViewLegacy
 			throw new Exception(implode("\n", $errors));
 		}
 
-		TjvendorsHelpersTjvendors::addSubmenu('reports');
+		TjvendorsHelper::addSubmenu('reports');
 
 		$this->addToolbar();
 
@@ -84,7 +89,7 @@ class TjvendorsViewReports extends JViewLegacy
 		$this->client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
-		$canDo = TjvendorsHelpersTjvendors::getActions();
+		$canDo = TjvendorsHelper::getActions();
 		JToolBarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;

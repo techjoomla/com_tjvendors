@@ -50,7 +50,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 			throw new Exception(implode("\n", $errors));
 		}
 
-		TjvendorsHelpersTjvendors::addSubmenu('vendorfees');
+		TjvendorsHelper::addSubmenu('vendorfees');
 		$this->addToolbar();
 
 		$this->sidebar = JHtmlSidebar::render();
@@ -69,7 +69,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		$input = JFactory::getApplication()->input;
 
 		$state = $this->get('State');
-		$canDo = TjvendorsHelpersTjvendors::getActions();
+		$canDo = TjvendorsHelper::getActions();
 
 		JToolBarHelper::custom('vendorfees.back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 		JToolBarHelper::addNew('vendorfee.add');

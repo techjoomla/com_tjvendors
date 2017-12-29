@@ -46,6 +46,9 @@
     </languages>
     <administration>
         <menu>COM_TJVENDORS</menu>
+		<submenu>
+			<menu link="option=com_tjnotifications&amp;extension=com_tjvendors" img="../.../../media/com_jgive/images/icon-16-campaigns.png">COM_TJVENDORS_TJNOTIFICATIONS_MENU</menu>
+        </submenu>
         <files folder="admin">
             <filename>access.xml</filename>
             <filename>config.xml</filename>

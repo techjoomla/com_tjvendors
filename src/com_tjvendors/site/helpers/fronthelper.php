@@ -42,7 +42,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $user_id  To give user specific clients for the filter
 	 *
-	 * @return null|object
+	 * @return null|object|boolean<false>
 	 */
 	public static function getUniqueClients($user_id)
 	{
@@ -91,7 +91,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   integer  $currency  required to give user specific result
 	 *
-	 * @return $totalDetails|array
+	 * @return  array|boolean<false>
 	 */
 	public static function getTotalDetails($client, $user_id, $currency)
 	{
@@ -153,7 +153,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $filterClient  client from filter
 	 *
-	 * @return amount
+	 * @return  integer|boolean<false>
 	 */
 	public static function getPaidAmount($user_id, $currency, $filterClient)
 	{
@@ -229,7 +229,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   integer  $vendor_id  required to give vendor specific result
 	 *
-	 * @return clientsForVendor|array
+	 * @return  array|boolean<array>
 	 */
 	public static function getClientsForVendor($vendor_id)
 	{
@@ -273,7 +273,7 @@ class TjvendorFrontHelper
 	/**
 	 * Get vendor for that user
 	 *
-	 * @return vendor
+	 * @return integer|boolean<string>
 	 */
 	public static function getvendor()
 	{
@@ -305,7 +305,7 @@ class TjvendorFrontHelper
 	/**
 	 * Get vendor for that user
 	 *
-	 * @return vendor
+	 * @return  array|boolean<false>
 	 */
 	public static function getCurrencies()
 	{
@@ -349,10 +349,9 @@ class TjvendorFrontHelper
 	 * Check for duplicate clients
 	 *
 	 * @param   integer  $vendor_id      required to give vendor specific result
-	 *
 	 * @param   integer  $vendor_client  client taken from the form
 	 *
-	 * @return vendor_client|string
+	 * @return  string|boolean<false>
 	 */
 	public static function checkForDuplicateClient($vendor_id,$vendor_client)
 	{
@@ -390,10 +389,9 @@ class TjvendorFrontHelper
 	 * Get get paymentDetails
 	 *
 	 * @param   string  $vendor_id  integer
-	 *
 	 * @param   string  $client     integer
 	 *
-	 * @return res|integer
+	 * @return  integer|boolean<false>
 	 */
 	public static function getPaymentDetails($vendor_id, $client)
 	{

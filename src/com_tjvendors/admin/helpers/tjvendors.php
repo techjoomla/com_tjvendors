@@ -816,15 +816,15 @@ class TjvendorsHelpersTjvendors
 		return $res;
 	}
 
-/**
- * Get get paymentDetails
- *
- * @param   string  $vendor_id  integer
- *
- * @param   string  $client     integer
- *
- * @return res|integer
- */
+	/**
+	 * Get get paymentDetails
+	 *
+	 * @param   string  $vendor_id  integer
+	 *
+	 * @param   string  $client     integer
+	 *
+	 * @return  object|boolean
+	 */
 	public static function getPaymentDetails($vendor_id, $client)
 	{
 		$db = JFactory::getDbo();

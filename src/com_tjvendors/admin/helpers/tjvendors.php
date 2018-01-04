@@ -136,11 +136,10 @@ class TjvendorsHelper
 	 *
 	 * @param   string   $client     integer
 	 *
-	 * @return client|array
+	 * @return boolean|array
 	 */
 	public static function getTotalAmount($vendor_id, $currency, $client)
 	{
-		$com_params = JComponentHelper::getParams('com_tjvendors');
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$subQuery = $db->getQuery(true);
@@ -213,7 +212,7 @@ class TjvendorsHelper
 	 *
 	 * @param   string  $vendor_id  integer
 	 *
-	 * @return client|array
+	 * @return boolean|array
 	 */
 	public static function getClients($vendor_id)
 	{
@@ -307,7 +306,7 @@ class TjvendorsHelper
 	 *
 	 * @param   string  $vendor_id  integer
 	 *
-	 * @return currencies|array
+	 * @return boolean|array
 	 */
 	public static function getCurrencies($vendor_id)
 	{
@@ -349,7 +348,7 @@ class TjvendorsHelper
 	 *
 	 * @param   string   $currency   string
 	 *
-	 * @return res|integer
+	 * @return integer
 	 */
 	public static function getPayableAmount($vendor_id, $client, $currency)
 	{

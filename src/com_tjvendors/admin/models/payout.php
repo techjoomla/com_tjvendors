@@ -267,7 +267,7 @@ class TjvendorsModelPayout extends JModelAdmin
 	 *
 	 * @param   array  $data  data of order
 	 *
-	 * @return   void
+	 * @return   boolean
 	 *
 	 * @since    1.6
 	 */
@@ -313,7 +313,7 @@ class TjvendorsModelPayout extends JModelAdmin
 	 *
 	 * @param   integer  $paidUnpaid  payout status
 	 *
-	 * @return   void
+	 * @return   boolean
 	 *
 	 * @since    1.6
 	 */

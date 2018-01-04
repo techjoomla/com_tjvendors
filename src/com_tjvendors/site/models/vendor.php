@@ -158,7 +158,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @param   Integer  $paymentDetails   payment details
 	 *
-	 * @return id
+	 * @return  boolean
 	 */
 	public function addMultiVendor($vendor_id,$payment_gateway, $paymentDetails)
 	{
@@ -181,7 +181,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		try
 		{
-			$result = $db->execute();
+			$db->execute();
 		}
 		catch (Exception $e)
 		{
@@ -196,7 +196,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @param   integer  $user_id  user name.
 	 *
-	 * @return   array rows
+	 * @return   array|boolean
 	 *
 	 * @since    1.6
 	 */
@@ -300,7 +300,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @param   Array  $data  Data
 	 *
-	 * @return id
+	 * @return boolean
 	 */
 	public function save($data)
 	{
@@ -310,7 +310,6 @@ class TjvendorsModelVendor extends JModelAdmin
 		$input = JFactory::getApplication()->input;
 		$layout = $input->get('layout', '', 'STRING');
 		$app = JFactory::getApplication();
-		$site = $app->isSite();
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
@@ -345,7 +344,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 			if ($authorised !== true)
 			{
-				JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+				throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
 
 				return false;
 			}

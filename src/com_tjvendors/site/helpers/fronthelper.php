@@ -44,7 +44,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $user_id  To give user specific clients for the filter
 	 *
-	 * @return null|object
+	 * @return boolean|array
 	 */
 	public static function getUniqueClients($user_id)
 	{
@@ -145,7 +145,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   integer  $vendor_id  required to give vendor specific result
 	 *
-	 * @return clientsForVendor|array
+	 * @return boolean|array
 	 */
 	public static function getClientsForVendor($vendor_id)
 	{
@@ -203,7 +203,7 @@ class TjvendorFrontHelper
 	/**
 	 * Get vendor for that user
 	 *
-	 * @return vendor
+	 * @return array|boolean
 	 */
 	public static function getCurrencies()
 	{
@@ -454,7 +454,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $filterClient  client from filter
 	 *
-	 * @return amount
+	 * @return  int
 	 */
 	public static function getPaidAmount($vendor_id,$currency,$filterClient)
 	{

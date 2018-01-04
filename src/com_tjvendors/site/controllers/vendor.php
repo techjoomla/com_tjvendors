@@ -142,7 +142,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		if (empty($data['vendor_client']))
 		{
 			$data['params'] = $data['paymentDetails'];
-			$data['payment_gateway'] = $paymentForm['payment_gateway'];
+			$data['payment_gateway'] = $paymentDetails['payment_gateway'];
 		}
 		else
 		{

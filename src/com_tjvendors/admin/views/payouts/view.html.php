@@ -82,16 +82,16 @@ class TjvendorsViewPayouts extends JViewLegacy
 	protected function addToolbar()
 	{
 		$input = JFactory::getApplication()->input;
-		$this->client = $input->get('client', '', 'STRING');
+		$client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
 		$canDo = TjvendorsHelper::getActions();
 		JToolBarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
-		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
+		$clientTitle = $tjvendorFrontHelper->getClientName($client);
 
-		if ($this->client)
+		if ($client)
 		{
 			$title = $clientTitle . ' : ';
 		}

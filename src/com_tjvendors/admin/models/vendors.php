@@ -177,7 +177,7 @@ class TjvendorsModelVendors extends JModelList
 	 *
 	 * @param   integer  $vendor_id  for deleting record of that vendor
 	 *
-	 * @return   JDatabaseQuery
+	 * @return   void
 	 *
 	 * @since    1.0
 	 */
@@ -188,7 +188,7 @@ class TjvendorsModelVendors extends JModelList
 		$query->delete($db->quoteName('#__tjvendors_vendors'));
 		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 		$db->setQuery($query);
-		$result = $db->execute();
+		$db->execute();
 	}
 
 	/**

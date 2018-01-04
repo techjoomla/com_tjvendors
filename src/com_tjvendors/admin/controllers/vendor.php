@@ -141,10 +141,11 @@ class TjvendorsControllerVendor extends JControllerForm
 	public function save($key = null, $urlVar = null)
 	{
 		// Initialise variables.
-		$app   = JFactory::getApplication();
-		$model = $this->getModel('Vendor', 'TjvendorsModel');
-		$input = $app->input;
+		$app    = JFactory::getApplication();
+		$model  = $this->getModel('Vendor', 'TjvendorsModel');
+		$input  = $app->input;
 		$client = $input->get('client', '', 'STRING');
+		$data   = array();
 
 		// Get the user data.
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
@@ -197,7 +198,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		if (empty($data['vendor_client']))
 		{
 			$data['params'] = $data['paymentDetails'];
-			$data['payment_gateway'] = $paymentForm['payment_gateway'];
+			$data['payment_gateway'] = $paymentDetails['payment_gateway'];
 		}
 		else
 		{

@@ -89,7 +89,7 @@ class TjvendorsHelper
 	/**
 	 * Get array of unique Clients
 	 *
-	 * @return null|object
+	 * @return boolean|object
 	 */
 	public static function getUniqueClients()
 	{
@@ -114,6 +114,7 @@ class TjvendorsHelper
 			return false;
 		}
 
+		$uniqueClient   = array();
 		$uniqueClient[] = array("vendor_client" => JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT'), "client_value" => '');
 
 		foreach ($rows as $row)
@@ -140,7 +141,6 @@ class TjvendorsHelper
 	public static function getTotalAmount($vendor_id, $currency, $client)
 	{
 		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$bulkPayoutStatus = $com_params->get('bulk_payout');
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$subQuery = $db->getQuery(true);
@@ -400,7 +400,6 @@ class TjvendorsHelper
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables', 'vendor');
 		$vendorsDetail = $tjvendorsModelVendors->save($data);
 		JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
-		$db = JFactory::getDbo();
 		$table = JTable::getInstance('vendor', 'TJVendorsTable', array());
 		$table->load(array('user_id' => $data['user_id']));
 

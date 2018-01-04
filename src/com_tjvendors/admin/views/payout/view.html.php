@@ -66,10 +66,9 @@ class TjvendorsViewPayout extends JViewLegacy
 		$user  = JFactory::getUser();
 
 		$input = JFactory::getApplication()->input;
-		$this->full_client = $input->get('client', '', 'STRING');
 
 		// Let's get the extension name
-		$this->client = $input->get('client', '', 'STRING');
+		$client = $input->get('client', '', 'STRING');
 
 		$viewTitle = JText::_('COM_TJVENDOR_EDIT_PAYOUT');
 
@@ -82,7 +81,7 @@ class TjvendorsViewPayout extends JViewLegacy
 			$checkedOut = false;
 		}
 
-		$clientTitle = TjvendorFrontHelper::getClientName($this->client);
+		$clientTitle = TjvendorFrontHelper::getClientName($client);
 		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 
 		if (empty($this->item->id))

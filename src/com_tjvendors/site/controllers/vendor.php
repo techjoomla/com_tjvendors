@@ -140,7 +140,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		if (empty($data['vendor_client']))
 		{
 			$data['params'] = $data['paymentDetails'];
-			$data['payment_gateway'] = $paymentForm['payment_gateway'];
+			$data['payment_gateway'] = $paymentDetails['payment_gateway'];
 		}
 		else
 		{
@@ -204,7 +204,6 @@ class TjvendorsControllerVendor extends JControllerForm
 			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
 			// Redirect back to the edit screen.
-			$id = $app->input->get('vendor_id', '', 'INTEGER');
 			$client = $app->input->get('client', '', 'STRING');
 			$id = $app->getUserState('com_tjvendors.edit.vendor.id', $data);
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');

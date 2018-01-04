@@ -390,7 +390,7 @@ class TjvendorsHelper
 	 *
 	 * @param   string  $data  integer
 	 *
-	 * @return currencies|array
+	 * @return object
 	 */
 	public static function addVendor($data)
 	{

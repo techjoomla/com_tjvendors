@@ -304,12 +304,13 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$table = $this->getTable();
-		$db = JFactory::getDbo();
-		$user = JFactory::getUser();
-		$input = JFactory::getApplication()->input;
+		$table  = $this->getTable();
+		$db     = JFactory::getDbo();
+		$user   = JFactory::getUser();
+		$app    = JFactory::getApplication();
+		$input  = $app->input;
 		$layout = $input->get('layout', '', 'STRING');
-		$app = JFactory::getApplication();
+
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
@@ -345,8 +346,6 @@ class TjvendorsModelVendor extends JModelAdmin
 			if ($authorised !== true)
 			{
 				throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
-
-				return false;
 			}
 		}
 

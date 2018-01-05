@@ -35,6 +35,8 @@ class TjvendorsModelVendors extends JModelList
 				'id', 'pass.`id`',
 				'total', 'pass.`total`',
 				'currency', 'pass.`currency`',
+				'credit', 'pass.`credit`',
+				'debit', 'pass.`debit`',
 				'transaction_id', 'pass.`transaction_id`',
 				'transaction_time', 'pass.`transaction_time`',
 				'reference_order_id','pass.`reference_order_id`',
@@ -193,6 +195,11 @@ class TjvendorsModelVendors extends JModelList
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
+
+		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC')))
+		{
+			$orderDirn = 'DESC';
+		}
 
 		if ($orderCol && $orderDirn)
 		{

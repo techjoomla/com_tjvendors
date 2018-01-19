@@ -91,7 +91,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($client);
 
-		$title = !empty($client) ? ' : ' : '';
+		$title = !empty($client) ? $clientTitle . ' : ' : '';
 
 		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'list.png');
 

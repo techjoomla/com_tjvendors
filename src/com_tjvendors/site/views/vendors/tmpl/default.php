@@ -181,7 +181,7 @@ $listDirn      = $this->state->get('list.direction');
 									{
 									?>
 										<th width="5%">
-											<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder);?>
+											<?php echo JText::_('COM_TJVENDORS_REPORTS_CLIENT');?>
 										</th>
 								<?php
 									}
@@ -263,7 +263,7 @@ $listDirn      = $this->state->get('list.direction');
 											<?php echo $this->pagination->getRowOffset($i);?>
 										</td>
 										<td>
-											<?php echo $row->transaction_id;?>
+											<?php echo htmlspecialchars($row->transaction_id, ENT_COMPAT, 'UTF-8');?>
 										</td>
 									<?php if ($client == '0')
 										{
@@ -271,7 +271,8 @@ $listDirn      = $this->state->get('list.direction');
 										<td>
 											<?php
 												$tjvendorFrontHelper = new TjvendorFrontHelper;
-												echo $client = $tjvendorFrontHelper->getClientName($row->client);
+												$client = $tjvendorFrontHelper->getClientName($row->client);
+												echo htmlspecialchars($client, ENT_COMPAT, 'UTF-8');
 											?>
 										</td>
 									<?php
@@ -280,7 +281,7 @@ $listDirn      = $this->state->get('list.direction');
 										{
 										?>
 										<td>
-											<?php echo $row->currency;?>
+											<?php echo htmlspecialchars($row->currency, ENT_COMPAT, 'UTF-8');?>
 										</td>
 									<?php
 										}
@@ -295,7 +296,7 @@ $listDirn      = $this->state->get('list.direction');
 											}
 											else
 											{
-												echo $row->credit;
+												echo htmlspecialchars($row->credit, ENT_COMPAT, 'UTF-8');
 											}
 											?>
 										</td>
@@ -305,19 +306,19 @@ $listDirn      = $this->state->get('list.direction');
 										{
 										?>
 										<td>
-											<?php echo $row->debit;?>
+											<?php echo htmlspecialchars($row->debit, ENT_COMPAT, 'UTF-8');?>
 										</td>
 									<?php
 										}
 										?>
 										<td>
-											<?php echo $row->reference_order_id;?>
+											<?php echo htmlspecialchars($row->reference_order_id, ENT_COMPAT, 'UTF-8');?>
 										</td>
 										<td>
-											<?php echo $row->transaction_time;?>
+											<?php echo htmlspecialchars($row->transaction_time, ENT_COMPAT, 'UTF-8');?>
 										</td>
 										<td>
-											<?php echo abs($row->total);?>
+											<?php echo htmlspecialchars(abs($row->total), ENT_COMPAT, 'UTF-8');?>
 										</td>
 										<td>
 										<?php
@@ -326,16 +327,16 @@ $listDirn      = $this->state->get('list.direction');
 											{
 												if ($row->status == 1)
 												{
-												echo "Payout Done";
+													echo JText::_('COM_TJVENDOR_PAYOUT_DONE');
 												}
 												else
 												{
-												echo "Payout Pending";
+													echo JText::_('COM_TJVENDOR_PAYOUT_PENDING');
 												}
 											}
 											elseif ($status['entry_status'] == "credit_for_ticket_buy")
 											{
-											echo "Credit Done";
+												echo JText::_('COM_TJVENDOR_CREDIT_DONE');
 											}
 											?>
 										</td>

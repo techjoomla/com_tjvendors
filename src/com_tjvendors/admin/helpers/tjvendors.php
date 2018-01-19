@@ -6,7 +6,6 @@
  * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
-
 // No direct access
 defined('_JEXEC') or die;
 
@@ -29,6 +28,7 @@ class TjvendorsHelper
 		$input = JFactory::getApplication()->input;
 		$full_client = $input->get('client', '', 'STRING');
 		$full_client = explode('.', $full_client);
+
 		$component = $full_client[0];
 		$eName = str_replace('com_', '', $component);
 		$file = JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component . '/helpers/' . $eName . '.php');
@@ -62,10 +62,6 @@ class TjvendorsHelper
 		if ($currentComponent == 'com_tjvendors')
 		{
 			$notifications  = false;
-
-			// $app = JFactory::getApplication();
-			// $queue        = $app->input->get('layout');
-			// $option = $app->input->get('option');
 
 			switch ($vName)
 			{
@@ -114,7 +110,7 @@ class TjvendorsHelper
 	/**
 	 * Get array of unique Clients
 	 *
-	 * @return null|object
+	 * @return boolean|object
 	 */
 	public static function getUniqueClients()
 	{
@@ -124,7 +120,22 @@ class TjvendorsHelper
 		$query->select('distinct' . $columns);
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$db->setQuery($query);
-		$rows = $db->loadAssocList();
+
+		try
+		{
+			$rows = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($rows))
+		{
+			return false;
+		}
+
+		$uniqueClient   = array();
 		$uniqueClient[] = array("vendor_client" => JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT'), "client_value" => '');
 
 		foreach ($rows as $row)
@@ -146,12 +157,10 @@ class TjvendorsHelper
 	 *
 	 * @param   string   $client     integer
 	 *
-	 * @return client|array
+	 * @return boolean|array
 	 */
 	public static function getTotalAmount($vendor_id, $currency, $client)
 	{
-		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$bulkPayoutStatus = $com_params->get('bulk_payout');
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$subQuery = $db->getQuery(true);
@@ -178,7 +187,20 @@ class TjvendorsHelper
 		$query->where($db->quoteName('id') . ' = (' . $subQuery . ')');
 
 		$db->setQuery($query);
-		$result = $db->loadAssoc();
+
+		try
+		{
+			$result = $db->loadAssoc();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		return $result;
 	}
@@ -211,7 +233,7 @@ class TjvendorsHelper
 	 *
 	 * @param   string  $vendor_id  integer
 	 *
-	 * @return client|array
+	 * @return boolean|array
 	 */
 	public static function getClients($vendor_id)
 	{
@@ -226,7 +248,20 @@ class TjvendorsHelper
 		}
 
 		$db->setQuery($query);
-		$clients = $db->loadAssocList();
+
+		try
+		{
+			$clients = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($clients))
+		{
+			return false;
+		}
 
 		return $clients;
 	}
@@ -261,7 +296,15 @@ class TjvendorsHelper
 		}
 
 		$db->setQuery($query);
-		$currencies = $db->loadAssocList();
+
+		try
+		{
+			$currencies = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
 
 		foreach ($currencies as $i)
 		{
@@ -284,7 +327,7 @@ class TjvendorsHelper
 	 *
 	 * @param   string  $vendor_id  integer
 	 *
-	 * @return currencies|array
+	 * @return boolean|array
 	 */
 	public static function getCurrencies($vendor_id)
 	{
@@ -299,7 +342,20 @@ class TjvendorsHelper
 		}
 
 		$db->setQuery($query);
-		$currencies = $db->loadAssocList();
+
+		try
+		{
+			$currencies = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($currencies))
+		{
+			return false;
+		}
 
 		return $currencies;
 	}
@@ -313,7 +369,7 @@ class TjvendorsHelper
 	 *
 	 * @param   string   $currency   string
 	 *
-	 * @return res|integer
+	 * @return integer
 	 */
 	public static function getPayableAmount($vendor_id, $client, $currency)
 	{
@@ -355,7 +411,7 @@ class TjvendorsHelper
 	 *
 	 * @param   string  $data  integer
 	 *
-	 * @return currencies|array
+	 * @return object
 	 */
 	public static function addVendor($data)
 	{
@@ -364,7 +420,6 @@ class TjvendorsHelper
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables', 'vendor');
 		$vendorsDetail = $tjvendorsModelVendors->save($data);
 		JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
-		$db = JFactory::getDbo();
 		$table = JTable::getInstance('vendor', 'TJVendorsTable', array());
 		$table->load(array('user_id' => $data['user_id']));
 

@@ -44,7 +44,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $user_id  To give user specific clients for the filter
 	 *
-	 * @return null|object
+	 * @return boolean|array
 	 */
 	public static function getUniqueClients($user_id)
 	{
@@ -62,13 +62,25 @@ class TjvendorFrontHelper
 		$db->setQuery($query);
 		$clients[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENTS');
 
-		$result = $db->loadAssocList();
+		try
+		{
+			$result = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		foreach ($result as $i)
 		{
 			$tjvendorFrontHelper = new TjvendorFrontHelper;
 			$client = $tjvendorFrontHelper->getClientName($i['client']);
-			$client = JText::_('COM_TJVENDORS_VENDOR_CLIENT_' . strtoupper($i['client']));
+			$client = JText::_(strtoupper($i['client']));
 			$clients[] = $client;
 		}
 
@@ -111,14 +123,21 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
-		$rows = $db->loadAssoc();
-		$totalDebitAmount = $rows['debit'];
-		$totalCreditAmount = $rows['credit'];
-		$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
 
-		$totalDetails = array("debitAmount" => $totalDebitAmount, "creditAmount" => $totalCreditAmount, "pendingAmount" => $totalpendingAmount);
+		try
+		{
+			$rows = $db->loadAssoc();
+			$totalDebitAmount   = $rows['debit'];
+			$totalCreditAmount  = $rows['credit'];
+			$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
+			$totalDetails       = array("debitAmount" => $totalDebitAmount, "creditAmount" => $totalCreditAmount, "pendingAmount" => $totalpendingAmount);
 
-		return $totalDetails;
+			return $totalDetails;
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
 	}
 
 	/**
@@ -126,7 +145,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   integer  $vendor_id  required to give vendor specific result
 	 *
-	 * @return clientsForVendor|array
+	 * @return boolean|array
 	 */
 	public static function getClientsForVendor($vendor_id)
 	{
@@ -141,7 +160,20 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
-		$result = $db->loadAssocList();
+
+		try
+		{
+			$result = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		if (!empty($result))
 		{
@@ -157,7 +189,7 @@ class TjvendorFrontHelper
 	/**
 	 * Get vendor for that user
 	 *
-	 * @return vendor
+	 * @return integer
 	 */
 	public static function getvendor()
 	{
@@ -171,7 +203,7 @@ class TjvendorFrontHelper
 	/**
 	 * Get vendor for that user
 	 *
-	 * @return vendor
+	 * @return array|boolean
 	 */
 	public static function getCurrencies()
 	{
@@ -189,7 +221,19 @@ class TjvendorFrontHelper
 		$db->setQuery($query);
 		$currencies[] = JText::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
 
-		$result = $db->loadAssocList();
+		try
+		{
+			$result = $db->loadAssocList();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 
 		foreach ($result as $i)
 		{
@@ -226,7 +270,15 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
-		$res = $db->loadObject();
+
+		try
+		{
+			$res = $db->loadObject();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
 
 		return $res;
 	}
@@ -258,7 +310,15 @@ class TjvendorFrontHelper
 		$query->where($db->quoteName('v.user_id') . ' = ' . $db->quote($user_id));
 		$query->where($db->quoteName('vx.client') . ' = ' . $db->quote($client));
 		$db->setQuery($query);
-		$vendor = $db->loadResult();
+
+		try
+		{
+			$vendor = $db->loadResult();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
 
 		if (!$vendor)
 		{
@@ -295,7 +355,16 @@ class TjvendorFrontHelper
 		$query->where($db->quoteName('v.user_id') . ' = ' . $db->quote($userId));
 		$query->where($db->quoteName('vc.client') . ' = ' . $db->quote($client));
 		$db->setQuery($query);
-		$result = $db->loadAssoc();
+
+		try
+		{
+			$result = $db->loadAssoc();
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
 		$params = json_decode($result['params']);
 
 		if (empty($params->payment_email_id))
@@ -386,7 +455,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $filterClient  client from filter
 	 *
-	 * @return amount
+	 * @return  int
 	 */
 	public static function getPaidAmount($vendor_id,$currency,$filterClient)
 	{
@@ -424,21 +493,29 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
-		$paidDetails = $db->loadAssocList();
-		$amount = 0;
 
-		foreach ($paidDetails as $detail)
+		try
 		{
-			$entryStatus = json_decode($detail['params']);
-			$entryStatus->entry_status;
+			$paidDetails = $db->loadAssocList();
+			$amount = 0;
 
-			if ($entryStatus->entry_status == "debit_payout" && $detail['status'] == 1)
+			foreach ($paidDetails as $detail)
 			{
-				$amount = $amount + $detail['debit'];
-			}
-		}
+				$entryStatus = json_decode($detail['params']);
+				$entryStatus->entry_status;
 
-		return $amount;
+				if ($entryStatus->entry_status == "debit_payout" && $detail['status'] == 1)
+				{
+					$amount = $amount + $detail['debit'];
+				}
+			}
+
+			return $amount;
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
 	}
 
 	/**

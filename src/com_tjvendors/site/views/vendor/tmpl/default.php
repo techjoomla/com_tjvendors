@@ -21,7 +21,7 @@ defined('_JEXEC') or die();
 	<div class="profile row" id="tjv-wrapper">
 		<div class="col-sm-12">
 			<h3 class="mt-0">
-				<?php echo $this->VendorDetail->vendor_title; ?>
+				<?php echo htmlspecialchars($this->VendorDetail->vendor_title, ENT_COMPAT, 'UTF-8');?>
 				<span class="pull-right">
 					<small>
 						<a  href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&&layout=profile&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>">
@@ -51,7 +51,9 @@ defined('_JEXEC') or die();
 				<div class="col-sm-9">
 					<div>
 						<div class='profile__content text-muted'>
-						<?php echo strip_tags($this->VendorDetail->vendor_description);?>
+						<?php
+							$description = htmlspecialchars($this->VendorDetail->vendor_description, ENT_COMPAT, 'UTF-8');
+							echo strip_tags($description);?>
 						</div>
 					</div>
 				</div>

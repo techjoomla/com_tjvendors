@@ -60,6 +60,7 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
+		$clients = array();
 		$clients[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENTS');
 
 		try

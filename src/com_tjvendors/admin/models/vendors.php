@@ -251,11 +251,10 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function setItemState($items, $state)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 
 		foreach ($items as $id)
 		{
-			$db    = JFactory::getDBO();
 			$updateState = new stdClass;
 
 			// Must be a valid primary key value.

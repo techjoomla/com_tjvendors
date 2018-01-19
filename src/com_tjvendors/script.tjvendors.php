@@ -83,16 +83,9 @@ class Com_TjvendorsInstallerScript
 		{
 			$oldVendorsData = $this->getOldData();
 
-			if (empty($oldVendorsData))
-			{
-				$db = JFactory::getDbo();
-				$db->dropTable('#__tj_vendors', true);
-			}
-			else
+			if (!empty($oldVendorsData))
 			{
 				$this->updateData();
-				$db = JFactory::getDbo();
-				$db->dropTable('#__tj_vendors', true);
 			}
 		}
 	}

@@ -63,10 +63,6 @@ class TjvendorsHelper
 		{
 			$notifications  = false;
 
-			// $app = JFactory::getApplication();
-			// $queue        = $app->input->get('layout');
-			// $option = $app->input->get('option');
-
 			switch ($vName)
 			{
 				case 'notifications':

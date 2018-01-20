@@ -84,14 +84,7 @@ class TjvendorsViewVendors extends JViewLegacy
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
 
-		if ($this->client)
-		{
-			$title = $clientTitle . ' : ';
-		}
-		else
-		{
-			$title = '';
-		}
+		$title = !empty($this->client) ? $clientTitle . ' : ' : '';
 
 		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'list.png');
 

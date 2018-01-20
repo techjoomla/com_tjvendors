@@ -241,7 +241,7 @@ class TjvendorsModelVendors extends JModelList
 	/**
 	 * Method To plublish and unpublish vendors
 	 *
-	 * @param   Integer  $items  Id
+	 * @param   Array    $items  Vendor Ids
 	 *
 	 * @param   Integer  $state  State
 	 *
@@ -251,28 +251,24 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function setItemState($items, $state)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 
-		if (is_array($items))
+		foreach ($items as $id)
 		{
-			foreach ($items as $id)
+			$updateState = new stdClass;
+
+			// Must be a valid primary key value.
+			$updateState->vendor_id = $id;
+			$updateState->state = $state;
+
+			// Update their details in the users table using id as the primary key.
+			$result = JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
+
+			if (!$db->execute())
 			{
-				$db    = JFactory::getDBO();
-				$updateState = new stdClass;
+				$this->setError($this->_db->getErrorMsg());
 
-				// Must be a valid primary key value.
-				$updateState->vendor_id = $id;
-				$updateState->state = $state;
-
-				// Update their details in the users table using id as the primary key.
-				$result = JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
-
-				if (!$db->execute())
-				{
-					$this->setError($this->_db->getErrorMsg());
-
-					return false;
-				}
+				return false;
 			}
 		}
 

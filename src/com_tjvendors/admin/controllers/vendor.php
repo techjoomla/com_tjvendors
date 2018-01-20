@@ -3,7 +3,7 @@
  * @version    SVN:
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright  2009-2018 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
 // No direct access
@@ -166,6 +166,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
 		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
+		$paymentDetails = array();
 
 		if (!empty($data['paymentForm']))
 		{

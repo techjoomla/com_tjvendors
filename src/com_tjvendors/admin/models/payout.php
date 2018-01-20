@@ -250,7 +250,6 @@ class TjvendorsModelPayout extends JModelAdmin
 			// Update their details in the users table using id as the primary key.
 			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
 		}
-
 		catch (Exception $e)
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');

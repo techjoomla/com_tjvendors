@@ -48,7 +48,7 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @return void
 	 */
-	public function postflight()
+	public function postflight($type, $parent)
 	{
 		// Write template file for email template
 		$this->_insertTjNotificationTemplates();

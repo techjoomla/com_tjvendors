@@ -251,7 +251,7 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function setItemState($items, $state)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
 
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 		$vendorObject = JTable::getInstance('vendor', 'TjvendorsTable');

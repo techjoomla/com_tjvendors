@@ -273,7 +273,7 @@ class TjvendorsModelVendors extends JModelList
 				$result = JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
 
 				$vendorObject->load(array('vendor_id' => $id));
-				$vendorObject->approved = $state;
+				$vendorObject->adminapproved = $state;
 
 				/* Send Mail when Admin users change vendor state */
 				$tjvendorsTriggerVendor->onAfterVendorSave($vendorObject, false);

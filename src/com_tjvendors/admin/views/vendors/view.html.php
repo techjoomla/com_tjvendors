@@ -83,11 +83,14 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
-		JToolbarHelper::title($clientTitle . ' : ' . JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'list.png');
+
+		$title = !empty($this->client) ? $clientTitle . ' : ' : '';
+
+		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'list.png');
 
 		if ($canDo->get('core.edit') && isset($this->items[0]))
 		{
-			JToolBarHelper::editList('vendor.edit', 'JTOOLBAR_EDIT');
+			JToolBarHelper::editList('vendors.edit', 'JTOOLBAR_EDIT');
 		}
 
 		if ($canDo->get('core.edit.state'))

@@ -171,7 +171,7 @@ var tjVAdmin =
 							'success': jmsgs
 						});
 					} else {
-						var jmsgs = [Joomla.JText._('COM_TJVENDOR_VENDOR_DENIAL')];
+						jmsgs = [Joomla.JText._('COM_TJVENDOR_VENDOR_DENIAL')];
 						Joomla.renderMessages({
 							'success': jmsgs
 						});
@@ -185,7 +185,7 @@ var tjVAdmin =
 		/*Initialize event js*/
 		initFeeJs: function () {
 			Joomla.submitbutton = function (task)
-			{console.log(task);
+			{
 				if(task == 'vendorfee.apply' || task == 'vendorfee.save')
 				{
 						var percent_commission = document.getElementById("jform_percent_commission").value;

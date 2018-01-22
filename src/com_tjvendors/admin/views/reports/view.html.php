@@ -94,7 +94,10 @@ class TjvendorsViewReports extends JViewLegacy
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
-		JToolbarHelper::title($clientTitle . ' : ' . JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'list.png');
+
+		$title = !empty($this->client) ? $clientTitle . ' : ' : '';
+
+		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'list.png');
 
 		if ($canDo->get('core.admin'))
 		{

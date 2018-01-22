@@ -224,6 +224,12 @@ class TjvendorsModelVendors extends JModelList
 	{
 		$db = JFactory::getDBO();
 
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorObject = JTable::getInstance('vendor', 'TjvendorsTable');
+
+		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
+		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
+
 		if (is_array($items))
 		{
 			foreach ($items as $id)
@@ -237,6 +243,12 @@ class TjvendorsModelVendors extends JModelList
 
 				// Update their details in the users table using id as the primary key.
 				$result = JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
+
+				$vendorObject->load(array('vendor_id' => $id));
+				$vendorObject->approved = $state;
+
+				/* Send Mail when Admin users change vendor state */
+				$tjvendorsTriggerVendor->onAfterVendorSave($vendorObject, false);
 
 				if (!$db->execute())
 				{

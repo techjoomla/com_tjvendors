@@ -33,8 +33,8 @@ class TjvendorsTriggerVendor
 	/**
 	 * Trigger for vendor after save
 	 *
-	 * @param   int  $vendorDetails  Vendor Details
-	 * @param   int  $isNew          isNew = true / !isNew = false
+	 * @param   int      $vendorDetails  Vendor Details
+	 * @param   boolean  $isNew          isNew = true / !isNew = false
 	 *
 	 * @return  void
 	 */

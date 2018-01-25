@@ -119,7 +119,7 @@ class TjvendorsMailsHelper
 		$vendor_approval = $this->tjvendorsparams->get('vendor_approval');
 
 		// Find admin has approved vendor, and add a new key
-		if ($vendor_approval && $vendorDetails->adminapproved == 1)
+		if ($vendor_approval && $vendorDetails->approved == 1)
 		{
 			JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 			$vendorData = JTable::getInstance('Vendor', 'TjvendorsTable');

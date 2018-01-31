@@ -241,7 +241,7 @@ class TjvendorsModelVendors extends JModelList
 	/**
 	 * Method To plublish and unpublish vendors
 	 *
-	 * @param   Integer  $items  Id
+	 * @param   Array    $items  Vendor Ids
 	 *
 	 * @param   Integer  $state  State
 	 *
@@ -251,13 +251,18 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function setItemState($items, $state)
 	{
-		$db = JFactory::getDBO();
+		$db = JFactory::getDbo();
+
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorObject = JTable::getInstance('vendor', 'TjvendorsTable');
+
+		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
+		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
 
 		if (is_array($items))
 		{
 			foreach ($items as $id)
 			{
-				$db    = JFactory::getDBO();
 				$updateState = new stdClass;
 
 				// Must be a valid primary key value.
@@ -266,6 +271,12 @@ class TjvendorsModelVendors extends JModelList
 
 				// Update their details in the users table using id as the primary key.
 				$result = JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
+
+				$vendorObject->load(array('vendor_id' => $id));
+				$vendorObject->adminapproved = $state;
+
+				/* Send Mail when Admin users change vendor state */
+				$tjvendorsTriggerVendor->onAfterVendorSave($vendorObject, false);
 
 				if (!$db->execute())
 				{

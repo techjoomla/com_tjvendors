@@ -47,8 +47,6 @@ class TjvendorsHelper
 				{
 					$lang = JFactory::getLanguage();
 
-					// Loading language file from the administrator/language directory then
-					// Loading language file from the administrator/components/*extension*/language directory
 					$lang->load($component, JPATH_BASE, null, false, false)
 					|| $lang->load($component, JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component), null, false, false)
 					|| $lang->load($component, JPATH_BASE, $lang->getDefault(), false, false)
@@ -57,6 +55,29 @@ class TjvendorsHelper
 					call_user_func(array($cName, 'addSubmenu'), $vName . (isset($section) ? '.' . $section : ''));
 				}
 			}
+		}
+
+		$currentComponent = $input->get('extension', '', 'STRING');
+
+		if ($currentComponent == 'com_tjvendors')
+		{
+			$notifications  = false;
+
+			switch ($vName)
+			{
+				case 'notifications':
+					$notifications = true;
+					break;
+			}
+
+			JHtmlSidebar::addEntry(
+				JText::_('COM_TJVENDORS_TJNOTIFICATIONS_MENU'), 'index.php?option=com_tjnotifications&extension=com_tjvendors',
+				$notifications
+			);
+
+			// Load bootsraped filter
+
+			JHtml::_('bootstrap.tooltip');
 		}
 	}
 

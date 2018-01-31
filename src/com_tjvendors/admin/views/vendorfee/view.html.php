@@ -42,6 +42,8 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
+		JText::script('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR');
+		JText::script('COM_TJVENDORS_FEES_PERCENT_ERROR');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

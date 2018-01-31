@@ -60,6 +60,7 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
+		$clients = array();
 		$clients[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENTS');
 
 		try
@@ -189,7 +190,7 @@ class TjvendorFrontHelper
 	/**
 	 * Get vendor for that user
 	 *
-	 * @return vendor
+	 * @return integer
 	 */
 	public static function getvendor()
 	{
@@ -274,13 +275,13 @@ class TjvendorFrontHelper
 		try
 		{
 			$res = $db->loadObject();
-
-			return $res;
 		}
 		catch (Exception $e)
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
+
+		return $res;
 	}
 
 	/**
@@ -314,19 +315,19 @@ class TjvendorFrontHelper
 		try
 		{
 			$vendor = $db->loadResult();
-
-			if (!$vendor)
-			{
-				return false;
-			}
-			else
-			{
-				return $vendor;
-			}
 		}
 		catch (Exception $e)
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (!$vendor)
+		{
+			return false;
+		}
+		else
+		{
+			return $vendor;
 		}
 	}
 
@@ -359,20 +360,21 @@ class TjvendorFrontHelper
 		try
 		{
 			$result = $db->loadAssoc();
-			$params = json_decode($result['params']);
-
-			if (empty($params->payment_email_id))
-			{
-				return true;
-			}
-			else
-			{
-				return false;
-			}
 		}
 		catch (Exception $e)
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		$params = json_decode($result['params']);
+
+		if (empty($params->payment_email_id))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
 		}
 	}
 

@@ -48,7 +48,7 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @return void
 	 */
-	public function postflight()
+	public function postflight( $type, $parent )
 	{
 		// Write template file for email template
 		$this->_insertTjNotificationTemplates();
@@ -83,20 +83,9 @@ class Com_TjvendorsInstallerScript
 		{
 			$oldVendorsData = $this->getOldData();
 
-			if (empty($oldVendorsData))
+			if (!empty($oldVendorsData))
 			{
-				$db = JFactory::getDbo();
-				$db->dropTable('#__tj_vendors', true);
-			}
-			else
-			{
-				$result = $this->updateData();
-
-				if ($result)
-				{
-					$db = JFactory::getDbo();
-					$db->dropTable('#__tj_vendors', true);
-				}
+				$this->updateData();
 			}
 		}
 	}
@@ -172,7 +161,7 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * method to migrate the old data
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function updateData()
 	{
@@ -216,7 +205,7 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @param   string  $table  table name
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function checkTableExists($table)
 	{
@@ -247,7 +236,7 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * method to get old data
 	 *
-	 * @return void
+	 * @return object
 	 */
 	public function getOldData()
 	{

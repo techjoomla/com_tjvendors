@@ -88,6 +88,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		// Initialise variables.
 		$app = JFactory::getApplication();
 		$model = $this->getModel('Vendor', 'TjvendorsModel');
+		$paymentDetails = array();
 
 		// Get the user data.
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
@@ -215,14 +216,7 @@ class TjvendorsControllerVendor extends JControllerForm
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
 			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $id;
 
-			if ($id != 0)
-			{
-				$layout = 'profile';
-			}
-			else
-			{
-				$layout = 'edit';
-			}
+			$layout = $id != 0 ? 'profile' : 'edit';
 
 			$this->setRedirect(
 					JRoute::_(

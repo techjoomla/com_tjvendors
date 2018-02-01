@@ -173,7 +173,7 @@ class TjvendorsModelReports extends JModelList
 		}
 
 		// Filter by search in title
-		$search = $this->getState('filter.search');
+		$search = $db->escape($this->getState('filter.search'));
 
 		if (!empty($search))
 		{

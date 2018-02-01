@@ -172,10 +172,8 @@ class TjvendorsModelPayouts extends JModelList
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(' . $db->quoteName('vendors.vendor_title') . ' LIKE ' . $search .
-							'OR ' . $db->quoteName('pass.currency') . ' LIKE' . $search .
-							'OR ' . $db->quoteName('vendors.vendor_client') . ' LIKE' . $search .
-							'OR ' . $db->quoteName('pass.vendor_id') . ' LIKE' . $search . ')');
+				$query->where('(' . $db->quoteName('pass.currency') . ' LIKE ' . $search .
+							'OR ' . $db->quoteName('pass.vendor_id') . ' LIKE ' . $search . ')');
 			}
 		}
 

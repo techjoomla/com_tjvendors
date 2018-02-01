@@ -78,16 +78,7 @@ else
 	<div id="j-main-container">
 <?php
 }
-
-if(empty($this->items))
-{?>
-	<div class="alert alert-no-items">
-		<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
-	</div>
-	<?php
-}
-else{
-	?>
+?>
 	<div class="alert alert-info">
 		<?php
 			if($this->bulkPayoutStatus != 0)
@@ -143,7 +134,12 @@ else{
 			 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
 	</div>
-<table class="table table-striped" id="payoutList">
+
+	<?php
+		if(!empty($this->items))
+		{
+		?>
+		<table class="table table-striped" id="payoutList">
 			<thead>
 				<tr>
 					<?php if (isset($this->items[0]->ordering)): ?>
@@ -248,8 +244,18 @@ else{
 				}?>
 			</tbody>
 		</table>
-		<?php
-	}?>
+	<?php
+		}
+		else
+		{
+		?>
+			<div class="alert alert-no-items">
+				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
+			</div>
+	<?php
+		}
+		?>
+
 		<input type="hidden" name="boxchecked" value="0"/>
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>

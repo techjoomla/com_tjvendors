@@ -43,7 +43,7 @@ class TjvendorsMailsHelper
 	/**
 	 * Send mails when campaign is created
 	 *
-	 * @param   BOOLEAN  $vendorDetails  Vender Detail
+	 * @param   OBJECT  $vendorDetails  Vender Detail
 	 *
 	 * @return void
 	 */

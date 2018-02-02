@@ -252,38 +252,36 @@ class TjvendorsModelVendors extends JModelList
 	public function setItemState($items, $state)
 	{
 		$db = JFactory::getDbo();
-
+		/*
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 		$vendorObject = JTable::getInstance('vendor', 'TjvendorsTable');
 
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
 		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
-
-		if (is_array($items))
+		*/
+		foreach ($items as $id)
 		{
-			foreach ($items as $id)
+			$updateState = new stdClass;
+
+			// Must be a valid primary key value.
+			$updateState->vendor_id = $id;
+			$updateState->state = $state;
+
+			// Update their details in the users table using id as the primary key.
+			JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
+
+			/* Send Mail when Admin users change vendor state of vendor, these mails are not needed.. */
+			/*
+			$vendorObject->load(array('vendor_id' => $id));
+			$vendorObject->adminapproved = $state;
+
+			$tjvendorsTriggerVendor->onAfterVendorSave($vendorObject, false);
+			*/
+			if (!$db->execute())
 			{
-				$updateState = new stdClass;
+				$this->setError($this->_db->getErrorMsg());
 
-				// Must be a valid primary key value.
-				$updateState->vendor_id = $id;
-				$updateState->state = $state;
-
-				// Update their details in the users table using id as the primary key.
-				$result = JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
-
-				$vendorObject->load(array('vendor_id' => $id));
-				$vendorObject->adminapproved = $state;
-
-				/* Send Mail when Admin users change vendor state */
-				$tjvendorsTriggerVendor->onAfterVendorSave($vendorObject, false);
-
-				if (!$db->execute())
-				{
-					$this->setError($this->_db->getErrorMsg());
-
-					return false;
-				}
+				return false;
 			}
 		}
 

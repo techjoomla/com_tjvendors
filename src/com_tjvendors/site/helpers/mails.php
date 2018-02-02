@@ -43,7 +43,7 @@ class TjvendorsMailsHelper
 	/**
 	 * Send mails when campaign is created
 	 *
-	 * @param   BOOLEAN  $vendorDetails  Vender Detail
+	 * @param   OBJECT  $vendorDetails  Vender Detail
 	 *
 	 * @return void
 	 */
@@ -65,7 +65,9 @@ class TjvendorsMailsHelper
 		$allVendorsLink = JUri::root() . 'administrator/' . substr(JRoute::_($allVendors), strlen(JUri::base(true)) + 1);
 		$vendorDetails->allVendors = $allVendorsLink;
 
-		$vendorItemID = $this->tjvendorFrontHelper->getItemId('index.php?option=com_tjvendors&view=vendor&layout=edit');
+		$vendorItemID = $this->tjvendorFrontHelper->getItemId(
+		'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $vendorDetails->vendor_client
+		);
 		$myVendor = 'index.php?option=com_tjvendors&view=vendor&layout=profile&client='
 		. $vendorDetails->vendor_client . '&vendor_id=' . $vendorDetails->vendor_id . '&Itemid=' . $vendorItemID;
 		$myVendorLink = JUri::root() . substr(JRoute::_($myVendor), strlen(JUri::base(true)) + 1);
@@ -102,6 +104,7 @@ class TjvendorsMailsHelper
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
 		$vendorDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
+		$loggedInUser = JFactory::getUser()->id;
 
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 		$vendorData = JTable::getInstance('Vendorclientxref', 'TjvendorsTable');
@@ -119,7 +122,7 @@ class TjvendorsMailsHelper
 		$vendor_approval = $this->tjvendorsparams->get('vendor_approval');
 
 		// Find admin has approved vendor, and add a new key
-		if ($vendor_approval && $vendorDetails->adminapproved == 1)
+		if ($vendor_approval && $vendorDetails->approved == 1)
 		{
 			JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 			$vendorData = JTable::getInstance('Vendor', 'TjvendorsTable');
@@ -136,7 +139,7 @@ class TjvendorsMailsHelper
 
 			$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
 		}
-		else
+		elseif ($vendorDetails->user_id === $loggedInUser)
 		{
 			$adminEmailObj = new stdClass;
 			$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');

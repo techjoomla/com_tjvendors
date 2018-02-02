@@ -65,7 +65,9 @@ class TjvendorsMailsHelper
 		$allVendorsLink = JUri::root() . 'administrator/' . substr(JRoute::_($allVendors), strlen(JUri::base(true)) + 1);
 		$vendorDetails->allVendors = $allVendorsLink;
 
-		$vendorItemID = $this->tjvendorFrontHelper->getItemId('index.php?option=com_tjvendors&view=vendor&layout=edit');
+		$vendorItemID = $this->tjvendorFrontHelper->getItemId(
+		'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $vendorDetails->vendor_client
+		);
 		$myVendor = 'index.php?option=com_tjvendors&view=vendor&layout=profile&client='
 		. $vendorDetails->vendor_client . '&vendor_id=' . $vendorDetails->vendor_id . '&Itemid=' . $vendorItemID;
 		$myVendorLink = JUri::root() . substr(JRoute::_($myVendor), strlen(JUri::base(true)) + 1);
@@ -102,6 +104,7 @@ class TjvendorsMailsHelper
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
 		$vendorDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
+		$loggedInUser = JFactory::getUser()->id;
 
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 		$vendorData = JTable::getInstance('Vendorclientxref', 'TjvendorsTable');
@@ -136,7 +139,7 @@ class TjvendorsMailsHelper
 
 			$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
 		}
-		else
+		elseif ($vendorDetails->user_id === $loggedInUser)
 		{
 			$adminEmailObj = new stdClass;
 			$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');

@@ -193,18 +193,17 @@ var tjVAdmin =
 
 						if (percent_commission > 100)
 						{
-							//~ var jmsgs = Joomla.JText._('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC');
+							var jmsgs = [Joomla.JText._('COM_TJVENDORS_FEES_PERCENT_ERROR')];
 							Joomla.renderMessages({
-								'warning': Joomla.JText._('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC')
+								'error': jmsgs
 							});
-							//~ alert("<?php echo JText::_('COM_TJVENDORS_FEES_PERCENT_ERROR_DESC');?>");
 						}
 						else if(percent_commission < 0 || flat_commission < 0)
 						{
+							var jmsgs = [Joomla.JText._('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR')];
 							Joomla.renderMessages({
-								'warning': Joomla.JText._('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR')
+								'error': jmsgs
 							});
-							//~ alert("<?php echo JText::_('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR');?>");
 						}
 						else
 						{

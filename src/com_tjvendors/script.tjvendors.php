@@ -310,7 +310,7 @@ class Com_TjvendorsInstallerScript
 			$result = $db->loadobject();
 			$obj = new Stdclass;
 			$obj->id = $result->id;
-			$obj->rules = '{"core.edit.own":{"1":1,"2":1,"7":1},"core.edit":{"7":0},"core.create":{"7":1,"2":1},"core.delete":{"7":1,"2":1},"core.edit.state":{"7":1,"2":1}}';
+			$obj->rules = '{"core.edit.own":{"1":1,"2":1,"7":1},"core.edit":{"7":0},"core.create":{"7":1,"2":1},"core.delete":{"7":1},"core.edit.state":{"7":1}}';
 
 			$db->updateObject('#__assets', $obj, 'id');
 		}

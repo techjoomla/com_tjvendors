@@ -36,16 +36,15 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
 		method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
 		<div class="row">
-			<div class="col-sm-12" id="tj-edit-form">
-				<ul class="nav nav-tabs mb-15 hidden-xs">
-				  <li class="active" rel="tab1"><a data-toggle="tab" href="#tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
-				  <li rel="tab2"><a data-toggle="tab" href="#tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
+			<div class="col-sm-12 vendorForm" id="tj-edit-form">
+				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
+				  <li class="active"><a data-toggle="tab" href="#tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
+				  <li><a data-toggle="tab" href="#tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
 				</ul>
 				<!----Tab Container Start----->
-				<div class="tab__container">
+				<div class="tab-content">
 					<!----Tab 1 Start----->
-					<h4 class="tab_active tab__heading p-10 visible-xs" rel="tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?><i class="fa fa-angle-double-down pull-right" aria-hidden="true"></i></h4>
-					<div id="tab1" class="tab-content">
+					<div id="tab1" class="tab-pane fade in active">
 						<fieldset class="adminform">
 							<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id; ?>" />
 							<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->vendor->checked_out_time; ?>" />
@@ -121,8 +120,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 					<!----Tab 1 End----->
 
 					<!----Tab 2 Start----->
-					<h4 class="tab__heading p-10 visible-xs" rel="tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?><i class="fa fa-angle-double-down pull-right" aria-hidden="true"></i></h4>
-					<div id="tab2" class="tab-content">
+					<div id="tab2" class="tab-pane fade">
 						<div class="row">
 							<div class="form-group col-xs-12 col-sm-6 col-md-4">
 								<?php echo $this->form->renderField('payment_gateway');?>

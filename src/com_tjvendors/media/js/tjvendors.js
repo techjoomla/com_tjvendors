@@ -23,7 +23,7 @@ var tjVAdmin =
 					{
 						var show_content = content.substr(0, showChar);
 						var hide_content = content.substr(showChar, content.length - showChar);
-						var html = show_content + '<span class="moreelipses">' + ellipsestext + '</span><span><span class="hide__desc">' + hide_content + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
+						var html = show_content + '<span class="show">' + ellipsestext + '</span><span><span class="collapse">' + hide_content + '</span>&nbsp;&nbsp;<a href="" class="morelink">' + moretext + '</a></span>';
 						jQuery(this).html(html);
 					}
 				});
@@ -279,47 +279,6 @@ var tjVSite = {
 					}
 				},
 			});
-		},
-
-		tabToAccordion: function()
-		{
-			jQuery(".tab-content").hide();
-			jQuery(".tab-content:first").show();
-
-		  /* if in tab mode */
-			jQuery("ul.nav-tabs li").click(function() {
-
-			  jQuery(".tab-content").hide();
-			  var activeTab = jQuery(this).attr("rel");
-			 jQuery("#"+activeTab).fadeIn();
-
-			  jQuery("ul.nav-tabs li").removeClass("active");
-			  jQuery(this).addClass("active");
-
-			  jQuery(".tab__heading").removeClass("tab_active");
-			  jQuery(".tab__heading[rel^='"+activeTab+"']").addClass("tab_active");
-
-			});
-			/* if in drawer mode */
-			jQuery(".tab__heading").click(function() {
-
-			  jQuery(".tab-content").hide();
-			  var tab_activeTab = jQuery(this).attr("rel");
-			  jQuery("#"+tab_activeTab).fadeIn();
-
-			  jQuery(".tab__heading").removeClass("tab_active");
-			  jQuery(this).addClass("tab_active");
-
-			  jQuery("ul.nav-tabs li").removeClass("active");
-			  jQuery("ul.nav-tabs li[rel^='"+tab_activeTab+"']").addClass("active");
-			});
-
-
-			/* Extra class "tab_last"
-			   to add border to right side
-			   of last tab */
-			jQuery('ul.nav-tabs li').last().addClass("tab_last");
-
 		},
 	},
 	vendors:

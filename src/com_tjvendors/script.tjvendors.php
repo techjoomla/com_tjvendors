@@ -52,6 +52,9 @@ class Com_TjvendorsInstallerScript
 	{
 		// Write template file for email template
 		$this->_insertTjNotificationTemplates();
+
+		// Add default permissions
+		$this->defaultPermissionsFix();
 	}
 
 	/**
@@ -294,7 +297,7 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @return  void
 	 */
-	public function deFaultPermissionsFix()
+	public function defaultPermissionsFix()
 	{
 		$db = JFactory::getDbo();
 		$columnArray = array('id', 'rules');

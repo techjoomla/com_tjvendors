@@ -32,7 +32,8 @@ display:inline-flex;
 margin-right:4px;
 }
 
-#tjv-wrapper #jform_payment_gateway_chzn{
+#tjv-wrapper #jform_payment_gateway_chzn,
+#tjv-wrapper .vendorForm .chzn-container{
 width:200px !important;
 }
 

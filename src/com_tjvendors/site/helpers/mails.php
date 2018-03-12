@@ -62,7 +62,7 @@ class TjvendorsMailsHelper
 		$promoterRecipients[] = $promoterEmailObj;
 
 		$allVendors = 'index.php?option=com_tjvendors&view=vendors&client=' . $vendorDetails->vendor_client;
-		$allVendorsLink = JUri::root() . 'administrator/' . substr(JRoute::_($allVendors), strlen(JUri::base(true)) + 1);
+		$allVendorsLink = JUri::root() . 'administrator/' . $allVendors;
 		$vendorDetails->allVendors = $allVendorsLink;
 
 		$vendorItemID = $this->tjvendorFrontHelper->getItemId(

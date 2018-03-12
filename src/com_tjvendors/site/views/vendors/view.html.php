@@ -19,6 +19,28 @@ JLoader::import('joomla.application.component.model');
  */
 class TjvendorsViewVendors extends JViewLegacy
 {
+	protected $user_id;
+
+	protected $input;
+
+	protected $items;
+
+	protected $pagination;
+
+	protected $filterForm;
+
+	protected $activeFilters;
+
+	protected $currencies;
+
+	protected $vendor_id;
+
+	protected $uniqueClients;
+
+	protected $totalDetails;
+
+	protected $vendorClient;
+
 	/**
 	 * Display passbook transaction list
 	 *

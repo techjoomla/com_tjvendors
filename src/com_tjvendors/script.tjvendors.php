@@ -52,6 +52,9 @@ class Com_TjvendorsInstallerScript
 	{
 		// Write template file for email template
 		$this->_insertTjNotificationTemplates();
+
+		// Add default permissions
+		$this->defaultPermissionsFix();
 	}
 
 	/**
@@ -83,20 +86,9 @@ class Com_TjvendorsInstallerScript
 		{
 			$oldVendorsData = $this->getOldData();
 
-			if (empty($oldVendorsData))
+			if (!empty($oldVendorsData))
 			{
-				$db = JFactory::getDbo();
-				$db->dropTable('#__tj_vendors', true);
-			}
-			else
-			{
-				$result = $this->updateData();
-
-				if ($result)
-				{
-					$db = JFactory::getDbo();
-					$db->dropTable('#__tj_vendors', true);
-				}
+				$this->updateData();
 			}
 		}
 	}
@@ -172,7 +164,7 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * method to migrate the old data
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function updateData()
 	{
@@ -216,7 +208,7 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @param   string  $table  table name
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function checkTableExists($table)
 	{
@@ -247,7 +239,7 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * method to get old data
 	 *
-	 * @return void
+	 * @return object
 	 */
 	public function getOldData()
 	{
@@ -297,6 +289,37 @@ class Com_TjvendorsInstallerScript
 					$notificationsModel->createTemplates($array);
 				}
 			}
+		}
+	}
+
+	/**
+	 * Add default ACL permissions
+	 *
+	 * @return  void
+	 */
+	public function defaultPermissionsFix()
+	{
+		$db = JFactory::getDbo();
+		$columnArray = array('id', 'rules');
+		$query = $db->getQuery(true);
+
+		$query->select($db->quoteName($columnArray));
+		$query->from($db->quoteName('#__assets'));
+		$query->where($db->quoteName('name') . ' = ' . $db->quote('com_tjvendors'));
+		$db->setQuery($query);
+
+		try
+		{
+			$result = $db->loadobject();
+			$obj = new Stdclass;
+			$obj->id = $result->id;
+			$obj->rules = '{"core.edit.own":{"1":1,"2":1,"7":1},"core.edit":{"7":0},"core.create":{"7":1,"2":1},"core.delete":{"7":1},"core.edit.state":{"7":1}}';
+
+			$db->updateObject('#__assets', $obj, 'id');
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 	}
 }

@@ -42,6 +42,8 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;
+		JText::script('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR');
+		JText::script('COM_TJVENDORS_FEES_PERCENT_ERROR');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -68,7 +70,7 @@ class TjvendorsViewVendorFee extends JViewLegacy
 		$isNew = ($this->item->vendor_id == 0);
 
 		$input = JFactory::getApplication()->input;
-		$this->client = $input->get('client', '', 'STRING');
+		$client = $input->get('client', '', 'STRING');
 
 		if ($isNew)
 		{
@@ -79,7 +81,7 @@ class TjvendorsViewVendorFee extends JViewLegacy
 			$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMMISSION');
 		}
 
-		$clientTitle = TjvendorFrontHelper::getClientName($this->client);
+		$clientTitle = TjvendorFrontHelper::getClientName($client);
 		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 
 		JToolBarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');

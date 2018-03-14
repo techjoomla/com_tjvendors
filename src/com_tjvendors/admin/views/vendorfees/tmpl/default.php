@@ -209,9 +209,6 @@ else
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 					<th class='left'>
-						<?php echo JText::_('COM_TJVENDORS_VENDORS_ID'); ?>
-					</th>
-					<th class='left'>
 						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_FEE_TITLE'); ?>
 					</th>
 
@@ -223,6 +220,9 @@ else
 					</th>
 					<th class='left'>
 						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_FLAT_COMMISSION', 'b.`flat_commission`', $listDirn, $listOrder); ?>
+					</th>
+					<th class='left'>
+						<?php echo JHtml::_('grid.sort','COM_TJVENDORS_VENDOR_FEE_ID', 'b.`id`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
@@ -283,9 +283,6 @@ else
 								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 							</td>
 							<td>
-								<?php echo $item->vendor_id; ?>
-							</td>
-							<td>
 									<?php echo $item->vendor_title; ?>
 							</td>
 							<td>
@@ -301,6 +298,10 @@ else
 							<td>
 								<?php echo $item->flat_commission; ?>
 							</td>
+							<td>
+								<?php echo $item->id; ?>
+							</td>
+
 						</tr>
 				<?php
 				}

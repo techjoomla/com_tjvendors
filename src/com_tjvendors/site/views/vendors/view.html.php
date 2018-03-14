@@ -19,6 +19,28 @@ JLoader::import('joomla.application.component.model');
  */
 class TjvendorsViewVendors extends JViewLegacy
 {
+	protected $user_id;
+
+	protected $input;
+
+	protected $items;
+
+	protected $pagination;
+
+	protected $filterForm;
+
+	protected $activeFilters;
+
+	protected $currencies;
+
+	protected $vendor_id;
+
+	protected $uniqueClients;
+
+	protected $totalDetails;
+
+	protected $vendorClient;
+
 	/**
 	 * Display passbook transaction list
 	 *
@@ -28,8 +50,9 @@ class TjvendorsViewVendors extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
+		$app = JFactory::getApplication();
 		$this->user_id = JFactory::getUser()->id;
-		$this->input = JFactory::getApplication()->input;
+		$this->input = $app->input;
 
 		// Get data from the model
 		$items_model = JModelLegacy::getInstance('vendors', 'TjvendorsModel');
@@ -45,6 +68,7 @@ class TjvendorsViewVendors extends JViewLegacy
 		$client = $this->state->get('filter.vendor_client', '');
 		$currency = $this->state->get('filter.currency', '');
 		$this->totalDetails = $tjvendorFrontHelper->getTotalDetails($this->vendor_id, $client, $currency);
+		$this->vendorClient = $app->getUserStateFromRequest('client', 'client', '');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

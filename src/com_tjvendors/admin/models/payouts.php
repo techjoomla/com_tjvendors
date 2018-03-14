@@ -172,16 +172,19 @@ class TjvendorsModelPayouts extends JModelList
 			else
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
-				$query->where('(' . $db->quoteName('vendors.vendor_title') . ' LIKE ' . $search .
-							'OR ' . $db->quoteName('pass.currency') . ' LIKE' . $search .
-							'OR ' . $db->quoteName('vendors.vendor_client') . ' LIKE' . $search .
-							'OR ' . $db->quoteName('pass.vendor_id') . ' LIKE' . $search . ')');
+				$query->where('(' . $db->quoteName('pass.currency') . ' LIKE ' . $search .
+							'OR ' . $db->quoteName('pass.vendor_id') . ' LIKE ' . $search . ')');
 			}
 		}
 
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
+
+		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC')))
+		{
+			$orderDirn = 'DESC';
+		}
 
 		if ($orderCol && $orderDirn)
 		{

@@ -43,7 +43,7 @@ class TjvendorsMailsHelper
 	/**
 	 * Send mails when campaign is created
 	 *
-	 * @param   BOOLEAN  $vendorDetails  Vender Detail
+	 * @param   OBJECT  $vendorDetails  Vender Detail
 	 *
 	 * @return void
 	 */
@@ -61,11 +61,13 @@ class TjvendorsMailsHelper
 		$promoterEmailObj->email = $vendorer->email;
 		$promoterRecipients[] = $promoterEmailObj;
 
-		$allVendors = 'index.php?option=com_tjvendors&view=vendors&client=com_jgive';
-		$allVendorsLink = JUri::root() . 'administrator/' . substr(JRoute::_($allVendors), strlen(JUri::base(true)) + 1);
+		$allVendors = 'index.php?option=com_tjvendors&view=vendors&client=' . $vendorDetails->vendor_client;
+		$allVendorsLink = JUri::root() . 'administrator/' . $allVendors;
 		$vendorDetails->allVendors = $allVendorsLink;
 
-		$vendorItemID = $this->tjvendorFrontHelper->getItemId('index.php?option=com_tjvendors&view=vendor&layout=edit');
+		$vendorItemID = $this->tjvendorFrontHelper->getItemId(
+		'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $vendorDetails->vendor_client
+		);
 		$myVendor = 'index.php?option=com_tjvendors&view=vendor&layout=profile&client='
 		. $vendorDetails->vendor_client . '&vendor_id=' . $vendorDetails->vendor_id . '&Itemid=' . $vendorItemID;
 		$myVendorLink = JUri::root() . substr(JRoute::_($myVendor), strlen(JUri::base(true)) + 1);
@@ -102,7 +104,14 @@ class TjvendorsMailsHelper
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
 		$vendorDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
-		$vendorDetails->vendorClient = $this->tjvendorFrontHelper->getClientName($vendorDetails->vendor_client);
+		$loggedInUser = JFactory::getUser()->id;
+
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorData = JTable::getInstance('Vendorclientxref', 'TjvendorsTable');
+		$vendorData->load(array('vendor_id' => $vendorDetails->vendor_id));
+		$vendor_client = $vendorData->client;
+
+		$vendorDetails->vendorClient = $this->tjvendorFrontHelper->getClientName($vendor_client);
 		$replacements->info = $vendorDetails;
 		$replacements->vendorer = JFactory::getUser($vendorDetails->user_id);
 
@@ -130,7 +139,7 @@ class TjvendorsMailsHelper
 
 			$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
 		}
-		else
+		elseif ($vendorDetails->user_id === $loggedInUser)
 		{
 			$adminEmailObj = new stdClass;
 			$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');

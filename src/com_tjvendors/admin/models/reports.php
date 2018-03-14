@@ -173,7 +173,7 @@ class TjvendorsModelReports extends JModelList
 		}
 
 		// Filter by search in title
-		$search = $this->getState('filter.search');
+		$search = $db->escape($this->getState('filter.search'));
 
 		if (!empty($search))
 		{
@@ -192,6 +192,11 @@ class TjvendorsModelReports extends JModelList
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
+
+		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC')))
+		{
+			$orderDirn = 'DESC';
+		}
 
 		if ($orderCol && $orderDirn)
 		{

@@ -108,13 +108,22 @@ $listDirn      = $this->state->get('list.direction');
 								$currency = $this->state->get('filter.currency');?>
 							</div>
 						</li>
+					<?php
+						if ($this->vendorClient == '')
+						{
+						?>
 						<li>
 							<div  class="input-group-btn">
 								<?php
-									echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client", "client", $this->state->get('filter.vendor_client'));
-								$client = $this->state->get('filter.vendor_client');?>
+
+									echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "clientType", "clientValue", $this->state->get('filter.vendor_client'));
+									$clientFilter = $this->state->get('filter.vendor_client');?>
 							</div>
 						</li>
+					<?php
+						}
+						?>
+
 						<li>
 							<div  class="input-group-btn hidden-xs">
 							<?php $transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
@@ -177,11 +186,11 @@ $listDirn      = $this->state->get('list.direction');
 									<th width="5%">
 										<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder);?>
 									</th>
-								<?php if ($client == '0')
+								<?php if ($this->vendorClient == '' && $clientFilter == 'all')
 									{
 									?>
 										<th width="5%">
-											<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder);?>
+											<?php echo JText::_('COM_TJVENDORS_REPORTS_CLIENT');?>
 										</th>
 								<?php
 									}
@@ -263,15 +272,17 @@ $listDirn      = $this->state->get('list.direction');
 											<?php echo $this->pagination->getRowOffset($i);?>
 										</td>
 										<td>
-											<?php echo $row->transaction_id;?>
+											<?php echo htmlspecialchars($row->transaction_id, ENT_COMPAT, 'UTF-8');?>
 										</td>
-									<?php if ($client == '0')
+									<?php
+									 if ($this->vendorClient == '' && $clientFilter == 'all')
 										{
 										?>
 										<td>
 											<?php
 												$tjvendorFrontHelper = new TjvendorFrontHelper;
-												echo $client = $tjvendorFrontHelper->getClientName($row->client);
+												$client = $tjvendorFrontHelper->getClientName($row->client);
+												echo htmlspecialchars($client, ENT_COMPAT, 'UTF-8');
 											?>
 										</td>
 									<?php
@@ -280,7 +291,7 @@ $listDirn      = $this->state->get('list.direction');
 										{
 										?>
 										<td>
-											<?php echo $row->currency;?>
+											<?php echo htmlspecialchars($row->currency, ENT_COMPAT, 'UTF-8');?>
 										</td>
 									<?php
 										}
@@ -295,7 +306,7 @@ $listDirn      = $this->state->get('list.direction');
 											}
 											else
 											{
-												echo $row->credit;
+												echo htmlspecialchars($row->credit, ENT_COMPAT, 'UTF-8');
 											}
 											?>
 										</td>
@@ -305,19 +316,19 @@ $listDirn      = $this->state->get('list.direction');
 										{
 										?>
 										<td>
-											<?php echo $row->debit;?>
+											<?php echo htmlspecialchars($row->debit, ENT_COMPAT, 'UTF-8');?>
 										</td>
 									<?php
 										}
 										?>
 										<td>
-											<?php echo $row->reference_order_id;?>
+											<?php echo htmlspecialchars($row->reference_order_id, ENT_COMPAT, 'UTF-8');?>
 										</td>
 										<td>
-											<?php echo $row->transaction_time;?>
+											<?php echo htmlspecialchars($row->transaction_time, ENT_COMPAT, 'UTF-8');?>
 										</td>
 										<td>
-											<?php echo abs($row->total);?>
+											<?php echo htmlspecialchars(abs($row->total), ENT_COMPAT, 'UTF-8');?>
 										</td>
 										<td>
 										<?php
@@ -326,16 +337,16 @@ $listDirn      = $this->state->get('list.direction');
 											{
 												if ($row->status == 1)
 												{
-												echo "Payout Done";
+													echo JText::_('COM_TJVENDOR_PAYOUT_DONE');
 												}
 												else
 												{
-												echo "Payout Pending";
+													echo JText::_('COM_TJVENDOR_PAYOUT_PENDING');
 												}
 											}
 											elseif ($status['entry_status'] == "credit_for_ticket_buy")
 											{
-											echo "Credit Done";
+												echo JText::_('COM_TJVENDOR_CREDIT_DONE');
 											}
 											?>
 										</td>

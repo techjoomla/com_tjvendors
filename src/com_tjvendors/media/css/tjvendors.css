@@ -32,6 +32,16 @@ display:inline-flex;
 margin-right:4px;
 }
 
+#tjv-wrapper #jform_payment_gateway_chzn,
+#tjv-wrapper .vendorForm .chzn-container{
+width:200px !important;
+}
+
+/*----Uber Template----*/
+#tjv-wrapper .vendor-report .btn{
+padding:6px 10px;
+}
+
 /*----Reusable css--*/
 #tjv-wrapper .mt-0{
 margin-top:0;
@@ -48,11 +58,16 @@ padding-right:0;
 #tjv-wrapper .p-10{
 padding:10px;
 }
+.d-flex {
+display: flex;
+}
+
 /*----Media Query for Tab css--*/
-@media screen and (max-width: 480px) {
-	#tjv-wrapper .tab__heading {
-	background-color:#ddd;
-	border:1px solid #c5bebe;
-	cursor:pointer;
+@media (max-width: 576px){
+	.vendorForm__nav {
+		white-space: nowrap;
+		overflow-x: auto;
+		overflow-y: hidden;
 	}
 }
+

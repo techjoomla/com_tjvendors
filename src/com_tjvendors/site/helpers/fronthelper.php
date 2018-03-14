@@ -61,7 +61,7 @@ class TjvendorFrontHelper
 
 		$db->setQuery($query);
 		$clients = array();
-		$clients[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENTS');
+		$clients['all'] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENTS');
 
 		try
 		{
@@ -82,7 +82,7 @@ class TjvendorFrontHelper
 			$tjvendorFrontHelper = new TjvendorFrontHelper;
 			$client = $tjvendorFrontHelper->getClientName($i['client']);
 			$client = JText::_(strtoupper($i['client']));
-			$clients[] = $client;
+			$clients[] = array("clientType" => $i['client'],"clientValue" => $client);
 		}
 
 		return $clients;

@@ -82,6 +82,9 @@ class TjvendorsModelVendors extends JModelList
 		$toDate = $app->getUserStateFromRequest($this->context . '.filter.toDate', 'toDates', '0', 'string');
 		$this->setState('filter.toDate', $toDate);
 
+		$urlClient = $app->input->get('client', '', 'STRING');
+		$this->setState('urlClient', $urlClient);
+
 		$client = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
 		$this->setState('filter.vendor_client', $client);
 
@@ -108,7 +111,18 @@ class TjvendorsModelVendors extends JModelList
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$client = $this->getState('filter.vendor_client', '');
+
+		$urlClient = $this->getState('urlClient', '');
+
+		if ($urlClient)
+		{
+			$client = $urlClient;
+		}
+		else
+		{
+			$client = $this->getState('filter.vendor_client', '');
+		}
+
 		$currency = $this->getState('filter.currency', '');
 		$TjvendorFrontHelper = new TjvendorFrontHelper;
 		$vendor_id = $TjvendorFrontHelper->getVendor();
@@ -125,7 +139,7 @@ class TjvendorsModelVendors extends JModelList
 			$query->where($db->quoteName('vendors.vendor_id') . ' = ' . $db->quote($vendor_id));
 		}
 
-		if (!empty($client))
+		if ($client != 'all')
 		{
 			$query->where($db->quoteName('pass.client') . ' = ' . $db->quote($client));
 		}

@@ -37,6 +37,11 @@ margin-right:4px;
 width:200px !important;
 }
 
+/*----Uber Template----*/
+#tjv-wrapper .vendor-report .btn{
+padding:6px 10px;
+}
+
 /*----Reusable css--*/
 #tjv-wrapper .mt-0{
 margin-top:0;

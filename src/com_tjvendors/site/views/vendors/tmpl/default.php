@@ -101,6 +101,9 @@ $listDirn      = $this->state->get('list.direction');
 			<div class="row">
 				<div class="col-xs-12 btn-group">
 					<ul class="input-group list-inline pull-right">
+						<?php
+						if (!empty($this->currencies))
+						{?>
 						<li>
 							<div  class="input-group-btn hidden-xs">
 								<?php
@@ -109,6 +112,7 @@ $listDirn      = $this->state->get('list.direction');
 							</div>
 						</li>
 					<?php
+						}
 						if ($this->vendorClient == '')
 						{
 						?>

@@ -47,7 +47,7 @@ $listDirn      = $this->state->get('list.direction');
 	if (!empty($this->vendor_id))
 	{
 	?>
-	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors');?>" method="post" id="adminForm" name="adminForm">
+	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING'));?>" method="post" id="adminForm" name="adminForm">
 		<div id="j-main-container" class="vendor-report">
 			<!-----"vendor-report" is a page cover class--->
 			<div class="row">

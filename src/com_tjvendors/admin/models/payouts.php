@@ -71,7 +71,14 @@ class TjvendorsModelPayouts extends JModelList
 		$vendorId = $app->getUserStateFromRequest($this->context . '.filter.vendor_id', 'vendor_id', '0', 'string');
 		$this->setState('filter.vendor_id', $vendorId);
 
-		$filterClient = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
+		$filterClient = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '', 'string');
+		$urlClient = $app->input->get('client', '', 'STRING');
+
+		if (empty($filterClient))
+		{
+			$filterClient = $urlClient;
+		}
+
 		$this->setState('filter.vendor_client', $filterClient);
 
 		// Load the filter state.
@@ -150,15 +157,15 @@ class TjvendorsModelPayouts extends JModelList
 
 		if (empty($vendor))
 		{
-			$query->where($db->quoteName('pass.vendor_id') . '=' . $vendor_id);
+			if (!empty($vendor_id))
+			{
+				$query->where($db->quoteName('pass.vendor_id') . '=' . $vendor_id);
+			}
 		}
 		else
 		{
 			$query->where($db->quoteName('pass.vendor_id') . ' = ' . $db->quote($vendor));
 		}
-
-		$db->setQuery($query);
-		$rows = $db->loadAssocList();
 
 		// Filter by search in title
 		$search = $this->getState('filter.search');

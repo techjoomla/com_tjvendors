@@ -128,11 +128,18 @@ else
 			?>
 		</div>
 
-		<div class="btn-group pull-right hidden-phone">
-			<?php
-				// Making custom filter list
-			 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
-		</div>
+		<?php
+			if ($this->input->get('vendor_id', 0, 'INTEGER'))
+			{
+			?>
+				<div class="btn-group pull-right hidden-phone">
+					<?php
+						// Making custom filter list
+					 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
+				</div>
+		<?php
+			}
+			?>
 	</div>
 
 	<?php

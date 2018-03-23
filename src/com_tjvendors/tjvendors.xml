@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
 	<name>COM_TJVENDORS</name>
-	<creationDate>2018-03-23</creationDate>
+	<creationDate>23rd Mar 2018</creationDate>
 	<copyright>Copyright(C)2016-18 TechJoomla</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<author>TechJoomla</author>

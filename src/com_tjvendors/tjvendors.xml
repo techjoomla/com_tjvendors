@@ -8,7 +8,7 @@
 	<authorEmail>extensions@techjoomla.com</authorEmail>
 	<authorUrl>www.techjoomla.com</authorUrl>
 	<version>1.3.0</version>
-	<description>TJVendors - Common code for TJ Vendors Manager!</description>
+	<description>COM_TJVENDORS_PRODUCT_DESC</description>
 	<install>
 		<!-- Runs on install -->
 		<sql>

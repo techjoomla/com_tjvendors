@@ -53,6 +53,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 								<input type="hidden" name="jform[checked_out]" value="<?php echo $this->vendor->checked_out; ?>" />
 								<input type="hidden" name="jform[ordering]" value="<?php echo $this->vendor->ordering; ?>" />
 								<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
+								<input type="hidden" name="jform[approved]" value="<?php echo $this->vendorClientXrefTable->approved; ?>" />
 								<div class="row">
 									<div class="col-sm-6">
 										<?php echo$this->form->renderField('vendor_title'); ?>

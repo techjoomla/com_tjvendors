@@ -18,5 +18,6 @@
 		<field name="ordering" type="hidden" />
 		<field name="currency" type="text" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY" rows="10" cols="5" />
 		<field name="payment_gateway" type="paymentgateway" filter="" label="COM_TJVENDORS_FORM_LBL_VENDOR_PAYMENT_GATEWAY"  rows="1" cols="5" />
+		<field name="approved" default="0" type="hidden" filter="" />
 	</fieldset>
 </form>

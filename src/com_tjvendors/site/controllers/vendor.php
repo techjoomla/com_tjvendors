@@ -151,13 +151,9 @@ class TjvendorsControllerVendor extends JControllerForm
 			$data['params'] = '';
 		}
 
-		if ($vendorApproval)
+		if ($vendorApproval && empty($data['vendor_id']))
 		{
 			$data['approved'] = 0;
-		}
-		else
-		{
-			$data['approved'] = 1;
 		}
 
 		// Check for errors.

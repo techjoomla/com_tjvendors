@@ -178,7 +178,7 @@ class TjvendorsModelVendors extends JModelList
 
 		if (!empty($transactionType))
 		{
-			if ($transactionType == "debit")
+			if ($transactionType == "Debit")
 			{
 				$query->where($db->quoteName('debit') . " >0 ");
 			}

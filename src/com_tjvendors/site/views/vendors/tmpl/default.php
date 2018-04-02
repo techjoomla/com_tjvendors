@@ -206,7 +206,7 @@ $listDirn      = $this->state->get('list.direction');
 										</th>
 								<?php
 									}
-									if ($transactionType == "credit" || empty($transactionType))
+									if ($transactionType == "Credit" || empty($transactionType))
 									{
 									?>
 										<th class='left' width="10%">
@@ -214,7 +214,7 @@ $listDirn      = $this->state->get('list.direction');
 										</th>
 									<?php
 									}
-									if ($transactionType == "debit" || empty($transactionType))
+									if ($transactionType == "Debit" || empty($transactionType))
 									{
 									?>
 										<th class='left' width="10%">
@@ -299,7 +299,7 @@ $listDirn      = $this->state->get('list.direction');
 										</td>
 									<?php
 										}
-										if ($transactionType == "credit" || empty($transactionType))
+										if ($transactionType == "Credit" || empty($transactionType))
 										{
 										?>
 										<td>
@@ -316,7 +316,7 @@ $listDirn      = $this->state->get('list.direction');
 										</td>
 									<?php
 										}
-										if ($transactionType == "debit" || empty($transactionType))
+										if ($transactionType == "Debit" || empty($transactionType))
 										{
 										?>
 										<td>

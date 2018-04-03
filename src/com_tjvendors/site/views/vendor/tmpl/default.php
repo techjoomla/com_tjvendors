@@ -12,11 +12,11 @@ defined('_JEXEC') or die();
 <?php if (!empty($this->vendor_id) )
 	{
 	?>
-	<h2>
+	<h1>
 		<?php
 			echo JText::_('COM_TJVENDOR_VENDOR_PROFILE');
 			?>
-	</h2>
+	</h1>
 	<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 	<div class="profile row" id="tjv-wrapper">
 		<div class="col-sm-12">

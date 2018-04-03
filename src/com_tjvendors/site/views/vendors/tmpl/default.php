@@ -37,11 +37,11 @@ $listDirn      = $this->state->get('list.direction');
 	tjVSite.vendors.initVendorsJs();
 </script>
 <div id="tjv-wrapper">
-	<h2>
+	<h1>
 		<?php
 			echo JText::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS');
 			?>
-	</h2>
+	</h1>
 <?php
 	$user_id = JFactory::getUser()->id;
 	if (!empty($this->vendor_id))
@@ -154,7 +154,7 @@ $listDirn      = $this->state->get('list.direction');
 			<div class="row">
 				<div class="col-xs-12">
 					<div id="no-more-tables">
-						<table class="table table-striped table-hover">
+						<table class="table table-striped table-bordered table-hover">
 							<thead>
 								<tr>
 									<th width="1%">

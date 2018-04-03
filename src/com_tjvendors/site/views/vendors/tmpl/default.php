@@ -47,11 +47,11 @@ $listDirn      = $this->state->get('list.direction');
 	if (!empty($this->vendor_id))
 	{
 	?>
-	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors');?>" method="post" id="adminForm" name="adminForm">
+	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING'));?>" method="post" id="adminForm" name="adminForm">
 		<div id="j-main-container" class="vendor-report">
 			<!-----"vendor-report" is a page cover class--->
 			<div class="row">
-				<div class="col-xs-12 col-md-7 date">
+				<div class="col-xs-12 col-md-6 date">
 					<div class="btn-group input-group">
 						<span class="input-group-btn">
 							<?php
@@ -70,37 +70,11 @@ $listDirn      = $this->state->get('list.direction');
 						</span>
 					</div>
 				</div>
-				<div class="col-xs-12 col-md-5 search">
-					<div class="input-group pull-right">
-						<span class="pull-left search__field" id="searchPayoutReport" style="display:none;">
-							<input
-								type="text"
-								onchange="document.adminForm.submit();"
-								class="form-control payoutInputBox"
-								name="filter_search"
-								id="filter_search"
-								placeholder="<?php echo JText::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_CURRENCY');?>"
-								value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-								title="<?php echo JText::_('JSEARCH_FILTER');?>"/>
-							<button
-								class="btn"
-								onclick="document.getElementById('filter_search').value='';this.form.submit();"
-								id="clear-search-button"
-								type="button"
-								title="<?php echo JText::_('JSEARCH_FILTER_CLEAR');?>">
-								<i class="fa fa-remove"></i>
-							</button>
-						</span>
-						<a id="searchVenueBtn"  href="javascript:void(0)" onclick="tjVSite.vendors.toggleDiv('searchPayoutReport');" title="<?php echo JText::_('COM_JTICKETING_SEARCH_EVENT')?>">
-							<i class="fa fa-search search__icon"></i>
-						</a>
-					</div>
-				</div>
-			</div>
-			<hr>
-			<div class="row">
-				<div class="col-xs-12 btn-group">
+				<div class="col-xs-12 col-md-6 btn-group">
 					<ul class="input-group list-inline pull-right">
+						<?php
+						if (!empty($this->currencies))
+						{?>
 						<li>
 							<div  class="input-group-btn hidden-xs">
 								<?php
@@ -109,6 +83,7 @@ $listDirn      = $this->state->get('list.direction');
 							</div>
 						</li>
 					<?php
+						}
 						if ($this->vendorClient == '')
 						{
 						?>
@@ -145,7 +120,9 @@ $listDirn      = $this->state->get('list.direction');
 						</li>
 					</ul>
 				</div>
+
 			</div>
+			<hr>
 			<div class="row">
 			<?php
 				if (empty($this->items))
@@ -202,7 +179,7 @@ $listDirn      = $this->state->get('list.direction');
 										</th>
 								<?php
 									}
-									if ($transactionType == "credit" || empty($transactionType))
+									if ($transactionType == "Credit" || empty($transactionType))
 									{
 									?>
 										<th class='left' width="10%">
@@ -210,7 +187,7 @@ $listDirn      = $this->state->get('list.direction');
 										</th>
 									<?php
 									}
-									if ($transactionType == "debit" || empty($transactionType))
+									if ($transactionType == "Debit" || empty($transactionType))
 									{
 									?>
 										<th class='left' width="10%">
@@ -295,7 +272,7 @@ $listDirn      = $this->state->get('list.direction');
 										</td>
 									<?php
 										}
-										if ($transactionType == "credit" || empty($transactionType))
+										if ($transactionType == "Credit" || empty($transactionType))
 										{
 										?>
 										<td>
@@ -312,7 +289,7 @@ $listDirn      = $this->state->get('list.direction');
 										</td>
 									<?php
 										}
-										if ($transactionType == "debit" || empty($transactionType))
+										if ($transactionType == "Debit" || empty($transactionType))
 										{
 										?>
 										<td>

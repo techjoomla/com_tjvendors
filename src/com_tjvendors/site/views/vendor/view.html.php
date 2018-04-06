@@ -56,6 +56,11 @@ class TjvendorsViewVendor extends JViewLegacy
 		JText::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
 		JText::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
 
+		if ($this->layout == 'profile' && $this->vendor_id != $this->vendor->vendor_id)
+		{
+			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+		}
+
 		if (!empty($this->vendor_id) && $this->layout == "edit")
 		{
 			if (!empty($this->clientsForVendor))

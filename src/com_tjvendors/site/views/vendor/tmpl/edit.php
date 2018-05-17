@@ -120,7 +120,7 @@ if (JFactory::getUser()->id ){?>
 				{
 				?>
 				<div>
-					<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
+					<button type="submit" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
 						<span><?php echo JText::_('JSUBMIT'); ?></span>
 					</button>
 
@@ -134,7 +134,7 @@ if (JFactory::getUser()->id ){?>
 				{
 				?>
 					<div>
-						<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
+						<button type="submit" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
 							<span><?php echo JText::_('COM_TJVENDORS_CLIENT_APPROVAL'); ?></span>
 						</button>
 						<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">

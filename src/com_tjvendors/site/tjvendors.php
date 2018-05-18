@@ -32,4 +32,4 @@ JHtml::_('script', 'com_tjvendor/tjvendors.js', $options);
 
 // Frontend css
 JHtml::_('stylesheet', 'com_tjvendor/tjvendors.css', $options);
-JHtml::_('stylesheet', 'media/com_tjvendors/css/tjvendors-tables.css');
+JHtml::_('stylesheet', 'media/com_tjvendors/vendors/no-more-tables.css');

@@ -15,11 +15,7 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
-
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
-	?>
+?>
 <script type="text/javascript">
 	var layout = '<?php echo "edit";?>';
 	tjVSite.vendor.initVendorJs();
@@ -53,9 +49,9 @@ if (JFactory::getUser()->id )
 							<?php
 							$input = JFactory::getApplication()->input;
 
-							if($this->vendor_id !=0)
+							if ($this->vendor_id != 0)
 							{
-								$client=$this->input->get('client', '', 'STRING');
+								$client = $this->input->get('client', '', 'STRING');
 								?>
 								<div class="pull-left alert alert-info">
 
@@ -63,7 +59,7 @@ if (JFactory::getUser()->id )
 										echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');
 									?>
 
-									<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $client . '&vendor_id='.$this->vendor_id);?>">
+									<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $client . '&vendor_id=' . $this->vendor_id);?>">
 									<strong><?php echo htmlspecialchars($this->VendorDetail->vendor_title, ENT_COMPAT, 'UTF-8');?></a></strong>
 
 									<?php
@@ -105,7 +101,7 @@ if (JFactory::getUser()->id )
 
 									if (empty($this->vendor->vendor_logo))
 									{
-										?>
+									?>
 										<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/administrator/components/com_tjvendors/assets/images/default.png" />
 										<div class="form-group">
 											<div class="row">
@@ -148,7 +144,7 @@ if (JFactory::getUser()->id )
 		</div>
 
 		<?php
-		if($this->vendor_id == 0)
+		if ($this->vendor_id == 0)
 		{
 			?>
 			<div class="mt-10">
@@ -183,12 +179,13 @@ if (JFactory::getUser()->id )
 }
 else
 {
-	$link =JRoute::_('index.php?option=com_users');
+	$link = JRoute::_('index.php?option=com_users');
 	$app = JFactory::getApplication();
 	$app->redirect($link);
 }
 ?>
 </div>
 <script>
-	tjVSite.vendor.tabToAccordion();
+	/* Not Using this code*/
+	/*tjVSite.vendor.tabToAccordion();*/
 </script>

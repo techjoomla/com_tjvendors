@@ -35,7 +35,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			?>
 	</h1>
 	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
-		method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form">
+		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm">  
 		<div class="vendorForm">
 			<div class="row">
 				<div class="col-sm-12">

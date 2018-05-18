@@ -28,8 +28,8 @@ if (JFactory::getUser()->id )
 	<h1>
 		<?php echo JText::_('COM_TJVENDOR_CREATE_VENDOR');?>
 	</h1>
-	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')); ?>"
-		method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form" class="form-validate">
+	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
+		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
 				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">

@@ -110,7 +110,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
 
 		// Validate the posted data.
-		$data = $model->validate($form, $data);
+		$validate  = $model->validate($form, $data);
 
 		if (!empty($data['paymentForm']))
 		{
@@ -156,8 +156,8 @@ class TjvendorsControllerVendor extends JControllerForm
 			$data['approved'] = 0;
 		}
 
-		// Check for errors.
-		if ($data === false)
+		// Check for errors
+		if ($validate === false)
 		{
 			// Get the validation messages.
 			$errors = $model->getErrors();

@@ -14,10 +14,6 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
-
-// Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 ?>
 <script type="text/javascript">
 	var layout = '<?php echo "profile";?>';
@@ -34,7 +30,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 			echo ':&nbsp' . $this->vendor->vendor_title;
 			?>
 	</h1>
-	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
+	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING') ); ?>"
 		method="post" enctype="multipart/form-data" name="adminForm" id="vendor-form">
 		<div class="vendorForm">
 			<div class="row">
@@ -61,7 +57,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 										<?php echo $this->form->renderField('vendor_description'); ?>
 									</div>
 									<div class="col-sm-6">
-									<?php if (!empty($this->vendor->vendor_logo))
+									<?php 
+										if (!empty($this->vendor->vendor_logo))
 										{
 										?>
 										<div class="form-group">
@@ -131,12 +128,13 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	}
 	else
 	{
-		$link =JRoute::_('index.php?option=com_users');
+		$link = JRoute::_('index.php?option=com_users');
 		$app = JFactory::getApplication();
 		$app->redirect($link);
 	}
 	?>
 </div>
 <script>
-	tjVSite.vendor.tabToAccordion();
+	/* Not Using this code*/
+	/*tjVSite.vendor.tabToAccordion();*/
 </script>

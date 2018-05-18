@@ -32,4 +32,4 @@ JHtml::_('script', 'com_tjvendor/tjvendors.js', $options);
 
 // Frontend css
 JHtml::_('stylesheet', 'com_tjvendor/tjvendors.css', $options);
-$document->addStyleSheet(JPATH_ROOT . 'media/techjoomla_strapper/vendors/no-more-tables/no-more-tables.css');
+JHtml::_('stylesheet', 'media/com_tjvendors/vendors/no-more-tables.css');

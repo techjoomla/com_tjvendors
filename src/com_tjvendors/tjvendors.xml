@@ -43,6 +43,7 @@
 	<media destination="com_tjvendor" folder="media">
 		<folder>js</folder>
 		<folder>css</folder>
+		<folder>vendors</folder>
 	</media>
 	<languages folder="site_language">
 		<language tag="en-GB">en-GB/en-GB.com_tjvendors.ini</language>

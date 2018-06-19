@@ -51,9 +51,7 @@ defined('_JEXEC') or die();
 				<div class="col-sm-9">
 					<div>
 						<div class='profile__content text-muted'>
-						<?php
-							$description = htmlspecialchars($this->VendorDetail->vendor_description, ENT_COMPAT, 'UTF-8');
-							echo strip_tags($description);?>
+						<?php echo $this->escape($this->VendorDetail->vendor_description);?>
 						</div>
 					</div>
 				</div>

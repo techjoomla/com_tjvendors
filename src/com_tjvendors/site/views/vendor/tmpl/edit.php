@@ -60,7 +60,7 @@ if (JFactory::getUser()->id )
 									?>
 
 									<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $client . '&vendor_id=' . $this->vendor_id);?>">
-									<strong><?php echo htmlspecialchars($this->VendorDetail->vendor_title, ENT_COMPAT, 'UTF-8');?></a></strong>
+									<strong><?php echo $this->escape($this->VendorDetail->vendor_title);?></a></strong>
 
 									<?php
 									echo " " . JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
@@ -70,8 +70,8 @@ if (JFactory::getUser()->id )
 									?>
 								</div>
 								<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
-								<input type="hidden" name="jform[vendor_title]" value="<?php echo $this->VendorDetail->vendor_title; ?>" />
-								<input type="hidden" name="jform[vendor_description]" value="<?php echo $this->VendorDetail->vendor_description; ?>" />
+								<input type="hidden" name="jform[vendor_title]" value="<?php echo $this->escape($this->VendorDetail->vendor_title); ?>" />
+								<input type="hidden" name="jform[vendor_description]" value="<?php echo $this->escape($this->VendorDetail->vendor_description); ?>" />
 								<?php
 							}
 							elseif($this->vendor_id == 0)
@@ -79,7 +79,7 @@ if (JFactory::getUser()->id )
 							?>
 							<div class="row">
 								<div class="col-sm-6">
-									<?php echo$this->form->renderField('vendor_title'); ?>
+									<?php echo $this->form->renderField('vendor_title'); ?>
 									<?php echo $this->form->renderField('alias'); ?>
 									<?php echo $this->form->renderField('vendor_description'); ?>
 								</div>

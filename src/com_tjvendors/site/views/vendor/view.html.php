@@ -24,6 +24,18 @@ class TjvendorsViewVendor extends JViewLegacy
 
 	protected $form;
 
+	protected $vendor_id;
+
+	protected $VendorDetail;
+
+	protected $vendorClientXrefTable;
+
+	protected $layout;
+
+	protected $vendor;
+
+	protected $input;
+
 	/**
 	 * Display the view
 	 *

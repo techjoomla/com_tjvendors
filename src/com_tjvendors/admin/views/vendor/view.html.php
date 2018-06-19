@@ -83,10 +83,6 @@ class TjvendorsViewVendor extends JViewLegacy
 		$input = JFactory::getApplication()->input;
 		$this->full_client = $input->get('client', '', 'STRING');
 
-		// Let's get the extension name
-		$client = JFactory::getApplication()->input->get('client', '', 'STRING');
-		$extensionName = strtoupper($client);
-
 		if ($isNew)
 		{
 			$viewTitle = JText::_('COM_TJVENDOR_VENDORS_ADD_USER_SPECIFIC_COMM');

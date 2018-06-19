@@ -36,6 +36,8 @@ class TjvendorsViewVendor extends JViewLegacy
 
 	protected $input;
 
+	protected $client;
+
 	/**
 	 * Display the view
 	 *
@@ -48,7 +50,6 @@ class TjvendorsViewVendor extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$this->state = $this->get('State');
-		$this->user_id = jFactory::getuser()->id;
 		$this->vendor  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = JFactory::getApplication()->input;

@@ -9,8 +9,6 @@
 defined('_JEXEC') or die;
 
 JHtml::_('formbehavior.chosen', 'select');
-$document               = JFactory::getDocument();
-$document->addStyleSheet(JUri::root(true) . '/media/com_tjvendor/css/vendor-tables.css');
 $listOrder     = $this->state->get('list.ordering');
 $listDirn      = $this->state->get('list.direction');
 

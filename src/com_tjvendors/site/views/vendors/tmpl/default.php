@@ -9,7 +9,6 @@
 defined('_JEXEC') or die;
 
 JHtml::_('formbehavior.chosen', 'select');
-
 $listOrder     = $this->state->get('list.ordering');
 $listDirn      = $this->state->get('list.direction');
 
@@ -248,14 +247,14 @@ $listDirn      = $this->state->get('list.direction');
 										<td>
 											<?php echo $this->pagination->getRowOffset($i);?>
 										</td>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_ID');?>">
 											<?php echo htmlspecialchars($row->transaction_id, ENT_COMPAT, 'UTF-8');?>
 										</td>
 									<?php
 									 if ($this->vendorClient == '' && $clientFilter == 'all')
 										{
 										?>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_CLIENT');?>">
 											<?php
 												$tjvendorFrontHelper = new TjvendorFrontHelper;
 												$client = $tjvendorFrontHelper->getClientName($row->client);
@@ -267,7 +266,7 @@ $listDirn      = $this->state->get('list.direction');
 										if ($currency == '0')
 										{
 										?>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_CURRENCY');?>">
 											<?php echo htmlspecialchars($row->currency, ENT_COMPAT, 'UTF-8');?>
 										</td>
 									<?php
@@ -275,7 +274,7 @@ $listDirn      = $this->state->get('list.direction');
 										if ($transactionType == "Credit" || empty($transactionType))
 										{
 										?>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT');?>">
 										<?php
 											if ($row->credit <='0')
 											{
@@ -292,22 +291,22 @@ $listDirn      = $this->state->get('list.direction');
 										if ($transactionType == "Debit" || empty($transactionType))
 										{
 										?>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT');?>">
 											<?php echo htmlspecialchars($row->debit, ENT_COMPAT, 'UTF-8');?>
 										</td>
 									<?php
 										}
 										?>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID');?>">
 											<?php echo htmlspecialchars($row->reference_order_id, ENT_COMPAT, 'UTF-8');?>
 										</td>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TIME');?>">
 											<?php echo htmlspecialchars($row->transaction_time, ENT_COMPAT, 'UTF-8');?>
 										</td>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT');?>">
 											<?php echo htmlspecialchars(abs($row->total), ENT_COMPAT, 'UTF-8');?>
 										</td>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS');?>">
 										<?php
 											$status = json_decode($row->params, true);
 											if ($status['entry_status'] == "debit_payout")
@@ -327,7 +326,7 @@ $listDirn      = $this->state->get('list.direction');
 											}
 											?>
 										</td>
-										<td class="center">
+										<td class="center" data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE');?>">
 										<?php
 											if (!empty($status['customer_note']))
 											{

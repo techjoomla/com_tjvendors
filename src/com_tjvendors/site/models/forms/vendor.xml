@@ -8,7 +8,7 @@
 		<field name="vendor_title" type="text" required="true" size="45" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE" description="COM_TJVENDORS_FORM_DESC_VENDOR_TITLE" hint="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE" filter=""/>
 		<field name="alias" type="text" size="45" label="COM_TJVENDORS_FORM_LBL_ALIAS" description="COM_TJVENDORS_FORM_DESC_ALIAS" filter="alias" hint="COM_TJVENDORS_FORM_LBL_ALIAS"/>
 		<field name="vendor_description" type="textarea" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_DESCRIPTION" description="COM_TJVENDORS_FORM_DESC_VENDOR_PROFILE_DESCRIPTION" hint="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_DESCRIPTION" rows="5" cols="45" filter="safehtml"/>
-		<field name="vendor_logo" size="45" type="file" accept="image/*" label="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR" description="COM_TJVENDORS_FORM_DESC_VENDOR_PROFILE_AVATAR" hint="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR" filter=""/>
+		<field name="vendor_logo" size="45" type="file" accept="image/jpeg,image/png,image/jpg" label="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR" description="COM_TJVENDORS_FORM_DESC_VENDOR_PROFILE_AVATAR" hint="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_AVATAR" filter=""/>
 		<field name="checked_out_time" default="0000-00-00 00:00:00" type="hidden" filter="" />
 		<field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
 			<option value="1">JPUBLISHED</option>

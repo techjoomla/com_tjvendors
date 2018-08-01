@@ -244,6 +244,39 @@ var tjVSite = {
 				});
 			});
 
+			jQuery(window).load(function(){
+				jQuery("#jform_vendor_logo").change(function(e) {
+					var file, img;
+					if ((file = this.files[0]))
+					{
+						img = new Image();
+						img.onload = function() {
+
+							if (file.size > vendorAllowedMediaSize)
+							{
+								alert(allowedMediaSizeErrorMessage);
+								jQuery("#jform_vendor_logo").val('');
+								return false;
+							}
+
+							if (this.width < 445 || this.height < 265)
+							{
+								alert(allowedImageDimensionErrorMessage + this.width + "px X " + this.height + "px");
+							}
+						};
+
+						img.onerror = function()
+						{
+							alert(allowedImageTypeErrorMessage + file.type);
+							jQuery("#jform_vendor_logo").val('');
+							return false;
+						};
+
+						img.src = _URL.createObjectURL(file);
+					}
+				});
+			});
+
 			Joomla.submitbutton = function (task) {
 				if (task == 'vendor.save') {
 					var validData = document.formvalidator.isValid(document.getElementById('adminForm'));

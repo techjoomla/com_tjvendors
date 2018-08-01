@@ -217,13 +217,15 @@ class TjvendorsTablevendor extends JTable
 					return false;
 				}
 
-				$filename = JFile::stripExt($singleFile['name']);
-				$extension = JFile::getExt($singleFile['name']);
-				$filename = md5(time()) . $filename;
-				$filepath = '/media/com_tjvendor/vendor/' . $filename . '.' . $extension;
+				$filename   = JFile::stripExt($singleFile['name']);
+				$extension  = JFile::getExt($singleFile['name']);
+				$fileType   = $singleFile['type'];
+				$filename   = md5(time()) . $filename;
+				$filepath   = '/media/com_tjvendor/vendor/' . $filename . '.' . $extension;
 				$uploadPath = JPATH_ROOT . $filepath;
-				$fileTemp = $singleFile['tmp_name'];
+				$fileTemp   = $singleFile['tmp_name'];
 
+				// Validate file extension
 				if (!empty($extension))
 				{
 					if (($extension !== "png") && ($extension !== "jpg") && ($extension !== "jpeg"))
@@ -233,6 +235,32 @@ class TjvendorsTablevendor extends JTable
 
 						return false;
 					}
+				}
+				else
+				{
+					$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+					$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+
+					return false;
+				}
+
+				// Validate file type
+				if (!empty($fileType))
+				{
+					if (($fileType !== "image/png") && ($fileType !== "image/jpg") && ($fileType !== "image/jpeg"))
+					{
+						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+						$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+
+						return false;
+					}
+				}
+				else
+				{
+					$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+					$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+
+					return false;
 				}
 
 				if (! JFile::exists($uploadPath))

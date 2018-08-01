@@ -19,53 +19,16 @@ $lang = JFactory::getLanguage();
 $lang->load('plg_payment_paypal', JPATH_ADMINISTRATOR);
 
 ?>
-<script>
-var _URL = window.URL || window.webkitURL;
-var jgiveAllowedMediaSize = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
-var allowedMediaSizeErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
-var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
-var allowedImageTypeErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
-
-jQuery(window).load(function(){
-	jQuery("#jform_profile_image").change(function(e) {
-		var file, img;
-		if ((file = this.files[0]))
-		{
-			img = new Image();
-			img.onload = function() {
-
-				if (file.size > jgiveAllowedMediaSize)
-				{
-					alert(allowedMediaSizeErrorMessage);
-					jQuery("#jform_profile_image").val('');
-					return false;
-				}
-
-				if (this.width < 445 || this.height < 265)
-				{
-					alert(allowedImageDimensionErrorMessage + this.width + "px X " + this.height + "px");
-				}
-
-			};
-
-			img.onerror = function()
-			{
-				alert(allowedImageTypeErrorMessage + file.type);
-				jQuery("#jform_profile_image").val('');
-				return false;
-			};
-
-			img.src = _URL.createObjectURL(file);
-		}
-	});
-});
-
-</script>
 <script type="text/javascript">
-	var vendor_id = '<?php echo $this->item->vendor_id;?>';
-	var client = '<?php echo $this->client;?>';
-	var layout = '<?php echo "default";?>';
-	tjVAdmin.vendor.initVendorJs();
+var _URL                              = window.URL || window.webkitURL;
+var allowedMediaSizeErrorMessage      = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
+var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
+var allowedImageTypeErrorMessage      = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
+const vendorAllowedMediaSize          = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
+var vendor_id                         = '<?php echo $this->item->vendor_id;?>';
+var client                            = '<?php echo $this->client;?>';
+var layout                            = '<?php echo "default";?>';
+tjVAdmin.vendor.initVendorJs();
 </script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client='.$this->input->get('client', '', 'INTEGER').'&vendor_id=' . (int) $this->item->vendor_id); ?>"

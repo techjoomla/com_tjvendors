@@ -45,86 +45,90 @@ var tjVAdmin =
 					return false;
 				});
 			},
-		/*Initialize event js*/
-		initVendorJs: function () {
-			jQuery(document).ready(function () {
-				tjVAdmin.vendor.generateGatewayFields();
-				jQuery(document).on("change", "#jform_user_id", function () {
-					tjVAdmin.vendor.checkVendor();
-				});
-
-				jQuery(document).on("change", "#jform_payment_gateway", function () {
+			/*Initialize event js*/
+			initVendorJs: function () {
+				jQuery(document).ready(function () {
 					tjVAdmin.vendor.generateGatewayFields();
+					jQuery(document).on("change", "#jform_user_id", function () {
+						tjVAdmin.vendor.checkVendor();
+					});
+
+					jQuery(document).on("change", "#jform_payment_gateway", function () {
+						tjVAdmin.vendor.generateGatewayFields();
+					});
 				});
-			});
 
-			Joomla.submitbutton = function (task) {
-				if (task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new') {
-					var validData = document.formvalidator.isValid(document.getElementById('adminForm'));
-					var username = document.getElementById("jform_user_id").value;
+				jQuery(window).load(function(){
+					tjCommon.vendorLogoValidation();
+				});
 
-					if (username == '') {
-						var jmsgs = [Joomla.JText._('COM_TJVENDOR_USER_ERROR')];
-						Joomla.renderMessages({
-							'warning': jmsgs
-						});
-					} else if (validData == true) {
-						Joomla.submitform(task, document.getElementById('adminForm'));
-					}
-				} else if (task == 'vendor.cancel') {
-					Joomla.submitform(task, document.getElementById('adminForm'));
-				} else {
-					Joomla.submitform(task, document.getElementById('adminForm'));
-				}
-			}
-		},
-		changePayoutStatus: function (payout_id, ele) {
-			var paidUnpaid1 = document.getElementById('paidUnpaid').value;
-			var userObject = {};
-			userObject["payout_id"] = payout_id;
-			userObject["paidUnpaid"] = jQuery(ele).val();
+				Joomla.submitbutton = function (task) {
+					if (task == 'vendor.apply' || task == 'vendor.save' || task == 'vendor.save2new') {
+						var validData = document.formvalidator.isValid(document.getElementById('adminForm'));
+						var username = document.getElementById("jform_user_id").value;
 
-			JSON.stringify(userObject);
-			jQuery.ajax({
-				type: "POST",
-				dataType: "json",
-				data: userObject,
-				url: "index.php?option=com_tjvendors&task=payout.changePayoutStatus",
-				success: function (data) {
-					if (data) {
-						document.location = 'index.php?option=com_tjvendors&view=reports&client=' + client;
-					}
-				},
-			});
-		},
-		checkVendor: function () {
-			var user = document.getElementById('jform_user_id_id').value;
-			var userObject = {};
-			userObject["user"] = user;
-			userObject["vendor_id"] = vendor_id;
-			JSON.stringify(userObject);
-			jQuery.ajax({
-				type: "POST",
-				dataType: "json",
-				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
-				success: function (data) {
-
-					if (data) {
-						if (layout === "update") {
-							var jmsgs = [Joomla.JText._('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR')];
+						if (username == '') {
+							var jmsgs = [Joomla.JText._('COM_TJVENDOR_USER_ERROR')];
 							Joomla.renderMessages({
 								'warning': jmsgs
 							});
-
-							return vendorCheck = "exists";
-						} else {
-							document.location = 'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' + client + '&vendor_id=' + data.vendor_id;
+						} else if (validData == true) {
+							Joomla.submitform(task, document.getElementById('adminForm'));
 						}
+					} else if (task == 'vendor.cancel') {
+						Joomla.submitform(task, document.getElementById('adminForm'));
+					} else {
+						Joomla.submitform(task, document.getElementById('adminForm'));
 					}
-				},
-			});
-		},
+				}
+			},
+			changePayoutStatus: function (payout_id, ele) {
+				var paidUnpaid1 = document.getElementById('paidUnpaid').value;
+				var userObject = {};
+				userObject["payout_id"] = payout_id;
+				userObject["paidUnpaid"] = jQuery(ele).val();
+
+				JSON.stringify(userObject);
+				jQuery.ajax({
+					type: "POST",
+					dataType: "json",
+					data: userObject,
+					url: "index.php?option=com_tjvendors&task=payout.changePayoutStatus",
+					success: function (data) {
+						if (data) {
+							document.location = 'index.php?option=com_tjvendors&view=reports&client=' + client;
+						}
+					},
+				});
+			},
+			checkVendor: function () {
+				var user = document.getElementById('jform_user_id_id').value;
+				var userObject = {};
+				userObject["user"] = user;
+				userObject["vendor_id"] = vendor_id;
+				JSON.stringify(userObject);
+				jQuery.ajax({
+					type: "POST",
+					dataType: "json",
+					data: userObject,
+					url: "index.php?option=com_tjvendors&task=vendor.checkDuplicateUser",
+					success: function (data) {
+
+						if (data) {
+							if (layout === "update") {
+								var jmsgs = [Joomla.JText._('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR')];
+								Joomla.renderMessages({
+									'warning': jmsgs
+								});
+
+								return vendorCheck = "exists";
+							} else {
+								document.location = 'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' + client + '&vendor_id=' + data.vendor_id;
+							}
+						}
+					},
+				});
+			},
 		generateGatewayFields: function () {
 			var payment_gateway = document.getElementById('jform_payment_gateway').value;
 			var userObject = {};
@@ -245,36 +249,7 @@ var tjVSite = {
 			});
 
 			jQuery(window).load(function(){
-				jQuery("#jform_vendor_logo").change(function(e) {
-					var file, img;
-					if ((file = this.files[0]))
-					{
-						img = new Image();
-						img.onload = function() {
-
-							if (file.size > vendorAllowedMediaSize)
-							{
-								alert(allowedMediaSizeErrorMessage);
-								jQuery("#jform_vendor_logo").val('');
-								return false;
-							}
-
-							if (this.width < 445 || this.height < 265)
-							{
-								alert(allowedImageDimensionErrorMessage + this.width + "px X " + this.height + "px");
-							}
-						};
-
-						img.onerror = function()
-						{
-							alert(allowedImageTypeErrorMessage + file.type);
-							jQuery("#jform_vendor_logo").val('');
-							return false;
-						};
-
-						img.src = _URL.createObjectURL(file);
-					}
-				});
+				tjCommon.vendorLogoValidation();
 			});
 
 			Joomla.submitbutton = function (task) {
@@ -336,4 +311,39 @@ var tjVSite = {
 				jQuery(".report_search_input").toggleClass( "active" );
 			},
 		}
+}
+
+var tjCommon = {
+	vendorLogoValidation: function(){
+		jQuery("#jform_vendor_logo").change(function(e) {
+			var file, img;
+			if ((file = this.files[0]))
+			{
+				img = new Image();
+				img.onload = function() {
+
+					if (file.size > vendorAllowedMediaSize)
+					{
+						alert(allowedMediaSizeErrorMessage);
+						jQuery("#jform_vendor_logo").val('');
+						return false;
+					}
+
+					if (this.width < 445 || this.height < 265)
+					{
+						alert(allowedImageDimensionErrorMessage + this.width + "px X " + this.height + "px");
+					}
+				};
+
+				img.onerror = function()
+				{
+					alert(allowedImageTypeErrorMessage + file.type);
+					jQuery("#jform_vendor_logo").val('');
+					return false;
+				};
+
+				img.src = _URL.createObjectURL(file);
+			}
+		});
+	}
 }

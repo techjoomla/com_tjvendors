@@ -19,10 +19,10 @@ JHtml::_('behavior.keepalive');
 <script type="text/javascript">
 	var layout = '<?php echo "edit";?>';
 	var _URL                              = window.URL || window.webkitURL;
-	var vendorAllowedMediaSize            = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
 	var allowedMediaSizeErrorMessage      = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
 	var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
 	var allowedImageTypeErrorMessage      = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
+	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
 	tjVSite.vendor.initVendorJs();
 </script>
 <div id="tjv-wrapper">

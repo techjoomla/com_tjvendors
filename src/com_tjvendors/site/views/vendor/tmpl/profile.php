@@ -27,7 +27,7 @@ JHtml::_('behavior.keepalive');
 	<h1>
 		<?php
 			echo JText::_('COM_TJVENDOR_UPDATE_VENDOR');
-			echo ':&nbsp' . $this->vendor->vendor_title;
+			echo ':&nbsp' . htmlspecialchars($this->vendor->vendor_title, ENT_COMPAT, 'UTF-8');
 			?>
 	</h1>
 	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING') ); ?>"

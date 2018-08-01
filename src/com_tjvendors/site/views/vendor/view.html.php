@@ -38,6 +38,8 @@ class TjvendorsViewVendor extends JViewLegacy
 
 	protected $client;
 
+	protected $params;
+
 	/**
 	 * Display the view
 	 *

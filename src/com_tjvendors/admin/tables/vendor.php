@@ -163,7 +163,7 @@ class TjvendorsTablevendor extends JTable
 		$app = JFactory::getApplication();
 		$vendor_id = $app->input->get('vendor_id');
 
-		$files = $app->input->files->get('jform', array(), 'raw');
+		$files = $app->input->files->get('jform', array(), 'ARRAY');
 		$array = $app->input->get('jform', array(), 'ARRAY');
 
 		if (! empty($files['vendor_logo']))

@@ -250,8 +250,8 @@ class TjvendorsControllerVendor extends JControllerForm
 			return false;
 		}
 
-		$msg      = JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR');
-		$id = $input->get('id');
+		$msg = JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR');
+		$id = $input->get('vendor_id');
 
 		if (empty($id))
 		{

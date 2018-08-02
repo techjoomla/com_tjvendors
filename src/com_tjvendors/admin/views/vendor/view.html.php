@@ -24,6 +24,8 @@ class TjvendorsViewVendor extends JViewLegacy
 
 	protected $form;
 
+	protected $params;
+
 	/**
 	 * Display the view
 	 *

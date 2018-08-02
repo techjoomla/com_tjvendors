@@ -38,6 +38,8 @@ class TjvendorsViewVendor extends JViewLegacy
 
 	protected $client;
 
+	protected $params;
+
 	/**
 	 * Display the view
 	 *
@@ -49,18 +51,21 @@ class TjvendorsViewVendor extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$this->state = $this->get('State');
-		$this->vendor  = $this->get('Item');
-		$this->form  = $this->get('Form');
-		$this->input = JFactory::getApplication()->input;
+		$this->params = JComponentHelper::getParams('com_tjvendors');
+		$this->state  = $this->get('State');
+		$this->vendor = $this->get('Item');
+		$this->form   = $this->get('Form');
+		$this->input  = JFactory::getApplication()->input;
 		$this->client = $this->input->get('client', '', 'STRING');
+
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
-		$tjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$tjvendorFrontHelper = new TjvendorFrontHelper;
-		$this->vendor_id = $tjvendorFrontHelper->getvendor();
+		$tjvendorsModelVendor        = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$tjvendorFrontHelper         = new TjvendorFrontHelper;
+		$this->vendor_id             = $tjvendorFrontHelper->getvendor();
 		$this->vendorClientXrefTable = JTable::getInstance('vendorclientxref', 'TjvendorsTable', array());
 		$this->vendorClientXrefTable->load(array('vendor_id' => $this->vendor_id, 'client' => $this->client));
-		$this->VendorDetail = $tjvendorsModelVendor->getItem($this->vendor_id);
+		$this->VendorDetail          = $tjvendorsModelVendor->getItem($this->vendor_id);
+
 		$app = JFactory::getApplication();
 		$app->setUserState("vendor.client", $this->client);
 		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);

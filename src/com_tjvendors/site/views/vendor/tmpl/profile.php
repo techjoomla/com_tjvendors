@@ -17,6 +17,11 @@ JHtml::_('behavior.keepalive');
 ?>
 <script type="text/javascript">
 	var layout = '<?php echo "profile";?>';
+	var _URL                              = window.URL || window.webkitURL;	
+	var allowedMediaSizeErrorMessage      = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
+	var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
+	var allowedImageTypeErrorMessage      = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
+	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
 	tjVSite.vendor.initVendorJs();
 </script>
 <div id="tjv-wrapper">
@@ -85,6 +90,9 @@ JHtml::_('behavior.keepalive');
 										?>
 										<div class="form-group">
 											<?php echo $this->form->renderField('vendor_logo'); ?>
+										</div>
+										<div class="alert alert-info">
+											<?php echo sprintf(JText::_("COM_TJVENDORS_MAXIMUM_LOGO_UPLOAD_SIZE_NOTE"), $this->params->get('image_size', '', 'STRING'));?>
 										</div>
 									</div>
 								</div>

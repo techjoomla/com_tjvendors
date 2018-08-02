@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
 	<name>COM_TJVENDORS</name>
-	<creationDate>29th Mar 2018</creationDate>
+	<creationDate>2nd Aug 2018</creationDate>
 	<copyright>Copyright(C)2016-18 TechJoomla</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
 	<author>TechJoomla</author>
 	<authorEmail>extensions@techjoomla.com</authorEmail>
 	<authorUrl>www.techjoomla.com</authorUrl>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 	<description>COM_TJVENDORS_PRODUCT_DESC</description>
 	<install>
 		<!-- Runs on install -->

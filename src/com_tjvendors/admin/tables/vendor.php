@@ -163,7 +163,7 @@ class TjvendorsTablevendor extends JTable
 		$app = JFactory::getApplication();
 		$vendor_id = $app->input->get('vendor_id');
 
-		$files = $app->input->files->get('jform', array(), 'ARRAY');
+		$files = $app->input->files->get('jform', array(), 'raw');
 		$array = $app->input->get('jform', array(), 'ARRAY');
 
 		if (! empty($files['vendor_logo']))
@@ -225,6 +225,42 @@ class TjvendorsTablevendor extends JTable
 				$uploadPath = JPATH_ROOT . $filepath;
 				$fileTemp   = $singleFile['tmp_name'];
 
+				// If tmp_name is empty, then the file was bigger than the PHP limit
+				if (!empty($fileTemp))
+				{
+					// Get the mime type this is an image file
+					$mime = $this->getMimeType($fileTemp, true);
+
+					// Did we get anything useful?
+					if ($mime !== false)
+					{
+						$result = in_array($mime, array('image/jpeg,image/png,image/jpg'));
+
+						// If the mime type is not allowed we don't upload it and show the mime code error to the user
+						if ($result === false)
+						{
+							$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+							$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+
+							return false;
+						}
+					}
+					else
+					{
+						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+						$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+
+						return false;
+					}
+				}
+				else
+				{
+					$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+					$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+
+					return false;
+				}
+
 				// Validate file extension
 				if (!empty($extension))
 				{
@@ -279,6 +315,61 @@ class TjvendorsTablevendor extends JTable
 		}
 
 		return parent::check();
+	}
+
+	/**
+	 * Get the Mime type
+	 *
+	 * @param   string   $file     The link to the file to be checked
+	 * @param   boolean  $isImage  True if the passed file is an image else false
+	 *
+	 * @return  mixed    the mime type detected false on error
+	 *
+	 * @since   3.7.2
+	 */
+	private function getMimeType($file, $isImage = false)
+	{
+		// If we can't detect anything mime is false
+		$mime = false;
+
+		try
+		{
+			if ($isImage && function_exists('exif_imagetype'))
+			{
+				$mime = image_type_to_mime_type(exif_imagetype($file));
+			}
+			elseif ($isImage && function_exists('getimagesize'))
+			{
+				$imagesize = getimagesize($file);
+				$mime      = isset($imagesize['mime']) ? $imagesize['mime'] : false;
+			}
+			elseif (function_exists('mime_content_type'))
+			{
+				// We have mime magic.
+				$mime = mime_content_type($file);
+			}
+			elseif (function_exists('finfo_open'))
+			{
+				// We have fileinfo
+				$finfo = finfo_open(FILEINFO_MIME_TYPE);
+				$mime  = finfo_file($finfo, $file);
+				finfo_close($finfo);
+			}
+		}
+		catch (\Exception $e)
+		{
+			// If we have any kind of error here => false;
+			return false;
+		}
+
+		// If we can't detect the mime try it again
+		if ($mime === 'application/octet-stream' && $isImage === true)
+		{
+			$mime = $this->getMimeType($file, false);
+		}
+
+		// We have a mime here
+		return $mime;
 	}
 
 	/**

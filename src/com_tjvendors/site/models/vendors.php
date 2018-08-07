@@ -82,7 +82,14 @@ class TjvendorsModelVendors extends JModelList
 		$toDate = $app->getUserStateFromRequest($this->context . '.filter.toDate', 'toDates', '0', 'string');
 		$this->setState('filter.toDate', $toDate);
 
+		$urlClient = $app->input->get('client', '', 'STRING');
 		$client = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
+
+		if (empty($client))
+		{
+			$client = $urlClient;
+		}
+
 		$this->setState('filter.vendor_client', $client);
 
 		// Load the filter state.
@@ -108,7 +115,18 @@ class TjvendorsModelVendors extends JModelList
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$client = $this->getState('filter.vendor_client', '');
+
+		$filterClient = $this->getState('filter.vendor_client', '');
+
+		if ($filterClient)
+		{
+			$client = $filterClient;
+		}
+		else
+		{
+			$client = '';
+		}
+
 		$currency = $this->getState('filter.currency', '');
 		$TjvendorFrontHelper = new TjvendorFrontHelper;
 		$vendor_id = $TjvendorFrontHelper->getVendor();
@@ -125,7 +143,7 @@ class TjvendorsModelVendors extends JModelList
 			$query->where($db->quoteName('vendors.vendor_id') . ' = ' . $db->quote($vendor_id));
 		}
 
-		if (!empty($client))
+		if ($client != 'all' && $client != '')
 		{
 			$query->where($db->quoteName('pass.client') . ' = ' . $db->quote($client));
 		}
@@ -160,7 +178,7 @@ class TjvendorsModelVendors extends JModelList
 
 		if (!empty($transactionType))
 		{
-			if ($transactionType == "debit")
+			if ($transactionType == "Debit")
 			{
 				$query->where($db->quoteName('debit') . " >0 ");
 			}
@@ -185,12 +203,6 @@ class TjvendorsModelVendors extends JModelList
 		{
 			$query->where($db ->quoteName('transaction_time') . 'BETWEEN' . "'$fromDate'" . 'AND' . "'$toDate'");
 		}
-
-		$client = $this->getState('filter.vendor_client', '');
-		$user_id = JFactory::getUser()->id;
-
-		// Display according to filter
-		$client = $this->getState('filter.vendor_client');
 
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');

@@ -19,6 +19,28 @@ JLoader::import('joomla.application.component.model');
  */
 class TjvendorsViewVendors extends JViewLegacy
 {
+	protected $user_id;
+
+	protected $input;
+
+	protected $items;
+
+	protected $pagination;
+
+	protected $filterForm;
+
+	protected $activeFilters;
+
+	protected $currencies;
+
+	protected $vendor_id;
+
+	protected $uniqueClients;
+
+	protected $totalDetails;
+
+	protected $vendorClient;
+
 	/**
 	 * Display passbook transaction list
 	 *
@@ -28,8 +50,9 @@ class TjvendorsViewVendors extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$this->user_id = JFactory::getUser()->id;
 		$app = JFactory::getApplication();
+		$this->user_id = JFactory::getUser()->id;
+		$this->input = $app->input;
 
 		// Get data from the model
 		$items_model = JModelLegacy::getInstance('vendors', 'TjvendorsModel');
@@ -38,14 +61,14 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->state		= $items_model->getState();
 		$this->filterForm		= $items_model->getFilterForm();
 		$this->activeFilters	= $items_model->getActiveFilters();
-		$TjvendorFrontHelper = new TjvendorFrontHelper;
-		$this->currencies = $TjvendorFrontHelper->getCurrencies();
-		$this->vendor_id = $TjvendorFrontHelper->getvendor();
-		$this->uniqueClients = $TjvendorFrontHelper->getUniqueClients($this->user_id);
-		$this->vendorClient = $app->getUserStateFromRequest('client', 'client', '');
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$this->currencies = $tjvendorFrontHelper->getCurrencies();
+		$this->vendor_id = $tjvendorFrontHelper->getvendor();
+		$this->uniqueClients = $tjvendorFrontHelper->getUniqueClients($this->user_id);
 		$client = $this->state->get('filter.vendor_client', '');
 		$currency = $this->state->get('filter.currency', '');
-		$this->totalDetails = $TjvendorFrontHelper->getTotalDetails($client, $this->user_id, $currency);
+		$this->totalDetails = $tjvendorFrontHelper->getTotalDetails($this->vendor_id, $client, $currency);
+		$this->vendorClient = $app->getUserStateFromRequest('client', 'client', '');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))

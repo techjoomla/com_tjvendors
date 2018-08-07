@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * View class for a list of Tjvendors.
@@ -25,6 +26,11 @@ class TjvendorsViewReports extends JViewLegacy
 
 	protected $state;
 
+	protected $vendor_details;
+
+	protected $uniqueClients;
+
+	protected $totalDetails;
 	/**
 	 * Display the view
 	 *
@@ -45,20 +51,16 @@ class TjvendorsViewReports extends JViewLegacy
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
-		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
-		$vendorsDetail = $TjvendorsModelVendors->getItems();
+		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
+		$vendorsDetail = $tjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
-		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
+		$this->uniqueClients = TjvendorsHelper::getUniqueClients();
 		$vendor_id = $this->state->get('filter.vendor_id');
 		$client = $this->state->get('filter.vendor_client');
 
-		if ($client == '0')
-		{
-			$client = $this->input->get('client', '', 'STRING');
-		}
-
 		$currency = $this->state->get('filter.currency');
-		$this->totalDetails = TjvendorsHelpersTjvendors::getTotalDetails($vendor_id, $client, $currency);
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$this->totalDetails = $tjvendorFrontHelper->getTotalDetails($vendor_id, $client, $currency);
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -66,7 +68,7 @@ class TjvendorsViewReports extends JViewLegacy
 			throw new Exception(implode("\n", $errors));
 		}
 
-		TjvendorsHelpersTjvendors::addSubmenu('reports');
+		TjvendorsHelper::addSubmenu('reports');
 
 		$this->addToolbar();
 
@@ -87,17 +89,15 @@ class TjvendorsViewReports extends JViewLegacy
 		$this->client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
-		$canDo = TjvendorsHelpersTjvendors::getActions();
+		$canDo = TjvendorsHelper::getActions();
 		JToolBarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 
-		if (JVERSION >= '3.0')
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'book');
-		}
-		else
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'reports.png');
-		}
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
+
+		$title = !empty($this->client) ? $clientTitle . ' : ' : '';
+
+		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'list.png');
 
 		if ($canDo->get('core.admin'))
 		{

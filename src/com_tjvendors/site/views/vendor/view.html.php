@@ -24,6 +24,22 @@ class TjvendorsViewVendor extends JViewLegacy
 
 	protected $form;
 
+	protected $vendor_id;
+
+	protected $VendorDetail;
+
+	protected $vendorClientXrefTable;
+
+	protected $layout;
+
+	protected $vendor;
+
+	protected $input;
+
+	protected $client;
+
+	protected $params;
+
 	/**
 	 * Display the view
 	 *
@@ -35,35 +51,47 @@ class TjvendorsViewVendor extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$this->state = $this->get('State');
-		$user = JFactory::getUser();
-		$this->user_id = $user->id;
-		$this->vendor  = $this->get('Item');
-		$this->form  = $this->get('Form');
-		$this->input = JFactory::getApplication()->input;
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$TjvendorFrontHelper = new TjvendorFrontHelper;
-		$this->vendor_id = $TjvendorFrontHelper->getvendor();
-		$this->VendorDetail = $TjvendorsModelVendor->getItem($this->vendor_id);
-		$this->clientsForVendor = $TjvendorFrontHelper->getClientsForVendor($this->vendor_id);
+		$this->params = JComponentHelper::getParams('com_tjvendors');
+		$this->state  = $this->get('State');
+		$this->vendor = $this->get('Item');
+		$this->form   = $this->get('Form');
+		$this->input  = JFactory::getApplication()->input;
 		$this->client = $this->input->get('client', '', 'STRING');
+
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
+		$tjvendorsModelVendor        = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$tjvendorFrontHelper         = new TjvendorFrontHelper;
+		$this->vendor_id             = $tjvendorFrontHelper->getvendor();
+		$this->vendorClientXrefTable = JTable::getInstance('vendorclientxref', 'TjvendorsTable', array());
+		$this->vendorClientXrefTable->load(array('vendor_id' => $this->vendor_id, 'client' => $this->client));
+		$this->VendorDetail          = $tjvendorsModelVendor->getItem($this->vendor_id);
+
 		$app = JFactory::getApplication();
 		$app->setUserState("vendor.client", $this->client);
 		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);
 		$this->layout = $this->input->get('layout', '', 'STRING');
 		JText::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+		JText::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
+		JText::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
+
+		if ($this->layout == 'profile' && $this->vendor_id != $this->vendor->vendor_id)
+		{
+			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+		}
 
 		if (!empty($this->vendor_id) && $this->layout == "edit")
 		{
-			foreach ($this->clientsForVendor as $client)
+			if (!empty($this->clientsForVendor))
 			{
-				if ($client == $this->client)
+				foreach ($this->clientsForVendor as $client)
 				{
-					$link = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);
-					$app = JFactory::getApplication();
-					$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
-					$app->redirect($link);
+					if ($client == $this->client)
+					{
+						$link = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);
+						$app = JFactory::getApplication();
+						$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
+						$app->redirect($link);
+					}
 				}
 			}
 		}
@@ -72,32 +100,6 @@ class TjvendorsViewVendor extends JViewLegacy
 		if (count($errors = $this->get('Errors')))
 		{
 			throw new Exception(implode("\n", $errors));
-		}
-
-		if (empty($this->vendor->vendor_id))
-		{
-			$authorised = $user->authorise('core.create', 'com_tjvendors');
-		}
-		else
-		{
-			$authorisedOwn = $user->authorise('core.edit.own', 'com_tjvendors');
-
-			if ($authorisedOwn)
-			{
-				$authorised = true;
-
-				if ($this->vendor->user_id != $user->id)
-				{
-					$authorised = false;
-				}
-			}
-		}
-
-		if ($authorised !== true)
-		{
-			JError::raiseWarning(403, JText::_('JERROR_ALERTNOAUTHOR'));
-
-			return false;
 		}
 
 		parent::display($tpl);

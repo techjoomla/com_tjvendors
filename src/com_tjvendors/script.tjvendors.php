@@ -14,13 +14,13 @@ jimport('joomla.filesystem.file');
 jimport('joomla.application.component.controller');
 
 
-	/**
-	 * script for migration
-	 *
-	 * @package  TJvendor
-	 *
-	 * @since    1.0
-	 */
+/**
+ * script for migration
+ *
+ * @package  TJvendor
+ *
+ * @since    1.0
+ */
 class Com_TjvendorsInstallerScript
 {
 	// Used to identify new install or update
@@ -50,7 +50,11 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function postflight( $type, $parent )
 	{
-		$this->deFaultPermissionsFix();
+		// Write template file for email template
+		$this->_insertTjNotificationTemplates();
+
+		// Add default permissions
+		$this->defaultPermissionsFix();
 	}
 
 	/**
@@ -82,20 +86,9 @@ class Com_TjvendorsInstallerScript
 		{
 			$oldVendorsData = $this->getOldData();
 
-			if (empty($oldVendorsData))
+			if (!empty($oldVendorsData))
 			{
-				$db = JFactory::getDbo();
-				$db->dropTable('#__tj_vendors', true);
-			}
-			else
-			{
-				$result = $this->updateData();
-
-				if ($result)
-				{
-					$db = JFactory::getDbo();
-					$db->dropTable('#__tj_vendors', true);
-				}
+				$this->updateData();
 			}
 		}
 	}
@@ -171,7 +164,7 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * method to migrate the old data
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function updateData()
 	{
@@ -215,7 +208,7 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @param   string  $table  table name
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function checkTableExists($table)
 	{
@@ -246,7 +239,7 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * method to get old data
 	 *
-	 * @return void
+	 * @return object
 	 */
 	public function getOldData()
 	{
@@ -260,11 +253,51 @@ class Com_TjvendorsInstallerScript
 	}
 
 	/**
-	 * Add default ACL permissions if already set by administrator
+	 * Installed Notifications
+	 * method to install default email templates
 	 *
 	 * @return  void
 	 */
-	public function deFaultPermissionsFix()
+	public function _insertTjNotificationTemplates()
+	{
+		jimport('joomla.application.component.model');
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
+
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->quoteName('key'));
+		$query->from($db->quoteName('#__tj_notification_templates'));
+		$query->where($db->quoteName('client') . ' = ' . $db->quote("com_tjvendors"));
+		$db->setQuery($query);
+		$existingKeys = $db->loadColumn();
+
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/models');
+		$notificationsModel = JModelLegacy::getInstance('Notification', 'TJNotificationsModel');
+
+		$filePath = JPATH_ADMINISTRATOR . '/components/com_tjvendors/tjvendorsTemplate.json';
+		$str = file_get_contents($filePath);
+		$json = json_decode($str, true);
+
+		$app   = JFactory::getApplication();
+
+		if (count($json) != 0)
+		{
+			foreach ($json as $template => $array)
+			{
+				if (!in_array($array['key'], $existingKeys))
+				{
+					$notificationsModel->createTemplates($array);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Add default ACL permissions
+	 *
+	 * @return  void
+	 */
+	public function defaultPermissionsFix()
 	{
 		$db = JFactory::getDbo();
 		$columnArray = array('id', 'rules');
@@ -280,7 +313,7 @@ class Com_TjvendorsInstallerScript
 			$result = $db->loadobject();
 			$obj = new Stdclass;
 			$obj->id = $result->id;
-			$obj->rules = '{"core.edit.own":{"1":1,"2":1,"7":1},"core.edit":{"7":0},"core.create":{"7":1,"2":1},"core.delete":{"7":1,"2":1},"core.edit.state":{"7":1,"2":1}}';
+			$obj->rules = '{"core.edit.own":{"1":1,"2":1,"7":1},"core.edit":{"7":0},"core.create":{"7":1,"2":1},"core.delete":{"7":1},"core.edit.state":{"7":1}}';
 
 			$db->updateObject('#__assets', $obj, 'id');
 		}

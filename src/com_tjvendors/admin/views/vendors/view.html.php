@@ -10,6 +10,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * View class for a list of Tjvendors.
@@ -39,20 +40,28 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 		$this->input = JFactory::getApplication()->input;
+		$this->params = JComponentHelper::getParams('com_tjvendors');
+		JText::script('COM_TJVENDOR_VENDOR_APPROVAL');
+		JText::script('COM_TJVENDOR_VENDOR_DENIAL');
+
+		$this->vendorApproval = $this->params->get('vendor_approval');
+		$client = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseError(500, implode('<br />', $errors));
-
-			return false;
+			throw new Exception(implode("\n", $errors));
 		}
 
-		TjvendorsHelpersTjvendors::addSubmenu('vendors');
+		TjvendorsHelper::addSubmenu('vendors');
 
 		$this->addToolbar();
 
-		$this->sidebar = JHtmlSidebar::render();
+		if (!empty($client))
+		{
+			$this->sidebar = JHtmlSidebar::render();
+		}
+
 		parent::display($tpl);
 	}
 
@@ -67,30 +76,24 @@ class TjvendorsViewVendors extends JViewLegacy
 	{
 		$input = JFactory::getApplication()->input;
 		$this->client = $input->get('client', '', 'STRING');
-		$this->userId = JFactory::getUser()->id;
+
 		$state = $this->get('State');
-		$canDo = TjvendorsHelpersTjvendors::getActions();
-		$this->canEdit = $canDo->get('core.edit');
-		$this->canEditState = $canDo->get('core.edit.state');
-		$this->canAdmin = $canDo->get('core.admin');
-		$this->canEditOwn = $canDo->get('core.edit.own');
+		$canDo = TjvendorsHelper::getActions();
 		JToolBarHelper::addNew('vendor.add');
 
-		if (JVERSION >= '3.0')
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
+
+		$title = !empty($this->client) ? $clientTitle . ' : ' : '';
+
+		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'list.png');
+
+		if ($canDo->get('core.edit') && isset($this->items[0]))
 		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'book');
-		}
-		else
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'vendors.png');
+			JToolBarHelper::editList('vendors.edit', 'JTOOLBAR_EDIT');
 		}
 
-		if ($this->canEdit && isset($this->items[0]))
-		{
-			JToolBarHelper::editList('vendor.edit', 'JTOOLBAR_EDIT');
-		}
-
-		if ($this->canEditState)
+		if ($canDo->get('core.edit.state'))
 		{
 			if (isset($this->items[0]->state))
 			{
@@ -106,7 +109,7 @@ class TjvendorsViewVendors extends JViewLegacy
 			}
 		}
 
-		if ($this->canAdmin)
+		if ($canDo->get('core.admin'))
 		{
 			JToolBarHelper::preferences('com_tjvendors');
 		}

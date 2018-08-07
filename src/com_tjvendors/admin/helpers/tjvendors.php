@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
  *
  * @since  1.6
  */
-class TjvendorsHelpersTjvendors
+class TjvendorsHelper
 {
 	/**
 	 * Configure the Linkbar.
@@ -47,8 +47,6 @@ class TjvendorsHelpersTjvendors
 				{
 					$lang = JFactory::getLanguage();
 
-					// Loading language file from the administrator/language directory then
-					// Loading language file from the administrator/components/*extension*/language directory
 					$lang->load($component, JPATH_BASE, null, false, false)
 					|| $lang->load($component, JPath::clean(JPATH_ADMINISTRATOR . '/components/' . $component), null, false, false)
 					|| $lang->load($component, JPATH_BASE, $lang->getDefault(), false, false)
@@ -57,6 +55,29 @@ class TjvendorsHelpersTjvendors
 					call_user_func(array($cName, 'addSubmenu'), $vName . (isset($section) ? '.' . $section : ''));
 				}
 			}
+		}
+
+		$currentComponent = $input->get('extension', '', 'STRING');
+
+		if ($currentComponent == 'com_tjvendors')
+		{
+			$notifications  = false;
+
+			switch ($vName)
+			{
+				case 'notifications':
+					$notifications = true;
+					break;
+			}
+
+			JHtmlSidebar::addEntry(
+				JText::_('COM_TJVENDORS_TJNOTIFICATIONS_MENU'), 'index.php?option=com_tjnotifications&extension=com_tjvendors',
+				$notifications
+			);
+
+			// Load bootsraped filter
+
+			JHtml::_('bootstrap.tooltip');
 		}
 	}
 
@@ -89,7 +110,7 @@ class TjvendorsHelpersTjvendors
 	/**
 	 * Get array of unique Clients
 	 *
-	 * @return null|object
+	 * @return boolean|object
 	 */
 	public static function getUniqueClients()
 	{
@@ -114,271 +135,17 @@ class TjvendorsHelpersTjvendors
 			return false;
 		}
 
-		$uniqueClient[] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT');
+		$uniqueClient   = array();
+		$uniqueClient[] = array("vendor_client" => JText::_('JFILTER_PAYOUT_CHOOSE_CLIENT'), "client_value" => '');
 
 		foreach ($rows as $row)
 		{
-			$langClient = JText::_("COM_TJVENDORS_VENDOR_CLIENT_" . strtoupper($row['client']));
+			$tjvendorFrontHelper = new TjvendorFrontHelper;
+			$langClient = $tjvendorFrontHelper->getClientName($row['client']);
 			$uniqueClient[] = array("vendor_client" => $langClient, "client_value" => $row['client']);
 		}
 
 		return $uniqueClient;
-	}
-
-	/**
-	 * Get array of unique Clients
-	 *
-	 * @param   string  $vendor_id  integer
-	 *
-	 * @param   string  $client     string
-	 *
-	 * @param   string  $currency   string
-	 *
-	 * @return null|object
-	 */
-	public static function getTotalDetails($vendor_id, $client, $currency)
-	{
-		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
-		$date = JFactory::getDate();
-		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
-		$query->select('sum(' . $db->quoteName('debit') . ') As debit');
-
-		$query->from($db->quoteName('#__tjvendors_passbook'));
-
-		if (!empty($vendor_id))
-		{
-			$query->where($db->quoteName('vendor_id') . '=' . $vendor_id);
-		}
-
-		if (!empty($client))
-		{
-		$query->where($db->quoteName('client') . " = " . $db->quote($client));
-		}
-
-		if (!empty($currency))
-		{
-		$query->where($db->quoteName('currency') . " = " . $db->quote($currency));
-		}
-
-		$db->setQuery($query);
-
-		try
-		{
-			$rows = $db->loadAssoc();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		if (empty($rows))
-		{
-			return false;
-		}
-
-		$totalDebitAmount = self::getPaidAmount($vendor_id, $currency, $client);
-		$totalCreditAmount = $rows['credit'];
-		$totalpendingAmount = $totalCreditAmount - $totalDebitAmount;
-
-		$totalDetails = array("debitAmount" => $totalDebitAmount, "creditAmount" => $totalCreditAmount, "pendingAmount" => $totalpendingAmount);
-
-		return $totalDetails;
-	}
-
-	/**
-	 * Get array of unique Clients
-	 *
-	 * @param   string  $vendor_id  integer
-	 *
-	 * @return clientsForVendor
-	 */
-	public static function getClientsForVendor($vendor_id)
-	{
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from($db->quoteName('#__vendor_client_xref'));
-
-		if (!empty($vendor_id))
-		{
-			$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
-		}
-
-		$db->setQuery($query);
-
-		try
-		{
-			$result = $rows = $db->loadAssocList();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		if (empty($result))
-		{
-			return false;
-		}
-
-		if (!empty($result))
-		{
-			foreach ($rows as $client)
-			{
-				$clientsForVendor[] = $client['client'];
-			}
-
-			return $clientsForVendor;
-		}
-	}
-
-	/**
-	 * Get paid amount
-	 *
-	 * @param   string  $vendor_id     integer
-	 *
-	 * @param   string  $currency      integer
-	 *
-	 * @param   string  $filterClient  client from filter
-	 *
-	 * @return amount
-	 */
-	public static function getPaidAmount($vendor_id,$currency,$filterClient)
-	{
-		$input = JFactory::getApplication()->input;
-		$urlClient = $input->get('client', '', 'STRING');
-		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$bulkPayoutStatus = $com_params->get('bulk_payout');
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from($db->quoteName('#__tjvendors_passbook'));
-
-		if ($filterClient != '0')
-		{
-			$client = $filterClient;
-		}
-		else
-		{
-			$client = $urlClient;
-		}
-
-		if (!empty($vendor_id))
-		{
-			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
-		}
-
-		if (!empty($currency))
-		{
-			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
-		}
-
-		if ($bulkPayoutStatus == 0 && !empty($client))
-		{
-			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		}
-
-		$db->setQuery($query);
-
-		try
-		{
-			$paidDetails = $db->loadAssocList();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		if (empty($paidDetails))
-		{
-			return false;
-		}
-
-		$amount = 0;
-
-		foreach ($paidDetails as $detail)
-		{
-			$entryStatus = json_decode($detail['params']);
-			$entryStatus->entry_status;
-
-			if ($entryStatus->entry_status == "debit_payout" && $detail['status'] == 1)
-			{
-				$amount = $amount + $detail['debit'];
-			}
-		}
-
-		return $amount;
-	}
-
-	/**
-	 * Get paid amount
-	 *
-	 * @param   string  $vendor_id  integer
-	 *
-	 * @param   string  $currency   currency for that vendor
-	 *
-	 * @return amount
-	 */
-	public static function getTotalPendingAmount($vendor_id,$currency)
-	{
-		$input = JFactory::getApplication()->input;
-		$client = $input->get('client', '', 'STRING');
-		$vendor_id = $input->get('vendor_id', '', 'STRING');
-		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$bulkPayoutStatus = $com_params->get('bulk_payout');
-		$db = JFactory::getDbo();
-		$subQuery = $db->getQuery(true);
-		$clients = self::getClients($vendor_id);
-		$totalAmount = 0;
-
-		foreach ($clients as $client)
-		{
-			$query = $db->getQuery(true);
-			$subQuery = $db->getQuery(true);
-			$subQuery->select('max(' . $db->quotename('id') . ')');
-			$subQuery->from($db->quotename('#__tjvendors_passbook'));
-
-			if (!empty($vendor_id))
-			{
-				$subQuery->where($db->quotename('vendor_id') . ' = ' . $db->quote($vendor_id));
-			}
-
-			if (!empty($currency))
-			{
-				$subQuery->where($db->quotename('currency') . ' = ' . $db->quote($currency));
-			}
-
-			if (!empty($client))
-			{
-				$subQuery->where($db->quotename('client') . ' = ' . $db->quote($client['client']));
-			}
-
-			$query->select($db->quotename('total'));
-			$query->from($db->quotename('#__tjvendors_passbook'));
-			$query->where($db->quotename('id') . ' = (' . $subQuery . ')');
-			$db->setQuery($query);
-
-			try
-			{
-				$result = $db->loadresult();
-			}
-			catch (Exception $e)
-			{
-				JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-			}
-
-			if (empty($result))
-			{
-				return false;
-			}
-
-			$totalAmount = $totalAmount + $result;
-		}
-
-		return $totalAmount;
 	}
 
 	/**
@@ -390,9 +157,8 @@ class TjvendorsHelpersTjvendors
 	 *
 	 * @param   string   $client     integer
 	 *
-	 * @return client|array
+	 * @return boolean|array
 	 */
-
 	public static function getTotalAmount($vendor_id, $currency, $client)
 	{
 		$db = JFactory::getDbo();
@@ -419,6 +185,7 @@ class TjvendorsHelpersTjvendors
 		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 		$query->where($db->quoteName('id') . ' = (' . $subQuery . ')');
+
 		$db->setQuery($query);
 
 		try
@@ -439,59 +206,26 @@ class TjvendorsHelpersTjvendors
 	}
 
 	/**
-	 * Get array of clients
+	 * Get bulk pending amount
 	 *
 	 * @param   integer  $vendor_id  integer
 	 *
 	 * @param   string   $currency   integer
 	 *
-	 * @param   string   $client     integer
-	 *
-	 * @return client|array
+	 * @return $bulkPendingAmount
 	 */
-	public static function getPayoutDetail($vendor_id,$currency,$client)
+	public static function bulkPendingAmount($vendor_id, $currency)
 	{
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$subQuery = $db->getQuery(true);
-		$subQuery->select('max(' . $db->quoteName('id') . ')');
-		$subQuery->from($db->quoteName('#__tjvendors_passbook'));
+		$vendorClients = self::getClients($vendor_id);
+		$bulkPendingAmount = 0;
 
-		if (!empty($vendor_id))
+		foreach ($vendorClients as $client)
 		{
-			$subQuery->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+			$pendingAmount = self::getPayableAmount($vendor_id, $client['client'], $currency);
+			$bulkPendingAmount = $bulkPendingAmount + $pendingAmount;
 		}
 
-		if (!empty($currency))
-		{
-			$subQuery->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
-		}
-
-		if (!empty($client))
-		{
-			$subQuery->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		}
-
-		$query->select('*');
-		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('id') . ' IN (' . $subQuery . ')');
-		$db->setQuery($query);
-
-		try
-		{
-			$payoutDetail = $db->loadAssoc();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		if (empty($payoutDetail))
-		{
-			return false;
-		}
-
-		return $payoutDetail;
+		return $bulkPendingAmount;
 	}
 
 	/**
@@ -499,7 +233,7 @@ class TjvendorsHelpersTjvendors
 	 *
 	 * @param   string  $vendor_id  integer
 	 *
-	 * @return client|array
+	 * @return boolean|array
 	 */
 	public static function getClients($vendor_id)
 	{
@@ -572,11 +306,6 @@ class TjvendorsHelpersTjvendors
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
-		if (empty($currencies))
-		{
-			return true;
-		}
-
 		foreach ($currencies as $i)
 		{
 			if ($currency == $i['currency'])
@@ -598,7 +327,7 @@ class TjvendorsHelpersTjvendors
 	 *
 	 * @param   string  $vendor_id  integer
 	 *
-	 * @return currencies|array
+	 * @return boolean|array
 	 */
 	public static function getCurrencies($vendor_id)
 	{
@@ -640,129 +369,41 @@ class TjvendorsHelpersTjvendors
 	 *
 	 * @param   string   $currency   string
 	 *
-	 * @return res|integer
+	 * @return integer
 	 */
 	public static function getPayableAmount($vendor_id, $client, $currency)
 	{
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
+		$date = JFactory::getDate();
+		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
+		$bulkPayoutStatus = $com_params->get('bulk_payout');
+
+		// Query to get the credit amount
 		$db = JFactory::getDbo();
-
-		// Create a new query object.
 		$query = $db->getQuery(true);
-		$subQuery = $db->getQuery(true);
-		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
+		$query->select('SUM(' . $db->quoteName('CREDIT') . ')');
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
-
-		if (!empty($vendor_id))
-		{
-			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
-		}
-
-		if (!empty($currency))
-		{
-			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
-		}
-
-		if (!empty($client))
-		{
-			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		}
-
 		$db->setQuery($query);
+		$credit = $db->loadResult();
 
-		try
-		{
-			$creditSum = $db->loadResult();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		if (empty($creditSum))
-		{
-			return false;
-		}
-
-		$result = $creditSum - self::getPaidAmount($vendor_id, $currency, $client);
-
-		return $result;
-	}
-
-	/**
-	 * check order payout
-	 *
-	 * @param   integer  $vendor_id  integer
-	 *
-	 * @param   integer  $currency   integer
-	 *
-	 * @param   integer  $client     integer
-	 *
-	 * @return res|integer
-	 */
-	public static function checkOrderPayout($vendor_id, $currency, $client)
-	{
-		$db = JFactory::getDbo();
-
-		// Create a new query object.
+		// Query to get debit data
 		$query = $db->getQuery(true);
-		$subQuery = $db->getQuery(true);
-		$query->select('*');
+		$query->select('SUM(' . $db->quoteName('debit') . ')');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
-
-		if (!empty($vendor_id))
-		{
-			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
-		}
-
-		if (!empty($currency))
-		{
-			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
-		}
-
-		if (!empty($client))
-		{
-			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		}
-
-		$query->where($db->quoteName('debit') . ' >0 ');
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		$query->where($db->quoteName('status') . ' = ' . $db->quote(1));
 		$db->setQuery($query);
+		$debit = $db->loadResult();
+		$payableAmount = $credit - $debit;
 
-		try
-		{
-			$payoutDetails = $db->loadAssocList();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		$amount = 0;
-
-		if (!empty($payoutDetails))
-		{
-			foreach ($payoutDetails as $detail)
-			{
-				$entryStatus = json_decode($detail['params']);
-
-				if ($entryStatus->entry_status == "debit_payout")
-				{
-					$status = $entryStatus->entry_status;
-					$payoutDetails = array("status" => $status, "transaction_time" => $detail['transaction_time']);
-				}
-
-				if ($entryStatus->entry_status == "debit_pending")
-				{
-					$status = $entryStatus->entry_status;
-					$payoutDetails = array("status" => $status, "transaction_time" => $detail['transaction_time']);
-				}
-			}
-
-			return $payoutDetails;
-		}
-		else
-		{
-			return null;
-		}
+		return $payableAmount;
 	}
 
 	/**
@@ -770,167 +411,18 @@ class TjvendorsHelpersTjvendors
 	 *
 	 * @param   string  $data  integer
 	 *
-	 * @return currencies|array
+	 * @return object
 	 */
 	public static function addVendor($data)
 	{
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables', 'vendor');
-		$vendorsDetail = $TjvendorsModelVendors->save($data);
-		$vendor_id = self::getVendorId($data['user_id']);
+		$vendorsDetail = $tjvendorsModelVendors->save($data);
+		JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
+		$table = JTable::getInstance('vendor', 'TJVendorsTable', array());
+		$table->load(array('user_id' => $data['user_id']));
 
-		return $vendor_id;
-	}
-
-/**
- * Get get userId
- *
- * @param   string  $userId  integer
- *
- * @return res|integer
- */
-	public static function getVendorId($userId)
-	{
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('vendor_id'));
-		$query->from($db->quoteName('#__tjvendors_vendors'));
-		$query->where($db->quoteName('user_id') . ' = ' . $db->quote($userId));
-		$db->setQuery($query);
-
-		try
-		{
-			$res = $db->loadResult();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		if (empty($res))
-		{
-			return false;
-		}
-
-		return $res;
-	}
-
-	/**
-	 * Get get paymentDetails
-	 *
-	 * @param   string  $vendor_id  integer
-	 *
-	 * @param   string  $client     integer
-	 *
-	 * @return  object|boolean
-	 */
-	public static function getPaymentDetails($vendor_id, $client)
-	{
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from($db->quoteName('#__vendor_client_xref'));
-
-		if (!empty($vendor_id))
-		{
-			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
-		}
-
-		if (!empty($client))
-		{
-			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		}
-
-		$db->setQuery($query);
-
-		try
-		{
-			$res = $db->loadObject();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		if (empty($res))
-		{
-			return false;
-		}
-
-		return $res;
-	}
-
-	/**
-	 * Check for duplicate clients
-	 *
-	 * @param   integer  $vendor_id      required to give vendor specific result
-	 *
-	 * @param   integer  $vendor_client  client taken from the form
-	 *
-	 * @return vendor_client|string
-	 */
-	public static function checkForDuplicateClient($vendor_id,$vendor_client)
-	{
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('client'));
-		$query->from($db->quoteName('#__vendor_client_xref'));
-		$query->where($db->quoteName('vendor_id') . ' = ' . $vendor_id);
-		$db->setQuery($query);
-
-		try
-		{
-			$rows = $db->loadAssocList();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		if (empty($rows))
-		{
-			return false;
-		}
-
-		foreach ($rows as $client)
-		{
-			if ($client['client'] == $vendor_client)
-			{
-				return $vendor_client;
-			}
-		}
-	}
-
-	/**
-	 * Get vendor for that user
-	 *
-	 * @return vendor
-	 */
-	public static function getvendor()
-	{
-		$user_id = jFactory::getuser()->id;
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('vendor_id'));
-		$query->from($db->quoteName('#__tjvendors_vendors'));
-		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
-		$db->setQuery($query);
-
-		try
-		{
-			$vendor = $db->loadResult();
-		}
-		catch (Exception $e)
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
-		}
-
-		if (empty($vendor))
-		{
-			return false;
-		}
-
-		return $vendor;
+		return $table->vendor_id;
 	}
 }

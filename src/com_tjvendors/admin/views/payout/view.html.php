@@ -64,23 +64,13 @@ class TjvendorsViewPayout extends JViewLegacy
 		JFactory::getApplication()->input->set('hidemainmenu', true);
 
 		$user  = JFactory::getUser();
-		$isNew = ($this->item->id == 0);
 
 		$input = JFactory::getApplication()->input;
-		$this->full_client = $input->get('client', '', 'STRING');
 
 		// Let's get the extension name
-		$client = JFactory::getApplication()->input->get('client', '', 'STRING');
-		$extensionName = strtoupper($client);
+		$client = $input->get('client', '', 'STRING');
 
-		if ($isNew)
-		{
-			$viewTitle = JText::_('COM_TJVENDOR_ADD_USER_SPECIFIC_COMM');
-		}
-		else
-		{
-			$viewTitle = JText::_('COM_TJVENDOR_EDIT_PAYOUT_SPECIFIC_COMM');
-		}
+		$viewTitle = JText::_('COM_TJVENDOR_EDIT_PAYOUT');
 
 		if (isset($this->item->checked_out))
 		{
@@ -91,16 +81,8 @@ class TjvendorsViewPayout extends JViewLegacy
 			$checkedOut = false;
 		}
 
-		$canDo = TjvendorsHelpersTjvendors::getActions();
-
-		if (JVERSION >= '3.0')
-		{
-			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS') . $viewTitle,  'pencil-2');
-		}
-		else
-		{
-			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS') . $viewTitle, 'course.png');
-		}
+		$clientTitle = TjvendorFrontHelper::getClientName($client);
+		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 
 		if (empty($this->item->id))
 		{

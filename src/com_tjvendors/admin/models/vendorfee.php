@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    SVN: 
+ * @version    SVN:
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -140,37 +140,21 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$table = $this->getTable();
 		$db = JFactory::getDbo();
 		$input  = JFactory::getApplication()->input;
+		$data['vendor_id'] = $input->get('vendor_id', '', 'INTEGER');
 		$app  = JFactory::getApplication();
-		$method = $input->getItem('task', '', 'STRING');
-		$vendor_id = TjvendorsHelpersTjvendors::getVendorId($data['user_id']);
 
-		if (!empty($vendor_id))
-		{
-			$data['vendor_id'] = $vendor_id;
-			$uniqueCurrency = TjvendorsHelpersTjvendors::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client']);
+		$uniqueCurrency = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client']);
 
-			if (!empty($uniqueCurrency))
-			{
-				if (parent::save($data))
-				{
-					return true;
-				}
-			}
-			else
-			{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'), 'error');
-			}
-		}
-		elseif (empty($data['id']))
-		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_VENDORFEE_NOT_A_VENDOR'), 'error');
-		}
-		else
+		if (!empty($uniqueCurrency))
 		{
 			if (parent::save($data))
 			{
 				return true;
 			}
+		}
+		else
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'), 'error');
 		}
 
 		return false;

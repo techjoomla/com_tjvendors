@@ -36,6 +36,9 @@ class TjvendorsModelReports extends JModelList
 				'debit', 'pass.`debit`',
 				'reference_order_id', 'pass.`reference_order_id`',
 				'currency', 'pass.`currency`',
+				'credit', 'pass.`credit`',
+				'debit', 'pass.`debit`',
+				'reference_order_id', 'pass.`reference_order_id`',
 				'vendor_title', 'vendors.`vendor_title`',
 				'transaction_id', 'pass.`transaction_id`',
 				'transaction_time', 'pass.`transaction_time`',
@@ -171,9 +174,32 @@ class TjvendorsModelReports extends JModelList
 		{
 			$query->where($db ->quoteName('transaction_time') . 'BETWEEN' . "'$fromDate'" . 'AND' . "'$toDate'");
 		}
+
+		// Filter by search in title
+		$search = $db->escape($this->getState('filter.search'));
+
+		if (!empty($search))
+		{
+			if (stripos($search, 'id:') === 0)
+			{
+				$query->where($db->quoteName('vendors.vendor_id') . ' = ' . (int) substr($search, 3));
+			}
+			else
+			{
+				$search = $db->Quote('%' . $db->escape($search, true) . '%');
+				$query->where('(' . $db->quoteName('vendors.vendor_id') . ' LIKE ' . $search . 'OR' .
+				$db->quoteName('pass.currency') . 'OR' . $db->quoteName('vendors.vendor_title') . ' LIKE ' . $search . ')');
+			}
+		}
+
 		// Add the list ordering clause.
 		$orderCol  = $this->state->get('list.ordering');
 		$orderDirn = $this->state->get('list.direction');
+
+		if (!in_array(strtoupper($orderDirn), array('ASC', 'DESC')))
+		{
+			$orderDirn = 'DESC';
+		}
 
 		if ($orderCol && $orderDirn)
 		{

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version    SVN: 
+ * @version    SVN:
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
  * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
@@ -10,6 +10,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * View class for a list of Tjvendors.
@@ -41,6 +42,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 		$this->input = JFactory::getApplication()->input;
+		$this->client = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -48,7 +50,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 			throw new Exception(implode("\n", $errors));
 		}
 
-		TjvendorsHelpersTjvendors::addSubmenu('vendorfees');
+		TjvendorsHelper::addSubmenu('vendorfees');
 		$this->addToolbar();
 
 		$this->sidebar = JHtmlSidebar::render();
@@ -67,19 +69,14 @@ class TjvendorsViewVendorFees extends JViewLegacy
 		$input = JFactory::getApplication()->input;
 
 		$state = $this->get('State');
-		$canDo = TjvendorsHelpersTjvendors::getActions();
+		$canDo = TjvendorsHelper::getActions();
 
 		JToolBarHelper::custom('vendorfees.back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 		JToolBarHelper::addNew('vendorfee.add');
 
-		if (JVERSION >= '3.0')
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'book');
-		}
-		else
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'vendors.png');
-		}
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
+		JToolbarHelper::title($clientTitle . ' : ' . JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'list.png');
 
 		if ($canDo->get('core.edit.state'))
 		{

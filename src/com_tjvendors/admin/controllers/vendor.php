@@ -3,7 +3,7 @@
  * @version    SVN:
  * @package    Com_Tjvendors
  * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright  2009-2018 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
 // No direct access
@@ -71,6 +71,28 @@ class TjvendorsControllerVendor extends JControllerForm
 	}
 
 	/**
+	 * Vendor approval
+	 *
+	 * @return null
+	 *
+	 * @since   1.1
+	 */
+	public function vendorApprove()
+	{
+		$input  = JFactory::getApplication()->input;
+		$vendor_id = $input->post->get('vendor_id', '', 'INTEGER');
+		$vendorApprove = $input->post->get('vendorApprove', '', 'INTEGER');
+		$client = $input->get('client', '', 'STRING');
+		$model = $this->getModel('vendor');
+		$data['vendor_id'] = $vendor_id;
+		$data['vendor_client'] = $client;
+		$data['approved'] = $vendorApprove;
+		$result = $model->save($data);
+
+		echo new JResponseJson($result, JText::_('COM_TJVENDORS_VENDOR_APPROVAL_ERROR'), true);
+	}
+
+	/**
 	 * Build payment gateway fields
 	 *
 	 * @return null
@@ -119,9 +141,9 @@ class TjvendorsControllerVendor extends JControllerForm
 	public function save($key = null, $urlVar = null)
 	{
 		// Initialise variables.
-		$app   = JFactory::getApplication();
-		$model = $this->getModel('Vendor', 'TjvendorsModel');
-		$input = $app->input;
+		$app    = JFactory::getApplication();
+		$model  = $this->getModel('Vendor', 'TjvendorsModel');
+		$input  = $app->input;
 		$client = $input->get('client', '', 'STRING');
 
 		// Get the user data.
@@ -142,6 +164,47 @@ class TjvendorsControllerVendor extends JControllerForm
 
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
+		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
+		$paymentDetails = array();
+
+		if (!empty($data['paymentForm']))
+		{
+			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
+			{
+				$paymentDetails[$key] = $field;
+			}
+
+			foreach ($data['paymentForm'] as $key => $detail)
+			{
+				$paymentPrefix = 'payment_';
+
+				if (strpos($key, $paymentPrefix) !== false)
+				{
+					if ($key != 'payment_fields')
+					{
+						$paymentDetails[$key] = $detail;
+					}
+				}
+			}
+		}
+
+		if (!empty($paymentDetails))
+		{
+			$data['paymentDetails'] = json_encode($paymentDetails);
+			$data['gateway'] = $paymentDetails['payment_gateway'];
+		}
+
+		// On a clientless vendor registration
+		if (empty($data['vendor_client']))
+		{
+			$data['params'] = $data['paymentDetails'];
+			$data['payment_gateway'] = $paymentDetails['payment_gateway'];
+		}
+		else
+		{
+			$data['payment_gateway'] = '';
+			$data['params'] = '';
+		}
 
 		// Check for errors.
 		if ($data === false)
@@ -187,8 +250,8 @@ class TjvendorsControllerVendor extends JControllerForm
 			return false;
 		}
 
-		$msg      = JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR');
-		$id = $input->get('id');
+		$msg = JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR');
+		$id = $input->get('vendor_id');
 
 		if (empty($id))
 		{

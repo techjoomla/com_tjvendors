@@ -27,4 +27,9 @@ $controller = JControllerLegacy::getInstance('Tjvendors');
 $controller->execute(JFactory::getApplication()->input->get('task'));
 $controller->redirect();
 $document = JFactory::getDocument();
-$document->addScript(JUri::root(true) . '/media/com_tjvendor/js/tjvendors.js');
+$options['relative'] = true;
+JHtml::_('script', 'com_tjvendor/tjvendors.js', $options);
+
+// Frontend css
+JHtml::_('stylesheet', 'com_tjvendor/tjvendors.css', $options);
+JHtml::stylesheet(JUri::root() . 'media/techjoomla_strapper/vendors/no-more-tables.css', array(), true);

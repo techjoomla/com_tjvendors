@@ -11,6 +11,7 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.view');
+JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
  * View class for a list of Tjvendors.
@@ -24,6 +25,12 @@ class TjvendorsViewPayouts extends JViewLegacy
 	protected $pagination;
 
 	protected $state;
+
+	protected $vendor_details;
+
+	protected $uniqueClients;
+
+	protected $bulkPayoutStatus;
 
 	/**
 	 * Display the view
@@ -44,10 +51,12 @@ class TjvendorsViewPayouts extends JViewLegacy
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
-		$TjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
-		$vendorsDetail = $TjvendorsModelVendors->getItems();
+		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
+		$vendorsDetail = $tjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
-		$this->uniqueClients = TjvendorsHelpersTjvendors::getUniqueClients();
+		$this->uniqueClients = TjvendorsHelper::getUniqueClients();
+		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$this->bulkPayoutStatus = $com_params->get('bulk_payout');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -55,7 +64,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 			throw new Exception(implode("\n", $errors));
 		}
 
-		TjvendorsHelpersTjvendors::addSubmenu('payouts');
+		TjvendorsHelper::addSubmenu('payouts');
 
 		$this->addToolbar();
 
@@ -73,20 +82,18 @@ class TjvendorsViewPayouts extends JViewLegacy
 	protected function addToolbar()
 	{
 		$input = JFactory::getApplication()->input;
-		$this->client = $input->get('client', '', 'STRING');
+		$client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
-		$canDo = TjvendorsHelpersTjvendors::getActions();
+		$canDo = TjvendorsHelper::getActions();
 		JToolBarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 
-		if (JVERSION >= '3.0')
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'book');
-		}
-		else
-		{
-			JToolBarHelper::title(JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'payouts.png');
-		}
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$clientTitle = $tjvendorFrontHelper->getClientName($client);
+
+		$title = !empty($client) ? $clientTitle . ' : ' : '';
+
+		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'list.png');
 
 		if ($canDo->get('core.admin'))
 		{

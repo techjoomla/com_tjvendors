@@ -24,6 +24,8 @@ class TjvendorsViewVendor extends JViewLegacy
 
 	protected $form;
 
+	protected $params;
+
 	/**
 	 * Display the view
 	 *
@@ -41,7 +43,6 @@ class TjvendorsViewVendor extends JViewLegacy
 		$this->form  = $this->get('Form');
 		$this->params = JComponentHelper::getParams('com_tjvendors');
 		$this->input = JFactory::getApplication()->input;
-		$this->clientsForVendor = TjvendorsHelpersTjvendors::getClientsForVendor($this->item->vendor_id);
 		JText::script('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR');
 		JText::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
 		JText::script('COM_TJVENDOR_USER_ERROR');
@@ -84,10 +85,6 @@ class TjvendorsViewVendor extends JViewLegacy
 		$input = JFactory::getApplication()->input;
 		$this->full_client = $input->get('client', '', 'STRING');
 
-		// Let's get the extension name
-		$client = JFactory::getApplication()->input->get('client', '', 'STRING');
-		$extensionName = strtoupper($client);
-
 		if ($isNew)
 		{
 			$viewTitle = JText::_('COM_TJVENDOR_VENDORS_ADD_USER_SPECIFIC_COMM');
@@ -106,16 +103,9 @@ class TjvendorsViewVendor extends JViewLegacy
 			$checkedOut = false;
 		}
 
-		$canDo = TjvendorsHelpersTjvendors::getActions();
-
-		if (JVERSION >= '3.0')
-		{
-			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle,  'pencil-2');
-		}
-		else
-		{
-			JToolbarHelper::title(JText::_('COM_TJVENDORS_TITLE_VENDOR') . $viewTitle, 'course.png');
-		}
+		$canDo = TjvendorsHelper::getActions();
+		$clientTitle = TjvendorFrontHelper::getClientName($this->client);
+		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 
 		// If not checked out, can save the item.
 		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create'))))

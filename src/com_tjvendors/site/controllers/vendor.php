@@ -82,13 +82,17 @@ class TjvendorsControllerVendor extends JControllerForm
 	{
 		// Check for request forgeries.
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		$params = JComponentHelper::getParams('com_tjvendors');
+		$vendorApproval = $params->get('vendor_approval');
 
 		// Initialise variables.
 		$app = JFactory::getApplication();
 		$model = $this->getModel('Vendor', 'TjvendorsModel');
+		$paymentDetails = array();
 
 		// Get the user data.
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+
 		$data['user_id'] = JFactory::getUser()->id;
 
 		// Validate the posted data.
@@ -106,10 +110,54 @@ class TjvendorsControllerVendor extends JControllerForm
 		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
 
 		// Validate the posted data.
-		$data = $model->validate($form, $data);
+		$validate  = $model->validate($form, $data);
 
-		// Check for errors.
-		if ($data === false)
+		if (!empty($data['paymentForm']))
+		{
+			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
+			{
+				$paymentDetails[$key] = $field;
+			}
+
+			foreach ($data['paymentForm'] as $key => $detail)
+			{
+				$paymentPrefix = 'payment_';
+
+				if (strpos($key, $paymentPrefix) !== false)
+				{
+					if ($key != 'payment_fields')
+					{
+						$paymentDetails[$key] = $detail;
+					}
+				}
+			}
+		}
+
+		if (!empty($paymentDetails))
+		{
+			$data['paymentDetails'] = json_encode($paymentDetails);
+			$data['gateway'] = $paymentDetails['payment_gateway'];
+		}
+
+		// On a clientless vendor registration
+		if (empty($data['vendor_client']))
+		{
+			$data['params'] = $data['paymentDetails'];
+			$data['payment_gateway'] = $paymentDetails['payment_gateway'];
+		}
+		else
+		{
+			$data['payment_gateway'] = '';
+			$data['params'] = '';
+		}
+
+		if ($vendorApproval && empty($data['vendor_id']))
+		{
+			$data['approved'] = 0;
+		}
+
+		// Check for errors
+		if ($validate === false)
 		{
 			// Get the validation messages.
 			$errors = $model->getErrors();
@@ -164,14 +212,7 @@ class TjvendorsControllerVendor extends JControllerForm
 			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
 			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $id;
 
-			if ($id != 0)
-			{
-				$layout = 'profile';
-			}
-			else
-			{
-				$layout = 'edit';
-			}
+			$layout = $id != 0 ? 'profile' : 'edit';
 
 			$this->setRedirect(
 					JRoute::_(

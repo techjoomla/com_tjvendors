@@ -157,7 +157,7 @@ $listDirn      = $this->state->get('list.direction');
 							<thead>
 								<tr>
 									<th width="1%">
-										<?php echo "Sr.No";?>
+										<?php echo JText::_('COM_TJVENDORS_VENDORS_SR_NO');?>
 									</th>
 									<th width="5%">
 										<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder);?>
@@ -213,28 +213,28 @@ $listDirn      = $this->state->get('list.direction');
 								</tr>
 							</thead>
 							<tfoot>
-								<td colspan="5">
-								<?php if ($currency != '0'):?>
-									<div class="pull-right">
-										<tr>
-											<th colspan="12">
-												<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' .$this->totalDetails['creditAmount']. '&nbsp' . $currency;?>
-											</th>
-										</tr>
-										<tr>
-											<th colspan="12">
-												<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount']. '&nbsp' . $currency;?>
-											</th>
-										</tr>
-										<tr>
-											<th colspan="12">
-												<?php echo JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount']. '&nbsp' . $currency?>
-											</th>
-										</tr>
-									</div>
-								<?php endif;?>
+								<td colspan="5" class="hidden-xs">
+									<?php if ($currency != '0'):?>
+										<div class="pull-right">
+											<tr>
+												<th colspan="12">
+													<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' .$this->totalDetails['creditAmount']. '&nbsp' . $currency;?>
+												</th>
+											</tr>
+											<tr>
+												<th colspan="12">
+													<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount']. '&nbsp' . $currency;?>
+												</th>
+											</tr>
+											<tr>
+												<th colspan="12">
+													<?php echo JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount']. '&nbsp' . $currency?>
+												</th>
+											</tr>
+										</div>
+									<?php endif;?>
 								</td>
-								<td colspan="7">
+								<td colspan="7" class="hidden-xs">
 									<?php echo $this->pagination->getListFooter();?>
 								</td>
 							</tfoot>
@@ -244,7 +244,7 @@ $listDirn      = $this->state->get('list.direction');
 								{
 								?>
 									<tr>
-										<td>
+										<td data-title="<?php echo JText::_('COM_TJVENDORS_VENDORS_SR_NO');?>">
 											<?php echo $this->pagination->getRowOffset($i);?>
 										</td>
 										<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_ID');?>">

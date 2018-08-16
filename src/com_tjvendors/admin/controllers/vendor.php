@@ -103,9 +103,10 @@ class TjvendorsControllerVendor extends JControllerForm
 	{
 		$input  = JFactory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
+		$parentTag = $input->get('parent_tag', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$model = $this->getModel('vendor');
-		$results = $model->generateGatewayFields($payment_gateway);
+		$results = $model->generateGatewayFields($payment_gateway, $parentTag);
 		echo json_encode($results);
 		jexit();
 	}

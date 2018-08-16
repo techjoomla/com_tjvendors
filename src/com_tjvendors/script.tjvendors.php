@@ -55,6 +55,9 @@ class Com_TjvendorsInstallerScript
 
 		// Add default permissions
 		$this->defaultPermissionsFix();
+
+		// Install Layouts
+		$this->_addLayout($parent);
 	}
 
 	/**
@@ -321,5 +324,26 @@ class Com_TjvendorsInstallerScript
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
+	}
+
+	/**
+	 * Add subform layout for payment form
+	 *
+	 * @return  void
+	 */
+	private function _addLayout($parent)
+	{
+		jimport('joomla.filesystem.file');
+		jimport('joomla.filesystem.folder');
+
+		$src = $parent->getParent()->getPath('source');
+		$JTsubformlayouts = $src . "/layouts/vendorsubformlayouts";
+
+		if (JFolder::exists(JPATH_SITE . '/layouts/vendorsubformlayouts/layouts'))
+		{
+			JFolder::delete(JPATH_SITE . '/layouts/vendorsubformlayouts/layouts');
+		}
+
+		JFolder::copy($JTsubformlayouts, JPATH_SITE . '/layouts/vendorsubformlayouts/layouts');
 	}
 }

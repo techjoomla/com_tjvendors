@@ -17,10 +17,23 @@
 		<field name="checked_out" type="hidden" />
 		<field name="ordering" type="hidden" />
 		<field name="currency" type="text" class="inputbox" label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY" rows="10" cols="5" />
-		<field name="payment_gateway" type="paymentGateway" filter="" label="COM_TJVENDORS_FORM_LBL_VENDOR_PAYMENT_GATEWAY" />
 		<field name="primary_gateway" type="radio" default="0" label="COM_TJVENDORS_FORM_LBL_VENDOR_PRIMARY_EMAIL_CONFIRMATION" description="COM_TJVENDORS_FORM_DESC_VENDOR_EMAIL_CONFIRMATION" class="btn-group btn-group-yesno">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
+	</fieldset>
+	<fieldset name= "paymentgateway">
+		<field
+			name= "payment_gateway"
+			description= ""
+			type= "subform"
+			label=""
+			min= "1"
+			formsource= "/administrator/components/com_tjvendors/models/forms/payment_gateway.xml"
+			multiple= "true"
+			buttons= "add,remove"
+			layout="joomla.form.field.subform.repeatable"
+			groupByFieldset="false"
+			/>
 	</fieldset>
 </form>

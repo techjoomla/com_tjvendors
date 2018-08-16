@@ -48,18 +48,15 @@ var tjVAdmin =
 			/*Initialize event js*/
 			initVendorJs: function () {
 				jQuery(document).ready(function () {
-					tjVAdmin.vendor.generateGatewayFields();
 					jQuery(document).on("change", "#jform_user_id", function () {
 						tjVAdmin.vendor.checkVendor();
 					});
 
-					jQuery(document).on("change", "#jform_payment_gateway", function () {
-						tjVAdmin.vendor.generateGatewayFields();
-					});
 				});
 
 				jQuery(window).load(function(){
 					tjCommon.vendorLogoValidation();
+					tjCommon.initVendorFields();
 				});
 
 				Joomla.submitbutton = function (task) {
@@ -128,29 +125,7 @@ var tjVAdmin =
 						}
 					},
 				});
-			},
-		generateGatewayFields: function () {
-			var payment_gateway = document.getElementById('jform_payment_gateway').value;
-			var userObject = {};
-			userObject["payment_gateway"] = payment_gateway;
-			JSON.stringify(userObject);
-			jQuery.ajax({
-				type: "POST",
-				dataType: "json",
-				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
-				success: function (data) {
-					jQuery('#payment_details').empty();
-
-					if (data) {
-						jQuery('#payment_details').html(data);
-					} else if (!data && payment_gateway != "" && layout != "update") {
-						var error_html = Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
-						jQuery("#payment_details").html("<div id='fieldmessage' class='alert alert-warning'>" + error_html + "</div>");
-					}
-				},
-			});
-		}
+			}
 	},
 	vendors: {
 		vendorApprove: function (vendor_id, ele) {
@@ -242,14 +217,13 @@ var tjVSite = {
 		/*Initialize event js*/
 		initVendorJs: function () {
 			jQuery(document).ready(function () {
-				tjVSite.vendor.generateGatewayFields();
 				jQuery(document).on("change", "#jform_payment_gateway", function () {
-					tjVSite.vendor.generateGatewayFields();
 				});
 			});
 
 			jQuery(window).load(function(){
 				tjCommon.vendorLogoValidation();
+				tjCommon.initVendorFields();
 			});
 
 			Joomla.submitbutton = function (task) {
@@ -264,30 +238,7 @@ var tjVSite = {
 					Joomla.submitform(task, document.getElementById('adminForm'));
 				}
 			}
-		},
-
-		generateGatewayFields: function () {
-			var payment_gateway = document.getElementById('jform_payment_gateway').value;
-			var userObject = {};
-			userObject["payment_gateway"] = payment_gateway;
-			JSON.stringify(userObject);
-			jQuery.ajax({
-				type: "POST",
-				dataType: "json",
-				data: userObject,
-				url: "?option=com_tjvendors&task=vendor.generateGatewayFields",
-				success: function (data) {
-					jQuery('#payment_details').empty();
-
-					if (data) {
-						jQuery('#payment_details').html(data);
-					} else if (!data && payment_gateway != "" && layout != "profile") {
-						var error_html = Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
-						jQuery("#payment_details").html("<div class='alert alert-warning'>" + error_html + "</div>");
-					}
-				},
-			});
-		},
+		}
 	},
 	vendors:
 		{
@@ -345,5 +296,56 @@ var tjCommon = {
 				img.src = _URL.createObjectURL(file);
 			}
 		});
-	}
+	},
+	initVendorFields: function() {
+		jQuery('.subform-repeatable-group .gateway_name').on('focus', function () {
+        		console.log("ONBEFOR ");
+        	previous = this.value;
+    	})
+			jQuery('.subform-repeatable-group .gateway_name').each(function() {
+  				jQuery(this).trigger("change");
+			});
+		},
+	generateGatewayFields: function (ele) {
+		let count = 0;
+		jQuery('.subform-repeatable-group .gateway_name').each(function() {
+			if (this.value === ele.value) {
+				count++;
+			}
+		});
+
+		console.log(count);
+		if (count>1) {
+			jQuery(ele).val();
+			return false;
+		}
+
+		let userObject = {
+			'payment_gateway': ele.value,
+			'parent_tag': ele.name.replace('[payment_gateways]', "")
+		};
+
+		this.getGatewayFields(userObject, ele.id);
+	},
+	getGatewayFields: function (userObject, eleId){
+			JSON.stringify(userObject);
+			jQuery.ajax({
+				type: "POST",
+				dataType: "json",
+				data: userObject,
+				url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
+				success: function (response) {
+					let $thisId = jQuery('#'+eleId);
+					$thisId.closest('.subform-repeatable-group').find('.payment-gateway-parent').empty();
+					if (response) {
+						response.forEach(function(data) {
+							$thisId.closest('.subform-repeatable-group').append("<div class='payment-gateway-parent'>" + data + "</div>");
+						});
+					} else if (!response && userObject.payment_gateway != "" && layout != "update") {
+						var error_html = Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+						jQuery("#payment_details").html("<div id='fieldmessage' class='alert alert-warning'>" + error_html + "</div>");
+					}
+				},
+			});
+		}
 }

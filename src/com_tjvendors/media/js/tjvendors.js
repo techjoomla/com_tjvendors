@@ -308,7 +308,8 @@ var tjCommon = {
   				jQuery(this).trigger("change");
 		});
 	},
-	generateGatewayFields: function (ele)
+
+	getGatewayFields: function (ele)
 	{
 		let count = 0;
 		jQuery('.subform-repeatable-group .gateway_name').each(function()
@@ -333,7 +334,8 @@ var tjCommon = {
 
 		this.getGatewayFields(userObject, ele.id);
 	},
-	getGatewayFields: function (userObject, eleId)
+
+	generateGatewayFields: function (userObject, eleId)
 	{
 		JSON.stringify(userObject);
 		jQuery.ajax({

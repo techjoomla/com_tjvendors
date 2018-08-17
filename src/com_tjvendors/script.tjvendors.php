@@ -14,13 +14,13 @@ jimport('joomla.filesystem.file');
 jimport('joomla.application.component.controller');
 
 
-/**
- * script for migration
- *
- * @package  TJvendor
- *
- * @since    1.0
- */
+	/**
+	 * script for migration
+	 *
+	 * @package  TJvendor
+	 *
+	 * @since    1.0
+	 */
 class Com_TjvendorsInstallerScript
 {
 	// Used to identify new install or update
@@ -55,6 +55,9 @@ class Com_TjvendorsInstallerScript
 
 		// Add default permissions
 		$this->defaultPermissionsFix();
+
+		// Payment gateway migration
+		$this->removePaymentGateway();
 	}
 
 	/**
@@ -320,6 +323,57 @@ class Com_TjvendorsInstallerScript
 		catch (Exception $e)
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+	}
+
+	/**
+	 * Override the Modules
+	 *
+	 * @return  JModel
+	 *
+	 * @since   1.6
+	 */
+	public function removePaymentGateway()
+	{
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select(array('*'));
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$query->where($db->quoteName('payment_gateway') . "=" . "'paypal'", 'OR');
+		$query->where($db->quoteName('payment_gateway') . "=" . "'adaptive_paypal'");
+		$db->setQuery($query);
+		$completedOrders = $db->loadObjectList();
+
+		foreach ($completedOrders as $key => $value)
+		{
+			$param1 = new stdClass;
+			$param1->payment_gateways = $value->payment_gateway;
+
+			$param2 = new stdClass;
+			$param2 = json_decode($value->params);
+
+			$params = (object) array_merge((array) $param1, (array) $param2);
+
+			$paymentArray = array();
+			$paymentArray['payment_gateway0'] = $params;
+			$paymentArrayList['payment_gateway'] = $paymentArray;
+
+			$vendorParams = json_encode($paymentArrayList);
+
+			$vendorData = new stdClass;
+			$vendorData->id        = $value->id;
+			$vendorData->vendor_id = $value->vendor_id;
+			$vendorData->params    = $vendorParams;
+
+			$result = JFactory::getDbo()->updateObject('#__vendor_client_xref', $vendorData, 'id');
+		}
+
+		$query = "ALTER TABLE  `#__vendor_client_xref` DROP  `payment_gateway`";
+		$db->setQuery($query);
+
+		if (!$db->execute())
+		{
+			JError::raiseError(500, $db->stderr());
 		}
 	}
 }

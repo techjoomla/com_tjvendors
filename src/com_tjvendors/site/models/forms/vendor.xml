@@ -29,7 +29,7 @@
 			formsource= "/components/com_tjvendors/models/forms/payment_gateway.xml"
 			multiple= "true"
 			buttons= "add,remove"
-			layout="vendorsubformlayouts.layouts.subform.repeatable"
+			layout="com_tjvendors.subform.repeatable"
 			groupByFieldset="false"
 			/>
 	</fieldset>

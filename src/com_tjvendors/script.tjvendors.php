@@ -337,13 +337,13 @@ class Com_TjvendorsInstallerScript
 		jimport('joomla.filesystem.folder');
 
 		$src = $parent->getParent()->getPath('source');
-		$JTsubformlayouts = $src . "/layouts/vendorsubformlayouts";
+		$VendorSubformLayouts = $src . "/layouts/com_tjvendors";
 
-		if (JFolder::exists(JPATH_SITE . '/layouts/vendorsubformlayouts/layouts'))
+		if (JFolder::exists(JPATH_SITE . '/layouts/com_tjvendors'))
 		{
-			JFolder::delete(JPATH_SITE . '/layouts/vendorsubformlayouts/layouts');
+			JFolder::delete(JPATH_SITE . '/layouts/com_tjvendors');
 		}
 
-		JFolder::copy($JTsubformlayouts, JPATH_SITE . '/layouts/vendorsubformlayouts/layouts');
+		JFolder::copy($VendorSubformLayouts, JPATH_SITE . '/layouts/com_tjvendors');
 	}
 }

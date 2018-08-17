@@ -249,8 +249,8 @@ class TjvendorFrontHelper
 	 * @param   string  $vendor_id  integer
 	 *
 	 * @param   string  $client     integer
-	 * 
-	 * @deprecated use getGatewayDetails instead
+	 *
+	 * @deprecated use getPaymentGatewayConfig instead
 	 *
 	 * @return res|integer
 	 */
@@ -574,13 +574,13 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string   $client    client
 	 *
-	 * @param   boolean  $global    Where to load global config of vendor
+	 * @param   boolean  $global    Whether to load global config of vendor
 	 *
 	 * @return  Object
 	 *
 	 * @since   1.2
 	 */
-	public function getGatewayDetails($vendorId, $client = "", $global = true)
+	public function getPaymentGatewayConfig($vendorId, $client = "", $global = true)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);

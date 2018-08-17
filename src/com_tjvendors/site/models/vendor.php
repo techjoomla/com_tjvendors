@@ -148,7 +148,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
-		$vendorXref->load(array('vendor_id'=> $item->vendor_id));
+		$vendorXref->load(array('vendor_id' => $item->vendor_id));
 		$item->params = $vendorXref->params;
 
 		return $item;
@@ -243,6 +243,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * Method to generate payment gateway fields.
 	 *
 	 * @param   string  $payment_gateway  payment gateway.
+	 * @param   string  $parentTag        To load payment form below the gateway list.
 	 *
 	 * @return   array result
 	 *
@@ -278,7 +279,6 @@ class TjvendorsModelVendor extends JModelAdmin
 					{
 						if ($key != "payment_gateways" && $param->payment_gateways == $payment_gateway)
 						{
-							// if ($key == $payment_gateway)
 							{
 								$form->setValue($key, '', $value);
 							}
@@ -307,7 +307,9 @@ class TjvendorsModelVendor extends JModelAdmin
 				else
 				{
 					// To convert frontend subform in Bootstrap 3
-					$tempForm = str_replace('control-group', 'col-xs-12 col-sm-6 form-group form_'.$field->class, $field->renderField(array('hiddenLabel' => false)));
+					$tempForm = str_replace('control-group', 'col-xs-12 col-sm-6 form-group form_'
+					. $field->class, $field->renderField(array('hiddenLabel' => false))
+					);
 					$col = str_replace('control-label', 'col-xs-12 col-md-3', $tempForm);
 					$col = str_replace('controls', 'col-xs-12 col-md-8', $col);
 					$html[] = $col;
@@ -522,7 +524,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	}
 
 	/**
-	 * Method to format payment config json structure
+	 * Method to format payment config json structure, As we are taking data in suborm and saving it in params, format the JSON structure 
 	 *
 	 * @param   array  $data            Jform processed data
 	 * @param   array  $paymentDetails  Current data of payment gateway

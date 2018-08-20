@@ -33,7 +33,6 @@ tjVAdmin.vendor.initVendorJs();
 
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client='.$this->input->get('client', '', 'INTEGER').'&vendor_id=' . (int) $this->item->vendor_id); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
-	<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 	<div class="form-horizontal">
 		<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'personal')); ?>
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'personal', JText::_('COM_TJVENDORS_TITLE_PERSONAL', true)); ?>
@@ -75,6 +74,7 @@ tjVAdmin.vendor.initVendorJs();
 							echo $this->form->renderField('client');
 							echo $this->form->renderField('vendor_title');
 							echo $this->form->renderField('alias');
+							echo $this->form->renderField('state');
 							echo $this->form->renderField('vendor_description');
 							echo $this->form->renderField('vendor_logo');
 							if(empty($this->item->vendor_logo)) :?>

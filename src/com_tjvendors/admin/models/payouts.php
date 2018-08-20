@@ -63,7 +63,7 @@ class TjvendorsModelPayouts extends JModelList
 
 		if (!in_array($orderCol, $this->filter_fields))
 		{
-			$orderCol = 'pass.vendor_id';
+			$orderCol = 'vendors.vendor_id';
 		}
 
 		$this->setState('list.ordering', $orderCol);

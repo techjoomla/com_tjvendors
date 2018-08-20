@@ -136,13 +136,7 @@ if (JFactory::getUser()->id )
 					<!----Tab 2 Start----->
 					<div id="tab2" class="tab-pane fade">
 						<div class="row">
-							<div class="form-group col-xs-12 col-sm-6 col-md-4">
-								<?php echo $this->form->renderField('payment_gateway');?>
-							</div>
-						</div>
-						<div class="row">
-							<div class="form-group col-xs-12 col-sm-6 col-md-4" id="payment_details">
-							</div>
+							<?php echo $this->form->getInput('payment_gateway');?>
 						</div>
 					</div>
 					<!----Tab 2 End----->

@@ -57,7 +57,10 @@ class Com_TjvendorsInstallerScript
 		$this->defaultPermissionsFix();
 
 		// Payment gateway migration
-		$this->removePaymentGateway();
+		$this->updatePaymentGatewayConfig();
+
+		// Install Layouts
+		$this->_addLayout($parent);
 	}
 
 	/**
@@ -333,18 +336,27 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @since   1.6
 	 */
-	public function removePaymentGateway()
+	public function updatePaymentGatewayConfig()
 	{
-		$db    = JFactory::getDbo();
+		$db = JFactory::getDBO();
+		$query = "SHOW COLUMNS FROM `#__vendor_client_xref` LIKE 'payment_gateway'";
+		$db->setQuery($query);
+		$result = $db->loadResult();
+
+		if (!isset($result))
+		{
+			return false;
+		}
+
 		$query = $db->getQuery(true);
 		$query->select(array('*'));
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$query->where($db->quoteName('payment_gateway') . "=" . "'paypal'", 'OR');
 		$query->where($db->quoteName('payment_gateway') . "=" . "'adaptive_paypal'");
 		$db->setQuery($query);
-		$completedOrders = $db->loadObjectList();
+		$vendorList = $db->loadObjectList();
 
-		foreach ($completedOrders as $key => $value)
+		foreach ($vendorList as $key => $value)
 		{
 			$param1 = new stdClass;
 			$param1->payment_gateways = $value->payment_gateway;
@@ -367,13 +379,28 @@ class Com_TjvendorsInstallerScript
 
 			$result = JFactory::getDbo()->updateObject('#__vendor_client_xref', $vendorData, 'id');
 		}
+	}
 
-		$query = "ALTER TABLE  `#__vendor_client_xref` DROP  `payment_gateway`";
-		$db->setQuery($query);
+	/**
+	 * Add subform layout for payment form
+	 *
+	 * @param   object  $parent  table name
+	 *
+	 * @return  void
+	 */
+	private function _addLayout($parent)
+	{
+		jimport('joomla.filesystem.file');
+		jimport('joomla.filesystem.folder');
 
-		if (!$db->execute())
+		$src = $parent->getParent()->getPath('source');
+		$VendorSubformLayouts = $src . "/layouts/com_tjvendors";
+
+		if (JFolder::exists(JPATH_SITE . '/layouts/com_tjvendors'))
 		{
-			JError::raiseError(500, $db->stderr());
+			JFolder::delete(JPATH_SITE . '/layouts/com_tjvendors');
 		}
+
+		JFolder::copy($VendorSubformLayouts, JPATH_SITE . '/layouts/com_tjvendors');
 	}
 }

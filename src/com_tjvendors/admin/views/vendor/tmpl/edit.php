@@ -99,9 +99,7 @@ tjVAdmin.vendor.initVendorJs();
 		</div>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'name', JText::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS')); ?>
-			<?php echo $this->form->renderField('payment_gateway');?>
-
-			<div id="payment_details"></div>
+				<?php echo $this->form->getInput('payment_gateway'); ?>
 		<?php echo JHtml::_('bootstrap.endTab'); ?>
 		<?php
 			if($this->item->vendor_id != 0)

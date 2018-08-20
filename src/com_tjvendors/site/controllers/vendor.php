@@ -88,7 +88,6 @@ class TjvendorsControllerVendor extends JControllerForm
 		// Initialise variables.
 		$app = JFactory::getApplication();
 		$model = $this->getModel('Vendor', 'TjvendorsModel');
-		$paymentDetails = array();
 
 		// Get the user data.
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
@@ -138,7 +137,7 @@ class TjvendorsControllerVendor extends JControllerForm
 				}
 			}
 			// Save the data in the session.
-			$app->setUserState('com_tjvendors.edit.vendor.data', $all_jform_data);
+			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
 			// Redirect back to the edit screen.
 			$id = $app->input->get('vendor_id', '', 'INTEGER');

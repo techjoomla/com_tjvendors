@@ -183,7 +183,7 @@ class TjvendorsControllerVendor extends JControllerForm
 			}
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
-			$app->setUserState('com_tjvendors.edit.vendor.data', $all_jform_data);
+			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
 			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false));
 

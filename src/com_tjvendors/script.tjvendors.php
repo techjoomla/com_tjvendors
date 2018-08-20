@@ -13,14 +13,13 @@ jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 jimport('joomla.application.component.controller');
 
-
-	/**
-	 * script for migration
-	 *
-	 * @package  TJvendor
-	 *
-	 * @since    1.0
-	 */
+/**
+ * script for migration
+ *
+ * @package  TJvendor
+ *
+ * @since    1.0
+ */
 class Com_TjvendorsInstallerScript
 {
 	// Used to identify new install or update

@@ -331,9 +331,9 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * Override the Modules
 	 *
-	 * @return  false
+	 * @return  false|true
 	 *
-	 * @since   1.6
+	 * @since   1.3
 	 */
 	public function updatePaymentGatewayConfig()
 	{
@@ -377,6 +377,8 @@ class Com_TjvendorsInstallerScript
 
 			JFactory::getDbo()->updateObject('#__vendor_client_xref', $vendorData, 'id');
 		}
+
+		return true;
 	}
 
 	/**

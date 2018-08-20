@@ -119,7 +119,6 @@ $listDirn      = $this->state->get('list.direction');
 						</li>
 					</ul>
 				</div>
-
 			</div>
 			<hr>
 			<div class="row">
@@ -149,7 +148,6 @@ $listDirn      = $this->state->get('list.direction');
 								?>
 						</div>
 					</div>
-			</div>
 			<div class="row">
 				<div class="col-xs-12">
 					<div id="no-more-tables">
@@ -351,6 +349,9 @@ $listDirn      = $this->state->get('list.direction');
 			<?php
 				}
 				?>
+				</div>
+		</div>
+
 			<input type="hidden" name="task" value=""/>
 			<input type="hidden" name="boxchecked" value="0"/>
 			<input type="hidden" name="filter_order" value="<?php echo $listOrder;?>"/>
@@ -372,5 +373,4 @@ $listDirn      = $this->state->get('list.direction');
 				$app->redirect($link);
 			}
 			?>
-	</div>
 </div>

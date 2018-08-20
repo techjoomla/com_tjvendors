@@ -41,9 +41,9 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * Runs after install, update or discover_update
 	 *
-	 * @param   array  $type    data
+	 * @param   array   $type    data
 	 *
-	 * @param   array  $parent  data
+	 * @param   object  $parent  data
 	 *
 	 * @return void
 	 */
@@ -331,7 +331,7 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * Override the Modules
 	 *
-	 * @return  JModel
+	 * @return  false
 	 *
 	 * @since   1.6
 	 */
@@ -360,7 +360,6 @@ class Com_TjvendorsInstallerScript
 			$param1 = new stdClass;
 			$param1->payment_gateways = $value->payment_gateway;
 
-			$param2 = new stdClass;
 			$param2 = json_decode($value->params);
 
 			$params = (object) array_merge((array) $param1, (array) $param2);
@@ -376,7 +375,7 @@ class Com_TjvendorsInstallerScript
 			$vendorData->vendor_id = $value->vendor_id;
 			$vendorData->params    = $vendorParams;
 
-			$result = JFactory::getDbo()->updateObject('#__vendor_client_xref', $vendorData, 'id');
+			JFactory::getDbo()->updateObject('#__vendor_client_xref', $vendorData, 'id');
 		}
 	}
 

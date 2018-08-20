@@ -299,12 +299,10 @@ var tjCommon = {
 	},
 	initVendorFields: function()
 	{
-		jQuery('.subform-repeatable-group .gateway_name').on('focus', function ()
-		{
+		jQuery('.subform-repeatable-group .gateway_name').on('focus', function(){
           	previous = this.value;
     	});
-		jQuery('.subform-repeatable-group .gateway_name').each(function()
-		{
+		jQuery('.subform-repeatable-group .gateway_name').each(function(){
   				jQuery(this).trigger("change");
 		});
 	},

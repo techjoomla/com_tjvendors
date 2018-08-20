@@ -51,6 +51,7 @@ tjVAdmin.vendor.initVendorJs();
 						echo $this->form->renderField('client');
 						echo $this->form->renderField('vendor_title');
 						echo $this->form->renderField('alias');
+						echo $this->form->renderField('state');
 						echo $this->form->renderField('vendor_description');
 						echo $this->form->renderField('vendor_logo');
 						?>

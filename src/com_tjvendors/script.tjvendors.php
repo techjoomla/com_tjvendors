@@ -333,7 +333,7 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @return  boolean
 	 *
-	 * @since   1.3
+	 * @since   1.3.0
 	 */
 	public function updatePaymentGatewayConfig()
 	{

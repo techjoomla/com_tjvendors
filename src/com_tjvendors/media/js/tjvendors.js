@@ -318,7 +318,7 @@ var tjCommon = {
 			'parent_tag': ele.name.replace('[payment_gateways]', "")
 		};
 
-		this.getGatewayFields(userObject, ele.id);
+		tjCommon.generateGatewayFields(userObject, ele.id);
 	},
 	getGatewayFields: function (userObject, eleId){
 			JSON.stringify(userObject);

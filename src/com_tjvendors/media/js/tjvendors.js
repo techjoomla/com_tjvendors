@@ -29,7 +29,7 @@ var tjVAdmin = {
 				if (jQuery(this).hasClass("less")) {
 					jQuery(this).removeClass("less");
 					jQuery(this).html(moretext);
-				} 
+				}
 				else {
 					jQuery(this).addClass("less");
 					jQuery(this).html(lesstext);
@@ -65,14 +65,14 @@ var tjVAdmin = {
 						Joomla.renderMessages({
 							'warning': jmsgs
 						});
-					} 
+					}
 					else if (validData == true) {
 						Joomla.submitform(task, document.getElementById('adminForm'));
 					}
-				} 
+				}
 				else if (task == 'vendor.cancel') {
 					Joomla.submitform(task, document.getElementById('adminForm'));
-				} 
+				}
 				else {
 					Joomla.submitform(task, document.getElementById('adminForm'));
 				}
@@ -120,7 +120,7 @@ var tjVAdmin = {
 							});
 
 							return vendorCheck = "exists";
-						} 
+						}
 						else {
 							document.location = 'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' + client + '&vendor_id=' + data.vendor_id;
 						}
@@ -152,7 +152,7 @@ var tjVAdmin = {
 						Joomla.renderMessages({
 							'success': jmsgs
 						});
-					} 
+					}
 					else {
 						jmsgs = [Joomla.JText._('COM_TJVENDOR_VENDOR_DENIAL')];
 						Joomla.renderMessages({
@@ -177,17 +177,17 @@ var tjVAdmin = {
 						Joomla.renderMessages({
 							'error': jmsgs
 						});
-					} 
+					}
 					else if (percent_commission < 0 || flat_commission < 0) {
 						var jmsgs = [Joomla.JText._('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR')];
 						Joomla.renderMessages({
 							'error': jmsgs
 						});
-					} 
+					}
 					else {
 						Joomla.submitform(task, document.getElementById('vendorfee-form'));
 					}
-				} 
+				}
 				else if (task == 'vendorfee.cancel') {
 					Joomla.submitform(task, document.getElementById('vendorfee-form'));
 				}
@@ -228,10 +228,10 @@ var tjVSite = {
 					if (validData == true) {
 						Joomla.submitform(task, document.getElementById('adminForm'));
 					}
-				} 
+				}
 				else if (task == 'vendor.cancel') {
 					Joomla.submitform(task, document.getElementById('adminForm'));
-				} 
+				}
 				else {
 					Joomla.submitform(task, document.getElementById('adminForm'));
 				}
@@ -252,7 +252,7 @@ var tjVSite = {
 		toggleDiv: function(spanId) {
 			if (jQuery(window).width() < 767) {
 				jQuery("#" + spanId).toggle("slow");
-			} 
+			}
 			else {
 				jQuery("#" + spanId).toggle();
 			}
@@ -320,7 +320,7 @@ var tjCommon = {
 
 		tjCommon.generateGatewayFields(userObject, ele.id);
 	},
-	getGatewayFields: function (userObject, eleId){
+	generateGatewayFields: function (userObject, eleId){
 			JSON.stringify(userObject);
 			jQuery.ajax({
 				type: "POST",

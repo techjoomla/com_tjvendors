@@ -331,7 +331,7 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * Override the Modules
 	 *
-	 * @return  false|true
+	 * @return  boolean
 	 *
 	 * @since   1.3
 	 */

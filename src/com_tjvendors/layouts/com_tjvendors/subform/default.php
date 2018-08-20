@@ -8,6 +8,9 @@
  */
 
 defined('_JEXEC') or die;
+/*
+ * As Joomla doesn't provide bootstrap 3 layout and TJVendor run on bootstrap 3 templates added the overrides for the Joomla subform layout
+*/
 
 /**
  * Make thing clear

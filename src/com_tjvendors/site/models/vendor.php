@@ -293,14 +293,8 @@ class TjvendorsModelVendor extends JModelAdmin
 			foreach ($fieldSet as $field)
 			{
 				$app = JFactory::getApplication();
-				$isAdmin = 0;
 
 				if ($app->isAdmin())
-				{
-					$isAdmin = 1;
-				}
-
-				if ($isAdmin == 1)
 				{
 					$html[] = $field->renderField();
 				}
@@ -524,7 +518,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	}
 
 	/**
-	 * Method to format payment config json structure, As we are taking data in subform and saving it in params, format the JSON structure 
+	 * Method to format payment config json structure, As we are taking data in subform and saving it in params, format the JSON structure
 	 *
 	 * @param   array  $data            Jform processed data
 	 * @param   array  $paymentDetails  Current data of payment gateway

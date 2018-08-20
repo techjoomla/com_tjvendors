@@ -320,11 +320,13 @@ var tjCommon = {
 
 		if (count>1) {
 			jQuery(ele).val();
-			return false; }
+			return false;
+		}
 
 		let userObject = {
 			'payment_gateway': ele.value,
-			'parent_tag': ele.name.replace('[payment_gateways]', "")};
+			'parent_tag': ele.name.replace('[payment_gateways]', "")
+		};
 
 		this.getGatewayFields(userObject, ele.id);
 	},

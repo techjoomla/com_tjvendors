@@ -9,6 +9,9 @@
 
 defined('_JEXEC') or die;
 
+/*
+ * As Joomla doesn't provide bootstrap 3 layout and TJVendor run on bootstrap 3 templates added the overrides for the Joomla subform layout
+*/
 /**
  * Make thing clear
  *
@@ -18,7 +21,6 @@ defined('_JEXEC') or die;
  * @var array   $buttons    Array of the buttons that will be rendered
  */
 extract($displayData);
-
 ?>
 
 <div class="row subform-repeatable-group bg-faded py-0 px-25 my-20 ml-0 mr-0" data-base-name="<?php echo $basegroup; ?>" data-group="<?php echo $group; ?>">

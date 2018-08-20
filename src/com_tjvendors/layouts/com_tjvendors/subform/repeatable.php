@@ -8,6 +8,9 @@
  */
 
 defined('_JEXEC') or die;
+/*
+ * As Joomla doesn't provide bootstrap 3 layout and TJVendor run on bootstrap 3 templates added the overrides for the Joomla subform layout
+*/
 
 /**
  * Make thing clear
@@ -24,6 +27,7 @@ defined('_JEXEC') or die;
  * @var array   $buttons          Array of the buttons that will be rendered
  * @var bool    $groupByFieldset  Whether group the subform fields by it`s fieldset
  */
+
 extract($displayData);
 
 // Add script

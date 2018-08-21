@@ -29,7 +29,7 @@ var tjVAdmin = {
 				if (jQuery(this).hasClass("less")) {
 					jQuery(this).removeClass("less");
 					jQuery(this).html(moretext);
-				} 
+				}
 				else {
 					jQuery(this).addClass("less");
 					jQuery(this).html(lesstext);
@@ -65,14 +65,14 @@ var tjVAdmin = {
 						Joomla.renderMessages({
 							'warning': jmsgs
 						});
-					} 
+					}
 					else if (validData == true) {
 						Joomla.submitform(task, document.getElementById('adminForm'));
 					}
-				} 
+				}
 				else if (task == 'vendor.cancel') {
 					Joomla.submitform(task, document.getElementById('adminForm'));
-				} 
+				}
 				else {
 					Joomla.submitform(task, document.getElementById('adminForm'));
 				}
@@ -120,7 +120,7 @@ var tjVAdmin = {
 							});
 
 							return vendorCheck = "exists";
-						} 
+						}
 						else {
 							document.location = 'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' + client + '&vendor_id=' + data.vendor_id;
 						}
@@ -152,7 +152,7 @@ var tjVAdmin = {
 						Joomla.renderMessages({
 							'success': jmsgs
 						});
-					} 
+					}
 					else {
 						jmsgs = [Joomla.JText._('COM_TJVENDOR_VENDOR_DENIAL')];
 						Joomla.renderMessages({
@@ -177,17 +177,17 @@ var tjVAdmin = {
 						Joomla.renderMessages({
 							'error': jmsgs
 						});
-					} 
+					}
 					else if (percent_commission < 0 || flat_commission < 0) {
 						var jmsgs = [Joomla.JText._('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR')];
 						Joomla.renderMessages({
 							'error': jmsgs
 						});
-					} 
+					}
 					else {
 						Joomla.submitform(task, document.getElementById('vendorfee-form'));
 					}
-				} 
+				}
 				else if (task == 'vendorfee.cancel') {
 					Joomla.submitform(task, document.getElementById('vendorfee-form'));
 				}
@@ -228,10 +228,10 @@ var tjVSite = {
 					if (validData == true) {
 						Joomla.submitform(task, document.getElementById('adminForm'));
 					}
-				} 
+				}
 				else if (task == 'vendor.cancel') {
 					Joomla.submitform(task, document.getElementById('adminForm'));
-				} 
+				}
 				else {
 					Joomla.submitform(task, document.getElementById('adminForm'));
 				}
@@ -252,7 +252,7 @@ var tjVSite = {
 		toggleDiv: function(spanId) {
 			if (jQuery(window).width() < 767) {
 				jQuery("#" + spanId).toggle("slow");
-			} 
+			}
 			else {
 				jQuery("#" + spanId).toggle();
 			}
@@ -321,26 +321,27 @@ var tjCommon = {
 		tjCommon.generateGatewayFields(userObject, ele.id);
 	},
 
-	generateGatewayFields: function(userObject, eleId) {
-		JSON.stringify(userObject);
-		jQuery.ajax({
-			type: "POST",
-			dataType: "json",
-			data: userObject,
-			url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
-			success: function(response) {
-				let $thisId = jQuery('#' + eleId);
-				$thisId.closest('.subform-repeatable-group').find('.payment-gateway-parent').empty();
-				if (response) {
-					response.forEach(function(data) {
-						$thisId.closest('.subform-repeatable-group').append("<div class='payment-gateway-parent'>" + data + "</div>");
-					});
-				} 
-				else if (!response && userObject.payment_gateway != "" && layout != "update") {
-					var error_html = Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
-					jQuery("#payment_details").html("<div id='fieldmessage' class='alert alert-warning'>" + error_html + "</div>");
+	generateGatewayFields: function (userObject, eleId) {
+			JSON.stringify(userObject);
+			jQuery.ajax({
+				type: "POST",
+				dataType: "json",
+				data: userObject,
+				url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
+				success: function (response) {
+					let $thisId = jQuery('#' + eleId);
+					$thisId.closest('.subform-repeatable-group').find('.payment-gateway-parent').empty();
+					
+					if (response) {
+						response.forEach(function(data) {
+							$thisId.closest('.subform-repeatable-group').append("<div class='payment-gateway-parent'>" + data + "</div>");
+						});
+					} 
+					else if (!response && userObject.payment_gateway != "") {
+						var error_html = Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+						$thisId.closest('.subform-repeatable-group').append("<div class='alert alert-warning payment-gateway-parent'>" + error_html + "</div>");
+					}
 				}
-			},
-		});
-	}
+			});
+		}
 }

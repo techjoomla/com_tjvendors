@@ -252,7 +252,7 @@ class TjvendorFrontHelper
 	 *
 	 * @deprecated use getPaymentGatewayConfig instead
 	 *
-	 * @return res|integer
+	 * @return res|object  vendor detail
 	 */
 	public static function getPaymentDetails($vendor_id, $client)
 	{

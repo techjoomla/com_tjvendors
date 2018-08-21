@@ -88,7 +88,6 @@ class TjvendorsControllerVendor extends JControllerForm
 		// Initialise variables.
 		$app = JFactory::getApplication();
 		$model = $this->getModel('Vendor', 'TjvendorsModel');
-		$paymentDetails = array();
 
 		// Get the user data.
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
@@ -105,51 +104,8 @@ class TjvendorsControllerVendor extends JControllerForm
 			return false;
 		}
 
-		$all_jform_data = $data;
-		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
-		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
-
 		// Validate the posted data.
 		$validate  = $model->validate($form, $data);
-
-		if (!empty($data['paymentForm']))
-		{
-			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
-			{
-				$paymentDetails[$key] = $field;
-			}
-
-			foreach ($data['paymentForm'] as $key => $detail)
-			{
-				$paymentPrefix = 'payment_';
-
-				if (strpos($key, $paymentPrefix) !== false)
-				{
-					if ($key != 'payment_fields')
-					{
-						$paymentDetails[$key] = $detail;
-					}
-				}
-			}
-		}
-
-		if (!empty($paymentDetails))
-		{
-			$data['paymentDetails'] = json_encode($paymentDetails);
-			$data['gateway'] = $paymentDetails['payment_gateway'];
-		}
-
-		// On a clientless vendor registration
-		if (empty($data['vendor_client']))
-		{
-			$data['params'] = $data['paymentDetails'];
-			$data['payment_gateway'] = $paymentDetails['payment_gateway'];
-		}
-		else
-		{
-			$data['payment_gateway'] = '';
-			$data['params'] = '';
-		}
 
 		if ($vendorApproval && empty($data['vendor_id']))
 		{
@@ -181,7 +137,7 @@ class TjvendorsControllerVendor extends JControllerForm
 				}
 			}
 			// Save the data in the session.
-			$app->setUserState('com_tjvendors.edit.vendor.data', $all_jform_data);
+			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
 			// Redirect back to the edit screen.
 			$id = $app->input->get('vendor_id', '', 'INTEGER');
@@ -198,9 +154,6 @@ class TjvendorsControllerVendor extends JControllerForm
 
 			return false;
 		}
-
-		$paymentData = array_diff_key($all_jform_data, $data);
-		$data['paymentForm'] = $paymentData;
 
 		// Attempt to save the data.
 		$return = $model->save($data);

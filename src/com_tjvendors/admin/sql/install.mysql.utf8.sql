@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `#__vendor_client_xref` (
 `approved` tinyint(1)  NOT NULL DEFAULT '1',
 `state` tinyint(1)  NOT NULL DEFAULT '1',
 `payment_gateway` varchar(255) DEFAULT NULL,
-`params` varchar(255) DEFAULT NULL,
+`params` text NOT NULL,
 PRIMARY KEY (`id`)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 

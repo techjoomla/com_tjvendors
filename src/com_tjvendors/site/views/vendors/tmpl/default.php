@@ -154,7 +154,7 @@ $listDirn  = $this->state->get('list.direction');
 										<thead>
 											<tr>
 												<th width="1%">
-													<?php echo "Sr.No";?>
+													<?php echo JText::_('COM_TJVENDORS_VENDORS_SR_NO');?>
 												</th>
 
 												<th width="5%">
@@ -222,7 +222,7 @@ $listDirn  = $this->state->get('list.direction');
 										</thead>
 
 										<tfoot>
-											<td colspan="5">
+											<td colspan="5" class="hidden-xs">
 												<?php if ($currency != '0'): ?>
 													<div class="pull-right">
 														<tr>
@@ -246,7 +246,7 @@ $listDirn  = $this->state->get('list.direction');
 												<?php endif;?>
 											</td>
 
-											<td colspan="7">
+											<td colspan="7" class="hidden-xs">
 												<?php echo $this->pagination->getListFooter();?>
 											</td>
 										</tfoot>

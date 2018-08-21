@@ -36,6 +36,8 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function preflight($type, $parent)
 	{
+		// Payment gateway migration
+		$this->updatePaymentGatewayConfig();
 	}
 
 	/**
@@ -54,9 +56,6 @@ class Com_TjvendorsInstallerScript
 
 		// Add default permissions
 		$this->defaultPermissionsFix();
-
-		// Payment gateway migration
-		$this->updatePaymentGatewayConfig();
 
 		// Install Layouts
 		$this->_addLayout($parent);
@@ -338,6 +337,17 @@ class Com_TjvendorsInstallerScript
 	public function updatePaymentGatewayConfig()
 	{
 		$db = JFactory::getDBO();
+		$config   = JFactory::getConfig();
+		$dbprefix = $config->get('dbprefix');
+		$query = "SHOW TABLES LIKE '" . $dbprefix . "vendor_client_xref';";
+		$db->setQuery($query);
+		$tableExists = $db->loadResult();
+
+		if (empty($tableExists))
+		{
+			return false;
+		}
+
 		$query = "SHOW COLUMNS FROM `#__vendor_client_xref` LIKE 'payment_gateway'";
 		$db->setQuery($query);
 		$result = $db->loadResult();

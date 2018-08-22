@@ -375,7 +375,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 		}
 
-		$paymentGatway['payment_gateway'] =  $data['payment_gateway'];
+		$paymentGatway['payment_gateway'] = $data['payment_gateway'];
 		$data['params'] = json_encode($paymentGatway);
 
 		// To check if editing in registration form

@@ -625,4 +625,27 @@ class TjvendorFrontHelper
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 	}
+
+	/**
+	 * Get client name
+	 *
+	 * @param   string   $client    client
+	 * @param   integer  $vendorId  Venodor ID
+	 *
+	 * @return  array column array
+	 *
+	 * @since  1.3.0
+	 */
+	public function isClientExist($client, $vendorId)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('client');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
+		$db->setQuery($query);
+
+		return $db->loadColumn();
+	}
 }

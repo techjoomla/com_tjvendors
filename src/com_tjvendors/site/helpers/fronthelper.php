@@ -632,7 +632,7 @@ class TjvendorFrontHelper
 	 * @param   string   $client    client
 	 * @param   integer  $vendorId  Venodor ID
 	 *
-	 * @return  array column array
+	 * @return  Boolean Client exist or not
 	 *
 	 * @since  1.3.0
 	 */
@@ -646,6 +646,15 @@ class TjvendorFrontHelper
 		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
 		$db->setQuery($query);
 
-		return $db->loadColumn();
+		$return = $db->loadResult();
+
+		if ($return)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
 	}
 }

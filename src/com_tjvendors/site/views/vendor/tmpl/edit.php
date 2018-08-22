@@ -37,10 +37,12 @@ if (JFactory::getUser()->id )
 		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
+			<?php if($this->vendor_id != 0 && !$this->isClientExist): ?>
 				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
 				  <li class="active"><a data-toggle="tab" href="#tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
 				  <li><a data-toggle="tab" href="#tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
 				</ul>
+			<?php endif; ?>
 				<!----Tab Container Start----->
 				<div class="tab-content">
 					<!----Tab 1 Start----->
@@ -56,7 +58,6 @@ if (JFactory::getUser()->id )
 
 							if ($this->vendor_id != 0)
 							{
-								$client = $this->input->get('client', '', 'STRING');
 								?>
 								<div class="pull-left alert alert-info">
 
@@ -64,14 +65,17 @@ if (JFactory::getUser()->id )
 										echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');
 									?>
 
-									<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $client . '&vendor_id=' . $this->vendor_id);?>">
+									<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);?>">
 									<strong><?php echo $this->escape($this->VendorDetail->vendor_title);?></a></strong>
 
 									<?php
-									echo " " . JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
-									$tjvendorFrontHelper = new TjvendorFrontHelper;
-									echo $client = $tjvendorFrontHelper->getClientName($client);
-									echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
+									if (!$this->isClientExist)
+									{
+										echo " " . JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
+										$tjvendorFrontHelper = new TjvendorFrontHelper;
+										echo $client = $tjvendorFrontHelper->getClientName($this->client);
+										echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
+									}
 									?>
 								</div>
 								<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
@@ -160,7 +164,7 @@ if (JFactory::getUser()->id )
 			</div>
 		<?php
 		}
-		else
+		elseif (!$this->isClientExist)
 		{
 			?>
 			<div class="mt-10">

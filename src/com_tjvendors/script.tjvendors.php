@@ -28,9 +28,13 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * method to run before an install/update/uninstall method
 	 *
+	 * @param   array  $type    data
+	 *
+	 * @param   array  $parent  data
+	 *
 	 * @return void
 	 */
-	public function preflight()
+	public function preflight($type, $parent)
 	{
 		// Payment gateway migration
 		$this->updatePaymentGatewayConfig();

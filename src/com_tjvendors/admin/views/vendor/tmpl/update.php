@@ -27,7 +27,6 @@ var vendor_id                         = '<?php echo $this->item->vendor_id;?>';
 var client                            = '<?php echo $this->client;?>';
 var layout                            = '<?php echo "update";?>';
 const vendorAllowedMediaSize          = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
-const root_url                        = "<?php echo JUri::root(); ?>";
 tjVAdmin.vendor.initVendorJs();
 </script>
 

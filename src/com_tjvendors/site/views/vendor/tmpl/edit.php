@@ -23,7 +23,6 @@ JHtml::_('behavior.keepalive');
 	var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
 	var allowedImageTypeErrorMessage      = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
 	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
-	const root_url                        = "<?php echo JUri::root(); ?>";
 	tjVSite.vendor.initVendorJs();
 </script>
 <div id="tjv-wrapper">

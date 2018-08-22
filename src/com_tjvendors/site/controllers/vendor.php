@@ -91,6 +91,7 @@ class TjvendorsControllerVendor extends JControllerForm
 
 		// Get the user data.
 		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
 
 		$data['user_id'] = JFactory::getUser()->id;
 

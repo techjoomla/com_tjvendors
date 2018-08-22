@@ -327,7 +327,7 @@ var tjCommon = {
 				type: "POST",
 				dataType: "json",
 				data: userObject,
-				url: "index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
+				url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
 				success: function (response) {
 					let $thisId = jQuery('#' + eleId);
 					$thisId.closest('.subform-repeatable-group').find('.payment-gateway-parent').empty();

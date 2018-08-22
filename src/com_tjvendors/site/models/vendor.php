@@ -122,7 +122,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 					if (!empty($gatewayDetails))
 					{
-						$this->item->payment_gateway = json_decode($gatewayDetails->params);
+						$this->item->payment_gateway = json_decode($gatewayDetails->params)->payment_gateway;
 					}
 				}
 			}
@@ -259,7 +259,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		if (!empty($vendorDetails))
 		{
-			$params = json_decode($vendorDetails->params);
+			$params = json_decode($vendorDetails->params)->payment_gateway;
 		}
 
 		$form_path = JPATH_SITE . '/plugins/payment/' . $payment_gateway . '/' . $payment_gateway . '/form/' . $payment_gateway . '.xml';
@@ -292,8 +292,6 @@ class TjvendorsModelVendor extends JModelAdmin
 
 			foreach ($fieldSet as $field)
 			{
-				$app = JFactory::getApplication();
-
 				if ($app->isAdmin())
 				{
 					$html[] = $field->renderField();
@@ -331,7 +329,6 @@ class TjvendorsModelVendor extends JModelAdmin
 		$app    = JFactory::getApplication();
 		$input  = $app->input;
 		$layout = $input->get('layout', '', 'STRING');
-
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
@@ -378,7 +375,8 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 		}
 
-		$data['params'] = json_encode($data['payment_gateway']);
+		$paymentGatway['payment_gateway'] = $data['payment_gateway'];
+		$data['params'] = json_encode($paymentGatway);
 
 		// To check if editing in registration form
 		if ($data['vendor_id'])

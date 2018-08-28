@@ -37,7 +37,7 @@ if (JFactory::getUser()->id )
 		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
-			<?php if($this->vendor_id != 0 && !$this->isClientExist): ?>
+			<?php if(!$this->isClientExist): ?>
 				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
 				  <li class="active"><a data-toggle="tab" href="#tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
 				  <li><a data-toggle="tab" href="#tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>

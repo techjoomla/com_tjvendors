@@ -12,12 +12,11 @@
 defined('_JEXEC') or die();
 jimport('joomla.application.component.model');
 
-use Joomla\Utilities\ArrayHelper;
 JLoader::register('PrivacyPlugin', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php');
 JLoader::register('PrivacyRemovalStatus', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/removal/status.php');
 
 /**
- * Privacy plugin managing JMailAlerts user data
+ * Privacy plugin managing TJvendor user data
  *
  * @since  3.2.11
  */
@@ -28,7 +27,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	 *
 	 * @var    boolean
 	 *
-	 * @since  3.2.11
+	 * @since  __DEPLOY_VERSION__
 	 */
 	protected $autoloadLanguage = true;
 
@@ -91,7 +90,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 		$domains[] = $this->createVendorDomain($userTable);
 
 		// Create the domain for the vendor client data
-		// Vendor related data stored in #__tjvendors_vendors table
+		// Vendor related data stored in #__vendor_client_xref table
 		$domains[] = $this->createVendorClientDomain($userTable);
 
 		// Create the domain for the vendor fees data
@@ -134,7 +133,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	}
 
 	/**
-	 * Create the domain for the TJvendor to get user client data
+	 * Create the domain for the TJvendor to get vendor client data
 	 *
 	 * @param   JTableUser  $user  The JTableUser object to process
 	 *
@@ -159,11 +158,11 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 					->select('id, vendor_id, client, approved, state, params')
 					->from($this->db->quoteName('#__vendor_client_xref'))
 					->where($this->db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
-			$UserClientData = $this->db->setQuery($query1)->loadAssocList();
+			$userClientData = $this->db->setQuery($query1)->loadAssocList();
 
-			if (!empty($UserClientData))
+			if (!empty($userClientData))
 			{
-				foreach ($UserClientData as $clientData)
+				foreach ($userClientData as $clientData)
 				{
 					$domain->addItem($this->createItemFromArray($clientData, $clientData['id']));
 				}
@@ -174,7 +173,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	}
 
 	/**
-	 * Create the domain for the TJvendor to get user Fee data
+	 * Create the domain for the TJvendor to get vendor Fee data
 	 *
 	 * @param   JTableUser  $user  The JTableUser object to process
 	 *
@@ -199,11 +198,11 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 					->select('id, vendor_id, currency, client, percent_commission, flat_commission')
 					->from($this->db->quoteName('#__tjvendors_fee'))
 					->where($this->db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
-			$UserFeesData = $this->db->setQuery($query1)->loadAssocList();
+			$userFeesData = $this->db->setQuery($query1)->loadAssocList();
 
-			if (!empty($UserFeesData))
+			if (!empty($userFeesData))
 			{
-				foreach ($UserFeesData as $feeData)
+				foreach ($userFeesData as $feeData)
 				{
 					$domain->addItem($this->createItemFromArray($feeData, $feeData['id']));
 				}
@@ -214,7 +213,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	}
 
 	/**
-	 * Create the domain for the TJvendor to get user passbook data
+	 * Create the domain for the TJvendor to get vendor passbook data
 	 *
 	 * @param   JTableUser  $user  The JTableUser object to process
 	 *
@@ -239,11 +238,11 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 					->select('id, vendor_id, currency, total, credit, debit, reference_order_id, transaction_time, client, transaction_id, status, params')
 					->from($this->db->quoteName('#__tjvendors_passbook'))
 					->where($this->db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
-			$UserPassbookData = $this->db->setQuery($query1)->loadAssocList();
+			$userPassbookData = $this->db->setQuery($query1)->loadAssocList();
 
-			if (!empty($UserPassbookData))
+			if (!empty($userPassbookData))
 			{
-				foreach ($UserPassbookData as $passbookData)
+				foreach ($userPassbookData as $passbookData)
 				{
 					$domain->addItem($this->createItemFromArray($passbookData, $passbookData['id']));
 				}

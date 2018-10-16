@@ -268,8 +268,23 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	{
 		$status = new PrivacyRemovalStatus;
 
-		$status->canRemove = false;
-		$status->reason    = JText::_('PLG_PRIVACY_TJVENDORS_ERROR_CANNOT_REMOVE_USER_DATA');
+		if (!$user)
+		{
+			return $status;
+		}
+
+		$query = $this->db->getQuery(true)
+			->select('vendor_id')
+			->from($this->db->quoteName('#__tjvendors_vendors'))
+			->where($this->db->quoteName('user_id') . ' = ' . (int) $user->id);
+
+		$vendorId = $this->db->setQuery($query)->loadResult();
+
+		if ($vendorId)
+		{
+			$status->canRemove = false;
+			$status->reason    = JText::_('PLG_PRIVACY_TJVENDORS_ERROR_CANNOT_REMOVE_USER_DATA');
+		}
 
 		return $status;
 	}

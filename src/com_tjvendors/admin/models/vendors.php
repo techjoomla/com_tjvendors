@@ -236,6 +236,10 @@ class TjvendorsModelVendors extends JModelList
 		{
 			$this->deleteVendor($vendor_id);
 		}
+
+		$dispatcher = JDispatcher::getInstance();
+		JPluginHelper::importPlugin('tjvendors');
+		$dispatcher->trigger('tjvendorOnAfterVendorDelete', array($vendorData));
 	}
 
 	/**
@@ -259,6 +263,7 @@ class TjvendorsModelVendors extends JModelList
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
 		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
 		*/
+
 		foreach ($items as $id)
 		{
 			$updateState = new stdClass;
@@ -284,7 +289,11 @@ class TjvendorsModelVendors extends JModelList
 				return false;
 			}
 		}
-
+		
+		$dispatcher = JDispatcher::getInstance();
+		JPluginHelper::importPlugin('tjvendors');
+		$dispatcher->trigger('tjVendorsOnAfterVendorStateChange', array($items, $state));
+		
 		return true;
 	}
 }

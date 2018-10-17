@@ -149,6 +149,9 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		{
 			if (parent::save($data))
 			{
+				$dispatcher = JDispatcher::getInstance();
+				JPluginHelper::importPlugin('tjvendors');
+				$dispatcher->trigger('tjVendorsOnAfterVendorFeeSave', array($data));
 				return true;
 			}
 		}

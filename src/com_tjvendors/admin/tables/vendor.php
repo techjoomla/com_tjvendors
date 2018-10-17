@@ -234,7 +234,7 @@ class TjvendorsTablevendor extends JTable
 					// Did we get anything useful?
 					if ($mime !== false)
 					{
-						$result = in_array($mime, array('image/jpeg,image/png,image/jpg'));
+						$result = in_array($mime, array('image/jpeg','image/png','image/jpg'));
 
 						// If the mime type is not allowed we don't upload it and show the mime code error to the user
 						if ($result === false)

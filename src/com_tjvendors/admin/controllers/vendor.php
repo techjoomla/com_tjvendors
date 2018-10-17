@@ -103,9 +103,10 @@ class TjvendorsControllerVendor extends JControllerForm
 	{
 		$input  = JFactory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
+		$parentTag = $input->get('parent_tag', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$model = $this->getModel('vendor');
-		$results = $model->generateGatewayFields($payment_gateway);
+		$results = $model->generateGatewayFields($payment_gateway, $parentTag);
 		echo json_encode($results);
 		jexit();
 	}
@@ -159,52 +160,8 @@ class TjvendorsControllerVendor extends JControllerForm
 			return false;
 		}
 
-		$all_jform_data = $data;
-		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
-
 		// Validate the posted data.
 		$data = $model->validate($form, $data);
-		$data['paymentForm'] = $app->input->get('jform', array(), 'ARRAY');
-		$paymentDetails = array();
-
-		if (!empty($data['paymentForm']))
-		{
-			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
-			{
-				$paymentDetails[$key] = $field;
-			}
-
-			foreach ($data['paymentForm'] as $key => $detail)
-			{
-				$paymentPrefix = 'payment_';
-
-				if (strpos($key, $paymentPrefix) !== false)
-				{
-					if ($key != 'payment_fields')
-					{
-						$paymentDetails[$key] = $detail;
-					}
-				}
-			}
-		}
-
-		if (!empty($paymentDetails))
-		{
-			$data['paymentDetails'] = json_encode($paymentDetails);
-			$data['gateway'] = $paymentDetails['payment_gateway'];
-		}
-
-		// On a clientless vendor registration
-		if (empty($data['vendor_client']))
-		{
-			$data['params'] = $data['paymentDetails'];
-			$data['payment_gateway'] = $paymentDetails['payment_gateway'];
-		}
-		else
-		{
-			$data['payment_gateway'] = '';
-			$data['params'] = '';
-		}
 
 		// Check for errors.
 		if ($data === false)
@@ -226,15 +183,13 @@ class TjvendorsControllerVendor extends JControllerForm
 			}
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
-			$app->setUserState('com_tjvendors.edit.vendor.data', $all_jform_data);
+			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
 			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false));
 
 			return false;
 		}
 
-		$paymentData = array_diff_key($all_jform_data, $data);
-		$data['paymentForm'] = $paymentData;
 		$return = $model->save($data);
 
 		// Check for errors.

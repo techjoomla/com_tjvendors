@@ -122,7 +122,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 					if (!empty($gatewayDetails))
 					{
-						$this->item->payment_gateway = $gatewayDetails->payment_gateway;
+						$this->item->payment_gateway = json_decode($gatewayDetails->params)->payment_gateway;
 					}
 				}
 			}
@@ -130,7 +130,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			$data = $this->item;
 		}
 
-		return $data;
+		return $this->item;
 	}
 
 	/**
@@ -145,6 +145,11 @@ class TjvendorsModelVendor extends JModelAdmin
 	public function getItem($pk = null)
 	{
 		$item = parent::getItem($pk);
+
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
+		$vendorXref->load(array('vendor_id' => $item->vendor_id));
+		$item->params = $vendorXref->params;
 
 		return $item;
 	}
@@ -238,12 +243,13 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * Method to generate payment gateway fields.
 	 *
 	 * @param   string  $payment_gateway  payment gateway.
+	 * @param   string  $parentTag        To load payment form below the gateway list.
 	 *
 	 * @return   array result
 	 *
 	 * @since    1.6
 	 */
-	public function generateGatewayFields($payment_gateway)
+	public function generateGatewayFields($payment_gateway, $parentTag)
 	{
 		$app = JFactory::getApplication();
 		$client = $app->getUserStateFromRequest('vendor.client', 'vendor.client');
@@ -253,7 +259,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		if (!empty($vendorDetails))
 		{
-			$paymentDetailsArray = json_decode($vendorDetails->params);
+			$params = json_decode($vendorDetails->params)->payment_gateway;
 		}
 
 		$form_path = JPATH_SITE . '/plugins/payment/' . $payment_gateway . '/' . $payment_gateway . '/form/' . $payment_gateway . '.xml';
@@ -261,24 +267,24 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		if (jFile::exists($form_path))
 		{
-			$form = JForm::getInstance($test, $form_path, array('control' => 'jform[payment_fields]'));
+			$form = JForm::getInstance($test, $form_path, array('control' => $parentTag));
 
-			if (!empty($vendor_id))
+			if ($vendor_id)
 			{
 				$paymentDetails = array();
 
-				if (!empty($paymentDetailsArray))
+				foreach ($params as $key => $param)
 				{
-					foreach ($paymentDetailsArray as $key => $detail)
+					foreach ($param as $key => $value)
 					{
-						if ($key != "payment_gateway")
+						if ($key != "payment_gateways" && $param->payment_gateways == $payment_gateway)
 						{
-							$paymentDetails[$key] = $detail;
+							{
+								$form->setValue($key, '', $value);
+							}
 						}
 					}
 				}
-
-				$form->bind($paymentDetails);
 			}
 
 			$fieldSet = $form->getFieldset('payment_gateway');
@@ -286,7 +292,20 @@ class TjvendorsModelVendor extends JModelAdmin
 
 			foreach ($fieldSet as $field)
 			{
-				$html[] = $field->renderField();
+				if ($app->isAdmin())
+				{
+					$html[] = $field->renderField();
+				}
+				else
+				{
+					// To convert frontend subform in Bootstrap 3
+					$tempForm = str_replace('control-group', 'col-xs-12 col-sm-6 form-group form_'
+					. $field->class, $field->renderField(array('hiddenLabel' => false))
+					);
+					$col = str_replace('control-label', 'col-xs-12 col-md-3', $tempForm);
+					$col = str_replace('controls', 'col-xs-12 col-md-8', $col);
+					$html[] = $col;
+				}
 			}
 
 			return $html;
@@ -310,7 +329,6 @@ class TjvendorsModelVendor extends JModelAdmin
 		$app    = JFactory::getApplication();
 		$input  = $app->input;
 		$layout = $input->get('layout', '', 'STRING');
-
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
@@ -349,46 +367,16 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 		}
 
-		/* Check if there is data in the payment form */
-		if (!empty($data['paymentForm']))
+		foreach ($data['payment_gateway'] as $key => $value)
 		{
-			// Seprate out the payment gateway data from rest of the form
-			foreach ($data['paymentForm']['payment_fields'] as $key => $field)
+			if (sizeof($value) <= 1)
 			{
-				$paymentDetails[$key] = $field;
-			}
-
-			foreach ($data['paymentForm'] as $key => $detail)
-			{
-				$paymentPrefix = 'payment_';
-
-				// To seprate out the payment gateway fields from rest of the payment form data
-				if (strpos($key, $paymentPrefix) !== false)
-				{
-					if ($key != 'payment_fields')
-					{
-						$paymentDetails[$key] = $detail;
-					}
-				}
+				unset($data['payment_gateway'][$key]);
 			}
 		}
 
-		// Collecting the vendor's data
-		if (!empty($paymentDetails))
-		{
-			$data['paymentDetails'] = json_encode($paymentDetails);
-		}
-
-		if (empty($data['vendor_client']))
-		{
-			$data['params'] = $data['paymentDetails'];
-			$data['payment_gateway'] = $paymentForm['payment_gateway'];
-		}
-		else
-		{
-			$data['payment_gateway'] = '';
-			$data['params'] = '';
-		}
+		$paymentGatway['payment_gateway'] = $data['payment_gateway'];
+		$data['params'] = json_encode($paymentGatway);
 
 		// To check if editing in registration form
 		if ($data['vendor_id'])
@@ -413,8 +401,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				$client_entry = new stdClass;
 				$client_entry->client = $data['vendor_client'];
 				$client_entry->vendor_id = $data['vendor_id'];
-				$client_entry->payment_gateway = $data['gateway'];
-				$client_entry->params = $data['paymentDetails'];
+				$client_entry->params = $data['params'];
 				$client_entry->approved = $data['approved'];
 
 				// Insert the object into the user profile table.
@@ -428,11 +415,10 @@ class TjvendorsModelVendor extends JModelAdmin
 				$query = $db->getQuery(true);
 
 				// Fields to update.
-				if (isset($data['paymentDetails']))
+				if (isset($data['params']))
 				{
 					$fields = array(
-						$db->quoteName('params') . ' = ' . $db->quote($data['paymentDetails']),
-						$db->quoteName('payment_gateway') . ' = ' . $db->quote($data['gateway']),
+						$db->quoteName('params') . ' = ' . $db->quote($data['params'])
 					);
 				}
 				else
@@ -470,8 +456,7 @@ class TjvendorsModelVendor extends JModelAdmin
 					$client_entry = new stdClass;
 					$client_entry->client = $data['vendor_client'];
 					$client_entry->vendor_id = $data['vendor_id'];
-					$client_entry->payment_gateway = $data['gateway'];
-					$client_entry->params = $data['paymentDetails'];
+					$client_entry->params = $data['params'];
 					$client_entry->approved = $data['approved'];
 
 					// Insert the object into the vendor_client_xref table.
@@ -481,7 +466,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				/* Send mail on vendor creation */
 				$tjvendorsTriggerVendor->onAfterVendorSave($data, true);
 
-				return true;
+				return $data['vendor_id'];
 			}
 
 			return false;
@@ -510,5 +495,30 @@ class TjvendorsModelVendor extends JModelAdmin
 	public function getClient()
 	{
 		return $this->vendor_client;
+	}
+
+	/**
+	 * Method to format payment config json structure, As we are taking data in subform and saving it in params, format the JSON structure
+	 *
+	 * @param   array  $data            Jform processed data
+	 * @param   array  $paymentDetails  Current data of payment gateway
+	 *
+	 * @return object The formatted json structure
+	 */
+	public function formatPaymentStructure($data, $paymentDetails)
+	{
+		$client = $this->getClient();
+		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$vendorDetails = $tjvendorFrontHelper->getPaymentDetails($data['vendor_id'], $client);
+
+		// Object  of old payment gateway params
+		$oldParams = json_decode($vendorDetails->params);
+
+		if (is_string($data['gateway']))
+		{
+			$oldParams->{$data['gateway']} = $paymentDetails;
+		}
+
+		return $oldParams;
 	}
 }

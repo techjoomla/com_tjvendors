@@ -13,7 +13,6 @@ jimport('joomla.filesystem.folder');
 jimport('joomla.filesystem.file');
 jimport('joomla.application.component.controller');
 
-
 /**
  * script for migration
  *
@@ -37,14 +36,16 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function preflight($type, $parent)
 	{
+		// Payment gateway migration
+		$this->updatePaymentGatewayConfig();
 	}
 
 	/**
 	 * Runs after install, update or discover_update
 	 *
-	 * @param   array  $type    data
+	 * @param   array   $type    data
 	 *
-	 * @param   array  $parent  data
+	 * @param   object  $parent  data
 	 *
 	 * @return void
 	 */
@@ -55,6 +56,9 @@ class Com_TjvendorsInstallerScript
 
 		// Add default permissions
 		$this->defaultPermissionsFix();
+
+		// Install Layouts
+		$this->_addLayout($parent);
 	}
 
 	/**
@@ -321,5 +325,92 @@ class Com_TjvendorsInstallerScript
 		{
 			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
+	}
+
+	/**
+	 * Override the Modules
+	 *
+	 * @return  boolean
+	 *
+	 * @since   1.3.0
+	 */
+	public function updatePaymentGatewayConfig()
+	{
+		$db = JFactory::getDBO();
+		$config   = JFactory::getConfig();
+		$dbprefix = $config->get('dbprefix');
+		$query = "SHOW TABLES LIKE '" . $dbprefix . "vendor_client_xref';";
+		$db->setQuery($query);
+		$tableExists = $db->loadResult();
+
+		if (empty($tableExists))
+		{
+			return false;
+		}
+
+		$query = "SHOW COLUMNS FROM `#__vendor_client_xref` LIKE 'payment_gateway'";
+		$db->setQuery($query);
+		$result = $db->loadResult();
+
+		if (!isset($result))
+		{
+			return false;
+		}
+
+		$query = $db->getQuery(true);
+		$query->select(array('*'));
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$query->where($db->quoteName('payment_gateway') . "=" . "'paypal'", 'OR');
+		$query->where($db->quoteName('payment_gateway') . "=" . "'adaptive_paypal'");
+		$db->setQuery($query);
+		$vendorList = $db->loadObjectList();
+
+		foreach ($vendorList as $key => $value)
+		{
+			$param1 = new stdClass;
+			$param1->payment_gateways = $value->payment_gateway;
+
+			$param2 = json_decode($value->params);
+
+			$params = (object) array_merge((array) $param1, (array) $param2);
+
+			$paymentArray = array();
+			$paymentArray['payment_gateway0'] = $params;
+			$paymentArrayList['payment_gateway'] = $paymentArray;
+
+			$vendorParams = json_encode($paymentArrayList);
+
+			$vendorData = new stdClass;
+			$vendorData->id        = $value->id;
+			$vendorData->vendor_id = $value->vendor_id;
+			$vendorData->params    = $vendorParams;
+
+			JFactory::getDbo()->updateObject('#__vendor_client_xref', $vendorData, 'id');
+		}
+
+		return true;
+	}
+
+	/**
+	 * Add subform layout for payment form
+	 *
+	 * @param   object  $parent  table name
+	 *
+	 * @return  void
+	 */
+	private function _addLayout($parent)
+	{
+		jimport('joomla.filesystem.file');
+		jimport('joomla.filesystem.folder');
+
+		$src = $parent->getParent()->getPath('source');
+		$VendorSubformLayouts = $src . "/layouts/com_tjvendors";
+
+		if (JFolder::exists(JPATH_SITE . '/layouts/com_tjvendors'))
+		{
+			JFolder::delete(JPATH_SITE . '/layouts/com_tjvendors');
+		}
+
+		JFolder::copy($VendorSubformLayouts, JPATH_SITE . '/layouts/com_tjvendors');
 	}
 }

@@ -250,7 +250,9 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $client     integer
 	 *
-	 * @return res|integer
+	 * @deprecated use getPaymentGatewayConfig instead
+	 *
+	 * @return res|object  vendor detail
 	 */
 	public static function getPaymentDetails($vendor_id, $client)
 	{
@@ -562,5 +564,97 @@ class TjvendorFrontHelper
 		}
 
 		return false;
+	}
+
+	/**
+	 * Method to retriew vendor info based on the client (OPtional if not provided global will be return)
+	 * This method will check for the global entry(clientless) of the vendor based on the client value
+	 *
+	 * @param   integer  $vendorId  VendorId
+	 *
+	 * @param   string   $client    client
+	 *
+	 * @param   boolean  $global    Whether to load global config of vendor
+	 *
+	 * @return  Object
+	 *
+	 * @since   1.2
+	 */
+	public function getPaymentGatewayConfig($vendorId, $client = "", $global = true)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$arrayColumns = array('vc.params');
+		$query->select($db->quoteName($arrayColumns));
+		$query->from($db->quoteName('#__tjvendors_vendors', 'v'));
+		$query->join('LEFT', $db->quoteName('#__vendor_client_xref', 'vc') .
+				' ON (' . $db->quoteName('v.vendor_id') . ' = ' . $db->quoteName('vc.vendor_id') . ')');
+
+		$query->where($db->quoteName('v.vendor_id') . ' = ' . $db->quote($vendorId));
+
+		$queryCustom = clone $query;
+
+		if (!empty($client))
+		{
+			$queryCustom->where($db->quoteName('vc.client') . ' = ' . $db->quote($client));
+		}
+		else
+		{
+			$queryCustom->where($db->quoteName('vc.client') . ' = ""');
+		}
+
+		$db->setQuery($queryCustom);
+
+		try
+		{
+			$result = $db->loadAssoc();
+
+			if ((empty($result) && $global))
+			{
+				$queryCustom = clone $query;
+				$queryCustom->where($db->quoteName('vc.client') . ' = ""');
+			}
+
+			$db->setQuery($queryCustom);
+			$result = $db->loadResult();
+
+			return json_decode($result);
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+	}
+
+	/**
+	 * Get client name
+	 *
+	 * @param   string   $client    client
+	 * @param   integer  $vendorId  Venodor ID
+	 *
+	 * @return  Boolean Client exist or not
+	 *
+	 * @since  1.3.0
+	 */
+	public function isClientExist($client, $vendorId)
+	{
+		$db = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('client');
+		$query->from($db->quoteName('#__vendor_client_xref'));
+		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
+		$db->setQuery($query);
+
+		$return = $db->loadResult();
+
+		if ($return)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

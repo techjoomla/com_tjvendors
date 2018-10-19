@@ -16,9 +16,6 @@ use Joomla\CMS\Language\Text;
 JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
 JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
 
-$lang = JFactory::getLanguage();
-$lang->load('com_tjvendors', JPATH_ADMINISTRATOR);
-
 /**
  * TJVendors Actions Logging Plugin.
  *
@@ -59,6 +56,12 @@ class PlgActionlogTjvendors extends JPlugin
 		$userId   = $jUser->id;
 		$userName = $jUser->username;
 
+		if ($vendorData['vendor_client'])
+		{
+			$language = JFactory::getLanguage();
+			$language->load($vendorData['vendor_client']);
+		}
+
 		// If admin create user as vendor from backend
 		if ($app->isAdmin())
 		{
@@ -77,10 +80,10 @@ class PlgActionlogTjvendors extends JPlugin
 					$message = array(
 						'action'         => $action,
 						'type'           => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-						'clientname'     => Text::_($this->getExtensionName($vendorData['vendor_client'])),
+						'clientname'     => JText::_(strtoupper($vendorData['vendor_client'])),
 						'clientlink'     => 'index.php?option=' . $vendorData['vendor_client'],
-						'vendorusername' =>	$vendorUserName,
-						'vendoruserlink' =>	'index.php?option=com_users&task=user.edit&id=' . $vendorID,
+						'vendorusername' => $vendorUserName,
+						'vendoruserlink' => 'index.php?option=com_users&task=user.edit&id=' . $vendorID,
 						'userid'         => $userId,
 						'username'       => $userName,
 						'accountlink'    => 'index.php?option=com_users&task=user.edit&id=' . $userId,
@@ -106,7 +109,7 @@ class PlgActionlogTjvendors extends JPlugin
 				$message = array(
 					'action'           => $action,
 					'type'             => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-					'clientname'       => Text::_($this->getExtensionName($vendorData['vendor_client'])),
+					'clientname'       => JText::_(strtoupper($vendorData['vendor_client'])),
 					'clientlink'       => 'index.php?option=' . $vendorData['vendor_client'],
 					'vendorname'	   => $vendorData['vendor_title'],
 					'vendorusername'   => $vendorUserName,
@@ -128,7 +131,7 @@ class PlgActionlogTjvendors extends JPlugin
 				$message = array(
 					'action'      => $action,
 					'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-					'clientname'  => Text::_($this->getExtensionName($vendorData['vendor_client'])),
+					'clientname'  => JText::_(strtoupper($vendorData['vendor_client'])),
 					'clientlink'  => 'index.php?option=' . $vendorData['vendor_client'],
 					'userid'      => $userId,
 					'username'    => $userName,
@@ -140,7 +143,7 @@ class PlgActionlogTjvendors extends JPlugin
 				$message = array(
 					'action'      => $action,
 					'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-					'clientname'  => Text::_($this->getExtensionName($vendorData['vendor_client'])),
+					'clientname'  => JText::_(strtoupper($vendorData['vendor_client'])),
 					'clientlink'  => 'index.php?option=' . $vendorData['vendor_client'],
 					'userid'      => $userId,
 					'username'    => $userName,
@@ -223,7 +226,7 @@ class PlgActionlogTjvendors extends JPlugin
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function tjvendorOnAfterVendorDelete($vendorData)
+	public function tjvendorOnAfterVendorDelete($vendorData, $client)
 	{
 		if (!$this->params->get('logActionForVendorDelete', 1))
 		{
@@ -237,10 +240,18 @@ class PlgActionlogTjvendors extends JPlugin
 		$userId             = $jUser->id;
 		$userName           = $jUser->username;
 
+		if ($client)
+		{
+			$language = JFactory::getLanguage();
+			$language->load($client);
+		}
+
 		$message = array(
 			'action'      => $action,
 			'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
 			'vendorname'  => $vendorData->vendor_title,
+			'clientname'  => JText::_(strtoupper($client)),
+			'clientlink'  => 'index.php?option=' . $client,
 			'userid'      => $userId,
 			'username'    => $userName,
 			'accountlink' => 'index.php?option=com_users&task=user.edit&id=' . $userId,
@@ -277,52 +288,26 @@ class PlgActionlogTjvendors extends JPlugin
 		$tjvendorsTableVendor = JTable::getInstance('vendor', 'TjvendorsTable', array());
 		$tjvendorsTableVendor->load(array('vendor_id' => $vendorFeeData['vendor_id']));
 
+		if ($vendorFeeData['client'])
+		{
+			$language = JFactory::getLanguage();
+			$language->load($vendorFeeData['client']);
+		}
+		
 		$message = array(
 			'action'      => $action,
 			'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
 			'vendorname'  => $vendorFeeData['vendor_title'],
 			'vendorlink'  => 'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
+			'feelink'     => 'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $vendorFeeData['id'] . '&vendor_id=' . $vendorFeeData['vendor_id'] . '&client=' . $vendorFeeData['client'],
 			'clientlink'  => 'index.php?option=' . $vendorFeeData['client'],
-			'clientname'  => Text::_($this->getExtensionName($vendorFeeData['client'])),
+			'clientname'  => JText::_(strtoupper($vendorFeeData['client'])),
 			'userid'      => $userId,
 			'username'    => $userName,
 			'accountlink' => 'index.php?option=com_users&task=user.edit&id=' . $userId,
 		);
 
 		$this->addLog(array($message), $messageLanguageKey, $context, $userId);
-	}
-
-	/**
-	 * Method to get extension name
-	 *
-	 * @param   String  $client  the client like com_jgive the function will return JGive
-	 *
-	 * @return  string Component name
-	 *
-	 * @since   __DEPLOY_VERSION__
-	 */
-	public function getExtensionName($client)
-	{
-		if ($client)
-		{
-			switch ($client)
-			{
-				case 'com_jgive':
-					$extensionName = 'COM_TJVENDOR_CLIENT_JGIVE';
-					break;
-				case 'com_jticketing':
-					$extensionName = 'COM_TJVENDOR_CLIENT_JTICKETING';
-					break;
-				case 'com_quick2cart':
-					$extensionName = 'COM_TJVENDOR_CLIENT_QUICK2CART';
-					break;
-				case 'com_tjlms':
-					$extensionName = 'COM_TJVENDOR_CLIENT_SHIKA';
-					break;
-			}
-
-			return $extensionName;
-		}
 	}
 
 	/**

@@ -238,11 +238,11 @@ class TjvendorsModelVendors extends JModelList
 		if ($availability == 0)
 		{
 			$this->deleteVendor($vendor_id);
-
-			$dispatcher = JDispatcher::getInstance();
-			JPluginHelper::importPlugin('tjvendors');
-			$dispatcher->trigger('tjvendorOnAfterVendorDelete', array($vendorData));
 		}
+		
+		$dispatcher = JDispatcher::getInstance();
+		JPluginHelper::importPlugin('tjvendors');
+		$dispatcher->trigger('tjvendorOnAfterVendorDelete', array($vendorData, $client));
 	}
 
 	/**

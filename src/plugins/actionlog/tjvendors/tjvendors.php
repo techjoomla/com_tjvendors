@@ -11,9 +11,13 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
 
 JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
 JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
+
+$lang = JFactory::getLanguage();
+$lang->load('com_tjvendors', JPATH_ADMINISTRATOR);
 
 /**
  * TJVendors Actions Logging Plugin.
@@ -58,10 +62,10 @@ class PlgActionlogTjvendors extends JPlugin
 		// If admin create user as vendor from backend
 		if ($app->isAdmin())
 		{
-			$vendorInfor  = JFactory::getUser($vendorData['user_id']);
-			$vendorID     = $vendorInfor->id;
+			$vendorInfor    = JFactory::getUser($vendorData['user_id']);
+			$vendorID       = $vendorInfor->id;
 			$vendorUserName = $vendorInfor->username;
-			$action       = ($isNew) ? 'add' : 'update';
+			$action         = ($isNew) ? 'add' : 'update';
 
 			// Create New Vendor
 			if ($isNew)
@@ -71,28 +75,27 @@ class PlgActionlogTjvendors extends JPlugin
 				if ($vendorData['vendor_client'])
 				{
 					$message = array(
-						'action'             => $action,
-						'type'               => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-						'clientname'         => $vendorData['vendor_client'],
-						'clientlink'         => 'index.php?option=' . $vendorData['vendor_client'],
-						'vendorusername'	 =>	$vendorUserName,
-						'vendoruserlink'	 =>	'index.php?option=com_users&task=user.edit&id=' . $vendorID,
-
-						'userid'             => $userId,
-						'username'           => $userName,
-						'accountlink'        => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+						'action'         => $action,
+						'type'           => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+						'clientname'     => Text::_($this->getExtensionName($vendorData['vendor_client'])),
+						'clientlink'     => 'index.php?option=' . $vendorData['vendor_client'],
+						'vendorusername' =>	$vendorUserName,
+						'vendoruserlink' =>	'index.php?option=com_users&task=user.edit&id=' . $vendorID,
+						'userid'         => $userId,
+						'username'       => $userName,
+						'accountlink'    => 'index.php?option=com_users&task=user.edit&id=' . $userId,
 					);
 				}
 				else
 				{
 					$message = array(
-						'action'             => $action,
-						'type'               => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-						'vendorusername'	 =>	$vendorUserName,
-						'vendoruserlink'	 =>	'index.php?option=com_users&task=user.edit&id=' . $vendorID,
-						'userid'             => $userId,
-						'username'           => $userName,
-						'accountlink'        => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+						'action'         => $action,
+						'type'           => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+						'vendorusername' => $vendorUserName,
+						'vendoruserlink' => 'index.php?option=com_users&task=user.edit&id=' . $vendorID,
+						'userid'         => $userId,
+						'username'       => $userName,
+						'accountlink'    => 'index.php?option=com_users&task=user.edit&id=' . $userId,
 					);
 				}
 			}
@@ -101,17 +104,16 @@ class PlgActionlogTjvendors extends JPlugin
 			{
 				$messageLanguageKey = 'PLG_ACTIONLOG_TJVENDORS_VENDOR_CLIENT_UPDATE';
 				$message = array(
-					'action'             => $action,
-					'type'               => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-					'clientname'         => $vendorData['vendor_client'],
-					'clientlink'         => 'index.php?option=' . $vendorData['vendor_client'],
-					'vendorname'	     =>	$vendorData['vendor_title'],
-					'vendorusername'	 =>	$vendorUserName,
-					'vendoruserlink'	 =>	'index.php?option=com_users&task=user.edit&id=' . $vendorID,
-
-					'userid'             => $userId,
-					'username'           => $userName,
-					'accountlink'        => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+					'action'           => $action,
+					'type'             => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+					'clientname'       => Text::_($this->getExtensionName($vendorData['vendor_client'])),
+					'clientlink'       => 'index.php?option=' . $vendorData['vendor_client'],
+					'vendorname'	   => $vendorData['vendor_title'],
+					'vendorusername'   => $vendorUserName,
+					'vendoruserlink'   => 'index.php?option=com_users&task=user.edit&id=' . $vendorID,
+					'userid'           => $userId,
+					'username'         => $userName,
+					'accountlink'      => 'index.php?option=com_users&task=user.edit&id=' . $userId,
 				);
 			}
 		}
@@ -124,25 +126,25 @@ class PlgActionlogTjvendors extends JPlugin
 			if ($isNew)
 			{
 				$message = array(
-					'action'             => $action,
-					'type'               => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-					'clientname'         => $vendorData['vendor_client'],
-					'clientlink'         => 'index.php?option=' . $vendorData['vendor_client'],
-					'userid'             => $userId,
-					'username'           => $userName,
-					'accountlink'        => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+					'action'      => $action,
+					'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+					'clientname'  => Text::_($this->getExtensionName($vendorData['vendor_client'])),
+					'clientlink'  => 'index.php?option=' . $vendorData['vendor_client'],
+					'userid'      => $userId,
+					'username'    => $userName,
+					'accountlink' => 'index.php?option=com_users&task=user.edit&id=' . $userId,
 				);
 			}
 			else
 			{
 				$message = array(
-					'action'             => $action,
-					'type'               => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-					'clientname'         => $vendorData['vendor_client'],
-					'clientlink'         => 'index.php?option=' . $vendorData['vendor_client'],
-					'userid'             => $userId,
-					'username'           => $userName,
-					'accountlink'        => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+					'action'      => $action,
+					'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+					'clientname'  => Text::_($this->getExtensionName($vendorData['vendor_client'])),
+					'clientlink'  => 'index.php?option=' . $vendorData['vendor_client'],
+					'userid'      => $userId,
+					'username'    => $userName,
+					'accountlink' => 'index.php?option=com_users&task=user.edit&id=' . $userId,
 				);
 			}
 		}
@@ -169,10 +171,10 @@ class PlgActionlogTjvendors extends JPlugin
 			return;
 		}
 
-		$jUser     = JFactory::getUser();
-		$userId    = $jUser->id;
-		$userName  = $jUser->username;
-		$context   = JFactory::getApplication()->input->get('option');
+		$jUser                = JFactory::getUser();
+		$userId               = $jUser->id;
+		$userName             = $jUser->username;
+		$context              = JFactory::getApplication()->input->get('option');
 		$tjvendorsTableVendor = JTable::getInstance('vendor', 'TjvendorsTable', array());
 
 		switch ($state)
@@ -196,14 +198,14 @@ class PlgActionlogTjvendors extends JPlugin
 			$tjvendorsTableVendor->load(array('vendor_id' => $vendorID));
 
 			$message = array(
-				'action'             => $action,
-				'type'               => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-				'vendorname'	     =>	$tjvendorsTableVendor->vendor_title,
-				'vendorid'	         =>	$tjvendorsTableVendor->user_id,
-				'vendorlink'	     =>	'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
-				'userid'             => $userId,
-				'username'           => $userName,
-				'accountlink'        => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+				'action'       => $action,
+				'type'         => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+				'vendorname'   => $tjvendorsTableVendor->vendor_title,
+				'vendorid'	   => $tjvendorsTableVendor->user_id,
+				'vendorlink'   => 'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
+				'userid'       => $userId,
+				'username'     => $userName,
+				'accountlink'  => 'index.php?option=com_users&task=user.edit&id=' . $userId,
 			);
 
 			$this->addLog(array($message), $messageLanguageKey, $context, $userId);
@@ -236,12 +238,12 @@ class PlgActionlogTjvendors extends JPlugin
 		$userName           = $jUser->username;
 
 		$message = array(
-			'action'                      => $action,
-			'type'                        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-			'vendorname'                  => $vendorData->vendor_title,
-			'userid'                      => $userId,
-			'username'                    => $userName,
-			'accountlink'                 => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+			'action'      => $action,
+			'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+			'vendorname'  => $vendorData->vendor_title,
+			'userid'      => $userId,
+			'username'    => $userName,
+			'accountlink' => 'index.php?option=com_users&task=user.edit&id=' . $userId,
 		);
 
 		$this->addLog(array($message), $messageLanguageKey, $context, $userId);
@@ -281,13 +283,46 @@ class PlgActionlogTjvendors extends JPlugin
 			'vendorname'  => $vendorFeeData['vendor_title'],
 			'vendorlink'  => 'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
 			'clientlink'  => 'index.php?option=' . $vendorFeeData['client'],
-			'clientname'  => $vendorFeeData['client'],
+			'clientname'  => Text::_($this->getExtensionName($vendorFeeData['client'])),
 			'userid'      => $userId,
 			'username'    => $userName,
 			'accountlink' => 'index.php?option=com_users&task=user.edit&id=' . $userId,
 		);
 
 		$this->addLog(array($message), $messageLanguageKey, $context, $userId);
+	}
+
+	/**
+	 * Method to get extension name
+	 *
+	 * @param   String  $client  the client like com_jgive the function will return JGive
+	 *
+	 * @return  string Component name
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getExtensionName($client)
+	{
+		if ($client)
+		{
+			switch ($client)
+			{
+				case 'com_jgive':
+					$extensionName = 'COM_TJVENDOR_CLIENT_JGIVE';
+					break;
+				case 'com_jticketing':
+					$extensionName = 'COM_TJVENDOR_CLIENT_JTICKETING';
+					break;
+				case 'com_quick2cart':
+					$extensionName = 'COM_TJVENDOR_CLIENT_QUICK2CART';
+					break;
+				case 'com_tjlms':
+					$extensionName = 'COM_TJVENDOR_CLIENT_SHIKA';
+					break;
+			}
+
+			return $extensionName;
+		}
 	}
 
 	/**

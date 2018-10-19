@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Component\ComponentHelper;
 
 JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
+JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
 
 /**
  * TJVendors Actions Logging Plugin.
@@ -167,13 +168,13 @@ class PlgActionlogTjvendors extends JPlugin
 		{
 			return;
 		}
-		
+
 		$jUser     = JFactory::getUser();
 		$userId    = $jUser->id;
 		$userName  = $jUser->username;
 		$context   = JFactory::getApplication()->input->get('option');
-		$tjvendorsTableVendor = JTable::getInstance('vendor', 'TjvendorsTablevendor', array());
-		
+		$tjvendorsTableVendor = JTable::getInstance('vendor', 'TjvendorsTable', array());
+
 		switch ($state)
 		{
 			case 0:
@@ -189,12 +190,22 @@ class PlgActionlogTjvendors extends JPlugin
 				$action             = '';
 				break;
 		}
-		
-		// User admin has published vendor of client JT
-		// User <a href=\"{accountlink}\">{username}</a> has published a {vendorname} {type} 
-		// User <a href=\"{accountlink}\">{username}</a> has unpublished a {vendorname} {type} 
+
 		foreach ($pks as $vendorID)
-		{		
+		{
+			$tjvendorsTableVendor->load(array('vendor_id' => $vendorID));
+
+			$message = array(
+				'action'             => $action,
+				'type'               => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+				'vendorname'	     =>	$tjvendorsTableVendor->vendor_title,
+				'vendorid'	         =>	$tjvendorsTableVendor->user_id,
+				'vendorlink'	     =>	'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
+				'userid'             => $userId,
+				'username'           => $userName,
+				'accountlink'        => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+			);
+
 			$this->addLog(array($message), $messageLanguageKey, $context, $userId);
 		}
 	}
@@ -204,8 +215,7 @@ class PlgActionlogTjvendors extends JPlugin
 	 *
 	 * Method is called after vendor data is deleted from  the database.
 	 *
-	 * @param   string  $context  com_tjvendors.
-	 * @param   Object  $table    Holds the vendor data.
+	 * @param   Object  $vendorData  Holds the vendor data.
 	 *
 	 * @return  void
 	 *
@@ -213,12 +223,28 @@ class PlgActionlogTjvendors extends JPlugin
 	 */
 	public function tjvendorOnAfterVendorDelete($vendorData)
 	{
-		// User admin has deleted vendor "Vendor Name" for client JT
-		// User admin has deleted vendor "Vendor Name"
 		if (!$this->params->get('logActionForVendorDelete', 1))
 		{
 			return;
 		}
+
+		$context            = JFactory::getApplication()->input->get('option');
+		$jUser              = JFactory::getUser();
+		$messageLanguageKey = 'PLG_ACTIONLOG_TJVENDORS_VENDOR_DELETED';
+		$action             = 'delete';
+		$userId             = $jUser->id;
+		$userName           = $jUser->username;
+
+		$message = array(
+			'action'                      => $action,
+			'type'                        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+			'vendorname'                  => $vendorData->vendor_title,
+			'userid'                      => $userId,
+			'username'                    => $userName,
+			'accountlink'                 => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+		);
+
+		$this->addLog(array($message), $messageLanguageKey, $context, $userId);
 	}
 
 	/**
@@ -235,13 +261,33 @@ class PlgActionlogTjvendors extends JPlugin
 	 */
 	public function tjVendorsOnAfterVendorFeeSave($vendorFeeData, $isNew)
 	{
-		// User admin has added/updated vendor "Vendor Name" fee for client JT
-		// User admin has added/updated vendor "Vendor Name" fee
-
 		if (!$this->params->get('logActionForVendorFeeSave', 1))
 		{
 			return;
 		}
+
+		$context              = JFactory::getApplication()->input->get('option');
+		$jUser                = JFactory::getUser();
+		$messageLanguageKey   = ($isNew) ? 'PLG_ACTIONLOG_TJVENDORS_VENDOR_FEE_SAVE' : 'PLG_ACTIONLOG_TJVENDORS_VENDOR_FEE_UPDATE';
+		$action               = ($isNew) ? 'add' : 'update';
+		$userId               = $jUser->id;
+		$userName             = $jUser->username;
+		$tjvendorsTableVendor = JTable::getInstance('vendor', 'TjvendorsTable', array());
+		$tjvendorsTableVendor->load(array('vendor_id' => $vendorFeeData['vendor_id']));
+
+		$message = array(
+			'action'      => $action,
+			'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
+			'vendorname'  => $vendorFeeData['vendor_title'],
+			'vendorlink'  => 'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
+			'clientlink'  => 'index.php?option=' . $vendorFeeData['client'],
+			'clientname'  => $vendorFeeData['client'],
+			'userid'      => $userId,
+			'username'    => $userName,
+			'accountlink' => 'index.php?option=com_users&task=user.edit&id=' . $userId,
+		);
+
+		$this->addLog(array($message), $messageLanguageKey, $context, $userId);
 	}
 
 	/**

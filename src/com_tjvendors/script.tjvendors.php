@@ -25,6 +25,16 @@ class Com_TjvendorsInstallerScript
 	// Used to identify new install or update
 	private $componentStatus = "install";
 
+	/** @var array The list of extra modules and plugins to install */
+	private $queue = array(
+
+	// plugins => { (folder) => { (element) => (published) }* }*
+	'plugins' => array(
+						'actionlog' => array('tjreports' => 1),
+						'privacy'   => array('tjreports' => 1)
+					)
+				);
+
 	/**
 	 * method to run before an install/update/uninstall method
 	 *
@@ -71,6 +81,60 @@ class Com_TjvendorsInstallerScript
 	public function install($parent)
 	{
 		$this->installSqlFiles($parent);
+	}
+
+	/**
+	 * This method is called after a component is uninstalled.
+	 *
+	 * @param   \stdClass  $parent  Parent object calling this method.
+	 *
+	 * @return void
+	 */
+	public function uninstall($parent)
+	{
+		jimport('joomla.installer.installer');
+
+		$db = JFactory::getDBO();
+
+		$status          = new JObject;
+		$status->plugins = array();
+
+		$src = $parent->getParent()->getPath('source');
+
+		// Plugins uninstallation
+		if (count($this->queue['plugins']))
+		{
+			foreach ($this->queue['plugins'] as $folder => $plugins)
+			{
+				if (count($plugins))
+				{
+					foreach ($plugins as $plugin => $published)
+					{
+						$sql = $db->getQuery(true)->select($db->qn('extension_id'))
+						->from($db->qn('#__extensions'))
+						->where($db->qn('type') . ' = ' . $db->q('plugin'))
+						->where($db->qn('element') . ' = ' . $db->q($plugin))
+						->where($db->qn('folder') . ' = ' . $db->q($folder));
+						$db->setQuery($sql);
+
+						$id = $db->loadResult();
+
+						if ($id)
+						{
+							$installer         = new JInstaller;
+							$result            = $installer->uninstall('plugin', $id);
+							$status->plugins[] = array(
+								'name' => 'plg_' . $plugin,
+								'group' => $folder,
+								'result' => $result
+							);
+						}
+					}
+				}
+			}
+		}
+
+		return $status;
 	}
 
 	/**

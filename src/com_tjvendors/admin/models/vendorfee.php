@@ -50,7 +50,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 */
 	public function getTable($type = 'Vendorfee', $prefix = 'TjvendorsTable', $config = array())
 	{
-		$db = JFactory::getDbo();
+		$db     = JFactory::getDbo();
 		$tables = $db->getTableList();
 
 		return JTable::getInstance($type, $prefix, $config);
@@ -96,8 +96,8 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		$data = parent::getItem($pk);
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
 		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$vendorDetail = $TjvendorsModelVendor->getItem();
-		$data->vendor_title = $vendorDetail->vendor_title;
+		$vendorDetail         = $TjvendorsModelVendor->getItem();
+		$data->vendor_title   = $vendorDetail->vendor_title;
 
 		return $data;
 	}
@@ -137,24 +137,28 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$table = $this->getTable();
-		$db = JFactory::getDbo();
-		$input  = JFactory::getApplication()->input;
+		$isNew             = (empty($data['id']))? true : false;
+		$app               = JFactory::getApplication();
+		$table             = $this->getTable();
+		$db                = JFactory::getDbo();
+		$input             = $app->input;
 		$data['vendor_id'] = $input->get('vendor_id', '', 'INTEGER');
-		$app  = JFactory::getApplication();
-
-		$uniqueCurrency = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client']);
+		$uniqueCurrency    = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client']);
 
 		if (!empty($uniqueCurrency))
 		{
 			if (parent::save($data))
 			{
+				$dispatcher = JDispatcher::getInstance();
+				JPluginHelper::importPlugin('tjvendors');
+				$dispatcher->trigger('tjVendorsOnAfterVendorFeeSave', array($data, $isNew));
+
 				return true;
 			}
 		}
 		else
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'), 'error');
+			$app->enqueueMessage(JText::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'), 'error');
 		}
 
 		return false;

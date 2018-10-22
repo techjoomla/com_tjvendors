@@ -239,7 +239,7 @@ class TjvendorsModelVendors extends JModelList
 		{
 			$this->deleteVendor($vendor_id);
 		}
-		
+
 		$dispatcher = JDispatcher::getInstance();
 		JPluginHelper::importPlugin('tjvendors');
 		$dispatcher->trigger('tjvendorOnAfterVendorDelete', array($vendorData, $client));
@@ -248,8 +248,8 @@ class TjvendorsModelVendors extends JModelList
 	/**
 	 * Method To plublish and unpublish vendors
 	 *
-	 * @param   Array    $items  Vendor Ids
-	 * @param   Integer  $state  State
+	 * @param   Array    $items   Vendor Ids
+	 * @param   Integer  $state   State
 	 * @param   String   $client  Client like com_jgive or com_jticketing
 	 *
 	 * @return  Boolean
@@ -264,12 +264,7 @@ class TjvendorsModelVendors extends JModelList
 		{
 			JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
 			$tjvendorsTablevendorclientxref = JTable::getInstance('vendorclientxref', 'TjvendorsTable', array());
-			$tjvendorsTablevendorclientxref->load(
-													array(
-															'vendor_id' => $id,
-															'client'    => $client															
-														)
-												);
+			$tjvendorsTablevendorclientxref->load(array('vendor_id' => $id, 'client'    => $client));
 			$updateState = new stdClass;
 
 			// Must be a valid primary key value.

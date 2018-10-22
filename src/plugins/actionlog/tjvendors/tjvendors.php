@@ -160,8 +160,8 @@ class PlgActionlogTjvendors extends JPlugin
 	 *
 	 * Method is called after vendor state is changed from  the database.
 	 *
-	 * @param   Array    $pks    Holds the vendors id
-	 * @param   Integer  $state  0-indicate unpublish 1-indicate publish.
+	 * @param   Array    $pks     Holds the vendors id
+	 * @param   Integer  $state   0-indicate unpublish 1-indicate publish.
 	 * @param   String   $client  Client like com_jgive or com_jticketing
 	 *
 	 * @return  void
@@ -226,6 +226,7 @@ class PlgActionlogTjvendors extends JPlugin
 	 * Method is called after vendor data is deleted from  the database.
 	 *
 	 * @param   Object  $vendorData  Holds the vendor data.
+	 * @param   String  $client      com_jgive, com_jticketing
 	 *
 	 * @return  void
 	 *
@@ -298,7 +299,7 @@ class PlgActionlogTjvendors extends JPlugin
 			$language = JFactory::getLanguage();
 			$language->load($vendorFeeData['client']);
 		}
-		
+
 		$message = array(
 			'action'      => $action,
 			'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',

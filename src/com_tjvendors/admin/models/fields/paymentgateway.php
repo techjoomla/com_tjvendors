@@ -55,11 +55,14 @@ class JFormFieldPaymentGateway extends JFormFieldList
 		if (!empty($client))
 		{
 			$com_params = JComponentHelper::getParams($client);
-			$gateways = $com_params['gateways'];
+			$gateways = (array) $com_params['gateways'];
 
-			foreach ($gateways as $detail)
+			if (!empty($gateways))
 			{
-				$options[] = JHtml::_('select.option', $detail, $detail);
+				foreach ($gateways as $detail)
+				{
+					$options[] = JHtml::_('select.option', $detail, $detail);
+				}
 			}
 		}
 		else

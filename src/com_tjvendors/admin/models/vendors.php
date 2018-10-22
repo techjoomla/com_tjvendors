@@ -204,17 +204,20 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function deleteClientFromVendor($vendor_id,$client)
 	{
-		$db = $this->getDbo();
-		$query = $db->getQuery(true);
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
+		$tjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$vendorData           = $tjvendorsModelVendor->getItem($vendor_id);
+		$db                   = $this->getDbo();
+		$query                = $db->getQuery(true);
 		$query->delete($db->quoteName('#__vendor_client_xref'));
-			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 
-			if (!empty($client))
-			{
-				$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-			}
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
 
-			$db->setQuery($query);
+		$db->setQuery($query);
 
 		try
 		{
@@ -236,6 +239,10 @@ class TjvendorsModelVendors extends JModelList
 		{
 			$this->deleteVendor($vendor_id);
 		}
+		
+		$dispatcher = JDispatcher::getInstance();
+		JPluginHelper::importPlugin('tjvendors');
+		$dispatcher->trigger('tjvendorOnAfterVendorDelete', array($vendorData, $client));
 	}
 
 	/**
@@ -259,6 +266,7 @@ class TjvendorsModelVendors extends JModelList
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
 		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
 		*/
+
 		foreach ($items as $id)
 		{
 			$updateState = new stdClass;
@@ -284,6 +292,10 @@ class TjvendorsModelVendors extends JModelList
 				return false;
 			}
 		}
+
+		$dispatcher = JDispatcher::getInstance();
+		JPluginHelper::importPlugin('tjvendors');
+		$dispatcher->trigger('tjVendorsOnAfterVendorStateChange', array($items, $state));
 
 		return true;
 	}

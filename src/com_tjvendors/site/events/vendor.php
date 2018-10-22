@@ -54,6 +54,10 @@ class TjvendorsTriggerVendor
 					$this->tjvendorsMailsHelper->onAfterVendorEdit((object) $vendorDetails);
 				break;
 		}
+		
+		$dispatcher = JDispatcher::getInstance();
+		JPluginHelper::importPlugin('tjvendors');
+		$dispatcher->trigger('tjVendorsOnAfterVendorSave', array($vendorDetails, $isNew));
 
 		return;
 	}

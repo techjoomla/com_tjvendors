@@ -162,12 +162,13 @@ class PlgActionlogTjvendors extends JPlugin
 	 *
 	 * @param   Array    $pks    Holds the vendors id
 	 * @param   Integer  $state  0-indicate unpublish 1-indicate publish.
+	 * @param   String   $client  Client like com_jgive or com_jticketing
 	 *
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function tjVendorsOnAfterVendorStateChange($pks, $state)
+	public function tjVendorsOnAfterVendorStateChange($pks, $state, $client)
 	{
 		if (!$this->params->get('logActionForVendorStateChange', 1))
 		{
@@ -179,6 +180,8 @@ class PlgActionlogTjvendors extends JPlugin
 		$userName             = $jUser->username;
 		$context              = JFactory::getApplication()->input->get('option');
 		$tjvendorsTableVendor = JTable::getInstance('vendor', 'TjvendorsTable', array());
+		$language = JFactory::getLanguage();
+		$language->load($client);
 
 		switch ($state)
 		{
@@ -204,8 +207,10 @@ class PlgActionlogTjvendors extends JPlugin
 				'action'       => $action,
 				'type'         => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
 				'vendorname'   => $tjvendorsTableVendor->vendor_title,
-				'vendorid'	   => $tjvendorsTableVendor->user_id,
+				'vendorid'     => $tjvendorsTableVendor->user_id,
 				'vendorlink'   => 'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
+				'clientname'   => JText::_(strtoupper($client)),
+				'clientlink'   => 'index.php?option=' . $client,
 				'userid'       => $userId,
 				'username'     => $userName,
 				'accountlink'  => 'index.php?option=com_users&task=user.edit&id=' . $userId,

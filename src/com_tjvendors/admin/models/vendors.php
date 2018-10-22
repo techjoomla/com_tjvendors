@@ -101,7 +101,7 @@ class TjvendorsModelVendors extends JModelList
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
-		$query->select('v.*, vx.approved');
+		$query->select('v.*, vx.approved, vx.state');
 		$query->from($db->quoteName('#__tjvendors_vendors', 'v'));
 		$query->join('LEFT', $db->quoteName('#__vendor_client_xref', 'vx') .
 		'ON (' . $db->quoteName('v.vendor_id') . ' = ' . $db->quoteName('vx.vendor_id') . ')');
@@ -249,34 +249,35 @@ class TjvendorsModelVendors extends JModelList
 	 * Method To plublish and unpublish vendors
 	 *
 	 * @param   Array    $items  Vendor Ids
-	 *
 	 * @param   Integer  $state  State
+	 * @param   String   $client  Client like com_jgive or com_jticketing
 	 *
 	 * @return  Boolean
 	 *
 	 * @since  1.0
 	 */
-	public function setItemState($items, $state)
+	public function setItemState($items, $state, $client)
 	{
 		$db = JFactory::getDbo();
-		/*
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
-		$vendorObject = JTable::getInstance('vendor', 'TjvendorsTable');
-
-		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
-		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
-		*/
 
 		foreach ($items as $id)
 		{
+			JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
+			$tjvendorsTablevendorclientxref = JTable::getInstance('vendorclientxref', 'TjvendorsTable', array());
+			$tjvendorsTablevendorclientxref->load(
+													array(
+															'vendor_id' => $id,
+															'client'    => $client															
+														)
+												);
 			$updateState = new stdClass;
 
 			// Must be a valid primary key value.
-			$updateState->vendor_id = $id;
+			$updateState->id    = $tjvendorsTablevendorclientxref->id;
 			$updateState->state = $state;
 
 			// Update their details in the users table using id as the primary key.
-			JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
+			JFactory::getDbo()->updateObject('#__vendor_client_xref', $updateState, 'id');
 
 			/* Send Mail when Admin users change vendor state of vendor, these mails are not needed.. */
 			/*
@@ -295,7 +296,7 @@ class TjvendorsModelVendors extends JModelList
 
 		$dispatcher = JDispatcher::getInstance();
 		JPluginHelper::importPlugin('tjvendors');
-		$dispatcher->trigger('tjVendorsOnAfterVendorStateChange', array($items, $state));
+		$dispatcher->trigger('tjVendorsOnAfterVendorStateChange', array($items, $state, $client));
 
 		return true;
 	}

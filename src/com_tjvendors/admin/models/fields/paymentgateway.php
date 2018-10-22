@@ -55,7 +55,7 @@ class JFormFieldPaymentGateway extends JFormFieldList
 		if (!empty($client))
 		{
 			$com_params = JComponentHelper::getParams($client);
-			$gateways = (array) $com_params['gateways'];
+			$gateways = (array) $com_params->get('gateways');
 
 			if (!empty($gateways))
 			{

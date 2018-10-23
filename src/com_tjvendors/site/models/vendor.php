@@ -120,7 +120,7 @@ class TjvendorsModelVendor extends JModelAdmin
 					$tjvendorFrontHelper = new TjvendorFrontHelper;
 					$gatewayDetails = $tjvendorFrontHelper->getPaymentDetails($this->item->vendor_id, $client);
 
-					if (!empty($gatewayDetails))
+					if (!empty($gatewayDetails) && !empty($gatewayDetails->params))
 					{
 						$this->item->payment_gateway = json_decode($gatewayDetails->params)->payment_gateway;
 					}
@@ -256,6 +256,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$vendor_id = $app->getUserStateFromRequest('vendor.vendor_id', 'vendor.vendor_id');
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$vendorDetails = $tjvendorFrontHelper->getPaymentDetails($vendor_id, $client);
+		$params = array();
 
 		if (!empty($vendorDetails))
 		{
@@ -273,14 +274,17 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$paymentDetails = array();
 
-				foreach ($params as $key => $param)
+				if (!empty($params))
 				{
-					foreach ($param as $key => $value)
+					foreach ($params as $key => $param)
 					{
-						if ($key != "payment_gateways" && $param->payment_gateways == $payment_gateway)
+						foreach ($param as $key => $value)
 						{
+							if ($key != "payment_gateways" && $param->payment_gateways == $payment_gateway)
 							{
-								$form->setValue($key, '', $value);
+								{
+									$form->setValue($key, '', $value);
+								}
 							}
 						}
 					}

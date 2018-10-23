@@ -120,7 +120,7 @@ class TjvendorsModelVendor extends JModelAdmin
 					$tjvendorFrontHelper = new TjvendorFrontHelper;
 					$gatewayDetails = $tjvendorFrontHelper->getPaymentDetails($this->item->vendor_id, $client);
 
-					if (!empty($gatewayDetails))
+					if (!empty($gatewayDetails) && !empty($gatewayDetails->params))
 					{
 						$this->item->payment_gateway = json_decode($gatewayDetails->params)->payment_gateway;
 					}

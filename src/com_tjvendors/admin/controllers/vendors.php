@@ -110,6 +110,6 @@ class TjvendorsControllerVendors extends JControllerAdmin
 			}
 		}
 
-		$this->setRedirect('index.php?option=com_tjvendors&view=vendors&client=' . $client, $msg);
+		$this->setRedirect('index.php?option=com_tjvendors&view=vendors&client=' . $client);
 	}
 }

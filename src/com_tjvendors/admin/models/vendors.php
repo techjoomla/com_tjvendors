@@ -205,36 +205,33 @@ class TjvendorsModelVendors extends JModelList
 	public function deleteClientFromVendor($vendor_id,$client)
 	{
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
-		$tjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$vendorData           = $tjvendorsModelVendor->getItem($vendor_id);
-		$db                   = $this->getDbo();
-		
-		//Get vendor specific Fees Data
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from($db->quoteName('#__tjvendors_fee'));
-		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendor_id);
-		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		$db->setQuery($query);
-		$VendorFeeData = $db->loadAssocList();
-		
-		if (!empty($VendorFeeData))
+		$tjvendorsModelVendor     = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$tjvendorsModelVendorFees = JModelLegacy::getInstance('VendorFees', 'TjvendorsModel');
+		$vendorData               = $tjvendorsModelVendor->getItem($vendor_id);
+		$db                       = $this->getDbo();
+
+		// Get vendor specific Fees Data
+		$tjvendorsModelVendorFees->setState('vendor_id', $vendor_id);
+		$vendorFeeData            = $tjvendorsModelVendorFees->getItems();
+
+		if (!empty($vendorFeeData))
 		{
-			foreach ($VendorFeeData as $FeeData)
+			foreach ($vendorFeeData as $FeeData)
 			{
 				// Getting Vendor Payable Amount here
-				$result = TjvendorsHelper::getPayableAmount($FeeData['vendor_id'], $FeeData['client'], $FeeData['currency']);
-				
-				// If Vendor Payable amount is remaining then don't allow to delete vendor 
+				$result = TjvendorsHelper::getPayableAmount($FeeData->vendor_id, $FeeData->client, $FeeData->currency);
+
+				// If Vendor Payable amount is remaining then don't allow to delete vendor
 				if ($result > 0)
 				{
 					JFactory::getApplication()->enqueueMessage(sprintf(JText::_("COM_TJVENDORS_VENDOR_DELETE_ERROR_MESSAGE"), $vendorData->vendor_title), 'error');
+
 					return false;
 				}
 			}
 		}
-		
-		$query                = $db->getQuery(true);
+
+		$query = $db->getQuery(true);
 		$query->delete($db->quoteName('#__vendor_client_xref'));
 		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 

@@ -91,7 +91,7 @@ class TjvendorsControllerVendors extends JControllerAdmin
 			// Publish the items.
 			try
 			{
-				$model->setItemState($cid, $value);
+				$model->setItemState($cid, $value, $client);
 
 				if ($value == 1)
 				{

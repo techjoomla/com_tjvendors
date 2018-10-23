@@ -216,10 +216,10 @@ class TjvendorsModelVendors extends JModelList
 
 		if (!empty($vendorFeeData))
 		{
-			foreach ($vendorFeeData as $FeeData)
+			foreach ($vendorFeeData as $feeData)
 			{
 				// Getting Vendor Payable Amount here
-				$result = TjvendorsHelper::getPayableAmount($FeeData->vendor_id, $FeeData->client, $FeeData->currency);
+				$result = TjvendorsHelper::getPayableAmount($feeData->vendor_id, $feeData->client, $feeData->currency);
 
 				// If Vendor Payable amount is remaining then don't allow to delete vendor
 				if ($result > 0)

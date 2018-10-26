@@ -94,6 +94,9 @@ class TjvendorsModelPayout extends JModelAdmin
 	 */
 	protected function loadFormData()
 	{
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
+		$tjvendorsModelVendor     = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		
 		// Check the session for previously entered form data.
 		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.payout.data', array());
 		$com_params = JComponentHelper::getParams('com_tjvendors');
@@ -113,8 +116,8 @@ class TjvendorsModelPayout extends JModelAdmin
 		}
 		else
 		{
-			$payableAmount = TjvendorsHelper::getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
-			$this->item->total = $payableAmount;
+			$payableAmount = $tjvendorsModelVendor->getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
+			$this->item->total = $payableAmount[0]['amount'];
 		}
 
 			$this->item->reference_order_id = '';

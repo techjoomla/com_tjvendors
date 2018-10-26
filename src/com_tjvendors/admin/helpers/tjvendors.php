@@ -216,13 +216,16 @@ class TjvendorsHelper
 	 */
 	public static function bulkPendingAmount($vendor_id, $currency)
 	{
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
+		$tjvendorsModelVendor     = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		
 		$vendorClients = self::getClients($vendor_id);
 		$bulkPendingAmount = 0;
 
 		foreach ($vendorClients as $client)
 		{
-			$pendingAmount = self::getPayableAmount($vendor_id, $client['client'], $currency);
-			$bulkPendingAmount = $bulkPendingAmount + $pendingAmount;
+			$pendingAmount = $tjvendorsModelVendor->getPayableAmount($vendor_id, $client['client'], $currency);
+			$bulkPendingAmount = $bulkPendingAmount + $pendingAmount[0]['amount'];
 		}
 
 		return $bulkPendingAmount;
@@ -358,52 +361,6 @@ class TjvendorsHelper
 		}
 
 		return $currencies;
-	}
-
-	/**
-	 * Get get vendor_id
-	 *
-	 * @param   integer  $vendor_id  integer
-	 *
-	 * @param   string   $client     string
-	 *
-	 * @param   string   $currency   string
-	 *
-	 * @return integer
-	 */
-	public static function getPayableAmount($vendor_id, $client, $currency)
-	{
-		$com_params = JComponentHelper::getParams('com_tjvendors');
-		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
-		$date = JFactory::getDate();
-		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
-		$bulkPayoutStatus = $com_params->get('bulk_payout');
-
-		// Query to get the credit amount
-		$db = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('SUM(' . $db->quoteName('CREDIT') . ')');
-		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
-		$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
-		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
-		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$db->setQuery($query);
-		$credit = $db->loadResult();
-
-		// Query to get debit data
-		$query = $db->getQuery(true);
-		$query->select('SUM(' . $db->quoteName('debit') . ')');
-		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
-		$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
-		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		$query->where($db->quoteName('status') . ' = ' . $db->quote(1));
-		$db->setQuery($query);
-		$debit = $db->loadResult();
-		$payableAmount = $credit - $debit;
-
-		return $payableAmount;
 	}
 
 	/**

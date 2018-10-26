@@ -14,6 +14,9 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', 'select');
 
+JLoader::import('vendor', JPATH_SITE . '/components/com_tjvendors/models');
+$tjvendorsModelVendor = new TjvendorsModelVendor;
+
 // Import CSS
 $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
@@ -229,14 +232,13 @@ else
 						<?php
 						if($this->bulkPayoutStatus==0)
 						{
-
-							$result = TjvendorsHelper::getPayableAmount($item->vendor_id, $item->client, $item->currency);
-							echo $result;
+							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, $item->client, $item->currency);
+							echo $result[0]['amount'];
 						}
 						else
 						{
-							$result = TjvendorsHelper::bulkPendingAmount($item->vendor_id, $item->currency);
-							echo $result;
+							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, '' , $item->currency);
+							echo $result[0]['amount'];
 						}
 
 						?>
@@ -259,7 +261,7 @@ else
 			<div class="alert alert-no-items">
 				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 			</div>
-	<?php
+		<?php
 		}
 		?>
 

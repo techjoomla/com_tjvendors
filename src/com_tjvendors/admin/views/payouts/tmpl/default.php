@@ -233,12 +233,12 @@ else
 						if($this->bulkPayoutStatus==0)
 						{
 							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, $item->client, $item->currency);
-							echo $result[0]['amount'];
+							echo $result[$item->currency]['amount'];
 						}
 						else
 						{
 							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, '' , $item->currency);
-							echo $result[0]['amount'];
+							echo $result[$item->currency]['amount'];
 						}
 
 						?>

@@ -546,7 +546,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		// Query to get the credit amount
 		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true);
-		$query->select('SUM(' . $db->quoteName('credit') . ')');
+		$query->select('SUM(credit) as credit');
 		$query->select($db->quoteName('currency'));
 		$query->select($db->quoteName('client'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
@@ -569,7 +569,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		
 		// Query to get debit data
 		$query = $db->getQuery(true);
-		$query->select('SUM(' . $db->quoteName('debit') . ')');
+		$query->select('SUM(debit) as debit');
 		$query->select($db->quoteName('currency'));
 		$query->select($db->quoteName('client'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
@@ -589,7 +589,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$query->group($db->quoteName('currency'));
 		$db->setQuery($query);
 		$debit = $db->loadAssocList();
-		
+
 		// Total credit amount against the vendor for e.g. 100 ($50 + €50)
 		if (!empty($credit))
 		{
@@ -604,14 +604,14 @@ class TjvendorsModelVendor extends JModelAdmin
 						/* For e.g. $50 - $20  = $30*/						
 						if ($creditAmount['currency'] == $debitAmount['currency'] && $creditAmount['client'] == $debitAmount['client'])
 						{
-							$payableAmt['amount']   = $creditAmount["SUM(`credit`)"] - $debitAmount["SUM(`debit`)"];
+							$payableAmt['amount']   = $creditAmount["credit"] - $debitAmount["debit"];
 							$payableAmt['currency'] = $creditAmount['currency'];
 							$payableAmt['client']   = $creditAmount['client'];
 						}	
 						/* For e.g. €50 - + €0 = $50*/			
 						else
 						{
-							$payableAmt['amount']   = $creditAmount["SUM(`credit`)"];
+							$payableAmt['amount']   = $creditAmount["credit"];
 							$payableAmt['currency'] = $creditAmount['currency'];
 							$payableAmt['client']   = $creditAmount['client'];
 						}
@@ -620,14 +620,14 @@ class TjvendorsModelVendor extends JModelAdmin
 				// If there is no amount has been debited for a vendor for e.g out $100  $0 amount is paid
 				else
 				{
-					$payableAmt['amount']   = $creditAmount["SUM(`credit`)"];
+					$payableAmt['amount']   = $creditAmount["credit"];
 					$payableAmt['currency'] = $creditAmount['currency'];
 					$payableAmt['client']   = $creditAmount['client'];
 				}
 				
-				$payableAmount[] = $payableAmt;
+				$payableAmount[$creditAmount['currency']] = $payableAmt;
 			}
-			
+
 			return $payableAmount;
 		}
 	}

@@ -632,6 +632,16 @@ class TjvendorsModelVendor extends JModelAdmin
 			$payableAmount[$creditAmount['currency']] = $payableAmt;
 		}
 
+		/*
+		 * Array
+			(
+				[USD] => Array
+				(
+					[amount] => 96.00
+					[currency] => USD
+					[client] => com_jticketing
+				)
+			)*/
 		return $payableAmount;
 	}
 }

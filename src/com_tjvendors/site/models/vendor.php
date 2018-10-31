@@ -529,19 +529,19 @@ class TjvendorsModelVendor extends JModelAdmin
 	/**
 	 * Get get vendor_id
 	 *
-	 * @param   integer  $vendor_id  integer
+	 * @param   integer  $vendorId  integer
 	 * @param   string   $client     string like com_jgive
 	 * @param   string   $currency   string like USD, EUR
 	 *
-	 * @return integer
+	 * @return  Array    
 	 */
-	public static function getPayableAmount($vendor_id, $client = '', $currency = '')
+	public static function getPayableAmount($vendorId, $client = '', $currency = '')
 	{
 		$date              = JFactory::getDate();
 		$com_params        = JComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus  = $com_params->get('bulk_payout');
-		$payout_day_limit  = $com_params->get('payout_limit_days', '0', 'INT');
-		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
+		$payoutDayLimit  = $com_params->get('payout_limit_days', '0', 'INT');
+		$payoutDateLimit = $date->modify("-" . $payoutDayLimit . " day");
 		
 		// Query to get the credit amount
 		$db    = JFactory::getDbo();
@@ -550,8 +550,8 @@ class TjvendorsModelVendor extends JModelAdmin
 		$query->select($db->quoteName('currency'));
 		$query->select($db->quoteName('client'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendor_id);
-		$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payout_date_limit));
+		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
+		$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDateLimit));
 		
 		if (!empty($client))
 		{
@@ -573,7 +573,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$query->select($db->quoteName('currency'));
 		$query->select($db->quoteName('client'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendorId));
 		
 		if (!empty($currency))
 		{
@@ -589,6 +589,8 @@ class TjvendorsModelVendor extends JModelAdmin
 		$query->group($db->quoteName('currency'));
 		$db->setQuery($query);
 		$debit = $db->loadAssocList();
+
+		$payableAmount = array();
 
 		// Total credit amount against the vendor for e.g. 100 ($50 + €50)
 		if (!empty($credit))
@@ -627,8 +629,8 @@ class TjvendorsModelVendor extends JModelAdmin
 				
 				$payableAmount[$creditAmount['currency']] = $payableAmt;
 			}
-
-			return $payableAmount;
 		}
+
+		return $payableAmount;
 	}
 }

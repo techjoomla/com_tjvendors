@@ -117,7 +117,11 @@ class TjvendorsModelPayout extends JModelAdmin
 		else
 		{
 			$payableAmount = $tjvendorsModelVendor->getPayableAmount($this->item->vendor_id, $this->item->client, $this->item->currency);
-			$this->item->total = $payableAmount[$this->item->currency]['amount'];
+			
+			if (!empty($payableAmount))
+			{
+				$this->item->total = $payableAmount[$this->item->currency]['amount'];
+			}
 		}
 
 			$this->item->reference_order_id = '';

@@ -225,7 +225,11 @@ class TjvendorsHelper
 		foreach ($vendorClients as $client)
 		{
 			$pendingAmount = $tjvendorsModelVendor->getPayableAmount($vendor_id, $client['client'], $currency);
-			$bulkPendingAmount = $bulkPendingAmount + $pendingAmount[$currency]['amount'];
+			
+			if (!empty($pendingAmount))
+			{
+				$bulkPendingAmount = $bulkPendingAmount + $pendingAmount[$currency]['amount'];
+			}
 		}
 
 		return $bulkPendingAmount;

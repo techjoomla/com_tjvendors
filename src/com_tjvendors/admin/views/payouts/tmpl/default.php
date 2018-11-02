@@ -14,6 +14,9 @@ JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', 'select');
 
+JLoader::import('vendor', JPATH_SITE . '/components/com_tjvendors/models');
+$tjvendorsModelVendor = new TjvendorsModelVendor;
+
 // Import CSS
 $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
@@ -227,16 +230,30 @@ else
 
 						<td>
 						<?php
-						if($this->bulkPayoutStatus==0)
+						if ($this->bulkPayoutStatus==0)
 						{
-
-							$result = TjvendorsHelper::getPayableAmount($item->vendor_id, $item->client, $item->currency);
-							echo $result;
+							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, $item->client, $item->currency);
+							
+							if (!empty($result))
+							{
+								echo $result[$item->client][$item->currency];
+							}
 						}
 						else
 						{
-							$result = TjvendorsHelper::bulkPendingAmount($item->vendor_id, $item->currency);
-							echo $result;
+							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, '' , $item->currency);
+							
+							if (!empty($result))
+							{
+								$totalPayableAmount = 0; 
+
+								foreach( $result as $payment)
+								{
+									$totalPayableAmount = $totalPayableAmount + $payment[$item->currency];
+								}
+
+								echo $totalPayableAmount;
+							}
 						}
 
 						?>
@@ -259,7 +276,7 @@ else
 			<div class="alert alert-no-items">
 				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 			</div>
-	<?php
+		<?php
 		}
 		?>
 

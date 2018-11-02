@@ -120,7 +120,7 @@ class TjvendorsModelPayout extends JModelAdmin
 			
 			if (!empty($payableAmount))
 			{
-				$this->item->total = $payableAmount[$this->item->currency]['amount'];
+				$this->item->total = $payableAmount[$this->item->client][$this->item->currency];
 			}
 		}
 

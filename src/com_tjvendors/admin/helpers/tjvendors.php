@@ -228,7 +228,7 @@ class TjvendorsHelper
 			
 			if (!empty($pendingAmount))
 			{
-				$bulkPendingAmount = $bulkPendingAmount + $pendingAmount[$currency]['amount'];
+				$bulkPendingAmount = $bulkPendingAmount + $pendingAmount[$client['client']][$currency];
 			}
 		}
 

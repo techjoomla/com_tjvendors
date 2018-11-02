@@ -230,13 +230,13 @@ else
 
 						<td>
 						<?php
-						if($this->bulkPayoutStatus==0)
+						if ($this->bulkPayoutStatus==0)
 						{
 							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, $item->client, $item->currency);
 							
 							if (!empty($result))
 							{
-								echo $result[$item->currency]['amount'];
+								echo $result[$item->client][$item->currency];
 							}
 						}
 						else
@@ -245,7 +245,14 @@ else
 							
 							if (!empty($result))
 							{
-								echo $result[$item->currency]['amount'];
+								$totalPayableAmount = 0; 
+
+								foreach( $result as $payment)
+								{
+									$totalPayableAmount = $totalPayableAmount + $payment[$item->currency];
+								}
+
+								echo $totalPayableAmount;
 							}
 						}
 

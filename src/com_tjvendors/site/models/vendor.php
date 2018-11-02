@@ -534,6 +534,22 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * @param   string   $currency   string like USD, EUR
 	 *
 	 * @return  Array    
+	 * 
+	 * Array
+		(
+			[com_jgive] => Array
+				(
+					[EUR] => 2
+					[USD] => 20
+				)
+
+			[com_jticketing] => Array
+				(
+					[EUR] => 4
+					[USD] => 2
+				)
+
+		)
 	 */
 	public static function getPayableAmount($vendorId, $client = '', $currency = '')
 	{
@@ -547,6 +563,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('SUM(credit) as credit');
+		$query->select('SUM(debit) as debit');
 		$query->select($db->quoteName('currency'));
 		$query->select($db->quoteName('client'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
@@ -564,84 +581,21 @@ class TjvendorsModelVendor extends JModelAdmin
 		}
 	
 		$query->group($db->quoteName('currency'));
+		$query->group($db->quoteName('client'));
 		$db->setQuery($query);
 		$credit = $db->loadAssocList();
-		
-		// Query to get debit data
-		$query = $db->getQuery(true);
-		$query->select('SUM(debit) as debit');
-		$query->select($db->quoteName('currency'));
-		$query->select($db->quoteName('client'));
-		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendorId));
-		
-		if (!empty($currency))
-		{
-			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
-		}
-		
-		if (!empty($client))
-		{
-			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		}
-		
-		$query->where($db->quoteName('status') . ' = ' . $db->quote(1));
-		$query->group($db->quoteName('currency'));
-		$db->setQuery($query);
-		$debit = $db->loadAssocList();
-
 		$payableAmount = array();
 
 		if (empty($credit))
 		{
 			return $payableAmount;
 		}
-		// Total credit amount against the vendor for e.g. 100 ($50 + €50)
+		
 		foreach ($credit as $creditAmount)
-		{
-			// Total debit amount against the vendor for e.g out 100 ($50 + €50) $20 is paid
-			if (!empty($debit))
-			{
-				foreach ($debit as $debitAmount)
-				{				
-					/* Here we are checking credit - debit amount as per currency */
-					/* For e.g. $50 - $20  = $30*/						
-					if ($creditAmount['currency'] == $debitAmount['currency'] && $creditAmount['client'] == $debitAmount['client'])
-					{
-						$payableAmt['amount']   = $creditAmount["credit"] - $debitAmount["debit"];
-						$payableAmt['currency'] = $creditAmount['currency'];
-						$payableAmt['client']   = $creditAmount['client'];
-					}	
-					/* For e.g. €50 - + €0 = $50*/			
-					else
-					{
-						$payableAmt['amount']   = $creditAmount["credit"];
-						$payableAmt['currency'] = $creditAmount['currency'];
-						$payableAmt['client']   = $creditAmount['client'];
-					}
-				}
-			}
-			// If there is no amount has been debited for a vendor for e.g out $100  $0 amount is paid
-			else
-			{
-				$payableAmt['amount']   = $creditAmount["credit"];
-				$payableAmt['currency'] = $creditAmount['currency'];
-				$payableAmt['client']   = $creditAmount['client'];
-			}
-			
-			$payableAmount[$creditAmount['currency']] = $payableAmt;
+		{			
+			$payableAmount[$creditAmount['client']][$creditAmount['currency']] = $creditAmount['credit'] - $creditAmount['debit'];
 		}
-
-		/*
-		 * Array
-			(
-				[USD] => Array
-				(
-					[amount] => 96.00
-					[currency] => USD
-					[client] => com_jticketing
-				)
-			)*/
+			
 		return $payableAmount;
 	}
 }

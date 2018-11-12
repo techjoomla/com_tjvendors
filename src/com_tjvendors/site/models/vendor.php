@@ -371,16 +371,19 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 		}
 
-		foreach ($data['payment_gateway'] as $key => $value)
+		if (isset($data['payment_gateway']))
 		{
-			if (sizeof($value) <= 1)
+			foreach ($data['payment_gateway'] as $key => $value)
 			{
-				unset($data['payment_gateway'][$key]);
+				if (sizeof($value) <= 1)
+				{
+					unset($data['payment_gateway'][$key]);
+				}
 			}
-		}
 
-		$paymentGatway['payment_gateway'] = $data['payment_gateway'];
-		$data['params'] = json_encode($paymentGatway);
+			$paymentGatway['payment_gateway'] = $data['payment_gateway'];
+			$data['params'] = json_encode($paymentGatway);
+		}
 
 		// To check if editing in registration form
 		if ($data['vendor_id'])

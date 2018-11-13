@@ -151,7 +151,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 			{
 				if (empty($data['id']))
 				{
-					$data['id'] = (int) $this->getState($this->getName().'.id');
+					$data['id'] = (int) $this->getState($this->getName() . '.id');
 				}
 
 				$dispatcher = JDispatcher::getInstance();

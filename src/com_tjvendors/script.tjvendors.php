@@ -70,7 +70,7 @@ class Com_TjvendorsInstallerScript
 		// Install Layouts
 		$this->_addLayout($parent);
 
-		// Install subextensions
+		// Install plugins
 		$this->_installPlugins($parent);
 	}
 

@@ -89,10 +89,10 @@ class TjvendorsModelVendorFees extends JModelList
 	 */
 	protected function getListQuery()
 	{
-		$input = JFactory::getApplication()->input;
+		$input           = JFactory::getApplication()->input;
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
-		$vendor_id = $this->vendor_id;
-		$client = $input->get('client', '', 'STRING');
+		$vendor_id       = $this->vendor_id ? $this->vendor_id : $this->getState('vendor_id');
+		$client          = $input->get('client', '', 'STRING');
 
 		// Create a new query object.
 		$db    = $this->getDbo();

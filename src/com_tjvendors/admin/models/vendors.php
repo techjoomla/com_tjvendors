@@ -101,7 +101,7 @@ class TjvendorsModelVendors extends JModelList
 		$query = $db->getQuery(true);
 
 		// Create the base select statement.
-		$query->select('v.*, vx.approved');
+		$query->select('v.*, vx.approved, vx.state');
 		$query->from($db->quoteName('#__tjvendors_vendors', 'v'));
 		$query->join('LEFT', $db->quoteName('#__vendor_client_xref', 'vx') .
 		'ON (' . $db->quoteName('v.vendor_id') . ' = ' . $db->quoteName('vx.vendor_id') . ')');
@@ -204,17 +204,43 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function deleteClientFromVendor($vendor_id,$client)
 	{
-		$db = $this->getDbo();
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
+		$tjvendorsModelVendor     = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		$tjvendorsModelVendorFees = JModelLegacy::getInstance('VendorFees', 'TjvendorsModel');
+		$vendorData               = $tjvendorsModelVendor->getItem($vendor_id);
+		$db                       = $this->getDbo();
+
+		// Get vendor specific Fees Data
+		$tjvendorsModelVendorFees->setState('vendor_id', $vendor_id);
+		$vendorFeeData            = $tjvendorsModelVendorFees->getItems();
+
+		if (!empty($vendorFeeData))
+		{
+			foreach ($vendorFeeData as $feeData)
+			{
+				// Getting Vendor Payable Amount here
+				$result = $tjvendorsModelVendor->getPayableAmount($feeData->vendor_id, $feeData->client, $feeData->currency);
+
+				// If Vendor Payable amount is remaining then don't allow to delete vendor
+				if (!empty($result))
+				{
+					JFactory::getApplication()->enqueueMessage(sprintf(JText::_("COM_TJVENDORS_VENDOR_DELETE_ERROR_MESSAGE"), $vendorData->vendor_title), 'error');
+
+					return false;
+				}
+			}
+		}
+
 		$query = $db->getQuery(true);
 		$query->delete($db->quoteName('#__vendor_client_xref'));
-			$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
+		$query->where($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id));
 
-			if (!empty($client))
-			{
-				$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-			}
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
 
-			$db->setQuery($query);
+		$db->setQuery($query);
 
 		try
 		{
@@ -236,39 +262,40 @@ class TjvendorsModelVendors extends JModelList
 		{
 			$this->deleteVendor($vendor_id);
 		}
+
+		$dispatcher = JDispatcher::getInstance();
+		JPluginHelper::importPlugin('tjvendors');
+		$dispatcher->trigger('tjvendorOnAfterVendorDelete', array($vendorData, $client));
 	}
 
 	/**
 	 * Method To plublish and unpublish vendors
 	 *
-	 * @param   Array    $items  Vendor Ids
-	 *
-	 * @param   Integer  $state  State
+	 * @param   Array    $items   Vendor Ids
+	 * @param   Integer  $state   State
+	 * @param   String   $client  Client like com_jgive or com_jticketing
 	 *
 	 * @return  Boolean
 	 *
 	 * @since  1.0
 	 */
-	public function setItemState($items, $state)
+	public function setItemState($items, $state, $client)
 	{
 		$db = JFactory::getDbo();
-		/*
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
-		$vendorObject = JTable::getInstance('vendor', 'TjvendorsTable');
 
-		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
-		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
-		*/
 		foreach ($items as $id)
 		{
+			JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
+			$tjvendorsTablevendorclientxref = JTable::getInstance('vendorclientxref', 'TjvendorsTable', array());
+			$tjvendorsTablevendorclientxref->load(array('vendor_id' => $id, 'client'    => $client));
 			$updateState = new stdClass;
 
 			// Must be a valid primary key value.
-			$updateState->vendor_id = $id;
+			$updateState->id    = $tjvendorsTablevendorclientxref->id;
 			$updateState->state = $state;
 
 			// Update their details in the users table using id as the primary key.
-			JFactory::getDbo()->updateObject('#__tjvendors_vendors', $updateState, 'vendor_id');
+			JFactory::getDbo()->updateObject('#__vendor_client_xref', $updateState, 'id');
 
 			/* Send Mail when Admin users change vendor state of vendor, these mails are not needed.. */
 			/*
@@ -284,6 +311,10 @@ class TjvendorsModelVendors extends JModelList
 				return false;
 			}
 		}
+
+		$dispatcher = JDispatcher::getInstance();
+		JPluginHelper::importPlugin('tjvendors');
+		$dispatcher->trigger('tjVendorsOnAfterVendorStateChange', array($items, $state, $client));
 
 		return true;
 	}

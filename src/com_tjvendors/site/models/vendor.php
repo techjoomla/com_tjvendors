@@ -120,7 +120,7 @@ class TjvendorsModelVendor extends JModelAdmin
 					$tjvendorFrontHelper = new TjvendorFrontHelper;
 					$gatewayDetails = $tjvendorFrontHelper->getPaymentDetails($this->item->vendor_id, $client);
 
-					if (!empty($gatewayDetails))
+					if (!empty($gatewayDetails) && !empty($gatewayDetails->params))
 					{
 						$this->item->payment_gateway = json_decode($gatewayDetails->params)->payment_gateway;
 					}
@@ -256,6 +256,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$vendor_id = $app->getUserStateFromRequest('vendor.vendor_id', 'vendor.vendor_id');
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$vendorDetails = $tjvendorFrontHelper->getPaymentDetails($vendor_id, $client);
+		$params = array();
 
 		if (!empty($vendorDetails))
 		{
@@ -273,14 +274,17 @@ class TjvendorsModelVendor extends JModelAdmin
 			{
 				$paymentDetails = array();
 
-				foreach ($params as $key => $param)
+				if (!empty($params))
 				{
-					foreach ($param as $key => $value)
+					foreach ($params as $key => $param)
 					{
-						if ($key != "payment_gateways" && $param->payment_gateways == $payment_gateway)
+						foreach ($param as $key => $value)
 						{
+							if ($key != "payment_gateways" && $param->payment_gateways == $payment_gateway)
 							{
-								$form->setValue($key, '', $value);
+								{
+									$form->setValue($key, '', $value);
+								}
 							}
 						}
 					}
@@ -367,16 +371,19 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 		}
 
-		foreach ($data['payment_gateway'] as $key => $value)
+		if (isset($data['payment_gateway']))
 		{
-			if (sizeof($value) <= 1)
+			foreach ($data['payment_gateway'] as $key => $value)
 			{
-				unset($data['payment_gateway'][$key]);
+				if (sizeof($value) <= 1)
+				{
+					unset($data['payment_gateway'][$key]);
+				}
 			}
-		}
 
-		$paymentGatway['payment_gateway'] = $data['payment_gateway'];
-		$data['params'] = json_encode($paymentGatway);
+			$paymentGatway['payment_gateway'] = $data['payment_gateway'];
+			$data['params'] = json_encode($paymentGatway);
+		}
 
 		// To check if editing in registration form
 		if ($data['vendor_id'])
@@ -520,5 +527,78 @@ class TjvendorsModelVendor extends JModelAdmin
 		}
 
 		return $oldParams;
+	}
+	
+	/**
+	 * Get get vendor_id
+	 *
+	 * @param   integer  $vendorId  integer
+	 * @param   string   $client     string like com_jgive
+	 * @param   string   $currency   string like USD, EUR
+	 *
+	 * @return  Array    
+	 * 
+	 * Array
+		(
+			[com_jgive] => Array
+				(
+					[EUR] => 2
+					[USD] => 20
+				)
+
+			[com_jticketing] => Array
+				(
+					[EUR] => 4
+					[USD] => 2
+				)
+
+		)
+	 */
+	public static function getPayableAmount($vendorId, $client = '', $currency = '')
+	{
+		$date              = JFactory::getDate();
+		$com_params        = JComponentHelper::getParams('com_tjvendors');
+		$bulkPayoutStatus  = $com_params->get('bulk_payout');
+		$payoutDayLimit  = $com_params->get('payout_limit_days', '0', 'INT');
+		$payoutDateLimit = $date->modify("-" . $payoutDayLimit . " day");
+		
+		// Query to get the credit amount
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('SUM(credit) as credit');
+		$query->select('SUM(debit) as debit');
+		$query->select($db->quoteName('currency'));
+		$query->select($db->quoteName('client'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
+		$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDateLimit));
+		
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+		
+		if (!empty($currency))
+		{
+			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+	
+		$query->group($db->quoteName('currency'));
+		$query->group($db->quoteName('client'));
+		$db->setQuery($query);
+		$credit = $db->loadAssocList();
+		$payableAmount = array();
+
+		if (empty($credit))
+		{
+			return $payableAmount;
+		}
+		
+		foreach ($credit as $creditAmount)
+		{			
+			$payableAmount[$creditAmount['client']][$creditAmount['currency']] = $creditAmount['credit'] - $creditAmount['debit'];
+		}
+			
+		return $payableAmount;
 	}
 }

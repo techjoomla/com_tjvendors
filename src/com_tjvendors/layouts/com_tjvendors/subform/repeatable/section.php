@@ -3,7 +3,7 @@
  * @package     Joomla.Site
  * @subpackage  Layout
  *
- * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -23,12 +23,12 @@ defined('_JEXEC') or die;
 extract($displayData);
 ?>
 
-<div class="row subform-repeatable-group bg-faded py-0 px-25 my-20 ml-0 mr-0" data-base-name="<?php echo $basegroup; ?>" data-group="<?php echo $group; ?>">
+<div class="row subform-repeatable-group subform-repeatable-group-<?php echo $unique_subform_id; ?> bg-faded py-0 px-25 my-20 ml-0 mr-0" data-base-name="<?php echo $basegroup; ?>" data-group="<?php echo $group; ?>">
 	<?php if (!empty($buttons)) : ?>
 	<div class="btn-toolbar text-right">
-		<?php if (!empty($buttons['add'])) : ?><a class="group-add btn btn-sm button btn-success"><span class="fa fa-2x fa-plus"></span> </a><?php endif; ?>
-		<?php if (!empty($buttons['remove'])) : ?><a class="group-remove btn btn-sm button btn-danger"><span class="fa fa-2x fa-trash"></span> </a><?php endif; ?>
-		<?php if (!empty($buttons['move'])) : ?><a class="group-move btn btn-sm button btn-primary"><span class="fa fa-2x fa-move"></span> </a><?php endif; ?>
+		<?php if (!empty($buttons['add'])) : ?><a class="group-add-<?php echo $unique_subform_id; ?> btn btn-sm button btn-success"><span class="fa fa-2x fa-plus"></span> </a><?php endif; ?>
+		<?php if (!empty($buttons['remove'])) : ?><a class="group-remove-<?php echo $unique_subform_id; ?> btn btn-sm button btn-danger"><span class="fa fa-2x fa-trash"></span> </a><?php endif; ?>
+		<?php if (!empty($buttons['move'])) : ?><a class="group-move-<?php echo $unique_subform_id; ?> btn btn-sm button btn-primary"><span class="fa fa-2x fa-move"></span> </a><?php endif; ?>
 	</div>
 	<?php endif; ?>
 

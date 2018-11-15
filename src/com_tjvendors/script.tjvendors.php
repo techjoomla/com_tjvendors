@@ -25,6 +25,16 @@ class Com_TjvendorsInstallerScript
 	// Used to identify new install or update
 	private $componentStatus = "install";
 
+	/** @var array The list of extra modules and plugins to install */
+	private $queue = array(
+
+	// plugins => { (folder) => { (element) => (published) }* }*
+	'plugins' => array(
+						'actionlog' => array('tjvendors' => 1),
+						'privacy'   => array('tjvendors' => 1)
+					)
+				);
+
 	/**
 	 * method to run before an install/update/uninstall method
 	 *
@@ -59,6 +69,9 @@ class Com_TjvendorsInstallerScript
 
 		// Install Layouts
 		$this->_addLayout($parent);
+
+		// Install plugins
+		$this->_installPlugins($parent);
 	}
 
 	/**
@@ -71,6 +84,138 @@ class Com_TjvendorsInstallerScript
 	public function install($parent)
 	{
 		$this->installSqlFiles($parent);
+	}
+
+	/**
+	 * This method is called after a component is uninstalled.
+	 *
+	 * @param   \stdClass  $parent  Parent object calling this method.
+	 *
+	 * @return void
+	 */
+	public function uninstall($parent)
+	{
+		jimport('joomla.installer.installer');
+
+		$db = JFactory::getDBO();
+
+		$status          = new JObject;
+		$status->plugins = array();
+
+		$src = $parent->getParent()->getPath('source');
+
+		// Plugins uninstallation
+		if (count($this->queue['plugins']))
+		{
+			foreach ($this->queue['plugins'] as $folder => $plugins)
+			{
+				if (count($plugins))
+				{
+					foreach ($plugins as $plugin => $published)
+					{
+						$sql = $db->getQuery(true)->select($db->qn('extension_id'))
+						->from($db->qn('#__extensions'))
+						->where($db->qn('type') . ' = ' . $db->q('plugin'))
+						->where($db->qn('element') . ' = ' . $db->q($plugin))
+						->where($db->qn('folder') . ' = ' . $db->q($folder));
+						$db->setQuery($sql);
+
+						$id = $db->loadResult();
+
+						if ($id)
+						{
+							$installer         = new JInstaller;
+							$result            = $installer->uninstall('plugin', $id);
+							$status->plugins[] = array(
+								'name' => 'plg_' . $plugin,
+								'group' => $folder,
+								'result' => $result
+							);
+						}
+					}
+				}
+			}
+		}
+
+		return $status;
+	}
+
+	/**
+	 * This method is called after a component is install to install plugins.
+	 *
+	 * @param   \stdClass  $parent  Parent object calling this method.
+	 *
+	 * @return void
+	 */
+	public function _installPlugins($parent)
+	{
+		jimport('joomla.installer.installer');
+		$src = $parent->getParent()->getPath('source');
+
+		$db = JFactory::getDbo();
+
+		$status = new JObject;
+		$status->plugins = array();
+
+		// Plugins installation
+		if (count($this->queue['plugins']))
+		{
+			foreach ($this->queue['plugins'] as $folder => $plugins)
+			{
+				if (count($plugins))
+				{
+					foreach ($plugins as $plugin => $published)
+					{
+						$path = "$src/plugins/$folder/$plugin";
+
+						if (!is_dir($path))
+						{
+							$path = "$src/plugins/$folder/plg_$plugin";
+						}
+
+						if (!is_dir($path))
+						{
+							$path = "$src/plugins/$plugin";
+						}
+
+						if (!is_dir($path))
+						{
+							$path = "$src/plugins/plg_$plugin";
+						}
+
+						if (!is_dir($path))
+						{
+							continue;
+						}
+
+						// Was the plugin already installed?
+						$query = $db->getQuery(true)
+							->select('COUNT(*)')
+							->from($db->qn('#__extensions'))
+							->where($db->qn('element') . ' = ' . $db->q($plugin))
+							->where($db->qn('folder') . ' = ' . $db->q($folder));
+						$db->setQuery($query);
+						$count = $db->loadResult();
+
+						$installer = new JInstaller;
+						$result = $installer->install($path);
+
+						$status->plugins[] = array('name' => 'plg_' . $plugin, 'group' => $folder, 'result' => $result);
+
+						if ($published && !$count)
+						{
+							$query = $db->getQuery(true)
+								->update($db->qn('#__extensions'))
+								->set($db->qn('enabled') . ' = ' . $db->q('1'))
+								->where($db->qn('element') . ' = ' . $db->q($plugin))
+								->where($db->qn('folder') . ' = ' . $db->q($folder));
+							$db->setQuery($query);
+							$db->execute();
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**

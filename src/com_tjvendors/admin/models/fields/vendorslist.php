@@ -1,7 +1,7 @@
 <?php
 /**
- * @package     JTicketing
- * @subpackage  com_jticketing
+ * @package     TJVendor
+ * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
  * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
@@ -43,7 +43,7 @@ class JFormFieldVendorsList extends \JFormFieldList
 	protected function getOptions()
 	{
 		$options   = array();
-		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_JTICKETING_COUPONS_SELECT_VENDOR'));
+		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJVENDORS_VENDOR_SELECT_VENDOR'));
 
 		// Get all vendors options, Param false to return option not all vendors
 		$db    = Factory::getDbo();

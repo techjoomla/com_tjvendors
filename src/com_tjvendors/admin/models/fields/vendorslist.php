@@ -42,6 +42,8 @@ class JFormFieldVendorsList extends \JFormFieldList
 	 */
 	protected function getOptions()
 	{
+		$lang = Factory::getLanguage();
+		$lang->load('com_tjvendors', JPATH_ADMINISTRATOR);
 		$options   = array();
 		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJVENDORS_VENDOR_SELECT_VENDOR'));
 

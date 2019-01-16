@@ -53,7 +53,8 @@ class JFormFieldVendorsList extends \JFormFieldList
 		$query->select($db->qn(array('v.vendor_id', 'v.vendor_title')))
 		->from($db->qn('#__tjvendors_vendors', 'v'))
 		->join('LEFT', $db->qn('#__vendor_client_xref', 'x') . 'ON (' . $db->qn('x.vendor_id') . ' = ' . $db->qn('v.vendor_id') . ')')
-		->where($db->qn('x.client') . ' = ' . $db->quote($this->element['client']));
+		->where($db->qn('x.client') . ' = ' . $db->quote($this->element['client']))
+		->where($db->qn('x.state') . ' = ' . $db->quote('1'));
 		$db->setQuery($query);
 		$vendorsList = $db->loadAssocList();
 

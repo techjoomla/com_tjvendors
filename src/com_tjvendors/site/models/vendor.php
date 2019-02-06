@@ -382,7 +382,8 @@ class TjvendorsModelVendor extends JModelAdmin
 			}
 
 			$paymentGatway['payment_gateway'] = $data['payment_gateway'];
-			$data['params'] = json_encode($paymentGatway);
+			$xrefData['params'] = json_encode($paymentGatway);
+			$data['params'] = '';
 		}
 
 		// To check if editing in registration form
@@ -408,7 +409,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				$client_entry = new stdClass;
 				$client_entry->client = $data['vendor_client'];
 				$client_entry->vendor_id = $data['vendor_id'];
-				$client_entry->params = $data['params'];
+				$client_entry->params = $xrefData['params'];
 				$client_entry->approved = $data['approved'];
 
 				// Insert the object into the user profile table.
@@ -425,7 +426,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				if (isset($data['params']))
 				{
 					$fields = array(
-						$db->quoteName('params') . ' = ' . $db->quote($data['params'])
+						$db->quoteName('params') . ' = ' . $db->quote($xrefData['params'])
 					);
 				}
 				else
@@ -463,7 +464,7 @@ class TjvendorsModelVendor extends JModelAdmin
 					$client_entry = new stdClass;
 					$client_entry->client = $data['vendor_client'];
 					$client_entry->vendor_id = $data['vendor_id'];
-					$client_entry->params = $data['params'];
+					$client_entry->params = $xrefData['params'];
 					$client_entry->approved = $data['approved'];
 
 					// Insert the object into the vendor_client_xref table.

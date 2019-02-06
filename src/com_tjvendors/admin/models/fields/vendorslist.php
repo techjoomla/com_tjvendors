@@ -21,7 +21,7 @@ jimport('joomla.form.helper');
 /**
  * Supports an HTML select list of vendors
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.3.2
  */
 class JFormFieldVendorsList extends \JFormFieldList
 {
@@ -29,7 +29,7 @@ class JFormFieldVendorsList extends \JFormFieldList
 	 * The form field type.
 	 *
 	 * @var   string
-	 * @since __DEPLOY_VERSION__
+	 * @since 1.3.2
 	 */
 	protected $type = 'vendorslist';
 
@@ -38,7 +38,7 @@ class JFormFieldVendorsList extends \JFormFieldList
 	 *
 	 * @return array An array of JHtml options.
 	 *
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.3.2
 	 */
 	protected function getOptions()
 	{

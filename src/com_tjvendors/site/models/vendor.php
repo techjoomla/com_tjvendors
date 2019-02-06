@@ -327,12 +327,13 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$table  = $this->getTable();
-		$db     = JFactory::getDbo();
-		$user   = JFactory::getUser();
-		$app    = JFactory::getApplication();
-		$input  = $app->input;
-		$layout = $input->get('layout', '', 'STRING');
+		$table    = $this->getTable();
+		$db       = JFactory::getDbo();
+		$user     = JFactory::getUser();
+		$app      = JFactory::getApplication();
+		$input    = $app->input;
+		$layout   = $input->get('layout', '', 'STRING');
+		$xrefData = array();
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
@@ -384,6 +385,10 @@ class TjvendorsModelVendor extends JModelAdmin
 			$paymentGatway['payment_gateway'] = $data['payment_gateway'];
 			$xrefData['params'] = json_encode($paymentGatway);
 			$data['params'] = '';
+		}
+		else
+		{
+			$xrefData['params'] = '';
 		}
 
 		// To check if editing in registration form

@@ -10,6 +10,11 @@
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modeladmin');
+
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\AdminModel;
+
 JLoader::import('fronthelper', JPATH_SITE . '/components/com_tjvendors/helpers');
 JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
 
@@ -18,7 +23,7 @@ JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/he
  *
  * @since  1.6
  */
-class TjvendorsModelVendor extends JModelAdmin
+class TjvendorsModelVendor extends AdminModel
 {
 	/**
 	 * @var    string  client data
@@ -57,7 +62,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function getTable($type = 'Vendor', $prefix = 'TjvendorsTable', $config = array())
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return Table::getInstance($type, $prefix, $config);
 	}
 
 	/**
@@ -73,7 +78,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get the form.
 		$form = $this->loadForm(
@@ -100,11 +105,11 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	protected function loadFormData()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$input = $app->input;
 		$client = $input->get('client', '', 'STRING');
 
-		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
+		$data = Factory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
 
 		if (empty($data))
 		{
@@ -146,8 +151,8 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$item = parent::getItem($pk);
 
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
-		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorXref = Table::getInstance('VendorClientXref', 'TjvendorsTable');
 		$vendorXref->load(array('vendor_id' => $item->vendor_id));
 		$item->params = $vendorXref->params;
 
@@ -328,9 +333,9 @@ class TjvendorsModelVendor extends JModelAdmin
 	public function save($data)
 	{
 		$table    = $this->getTable();
-		$db       = JFactory::getDbo();
-		$user     = JFactory::getUser();
-		$app      = JFactory::getApplication();
+		$db       = Factory::getDbo();
+		$user     = Factory::getUser();
+		$app      = Factory::getApplication();
 		$input    = $app->input;
 		$layout   = $input->get('layout', '', 'STRING');
 		$xrefData = array();
@@ -606,5 +611,77 @@ class TjvendorsModelVendor extends JModelAdmin
 		)*/
 
 		return $payableAmount;
+	}
+
+/**
+	 * Get the vendor id
+	 *
+	 * @param   Int     $userId  user id
+	 *
+	 * @param   String  $client  client ex->"com_tjlms/com_jticketing"
+	 *
+	 * @return  Int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function validateVendor($userId, $client)
+	{
+	    if (!class_exists('TjvendorFrontHelper'))
+	    {
+	        JLoader::register('TjvendorFrontHelper', JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php');
+	        JLoader::load('TjvendorFrontHelper');
+	    }
+
+	    if (!class_exists('TjvendorsHelper'))
+	    {
+	        JLoader::register('TjvendorsHelper', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php');
+	        JLoader::load('TjvendorsHelper');
+	    }
+
+	    // Generating vendor
+	    $tjvendorFrontHelper = new TjvendorFrontHelper;
+	    $tjvendorsHelper     = new TjvendorsHelper;
+
+	    // Checked if the user is a vendor
+	    $getVendorId = $tjvendorFrontHelper->checkVendor($userId, $client);
+
+	    // Collecting vendor data
+	    $vendorData                  = array();
+	    $vendorData['vendor_client'] = $client;
+	    $vendorData['user_id']       = $userId;
+
+	    $userName                   = Factory::getUser($vendorData['user_id'])->name;
+	    $vendorData['vendor_title'] = $userName;
+	    $vendorData['state']        = "1";
+
+	    // Collecting payment gateway details
+	    $paymentDetails                    = array();
+	    $paymentDetails['payment_gateway'] = '';
+	    $vendorData['paymentDetails']      = json_encode($paymentDetails);
+
+	    Table::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
+	    $table = Table::getInstance('vendor', 'TJVendorsTable', array());
+	    $table->load(
+	        array(
+	            'user_id' => $userId
+	        )
+	        );
+
+	    // Check for vendor's id if not adds a vendor
+	    if (empty($table->vendor_id))
+	    {
+	        $vendorId = $tjvendorsHelper->addVendor($vendorData);
+	    }
+	    elseif (empty($getVendorId))
+	    {
+	        $vendorData['vendor_id'] = $table->vendor_id;
+	        $vendorId       = $tjvendorsHelper->addVendor($vendorData);
+	    }
+	    else
+	    {
+	        $vendorId = $getVendorId;
+	    }
+
+	    return $vendorId;
 	}
 }

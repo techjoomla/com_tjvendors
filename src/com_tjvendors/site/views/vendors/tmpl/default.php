@@ -112,7 +112,7 @@ $listDirn  = $this->state->get('list.direction');
 							</li>
 
 							<li class="pr-0">
-								<div  class="input-group-btn hidden-xs">
+								<div  class="input-group-btn hidden">
 									<label for="limit" >
 										<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
 									</label>

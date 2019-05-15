@@ -36,7 +36,7 @@ JHtml::_('stylesheet', 'com_tjvendor/tjvendors.css', $options);
 JHtml::stylesheet(JUri::root() . 'media/techjoomla_strapper/vendors/no-more-tables.css', array(), true);
 
 // Load Boostrap
-$params         = ComponentHelper::getParams('com_tjvendor');
+$params         = ComponentHelper::getParams('com_tjvendors');
 $load_bootstrap = (int) $params->get('load_bootstrap');
 
 if (!empty($load_bootstrap))

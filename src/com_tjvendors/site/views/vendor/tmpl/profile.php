@@ -14,6 +14,8 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
+
+$tjBs3ClassLoad = COM_TJVENDORS_BS_CLASS_CONST;
 ?>
 <script type="text/javascript">
 	var layout = '<?php echo "profile";?>';
@@ -24,7 +26,7 @@ JHtml::_('behavior.keepalive');
 	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
 	tjVSite.vendor.initVendorJs();
 </script>
-<div id="tjv-wrapper" class="tjBs3">
+<div id="tjv-wrapper" class="<?php echo $tjBs3ClassLoad;?>">
 <?php
 	if (JFactory::getUser()->id )
 	{

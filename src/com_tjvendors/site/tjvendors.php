@@ -14,10 +14,6 @@ use Joomla\CMS\Component\ComponentHelper;
 jimport('joomla.application.component.controller');
 
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT);
-
-// Load defines.php
-require_once JPATH_SITE . '/components/com_tjvendors/defines.php';
-
 JLoader::register('TjvendorsController', JPATH_COMPONENT . '/controller.php');
 $TjvendorFrontHelper = JPATH_ROOT . '/components/com_tjvendors/helpers/fronthelper.php';
 

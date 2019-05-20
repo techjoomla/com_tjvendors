@@ -26,7 +26,7 @@ JHtml::_('behavior.keepalive');
 	tjVSite.vendor.initVendorJs();
 </script>
 
-<div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_BS_CLASS_CONST;?>">
+<div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
 <?php
 if (JFactory::getUser()->id )
 {

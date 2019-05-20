@@ -15,9 +15,6 @@ jimport('joomla.application.component.controller');
 
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT);
 
-// Load defines.php
-require_once JPATH_SITE . '/components/com_tjvendors/defines.php';
-
 JLoader::register('TjvendorsController', JPATH_COMPONENT . '/controller.php');
 $TjvendorFrontHelper = JPATH_ROOT . '/components/com_tjvendors/helpers/fronthelper.php';
 
@@ -40,16 +37,16 @@ JHtml::_('stylesheet', 'com_tjvendor/tjvendors.css', $options);
 JHtml::stylesheet(JUri::root() . 'media/techjoomla_strapper/vendors/no-more-tables.css', array(), true);
 
 // Load Boostrap
-$params         = ComponentHelper::getParams('com_tjvendors');
-$load_bootstrap = $params->get('load_bootstrap');
+$params        = ComponentHelper::getParams('com_tjvendors');
+$loadBootstrap = $params->get('load_bootstrap');
 
-if ($load_bootstrap == '1')
+if ($loadBootstrap == '1')
 {
-	define('COM_TJVENDORS_BS_CLASS_CONST', "tjBs3");
+	define('COM_TJVENDORS_WRAPPAER_CLASS', "tjBs3");
 	JHtml::_('stylesheet', 'media/techjoomla_strapper/bs3/css/bootstrap.min.css');
 	JHtml::_('stylesheet', 'media/techjoomla_strapper/vendors/font-awesome/css/font-awesome.min.css');
 }
 else
 {
-	define('COM_TJVENDORS_BS_CLASS_CONST', '');
+	define('COM_TJVENDORS_WRAPPAER_CLASS', '');
 }

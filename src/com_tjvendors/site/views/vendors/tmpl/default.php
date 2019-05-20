@@ -12,7 +12,6 @@ JHtml::_('formbehavior.chosen', 'select');
 
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
-$tjBs3ClassLoad = COM_TJVENDORS_BS_CLASS_CONST;
 ?>
 
 <script type="text/javascript">
@@ -34,7 +33,7 @@ $tjBs3ClassLoad = COM_TJVENDORS_BS_CLASS_CONST;
 	tjVSite.vendors.initVendorsJs();
 </script>
 
-<div id="tjv-wrapper" class="<?php echo $tjBs3ClassLoad;?>">
+<div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_BS_CLASS_CONST;?>">
 	<h1>
 		<?php echo JText::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS'); ?>
 	</h1>

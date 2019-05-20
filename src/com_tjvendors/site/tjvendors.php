@@ -41,10 +41,15 @@ JHtml::stylesheet(JUri::root() . 'media/techjoomla_strapper/vendors/no-more-tabl
 
 // Load Boostrap
 $params         = ComponentHelper::getParams('com_tjvendors');
-$load_bootstrap = (int) $params->get('load_bootstrap');
+$load_bootstrap = $params->get('load_bootstrap');
 
-if (!empty($load_bootstrap))
+if ($load_bootstrap == '1')
 {
+	define('COM_TJVENDORS_BS_CLASS_CONST', "tjBs3");
 	JHtml::_('stylesheet', 'media/techjoomla_strapper/bs3/css/bootstrap.min.css');
 	JHtml::_('stylesheet', 'media/techjoomla_strapper/vendors/font-awesome/css/font-awesome.min.css');
+}
+else
+{
+	define('COM_TJVENDORS_BS_CLASS_CONST', '');
 }

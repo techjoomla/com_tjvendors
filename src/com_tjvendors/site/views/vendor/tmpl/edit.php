@@ -15,8 +15,6 @@ JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
 JHtml::_('behavior.keepalive');
-
-$tjBs3ClassLoad = COM_TJVENDORS_BS_CLASS_CONST;
 ?>
 <script type="text/javascript">
 	var layout = '<?php echo "edit";?>';
@@ -28,7 +26,7 @@ $tjBs3ClassLoad = COM_TJVENDORS_BS_CLASS_CONST;
 	tjVSite.vendor.initVendorJs();
 </script>
 
-<div id="tjv-wrapper" class="<?php echo $tjBs3ClassLoad;?>">
+<div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_BS_CLASS_CONST;?>">
 <?php
 if (JFactory::getUser()->id )
 {

@@ -12,6 +12,11 @@
 		<field name="payout_limit_days" type="number" default="0" label="COM_TJVENDORS_PAYOUT_DATE_LIMIT" description="COM_TJVENDORS_PAYOUT_DATE_LIMIT_DESC"/>
 		<field name="image_size" type="number" default="2500" label="COM_TJVENDORS_IMAGE_SIZE" description="COM_TJVENDORS_IMAGE_SIZE_DESCRIPTION"/>
 		<field name="email" type="text" label="COM_TJVENDORS_ADMIN_EMAIL_ADDRESS" description="COM_TJVENDORS_ADMIN_EMAIL_ADDRESS_DESCRIPTION"/>
+
+		<field name="load_bootstrap" type="radio" default="0" label="COM_TJVENDORS_LOAD_BOOTSTRAP" description="COM_TJVENDORS_LOAD_BOOTSTRAP_DESC" class="btn-group">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 	</fieldset>
 	<fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC" label="JCONFIG_PERMISSIONS_LABEL">
 		<field name="rules" type="rules" component="com_tjvendors" class="inputbox" filter="rules" validate="rules" label="JCONFIG_PERMISSIONS_LABEL" section="component" />

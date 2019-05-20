@@ -25,7 +25,8 @@ JHtml::_('behavior.keepalive');
 	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
 	tjVSite.vendor.initVendorJs();
 </script>
-<div id="tjv-wrapper">
+
+<div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
 <?php
 if (JFactory::getUser()->id )
 {

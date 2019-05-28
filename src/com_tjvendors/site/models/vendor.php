@@ -607,4 +607,66 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		return $payableAmount;
 	}
+
+	/**
+	 * Check if vendor exists, if not create
+	 *
+	 * @param   Int     $userId  user id
+	 *
+	 * @param   String  $client  client ex->"com_tjlms/com_jticketing"
+	 *
+	 * @return  Int|Boolean
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function checkOrCreateVendor($userId, $client)
+	{
+		if (!$userId || !$client)
+		{
+			return false;
+		}
+
+		$vendorData                  = array();
+		$vendorData['vendor_client'] = $client;
+		$vendorData['user_id']       = $userId;
+		$vendorData['vendor_title'] = Factory::getUser($userId)->name;
+		$vendorData['state']        = "1";
+
+		// Collecting payment gateway details
+		$paymentDetails                    = array();
+		$paymentDetails['payment_gateway'] = '';
+		$vendorData['paymentDetails']      = json_encode($paymentDetails);
+
+		try
+		{
+			$vendorTable = $this->getTable();
+			$vendorTable->load(array('user_id' => $userId));
+
+			if (!$vendorTable->vendor_id)
+			{
+				return $this->save($vendorData);
+			}
+
+			$vendorId = $vendorTable->vendor_id;
+
+			// Check if vendor id is added against client
+			$xreftable = Table::getInstance('vendorclientxref', 'TjvendorsTable');
+			$xreftable->load(array('vendor_id' => $vendorTable->vendor_id, 'client' => $client));
+
+			if (!$xreftable->id)
+			{
+				$vendorData['vendor_id'] = $vendorId;
+
+				return $this->save($vendorData);
+			}
+
+			return $vendorId;
+		}
+		catch (Exception $e)
+		{
+			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+
+			return false;
+		}
+	}
 }

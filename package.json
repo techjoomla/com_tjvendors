@@ -22,10 +22,10 @@
     }
   },
   "lint-staged": {
-    "./src/com_tjvendors/media/ts/**/*.js": "tslint",
+    "./src/com_tjvendors/media/ts/*.js": "tslint",
     "./src/com_tjvendors/**/*.html": "htmlhint --config htmlhint.conf",
-    "./src/com_tjvendors/media/css/**/*.css": "stylelint",
-    "./src/com_tjvendors/media/scss/**/*.scss": "stylelint --syntax=scss"
+    "./src/com_tjvendors/media/css/*.css": "stylelint",
+    "./src/com_tjvendors/media/scss/*.scss": "stylelint --syntax=scss"
   },
   "dependencies": {},
   "devDependencies": {

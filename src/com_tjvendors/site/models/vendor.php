@@ -619,6 +619,11 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function getDetailsByXrefId($xrefId)
 	{
+		if (empty($xrefId))
+		{
+			return false;
+		}
+
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
 		$vendorXref->load(array('id' => $xrefId));

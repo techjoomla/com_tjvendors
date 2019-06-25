@@ -609,13 +609,13 @@ class TjvendorsModelVendor extends JModelAdmin
 	}
 
 	/**
-	 * Method to get a vendor details by vendor Id
+	 * Method to get a vendor details by vendor xref Id
 	 *
 	 * @param   integer  $xrefId  The id of the primary key.
 	 *
 	 * @return  mixed    Object on success, false on failure.
 	 *
-	 * @since    1.6
+	 * @since    __DEPLOY_VERSION__
 	 */
 	public function getDetailsByXrefId($xrefId)
 	{

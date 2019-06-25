@@ -607,4 +607,28 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		return $payableAmount;
 	}
+
+	/**
+	 * Method to get a vendor details by vendor xref Id
+	 *
+	 * @param   integer  $xrefId  The id of the primary key.
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 *
+	 * @since    __DEPLOY_VERSION__
+	 */
+	public function getDetailsByXrefId($xrefId)
+	{
+		if (empty($xrefId))
+		{
+			return false;
+		}
+
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
+		$vendorXref->load(array('id' => $xrefId));
+		$item = parent::getItem($vendorXref->vendor_id);
+
+		return $item;
+	}
 }

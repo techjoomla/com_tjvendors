@@ -33,7 +33,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	protected $text_prefix = 'COM_TJVENDORS';
 
 	/**
-	 * @var   	string  	Alias to manage history control
+	 * @var     string      Alias to manage history control
 	 * @since   3.2
 	 */
 	public $typeAlias = 'com_tjvendors.vendor';
@@ -57,6 +57,10 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function getTable($type = 'Vendor', $prefix = 'TjvendorsTable', $config = array())
 	{
+		// Load tables to fix - unable to load the vendors data using the model object, 
+		// When it is created outside the tjvendors component
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+
 		return JTable::getInstance($type, $prefix, $config);
 	}
 

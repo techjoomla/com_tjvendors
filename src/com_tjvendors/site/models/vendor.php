@@ -619,7 +619,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @return  mixed    Object on success, false on failure.
 	 *
-	 * @since    __DEPLOY_VERSION__
+	 * @since    1.3.3
 	 */
 	public function getDetailsByXrefId($xrefId)
 	{

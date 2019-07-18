@@ -33,7 +33,7 @@ $listDirn  = $this->state->get('list.direction');
 	tjVSite.vendors.initVendorsJs();
 </script>
 
-<div id="tjv-wrapper">
+<div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
 	<h1>
 		<?php echo JText::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS'); ?>
 	</h1>
@@ -112,7 +112,7 @@ $listDirn  = $this->state->get('list.direction');
 							</li>
 
 							<li class="pr-0">
-								<div  class="input-group-btn hidden-xs">
+								<div  class="input-group-btn hidden">
 									<label for="limit" >
 										<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
 									</label>

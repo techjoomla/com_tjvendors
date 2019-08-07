@@ -4,14 +4,11 @@
  * @subpackage  Actionlog.tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2018 Techjoomla. All rights reserved.
- * @license     GNU General Public License version 2 or later
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
-
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Language\Text;
 
 JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
 JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');

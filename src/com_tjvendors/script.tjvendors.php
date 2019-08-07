@@ -1,10 +1,11 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla  <contact@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -31,8 +32,8 @@ class Com_TjvendorsInstallerScript
 	// plugins => { (folder) => { (element) => (published) }* }*
 	'plugins' => array(
 						'actionlog' => array('tjvendors' => 1),
-						'privacy'   => array('tjvendors' => 1)
-					)
+						'privacy'   => array('tjvendors' => 1),
+					),
 				);
 
 	/**
@@ -59,7 +60,7 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @return void
 	 */
-	public function postflight( $type, $parent )
+	public function postflight($type, $parent)
 	{
 		// Write template file for email template
 		$this->_insertTjNotificationTemplates();
@@ -129,7 +130,7 @@ class Com_TjvendorsInstallerScript
 							$status->plugins[] = array(
 								'name' => 'plg_' . $plugin,
 								'group' => $folder,
-								'result' => $result
+								'result' => $result,
 							);
 						}
 					}
@@ -266,7 +267,7 @@ class Com_TjvendorsInstallerScript
 	 *
 	 * @return void
 	 */
-	public function runSQL($parent,$sqlfile)
+	public function runSQL($parent, $sqlfile)
 	{
 		$db = JFactory::getDBO();
 

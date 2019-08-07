@@ -65,7 +65,7 @@ if (!empty($this->extra_sidebar))
 }
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER').'&client=' . $this->input->get('client', '', 'STRING')); ?>"
+<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
 if(!empty($this->sidebar))
@@ -161,17 +161,17 @@ else
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th width="8%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th  width="5%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
 					</th>
 					<th width="10%">
 						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_PAID_UPTO');  ?>
 					</th>
 					<th  width="10%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th  width="10%">
@@ -205,7 +205,7 @@ else
 						if ($this->bulkPayoutStatus != 0)
 						{
 							$client= '';
-							$paidAmount = $tjvendorFrontHelper->getPaidAmount($item->vendor_id,$item->currency, $client);
+							$paidAmount = $tjvendorFrontHelper->getPaidAmount($item->vendor_id, $item->currency, $client);
 
 							if (empty($paidAmount))
 							{
@@ -216,7 +216,7 @@ else
 						}
 						else
 						{
-							$paidAmount = $tjvendorFrontHelper->getPaidAmount($item->vendor_id,$item->currency, $filterClient);
+							$paidAmount = $tjvendorFrontHelper->getPaidAmount($item->vendor_id, $item->currency, $filterClient);
 
 							if (empty($paidAmount))
 							{
@@ -233,7 +233,7 @@ else
 						if ($this->bulkPayoutStatus==0)
 						{
 							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, $item->client, $item->currency);
-							
+
 							if (!empty($result))
 							{
 								echo $result[$item->client][$item->currency];
@@ -241,13 +241,13 @@ else
 						}
 						else
 						{
-							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, '' , $item->currency);
-							
+							$result = $tjvendorsModelVendor->getPayableAmount($item->vendor_id, '', $item->currency);
+
 							if (!empty($result))
 							{
-								$totalPayableAmount = 0; 
+								$totalPayableAmount = 0;
 
-								foreach( $result as $payment)
+								foreach($result as $payment)
 								{
 									$totalPayableAmount = $totalPayableAmount + $payment[$item->currency];
 								}
@@ -260,7 +260,7 @@ else
 						</td>
 
 						<td>
-							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' .$item->vendor_id.'&id=' .$item->id. '&client=' .$this->input->get('client', '', 'STRING'));?>"
+							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' . $item->vendor_id . '&id=' . $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>"
 							<button class="validate btn btn-primary">PAY</button>
 						</td>
 					</tr>

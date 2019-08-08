@@ -1,11 +1,13 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
@@ -99,11 +101,13 @@ class TjvendorsModelVendorFees extends JModelList
 		$query = $db->getQuery(true);
 
 		// Select the required fields from the table.
-	$query->select($db->quoteName(array('a.vendor_id','a.vendor_title','b.client','b.percent_commission','b.flat_commission','b.id','b.currency')));
+		$query->select(
+			$db->quoteName(array('a.vendor_id', 'a.vendor_title', 'b.client', 'b.percent_commission', 'b.flat_commission', 'b.id', 'b.currency'))
+		);
 
 		$query->from($db->quoteName('#__tjvendors_fee', 'b'));
 
-	$query->join('LEFT', ($db->quoteName('#__tjvendors_vendors', 'a') . 'ON ' . $db->quoteName('b.vendor_id') . ' = ' . $db->quoteName('a.vendor_id') ));
+		$query->join('LEFT', ($db->quoteName('#__tjvendors_vendors', 'a') . 'ON ' . $db->quoteName('b.vendor_id') . ' = ' . $db->quoteName('a.vendor_id')));
 
 		$query->where($db->quoteName('a.vendor_id') . ' = ' . $vendor_id);
 

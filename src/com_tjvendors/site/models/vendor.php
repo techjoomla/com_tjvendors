@@ -1,11 +1,13 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access.
 defined('_JEXEC') or die;
 
@@ -57,7 +59,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function getTable($type = 'Vendor', $prefix = 'TjvendorsTable', $config = array())
 	{
-		// Load tables to fix - unable to load the vendors data using the model object, 
+		// Load tables to fix - unable to load the vendors data using the model object,
 		// When it is created outside the tjvendors component
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 
@@ -83,7 +85,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$form = $this->loadForm(
 			'com_tjvendors.vendor', 'vendor',
 			array('control' => 'jform',
-				'load_data' => $loadData
+				'load_data' => $loadData,
 			)
 		);
 
@@ -169,7 +171,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @return  boolean
 	 */
-	public function addMultiVendor($vendor_id,$payment_gateway, $paymentDetails)
+	public function addMultiVendor($vendor_id, $payment_gateway, $paymentDetails)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -380,7 +382,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		{
 			foreach ($data['payment_gateway'] as $key => $value)
 			{
-				if (sizeof($value) <= 1)
+				if (count($value) <= 1)
 				{
 					unset($data['payment_gateway'][$key]);
 				}
@@ -435,7 +437,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				if (isset($data['params']))
 				{
 					$fields = array(
-						$db->quoteName('params') . ' = ' . $db->quote($xrefData['params'])
+						$db->quoteName('params') . ' = ' . $db->quote($xrefData['params']),
 					);
 				}
 				else
@@ -448,7 +450,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				// The vendor information is updated for that client
 					$conditions = array(
 					$db->quoteName('vendor_id') . ' = ' . $db->quote($data['vendor_id']),
-					$db->quoteName('client') . ' = ' . $db->quote($data['vendor_client'])
+					$db->quoteName('client') . ' = ' . $db->quote($data['vendor_client']),
 				);
 
 				$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);

@@ -197,7 +197,7 @@ else
 					<?php endif?>
 
 					<th width="5%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'v.`vendor_title`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'v.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 					<?php	if ($this->vendorApproval) :?>
 					<th width="2%">
@@ -208,7 +208,7 @@ else
 						<?php echo JText::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
 					</th>
 					<th width="5%" >
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_ID', 'v.`vendor_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_VENDORS_ID', 'v.`vendor_id`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
@@ -221,8 +221,8 @@ else
 			</tfoot>
 			<tbody>
 				<?php
-				$options[] = array("type"=>JText::_('Approve'),"value" => "1");
-				$options[] = array("type"=>JText::_('UnApproved'),"value" => "0");
+				$options[] = array("type"=>JText::_('Approve'), "value" => "1");
+				$options[] = array("type"=>JText::_('UnApproved'), "value" => "0");
 				foreach ($this->items as $i => $item)
 				{
 					$ordering   = ($listOrder == 'a.ordering');
@@ -277,7 +277,7 @@ else
 
 
 							<td>
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' .$this->input->get('client', '', 'STRING').'&vendor_id=' . (int) $item->vendor_id );?>">
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $this->input->get('client', '', 'STRING') . '&vendor_id=' . (int) $item->vendor_id);?>">
 									<?php echo $this->escape($item->vendor_title); ?>
 								</a>
 							</td>
@@ -290,9 +290,9 @@ else
 							<?php endif;?>
 							<td>
 
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_FEE'); ?></a> |
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_PAYOUTS'); ?></a> |
-								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . (int) $item->vendor_id).'&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_REPORTS'); ?></a>
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id) . '&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_FEE'); ?></a> |
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id) . '&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_PAYOUTS'); ?></a> |
+								<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . (int) $item->vendor_id) . '&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo JText::_('COM_TJVENDORS_VENDORS_REPORTS'); ?></a>
 
 							</td>
 							<td >

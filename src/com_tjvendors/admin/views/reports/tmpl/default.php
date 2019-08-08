@@ -124,12 +124,12 @@ else
 		</div>
 		<div class="btn-group pull-left hidden-phone">
 			<?php
-				echo JHTML::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d',array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
+				echo JHTML::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
 			?>
 		</div>
 		<div class="btn-group pull-left hidden-phone">
 			<?php
-				echo JHTML::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d',array( 'class' => 'inputbox','onchange' => 'document.adminForm.submit()'));
+				echo JHTML::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
 			?>
 		</div>
 
@@ -155,9 +155,9 @@ else
 
 			<div class="btn-group hidden-phone">
 				<?php
-				$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'),"transactionValue" => "0");
-				$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
-				$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
+				$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'), "transactionValue" => "0");
+				$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'), "transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
+				$transactionType[] = array("transactionType"=>JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'), "transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
 				echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
 			</div>
 			<div class="btn-group hidden-phone">
@@ -211,17 +211,17 @@ else
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th class='left' width="10%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left' width="8%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 					<?php
 						$filterClient = $this->state->get('filter.vendor_client');
 						if(empty($filterClient))
 						{?>
 							<th class='left' width="5%">
-								<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder); ?>
+								<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder); ?>
 							</th>
 					<?php
 						}
@@ -230,7 +230,7 @@ else
 						if(empty($filterCurrency))
 						{?>
 							<th class='left' width="5%">
-							<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
+							<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
 							</th>
 					<?php
 						}
@@ -240,7 +240,7 @@ else
 						if($transactionType == "credit" || empty($transactionType))
 						{?>
 							<th class='left' width="10%">
-								<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
+								<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
 							</th>
 					<?php
 						}
@@ -248,20 +248,20 @@ else
 						if($transactionType == "debit" || empty($transactionType))
 						{?>
 							<th class='left' width="10%">
-								<?php	echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
+								<?php	echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
 							</th>
 					<?php
 						}
 					?>
 					<th class='left' width="12%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID', 'pass.`reference_order_id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID', 'pass.`reference_order_id`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left' width="10%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th class='left' width="10%">
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th class='left' width="10%">
@@ -280,19 +280,19 @@ else
 						<tr>
 							<th colspan="8"></th>
 							<th colspan="12">
-									<?php echo JText::_('COM_TJVENDORS_REPORTS_TOTAL_CREDIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' .$this->totalDetails['creditAmount']. '&nbsp' . $filterCurrency;?>
+									<?php echo JText::_('COM_TJVENDORS_REPORTS_TOTAL_CREDIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['creditAmount'] . '&nbsp' . $filterCurrency;?>
 							</th>
 						</tr>
 						<tr>
 							<th colspan="8"></th>
 							<th colspan="12">
-									<?php echo JText::_('COM_TJVENDORS_REPORTS_TOTAL_DEBIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount']. '&nbsp' . $filterCurrency;?>
+									<?php echo JText::_('COM_TJVENDORS_REPORTS_TOTAL_DEBIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount'] . '&nbsp' . $filterCurrency;?>
 							</th>
 						</tr>
 						<tr>
 							<th colspan="8"></th>
 							<th colspan="12">
-									<?php echo JText::_('COM_TJVENDORS_REPORTS_TOTAL_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount']. '&nbsp' . $filterCurrency?>
+									<?php echo JText::_('COM_TJVENDORS_REPORTS_TOTAL_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount'] . '&nbsp' . $filterCurrency?>
 							</th>
 						</tr>
 				</div>
@@ -307,8 +307,8 @@ else
 			</tfoot>
 			<tbody>
 				<?php
-				$options[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_PAID'),"value" => "1");
-				$options[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_UNPAID'),"value" => "0");
+				$options[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_PAID'), "value" => "1");
+				$options[] = array("type"=>JText::_('COM_TJVENDORS_STATUS_UNPAID'), "value" => "0");
 				$doneOptions = JText::_('COM_TJVENDORS_STATUS_CREDIT_DONE');
 
 				foreach ($this->items as $i => $item)

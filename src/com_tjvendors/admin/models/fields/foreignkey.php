@@ -1,10 +1,11 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('JPATH_BASE') or die;
@@ -93,7 +94,7 @@ class JFormFieldForeignKey extends JFormField
 			->select(
 				array(
 					$db->quoteName($this->key_field),
-					$fk_value
+					$fk_value,
 				)
 			)
 			->from($this->table);

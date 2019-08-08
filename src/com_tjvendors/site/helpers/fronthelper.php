@@ -1,11 +1,13 @@
 <?php
 /**
- * @version    CVS: 1.0.0
- * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die;
 JLoader::import('payout', JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
@@ -81,7 +83,7 @@ class TjvendorFrontHelper
 			$tjvendorFrontHelper = new TjvendorFrontHelper;
 			$client = $tjvendorFrontHelper->getClientName($i['client']);
 			$client = JText::_(strtoupper($i['client']));
-			$clients[] = array("clientType" => $i['client'],"clientValue" => $client);
+			$clients[] = array("clientType" => $i['client'], "clientValue" => $client);
 		}
 
 		return $clients;
@@ -439,7 +441,7 @@ class TjvendorFrontHelper
 			$entry_status = "credit_for_ticket_buy";
 		}
 
-		$params = array("customer_note" => $order_data['customer_note'],"entry_status" => $entry_status);
+		$params = array("customer_note" => $order_data['customer_note'], "entry_status" => $entry_status);
 		$entry_data['params'] = json_encode($params);
 		$entry_data['currency'] = $currency;
 		$entry_data['client'] = $order_data['client'];
@@ -459,7 +461,7 @@ class TjvendorFrontHelper
 	 *
 	 * @return  int
 	 */
-	public static function getPaidAmount($vendor_id,$currency,$filterClient)
+	public static function getPaidAmount($vendor_id, $currency, $filterClient)
 	{
 		$input = JFactory::getApplication()->input;
 		$urlClient = $input->get('client', '', 'STRING');

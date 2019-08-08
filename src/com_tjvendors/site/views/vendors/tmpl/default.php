@@ -51,11 +51,11 @@ $listDirn  = $this->state->get('list.direction');
 					<div class="col-xs-12 col-md-6 date">
 						<div class="btn-group input-group">
 							<span class="input-group-btn">
-								<?php echo JHtml::_('calendar',$this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
+								<?php echo JHtml::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
 							</span>
 
 							<span class="input-group-btn">
-								<?php echo JHtml::_('calendar',$this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
+								<?php echo JHtml::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
 							</span>
 
 							<span>
@@ -103,7 +103,7 @@ $listDirn  = $this->state->get('list.direction');
 									<?php
 									$transactionType[] = array("transactionType" => JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'), "transactionValue" => "0");
 									$transactionType[] = array("transactionType" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'), "transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
-									$transactionType[] = array("transactionType" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'),"transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
+									$transactionType[] = array("transactionType" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'), "transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
 
 									echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));
 
@@ -184,7 +184,7 @@ $listDirn  = $this->state->get('list.direction');
 												{
 													?>
 													<th class='left' width="10%">
-														<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
+														<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
 													</th>
 													<?php
 												}
@@ -193,7 +193,7 @@ $listDirn  = $this->state->get('list.direction');
 												{
 													?>
 													<th class='left' width="10%">
-														<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
+														<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
 													</th>
 													<?php
 												}
@@ -227,19 +227,19 @@ $listDirn  = $this->state->get('list.direction');
 													<div class="pull-right">
 														<tr>
 															<th colspan="12">
-																<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' .$this->totalDetails['creditAmount']. '&nbsp' . $currency; ?>
+																<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['creditAmount'] . '&nbsp' . $currency; ?>
 															</th>
 														</tr>
 
 														<tr>
 															<th colspan="12">
-																<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT'). '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount']. '&nbsp' . $currency; ?>
+																<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount'] . '&nbsp' . $currency; ?>
 															</th>
 														</tr>
 
 														<tr>
 															<th colspan="12">
-																<?php echo JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount']. '&nbsp' . $currency; ?>
+																<?php echo JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount'] . '&nbsp' . $currency; ?>
 															</th>
 														</tr>
 													</div>

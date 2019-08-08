@@ -1,11 +1,11 @@
 <?php
 /**
- * @package     TJvendors
- * @subpackage  Actionlog.tjvendors
+ * @package     TJVendors
+ * @subpackage  Privacy.tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2018 Techjoomla. All rights reserved.
- * @license     GNU General Public License version 2 or later
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access.
@@ -52,8 +52,8 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 
 		return array(
 			JText::_('PLG_PRIVACY_TJVENDORS') => array(
-				JText::_('PLG_PRIVACY_TJVENDORS_PRIVACY_CAPABILITY_USER_DETAIL')
-			)
+				JText::_('PLG_PRIVACY_TJVENDORS_PRIVACY_CAPABILITY_USER_DETAIL'),
+			),
 		);
 	}
 

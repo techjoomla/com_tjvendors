@@ -19,7 +19,6 @@ JHtml::_('formbehavior.chosen', 'select');
 $document = JFactory::getDocument();
 $document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
 
-
 $user      = JFactory::getUser();
 $userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
@@ -113,7 +112,7 @@ if (!empty($this->extra_sidebar))
 <form
 action="
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id.'&client=' . $this->input->get('client', '', 'STRING')); ?>" 
+echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id . '&client=' . $this->input->get('client', '', 'STRING')); ?>" 
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
@@ -129,7 +128,7 @@ else
 {
 	?>
 	<div id="j-main-container">
-<?php 
+<?php
 }?>
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="filter-search btn-group pull-left">
@@ -216,13 +215,13 @@ else
 						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY'); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'b.`percent_commission`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'b.`percent_commission`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort',  'COM_TJVENDORS_VENDORS_FLAT_COMMISSION', 'b.`flat_commission`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_VENDORS_FLAT_COMMISSION', 'b.`flat_commission`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort','COM_TJVENDORS_VENDOR_FEE_ID', 'b.`id`', $listDirn, $listOrder); ?>
+						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_VENDOR_FEE_ID', 'b.`id`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>

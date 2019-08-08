@@ -34,7 +34,7 @@ extract($displayData);
 
 <?php foreach ($form->getGroup('') as $key => $field) : ?>
 	<?php
-		$form = str_replace('control-group', 'col-xs-12 col-sm-6 form-group form_'.$field->class, $field->renderField(array('hiddenLabel' => false)));
+		$form = str_replace('control-group', 'col-xs-12 col-sm-6 form-group form_' . $field->class, $field->renderField(array('hiddenLabel' => false)));
 		$col = str_replace('control-label', 'col-xs-12 col-md-3', $form);
 		$col = str_replace('controls', 'col-xs-12 col-md-8', $col);
 		echo str_replace('form-label', 'col-xs-12', $col);

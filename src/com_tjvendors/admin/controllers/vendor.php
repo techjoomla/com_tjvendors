@@ -161,10 +161,10 @@ class TjvendorsControllerVendor extends JControllerForm
 		}
 
 		// Validate the posted data.
-		$data = $model->validate($form, $data);
+		$validate = $model->validate($form, $data);
 
 		// Check for errors.
-		if ($data === false)
+		if ($validate === false)
 		{
 			// Get the validation messages.
 			$errors = $model->getErrors();

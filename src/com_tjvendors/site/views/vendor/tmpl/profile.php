@@ -69,7 +69,7 @@ JHtml::_('behavior.keepalive');
 										<div class="form-group">
 											<div class="row">
 												<div class="col-xs-12 col-sm-10 col-md-7">
-													<img class="img-responsive" src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>">
+													<img class="img-responsive" src="<?php echo JUri::root() . htmlspecialchars($this->vendor->vendor_logo, ENT_COMPAT, 'UTF-8'); ?>">
 												</div>
 											</div>
 										</div>
@@ -96,7 +96,7 @@ JHtml::_('behavior.keepalive');
 										</div>
 									</div>
 								</div>
-								<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
+								<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo htmlspecialchars($this->vendor->vendor_logo, ENT_COMPAT, 'UTF-8'); ?>" />
 							</fieldset>
 						</div>
 						<!----Tab 1 End----->

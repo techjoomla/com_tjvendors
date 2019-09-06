@@ -82,18 +82,17 @@ class TjvendorsControllerVendor extends JControllerForm
 	{
 		// Check for request forgeries.
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-		$params = JComponentHelper::getParams('com_tjvendors');
+		$params         = JComponentHelper::getParams('com_tjvendors');
 		$vendorApproval = $params->get('vendor_approval');
 
 		// Initialise variables.
-		$app = JFactory::getApplication();
+		$app   = JFactory::getApplication();
 		$model = $this->getModel('Vendor', 'TjvendorsModel');
 
 		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+		$data                  = $app->input->get('jform', array(), 'array');
 		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
-
-		$data['user_id'] = JFactory::getUser()->id;
+		$data['user_id']       = JFactory::getUser()->id;
 
 		// Validate the posted data.
 		$form = $model->getForm();
@@ -196,7 +195,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
 		$db->setQuery($query);
 		$vendor_id = $db->loadResult();
-		$input = JFactory::getApplication()->input;
+		$input = $app->input;
 
 		// Redirect to the list screen.
 		$this->setMessage(JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR'));
@@ -220,7 +219,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	public function cancel($key=null)
 	{
 		$input = JFactory::getApplication()->input;
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+		$data = $input->input->get('jform', array(), 'array');
 		$this->setRedirect(
 		JRoute::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $input->get('client', '', 'STRING'), false)
 		);

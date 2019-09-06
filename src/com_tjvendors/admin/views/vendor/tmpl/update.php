@@ -62,10 +62,10 @@ tjVAdmin.vendor.initVendorJs();
 						?>
 						</div>
 
-						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
+						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo htmlspecialchars($this->item->vendor_logo, ENT_COMPAT, 'UTF-8'); ?>" />
 						<?php if (!empty($this->item->vendor_logo)) : ?>
 							<div class="control-group">
-								<div><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>" class="span3 col-md-3 img-thumbnail pull-left marginb10 img-polaroid"></div>
+								<div><img src="<?php echo JUri::root(true) . htmlspecialchars($this->item->vendor_logo, ENT_COMPAT, 'UTF-8'); ?>" class="span3 col-md-3 img-thumbnail pull-left marginb10 img-polaroid"></div>
 							</div>
 						<?php endif;
 					?>

@@ -1,11 +1,13 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access
 defined('_JEXEC') or die;
 
@@ -96,7 +98,7 @@ class TjvendorsHelper
 		$assetName = 'com_tjvendors';
 
 		$actions = array(
-			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.edit.own', 'core.edit.state', 'core.delete'
+			'core.admin', 'core.manage', 'core.create', 'core.edit', 'core.edit.own', 'core.edit.state', 'core.delete',
 		);
 
 		foreach ($actions as $action)
@@ -218,14 +220,14 @@ class TjvendorsHelper
 	{
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
 		$tjvendorsModelVendor     = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		
+
 		$vendorClients = self::getClients($vendor_id);
 		$bulkPendingAmount = 0;
 
 		foreach ($vendorClients as $client)
 		{
 			$pendingAmount = $tjvendorsModelVendor->getPayableAmount($vendor_id, $client['client'], $currency);
-			
+
 			if (!empty($pendingAmount))
 			{
 				$bulkPendingAmount = $bulkPendingAmount + $pendingAmount[$client['client']][$currency];

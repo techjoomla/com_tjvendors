@@ -1,11 +1,13 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2018 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access
 defined('_JEXEC') or die;
 
@@ -161,10 +163,10 @@ class TjvendorsControllerVendor extends JControllerForm
 		}
 
 		// Validate the posted data.
-		$data = $model->validate($form, $data);
+		$validate = $model->validate($form, $data);
 
 		// Check for errors.
-		if ($data === false)
+		if ($validate === false)
 		{
 			// Get the validation messages.
 			$errors = $model->getErrors();

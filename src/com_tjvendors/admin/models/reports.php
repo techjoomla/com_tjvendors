@@ -1,11 +1,13 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla  <contact@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die;
 
 jimport('joomla.application.component.modellist');
@@ -126,7 +128,7 @@ class TjvendorsModelReports extends JModelList
 		$db = JFactory::getDbo();
 
 		$query = $db->getQuery(true);
-		$query->select(array('vendors.vendor_id','vendors.vendor_title','pass.*'));
+		$query->select(array('vendors.vendor_id', 'vendors.vendor_title', 'pass.*'));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
 		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .
 			' ON (' . $db->quoteName('vendors.vendor_id') . ' = ' . $db->quoteName('pass.vendor_id') . ')');

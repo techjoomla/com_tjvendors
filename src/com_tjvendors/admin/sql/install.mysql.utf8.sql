@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_passbook` (
 `status` TINYINT(1)  NOT NULL ,
 `params` VARCHAR(255)  NOT NULL ,
 PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__tjvendors_fee` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_fee` (
 `percent_commission` DOUBLE(15,2)  NOT NULL ,
 `flat_commission` DOUBLE(15,2)  NOT NULL ,
 PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__vendor_client_xref` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -32,8 +32,7 @@ CREATE TABLE IF NOT EXISTS `#__vendor_client_xref` (
 `state` tinyint(1)  NOT NULL DEFAULT '1',
 `params` text DEFAULT NULL,
 PRIMARY KEY (`id`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
-
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
   `vendor_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -48,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
   `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `params` varchar(255) NOT NULL,
   PRIMARY KEY (`vendor_id`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `content_history_options`)
 SELECT * FROM ( SELECT 'Vendor','com_tjvendors.vendor','{"special":{"dbtable":"#__tjvendors_vendors","key":"id","type":"Vendor","prefix":"TjTable"}}', '{"formFile":"administrator\/components\/com_tjvendors\/models\/forms\/vendor.xml", "hideFields":["checked_out","checked_out_time","params","language"], "ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time"], "convertToInt":["publish_up", "publish_down"], "displayLookup":[{"sourceColumn":"catid","targetTable":"#__categories","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"group_id","targetTable":"#__usergroups","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"}]}') AS tmp

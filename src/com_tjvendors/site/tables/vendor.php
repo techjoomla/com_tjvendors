@@ -1,12 +1,13 @@
 <?php
-
 /**
- * @version    CVS: 1.0.0
- * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access
 defined('_JEXEC') or die();
 
@@ -269,7 +270,7 @@ class TjvendorsTablevendor extends JTable
 			if ($this->$k)
 			{
 				$pks = array(
-					$this->$k
+					$this->$k,
 				);
 			}
 			// Nothing to set publishing state on, return false.

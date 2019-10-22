@@ -72,3 +72,17 @@ display: flex;
 	}
 }
 
+/* Since v1.3.3*/
+.tjBs3 .vendor-report, .tjBs3 .vendorForm input {
+  height: inherit;
+}
+
+.tjBs3 .vendor-report .chzn-container-single .chzn-single {
+  height: inherit;
+}
+
+.tjBs3 .vendorForm .btn-toolbar .btn,
+.tjBs3 .vendorForm .btn-toolbar .btn-group,
+.tjBs3 .vendorForm .btn-toolbar .input-group {
+  float: unset;
+}

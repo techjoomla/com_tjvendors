@@ -1,11 +1,13 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access.
 defined('_JEXEC') or die;
 
@@ -33,7 +35,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	protected $text_prefix = 'COM_TJVENDORS';
 
 	/**
-	 * @var   	string  	Alias to manage history control
+	 * @var     string      Alias to manage history control
 	 * @since   3.2
 	 */
 	public $typeAlias = 'com_tjvendors.vendor';
@@ -57,6 +59,10 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function getTable($type = 'Vendor', $prefix = 'TjvendorsTable', $config = array())
 	{
+		// Load tables to fix - unable to load the vendors data using the model object,
+		// When it is created outside the tjvendors component
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
@@ -79,7 +85,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$form = $this->loadForm(
 			'com_tjvendors.vendor', 'vendor',
 			array('control' => 'jform',
-				'load_data' => $loadData
+				'load_data' => $loadData,
 			)
 		);
 
@@ -165,7 +171,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @return  boolean
 	 */
-	public function addMultiVendor($vendor_id,$payment_gateway, $paymentDetails)
+	public function addMultiVendor($vendor_id, $payment_gateway, $paymentDetails)
 	{
 		$db = JFactory::getDbo();
 		$query = $db->getQuery(true);
@@ -258,7 +264,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$vendorDetails = $tjvendorFrontHelper->getPaymentDetails($vendor_id, $client);
 		$params = array();
 
-		if (!empty($vendorDetails))
+		if (!empty($vendorDetails->params))
 		{
 			$params = json_decode($vendorDetails->params)->payment_gateway;
 		}
@@ -376,7 +382,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		{
 			foreach ($data['payment_gateway'] as $key => $value)
 			{
-				if (sizeof($value) <= 1)
+				if (count($value) <= 1)
 				{
 					unset($data['payment_gateway'][$key]);
 				}
@@ -431,7 +437,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				if (isset($data['params']))
 				{
 					$fields = array(
-						$db->quoteName('params') . ' = ' . $db->quote($xrefData['params'])
+						$db->quoteName('params') . ' = ' . $db->quote($xrefData['params']),
 					);
 				}
 				else
@@ -444,7 +450,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				// The vendor information is updated for that client
 					$conditions = array(
 					$db->quoteName('vendor_id') . ' = ' . $db->quote($data['vendor_id']),
-					$db->quoteName('client') . ' = ' . $db->quote($data['vendor_client'])
+					$db->quoteName('client') . ' = ' . $db->quote($data['vendor_client']),
 				);
 
 				$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);
@@ -534,17 +540,62 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		return $oldParams;
 	}
-	
+
 	/**
 	 * Get get vendor_id
 	 *
 	 * @param   integer  $vendorId  integer
-	 * @param   string   $client     string like com_jgive
-	 * @param   string   $currency   string like USD, EUR
+	 * @param   string   $client    string like com_jgive
+	 * @param   string   $currency  string like USD, EUR
 	 *
-	 * @return  Array    
-	 * 
-	 * Array
+	 * @return  Array
+	 */
+	public static function getPayableAmount($vendorId, $client = '', $currency = '')
+	{
+		$date              = JFactory::getDate();
+		$com_params        = JComponentHelper::getParams('com_tjvendors');
+		$bulkPayoutStatus  = $com_params->get('bulk_payout');
+		$payoutDayLimit  = $com_params->get('payout_limit_days', '0', 'INT');
+		$payoutDateLimit = $date->modify("-" . $payoutDayLimit . " day");
+
+		// Query to get the credit amount
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('SUM(credit) as credit');
+		$query->select('SUM(debit) as debit');
+		$query->select($db->quoteName('currency'));
+		$query->select($db->quoteName('client'));
+		$query->from($db->quoteName('#__tjvendors_passbook'));
+		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
+		$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDateLimit));
+
+		if (!empty($client))
+		{
+			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
+		}
+
+		if (!empty($currency))
+		{
+			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
+		}
+
+		$query->group($db->quoteName('currency'));
+		$query->group($db->quoteName('client'));
+		$db->setQuery($query);
+		$credit = $db->loadAssocList();
+		$payableAmount = array();
+
+		if (empty($credit))
+		{
+			return $payableAmount;
+		}
+
+		foreach ($credit as $creditAmount)
+		{
+			$payableAmount[$creditAmount['client']][$creditAmount['currency']] = $creditAmount['credit'] - $creditAmount['debit'];
+		}
+
+		/*Array
 		(
 			[com_jgive] => Array
 				(
@@ -558,53 +609,32 @@ class TjvendorsModelVendor extends JModelAdmin
 					[USD] => 2
 				)
 
-		)
-	 */
-	public static function getPayableAmount($vendorId, $client = '', $currency = '')
-	{
-		$date              = JFactory::getDate();
-		$com_params        = JComponentHelper::getParams('com_tjvendors');
-		$bulkPayoutStatus  = $com_params->get('bulk_payout');
-		$payoutDayLimit  = $com_params->get('payout_limit_days', '0', 'INT');
-		$payoutDateLimit = $date->modify("-" . $payoutDayLimit . " day");
-		
-		// Query to get the credit amount
-		$db    = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('SUM(credit) as credit');
-		$query->select('SUM(debit) as debit');
-		$query->select($db->quoteName('currency'));
-		$query->select($db->quoteName('client'));
-		$query->from($db->quoteName('#__tjvendors_passbook'));
-		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
-		$query->where($db->quoteName('transaction_time') . ' < ' . $db->quote($payoutDateLimit));
-		
-		if (!empty($client))
-		{
-			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		}
-		
-		if (!empty($currency))
-		{
-			$query->where($db->quoteName('currency') . ' = ' . $db->quote($currency));
-		}
-	
-		$query->group($db->quoteName('currency'));
-		$query->group($db->quoteName('client'));
-		$db->setQuery($query);
-		$credit = $db->loadAssocList();
-		$payableAmount = array();
+		)*/
 
-		if (empty($credit))
-		{
-			return $payableAmount;
-		}
-		
-		foreach ($credit as $creditAmount)
-		{			
-			$payableAmount[$creditAmount['client']][$creditAmount['currency']] = $creditAmount['credit'] - $creditAmount['debit'];
-		}
-			
 		return $payableAmount;
+	}
+
+	/**
+	 * Method to get a vendor details by vendor xref Id
+	 *
+	 * @param   integer  $xrefId  The id of the primary key.
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 *
+	 * @since    1.3.3
+	 */
+	public function getDetailsByXrefId($xrefId)
+	{
+		if (empty($xrefId))
+		{
+			return false;
+		}
+
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
+		$vendorXref->load(array('id' => $xrefId));
+		$item = parent::getItem($vendorXref->vendor_id);
+
+		return $item;
 	}
 }

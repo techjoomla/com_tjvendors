@@ -274,10 +274,6 @@ var tjCommon = {
 						jQuery("#jform_vendor_logo").val('');
 						return false;
 					}
-
-					if (this.width < 445 || this.height < 265) {
-						alert(allowedImageDimensionErrorMessage + this.width + "px X " + this.height + "px");
-					}
 				};
 
 				img.onerror = function() {

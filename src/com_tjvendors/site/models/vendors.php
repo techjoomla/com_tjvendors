@@ -1,10 +1,11 @@
 <?php
 /**
- * @version    CVS: 1.0.0
- * @package    Com_Tjvendors
- * @author     Parth Lawate <contact@techjoomla.com>
- * @copyright  2016 Parth Lawate
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access.
@@ -39,8 +40,8 @@ class TjvendorsModelVendors extends JModelList
 				'debit', 'pass.`debit`',
 				'transaction_id', 'pass.`transaction_id`',
 				'transaction_time', 'pass.`transaction_time`',
-				'reference_order_id','pass.`reference_order_id`',
-				'vendor_client','vendors.`vendor_client`',
+				'reference_order_id', 'pass.`reference_order_id`',
+				'vendor_client', 'vendors.`vendor_client`',
 
 			);
 		}

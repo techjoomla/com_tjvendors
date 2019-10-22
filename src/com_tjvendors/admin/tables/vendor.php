@@ -1,12 +1,13 @@
 <?php
-
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access
 defined('_JEXEC') or die;
 
@@ -234,7 +235,7 @@ class TjvendorsTablevendor extends JTable
 					// Did we get anything useful?
 					if ($mime !== false)
 					{
-						$result = in_array($mime, array('image/jpeg','image/png','image/jpg'));
+						$result = in_array($mime, array('image/jpeg', 'image/png', 'image/jpg'));
 
 						// If the mime type is not allowed we don't upload it and show the mime code error to the user
 						if ($result === false)
@@ -404,7 +405,7 @@ class TjvendorsTablevendor extends JTable
 			if ($this->$k)
 			{
 				$pks = array(
-					$this->$k
+					$this->$k,
 				);
 			}
 			// Nothing to set publishing state on, return false.

@@ -25,7 +25,7 @@ if (!class_exists('TjvendorFrontHelper'))
 	JLoader::load('TjvendorFrontHelper');
 }
 
-TJV::init();
+TJVendors::init();
 
 // Execute the task.
 $controller = BaseController::getInstance('Tjvendors');

@@ -8,7 +8,6 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-// No direct access
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
@@ -25,7 +24,7 @@ use Joomla\String\StringHelper;
  *
  * @since  __DEPLOY_VERSION__
  */
-class TJV
+class TJVendors
 {
 	/**
 	 * Holds the record of the loaded TJVendors classes
@@ -166,12 +165,6 @@ class TJV
 		if ($loaded[$location] && ($docType != 'html'))
 		{
 			return;
-		}
-
-		if (file_exists(JPATH_ROOT . '/media/techjoomla_strapper/tjstrapper.php'))
-		{
-			require_once JPATH_ROOT . '/media/techjoomla_strapper/tjstrapper.php';
-			TjStrapper::loadTjAssets('com_tjvendors');
 		}
 
 		$version = $versionClass->getMediaVersion();

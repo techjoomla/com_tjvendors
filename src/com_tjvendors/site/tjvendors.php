@@ -9,10 +9,10 @@
  */
 
 defined('_JEXEC') or die;
-use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
 
-// Include dependancies
-jimport('joomla.application.component.controller');
+include_once  JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT);
 
@@ -25,29 +25,9 @@ if (!class_exists('TjvendorFrontHelper'))
 	JLoader::load('TjvendorFrontHelper');
 }
 
+TJV::init();
+
 // Execute the task.
-$controller = JControllerLegacy::getInstance('Tjvendors');
-$controller->execute(JFactory::getApplication()->input->get('task'));
+$controller = BaseController::getInstance('Tjvendors');
+$controller->execute(Factory::getApplication()->input->get('task'));
 $controller->redirect();
-$document = JFactory::getDocument();
-$options['relative'] = true;
-JHtml::_('script', 'com_tjvendor/tjvendors.js', $options);
-
-// Frontend css
-JHtml::_('stylesheet', 'com_tjvendor/tjvendors.css', $options);
-JHtml::stylesheet(JUri::root() . 'media/techjoomla_strapper/vendors/no-more-tables.css', array(), true);
-
-// Load Boostrap
-$params        = ComponentHelper::getParams('com_tjvendors');
-$loadBootstrap = $params->get('load_bootstrap');
-
-if ($loadBootstrap == '1')
-{
-	define('COM_TJVENDORS_WRAPPAER_CLASS', "tjBs3");
-	JHtml::_('stylesheet', 'media/techjoomla_strapper/bs3/css/bootstrap.min.css');
-	JHtml::_('stylesheet', 'media/techjoomla_strapper/vendors/font-awesome/css/font-awesome.min.css');
-}
-else
-{
-	define('COM_TJVENDORS_WRAPPAER_CLASS', '');
-}

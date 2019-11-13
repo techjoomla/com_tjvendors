@@ -11,6 +11,8 @@
 // No direct access.
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Session\Session;
+
 jimport('joomla.application.component.controlleradmin');
 
 /**
@@ -45,6 +47,9 @@ class TjvendorsControllerVendors extends JControllerAdmin
 	 */
 	public function delete()
 	{
+		// Check for request forgeries
+		Session::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
 		$input  = JFactory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
 		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');

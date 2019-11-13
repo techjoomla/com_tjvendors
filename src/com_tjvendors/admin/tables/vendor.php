@@ -219,6 +219,10 @@ class TjvendorsTablevendor extends JTable
 				}
 
 				$filename   = JFile::stripExt($singleFile['name']);
+
+				// Strip unwanted characters
+				$filename   = JFile::makeSafe($filename);
+
 				$extension  = JFile::getExt($singleFile['name']);
 				$fileType   = $singleFile['type'];
 				$filename   = md5(time()) . $filename;

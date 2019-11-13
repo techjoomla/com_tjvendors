@@ -22,6 +22,9 @@ use Joomla\String\StringHelper;
  *
  * This class perform the helpful operation required to  TJVendors package
  *
+ * @method  TjvendorsVersion  version()
+ * @method  TjvendorsVendor   vendor()
+ *
  * @since  __DEPLOY_VERSION__
  */
 class TJVendors

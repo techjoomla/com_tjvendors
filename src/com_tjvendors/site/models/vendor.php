@@ -8,41 +8,43 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-// No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modeladmin');
 JLoader::import('fronthelper', JPATH_SITE . '/components/com_tjvendors/helpers');
 JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Table\Table;
 
 /**
  * Tjvendors model.
  *
- * @since  1.6
+ * @since  1.0.0
  */
-class TjvendorsModelVendor extends JModelAdmin
+class TjvendorsModelVendor extends AdminModel
 {
 	/**
 	 * @var    string  client data
-	 * @since  1.6
+	 * @since  1.0.0
 	 */
 	private $vendor_client = '';
 
 	/**
 	 * @var      string    The prefix to use with controller messages.
-	 * @since    1.6
+	 * @since    1.0.0
 	 */
 	protected $text_prefix = 'COM_TJVENDORS';
 
 	/**
 	 * @var     string      Alias to manage history control
-	 * @since   3.2
+	 * @since   1.0.0
 	 */
 	public $typeAlias = 'com_tjvendors.vendor';
 
 	/**
 	 * @var null  Item data
-	 * @since  1.6
+	 * @since  1.0.0
 	 */
 	protected $item = null;
 
@@ -55,15 +57,13 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @return    JTable    A database object
 	 *
-	 * @since    1.6
+	 * @since    1.0.0
 	 */
 	public function getTable($type = 'Vendor', $prefix = 'TjvendorsTable', $config = array())
 	{
-		// Load tables to fix - unable to load the vendors data using the model object,
-		// When it is created outside the tjvendors component
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 
-		return JTable::getInstance($type, $prefix, $config);
+		return Table::getInstance($type, $prefix, $config);
 	}
 
 	/**
@@ -74,14 +74,10 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @return  JForm  A JForm object on success, false on failure
 	 *
-	 * @since    1.6
+	 * @since    1.0.0
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
-		// Initialise variables.
-		$app = JFactory::getApplication();
-
-		// Get the form.
 		$form = $this->loadForm(
 			'com_tjvendors.vendor', 'vendor',
 			array('control' => 'jform',
@@ -89,12 +85,7 @@ class TjvendorsModelVendor extends JModelAdmin
 			)
 		);
 
-		if (empty($form))
-		{
-			return false;
-		}
-
-		return $form;
+		return empty($form) ? false: $form;
 	}
 
 	/**
@@ -102,7 +93,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @return   mixed  The data for the form.
 	 *
-	 * @since    1.6
+	 * @since    1.0.0
 	 */
 	protected function loadFormData()
 	{
@@ -110,11 +101,14 @@ class TjvendorsModelVendor extends JModelAdmin
 		$input = $app->input;
 		$client = $input->get('client', '', 'STRING');
 
-		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
+		$data = Factory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
 
 		if (empty($data))
 		{
-			if ($this->item === null)
+			$data = $this->getItem();
+
+			/**
+			 * if ($this->item === null)
 			{
 				$this->item = $this->getItem();
 			}
@@ -131,12 +125,10 @@ class TjvendorsModelVendor extends JModelAdmin
 						$this->item->payment_gateway = json_decode($gatewayDetails->params)->payment_gateway;
 					}
 				}
-			}
-
-			$data = $this->item;
+			} */
 		}
 
-		return $this->item;
+		return $data;
 	}
 
 	/**
@@ -144,13 +136,16 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @param   integer  $pk  The id of the primary key.
 	 *
-	 * @return  mixed    Object on success, false on failure.
+	 * @return  TjvendorsVendor  Object on success, false on failure.
 	 *
-	 * @since    1.6
+	 * @since    1.0.0
 	 */
 	public function getItem($pk = null)
 	{
-		$item = parent::getItem($pk);
+		return TJVendors::vendor();
+		/*
+		 *
+		 *$item = parent::getItem($pk);
 
 		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
@@ -158,6 +153,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		$item->params = $vendorXref->params;
 
 		return $item;
+		*/
 	}
 
 	/**
@@ -209,7 +205,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @return   array|boolean
 	 *
-	 * @since    1.6
+	 * @since    1.0.0
 	 */
 	public function checkDuplicateUser($user_id)
 	{
@@ -253,7 +249,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 *
 	 * @return   array result
 	 *
-	 * @since    1.6
+	 * @since    1.0.0
 	 */
 	public function generateGatewayFields($payment_gateway, $parentTag)
 	{

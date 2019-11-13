@@ -1,46 +1,60 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
-// No direct access
+
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 /**
- * View to edit
+ * Vendor view class
  *
- * @since  1.6
+ * @since  1.0.0
  */
-class TjvendorsViewVendor extends JViewLegacy
+class TjvendorsViewVendor extends HtmlView
 {
-	protected $state;
-
-	protected $item;
-
+	/**
+	 * Object of the vendor class
+	 *
+	 * @var    \Joomla\CMS\Form\Form;
+	 * @since  __DEPLOY_VERSION__
+	 */
 	protected $form;
 
-	protected $vendor_id;
-
-	protected $VendorDetail;
-
-	protected $vendorClientXrefTable;
-
-	protected $layout;
-
+	/**
+	 * Object of the vendor class
+	 *
+	 * @var    TjvendorsVendor
+	 * @since  __DEPLOY_VERSION__
+	 */
 	protected $vendor;
 
-	protected $input;
-
+	/**
+	 * The current client of the vendor
+	 * eg. com_jticketing, com_jgive
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
 	protected $client;
 
+	/**
+	 * params of the component
+	 *
+	 * @var    Joomla\Registry\Registry
+	 * @since  __DEPLOY_VERSION__
+	 */
 	protected $params;
-
-	protected $isClientExist;
 
 	/**
 	 * Display the view
@@ -53,52 +67,54 @@ class TjvendorsViewVendor extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$this->params = JComponentHelper::getParams('com_tjvendors');
-		$this->state  = $this->get('State');
-		$this->vendor = $this->get('Item');
+		$app = Factory::getApplication();
+		$this->params = TJVendors::config();
 		$this->form   = $this->get('Form');
-		$this->input  = JFactory::getApplication()->input;
-		$this->client = $this->input->get('client', '', 'STRING');
+		$input  = Factory::getApplication()->input;
+		$this->client = $input->get('client', '', 'STRING');
+		$layout = $input->get('layout', '', 'STRING');
+		$vendorId = $input->getInt('vendor_id');
+		$this->vendor = TJVendors::vendor()->loadByUserId();
 
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
-		$tjvendorsModelVendor        = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$tjvendorFrontHelper         = new TjvendorFrontHelper;
-		$this->vendor_id             = $tjvendorFrontHelper->getvendor();
-		$this->client                = $this->input->get('client', '', 'STRING');
-		$this->isClientExist         = $tjvendorFrontHelper->isClientExist($this->client, $this->vendor_id);
-		$this->vendorClientXrefTable = JTable::getInstance('vendorclientxref', 'TjvendorsTable', array());
-		$this->vendorClientXrefTable->load(array('vendor_id' => $this->vendor_id, 'client' => $this->client));
-		$this->VendorDetail          = $tjvendorsModelVendor->getItem($this->vendor_id);
+		$user = Factory::getUser();
 
-		$app = JFactory::getApplication();
-		$app->setUserState("vendor.client", $this->client);
-		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);
-		$this->layout = $this->input->get('layout', '', 'STRING');
-		JText::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
-		JText::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
-		JText::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
-
-		if ($this->layout == 'profile' && $this->vendor_id != $this->vendor->vendor_id)
+		if ($user->guest)
 		{
-			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+			$return = base64_encode(Uri::getInstance());
+			$loginUrlWithReturn = Route::_('index.php?option=com_users&view=login&return=' . $return);
+			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'notice');
+			$app->redirect($loginUrlWithReturn, 403);
 		}
-
-		if (!empty($this->vendor_id) && $this->layout == "edit")
+		else
 		{
-			if (!empty($this->clientsForVendor))
+			if ($layout == 'profile' && ($this->vendor->vendor_id !== $vendorId || !$user->authorise('core.edit.own')))
 			{
-				foreach ($this->clientsForVendor as $client)
+				$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'notice');
+				$app->redirect(Route::_('index.php'), 403);
+			}
+			elseif ($layout == 'edit')
+			{
+				// Do nothing
+			}
+			else
+			{
+				// Change to vendor provided in the url
+				if (!empty($vendorId))
 				{
-					if ($client == $this->client)
-					{
-						$link = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);
-						$app = JFactory::getApplication();
-						$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
-						$app->redirect($link);
-					}
+					$this->vendor = TJVendors::vendor($vendorId);
+				}
+
+				if (empty($this->vendor->vendor_id))
+				{
+					$app->enqueueMessage(Text::_('The vendor is not exist'), 'notice');
+					$app->redirect(Route::_('index.php'), 403);
 				}
 			}
 		}
+
+		Text::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+		Text::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
+		Text::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
 
 		// Check for errors
 		if (count($errors = $this->get('Errors')))

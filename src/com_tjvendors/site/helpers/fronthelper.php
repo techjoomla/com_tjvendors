@@ -191,6 +191,8 @@ class TjvendorFrontHelper
 	/**
 	 * Get vendor for that user
 	 *
+	 * @deprecated  __DEPLOY_VERSION__ use the alternative method TJVendors::vendor()->loadByUserId
+	 *
 	 * @return integer
 	 */
 	public static function getvendor()
@@ -293,6 +295,8 @@ class TjvendorFrontHelper
 	 * @param   integer  $user_id  user id
 	 *
 	 * @param   string   $client   client
+	 *
+	 * @deprecated  __DEPLOY_VERSION__ use the alternative method from TJVendorsVendor class
 	 *
 	 * @return   mixed
 	 *
@@ -633,6 +637,8 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string   $client    client
 	 * @param   integer  $vendorId  Venodor ID
+	 *
+	 * @deprecated  __DEPLOY_VERSION__ use the alternative method TJVendors::vendor()->isAssociatedToClient
 	 *
 	 * @return  Boolean Client exist or not
 	 *

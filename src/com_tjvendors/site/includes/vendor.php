@@ -11,7 +11,9 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
 
 /**
  * Vendor class.
@@ -20,7 +22,7 @@ use Joomla\CMS\Uri\Uri;
  *
  * @since  __DEPLOY_VERSION__
  */
-class TjvendorsVendor
+class TjvendorsVendor extends CMSObject
 {
 	/**
 	 * primary key of the vendor record.
@@ -111,6 +113,31 @@ class TjvendorsVendor
 	private $params = '';
 
 	/**
+	 * Integrated component client name eg. com_tjlms, com_jticketing
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $client = '';
+
+	/**
+	 * Is vendor approved by the client
+	 * By default the vendor is approved
+	 *
+	 * @var    int
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $approved = 1;
+
+	/**
+	 * Payment gateway details configured by the vendor
+	 *
+	 * @var    string
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $payment_gateway = '';
+
+	/**
 	 * holds the already loaded instances of the vendor
 	 *
 	 * @var    array
@@ -121,15 +148,16 @@ class TjvendorsVendor
 	/**
 	 * Constructor activating the default information of the vendor
 	 *
-	 * @param   int  $id  The unique vendor id to load.
+	 * @param   int     $id      The unique vendor id to load.
+	 * @param   string  $client  the client name whose properties need to load while creating object
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function __construct($id = 0)
+	public function __construct($id = 0, $client = '')
 	{
 		if (!empty($id))
 		{
-			$this->load($id);
+			$this->load($id, $client);
 		}
 		else
 		{
@@ -140,13 +168,14 @@ class TjvendorsVendor
 	/**
 	 * Returns the global vendor object
 	 *
-	 * @param   integer  $id  The primary key of the vendor to load (optional). if id is empty the empty instance will be returned
+	 * @param   integer  $id      The primary key of the vendor to load (optional). if id is empty the empty instance will be returned
+	 * @param   string   $client  the client name whose properties need to load while creating object
 	 *
 	 * @return  TjvendorsVendor  The vendor object.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public static function getInstance($id = 0)
+	public static function getInstance($id = 0, $client = '')
 	{
 		if (!$id)
 		{
@@ -156,7 +185,7 @@ class TjvendorsVendor
 		// Check if the coupon id is already cached.
 		if (empty(self::$vendorObj[$id]))
 		{
-			self::$vendorObj[$id] = new TjvendorsVendor($id);
+			self::$vendorObj[$id] = new TjvendorsVendor($id, $client);
 		}
 
 		return self::$vendorObj[$id];
@@ -165,17 +194,26 @@ class TjvendorsVendor
 	/**
 	 * Method to load a vendor properties
 	 *
-	 * @param   int  $id  The vendor id
+	 * @param   int     $id      The vendor id
+	 * @param   string  $client  the client name whose properties need to load while creating object
 	 *
 	 * @return  boolean  True on success
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function load($id)
+	public function load($id, $client = '')
 	{
 		$table = TJVendors::table("vendor");
 
 		if (!$table->load($id))
+		{
+			return false;
+		}
+
+		// Check for the client in the xref
+		$xreftable = TJVendors::table("vendorclientxref");
+
+		if (!$xreftable->load(array('vendor_id' => $id, 'client' => $client)))
 		{
 			return false;
 		}
@@ -191,6 +229,7 @@ class TjvendorsVendor
 		$this->checked_out         = (int) $table->get('checked_out');
 		$this->checked_out_time    = $table->get('checked_out_time');
 		$this->params              = $table->get('params');
+		$this->setClient($client);
 
 		return true;
 	}
@@ -267,8 +306,8 @@ class TjvendorsVendor
 	/**
 	 * Check whether the vendor is associated with the provided client
 	 *
-	 * @param   string  $client  The client name to cehck integration eg. com_jticketing, com_tjllms
-	 * 
+	 * @param   string  $client  The client name to check integration eg. com_jticketing, com_tjllms
+	 *
 	 * @return  bool True on success
 	 *
 	 * @since   __DEPLOY_VERSION__
@@ -289,9 +328,67 @@ class TjvendorsVendor
 
 		/** @var $table TjvendorsTableVendor */
 		$table = TJVendors::table("vendor");
-
 		$clientExist[$client] = $table->load(array('vendor_id' => $this->vendor_id, 'client' => $client));
 
 		return $clientExist[$client];
+	}
+
+	/**
+	 * Set client properties to the vendor object
+	 *
+	 * @param   string  $client  The client name to check integration eg. com_jticketing, com_tjllms
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function setClient($client)
+	{
+		// Check for the client in the xref
+		$xreftable = TJVendors::table("vendorclientxref");
+
+		if (!$xreftable->load(array('vendor_id' => $this->vendor_id, 'client' => $client)))
+		{
+			return false;
+		}
+
+		$this->client      = $xreftable->get('client');
+		$this->approved    = (int) $xreftable->get('approved');
+
+		// State property override by the client
+		$this->state       = (int) $xreftable->get('state');
+
+		// Expecting RuntimeException thrown by the Joomla\Registry\Format\Json class
+		try
+		{
+			// Params properties are overrided by the client params
+			$clientParams = new Registry($xreftable->get('params'));
+			$vendorParam  = new Registry($this->params);
+			$vendorParam->merge($clientParams);
+			$this->params      = $vendorParam->toString();
+
+			if (!empty($this->params))
+			{
+				$this->payment_gateway = $vendorParam->get('payment_gateway');
+			}
+		}
+		catch (Exception $e)
+		{
+			// Don't throw an error
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns an associative array of object properties.
+	 *
+	 * @return  array
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getProperties()
+	{
+		return get_object_vars($this);
 	}
 }

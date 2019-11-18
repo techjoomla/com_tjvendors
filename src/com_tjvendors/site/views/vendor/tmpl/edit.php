@@ -58,7 +58,7 @@ HTMLHelper::_('behavior.keepalive');
 									echo Text::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');
 									?>
 								<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor->vendor_id);?>">
-								<strong><?php echo $this->escape($this->vendor->getTitle());?></a></strong>
+								<strong><?php echo $this->escape($this->vendor->getTitle());?></strong></a>
 								<?php
 								if (!$this->vendor->isAssociatedToClient($this->client))
 									{

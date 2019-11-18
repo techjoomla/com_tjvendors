@@ -89,6 +89,30 @@ class TjvendorsModelVendor extends AdminModel
 	}
 
 	/**
+	 * Method to auto-populate the model state.
+	 *
+	 * Note. Calling getState in this method will result in recursion.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	protected function populateState()
+	{
+		$app = Factory::getApplication();
+		$params = TJVendors::config();
+		$vendorId = $app->input->getInt('vendor_id')? $app->input->getInt('vendor_id') : $app->getUserState('com_tjvendors.edit.vendor.id');
+		$vendorId = !empty($vendorId) ? $vendorId : (int) TJVendors::vendor()->loadByUserId()->vendor_id;
+		$this->setState('vendor.id', $vendorId);
+
+		$client = $app->input->getString('client', null);
+		$client = $client ? $client : $app->getUserState('com_tjvendors.client.name');
+
+		$this->setState('client.name', $client);
+		$this->setState('params', $params);
+	}
+
+	/**
 	 * Method to get the data that should be injected in the form.
 	 *
 	 * @return   mixed  The data for the form.
@@ -97,35 +121,11 @@ class TjvendorsModelVendor extends AdminModel
 	 */
 	protected function loadFormData()
 	{
-		$app = JFactory::getApplication();
-		$input = $app->input;
-		$client = $input->get('client', '', 'STRING');
-
 		$data = Factory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
 
 		if (empty($data))
 		{
-			$data = $this->getItem();
-
-			/**
-			 * if ($this->item === null)
-			{
-				$this->item = $this->getItem();
-			}
-
-			if (!empty($this->item->vendor_id))
-			{
-				if (!empty($client))
-				{
-					$tjvendorFrontHelper = new TjvendorFrontHelper;
-					$gatewayDetails = $tjvendorFrontHelper->getPaymentDetails($this->item->vendor_id, $client);
-
-					if (!empty($gatewayDetails) && !empty($gatewayDetails->params))
-					{
-						$this->item->payment_gateway = json_decode($gatewayDetails->params)->payment_gateway;
-					}
-				}
-			} */
+			$data = $this->getItem()->getProperties();
 		}
 
 		return $data;
@@ -134,26 +134,19 @@ class TjvendorsModelVendor extends AdminModel
 	/**
 	 * Method to get a single record.
 	 *
-	 * @param   integer  $pk  The id of the primary key.
+	 * @param   integer  $pk      The id of the primary key.
+	 * @param   string   $client  the client name whose properties need to load while creating object
 	 *
 	 * @return  TjvendorsVendor  Object on success, false on failure.
 	 *
 	 * @since    1.0.0
 	 */
-	public function getItem($pk = null)
+	public function getItem($pk = null, $client = '')
 	{
-		return TJVendors::vendor();
-		/*
-		 *
-		 *$item = parent::getItem($pk);
+		$pk     = (!empty($pk)) ? $pk : (int) $this->getState($this->getName() . '.id');
+		$client = (!empty($client)) ? $client : $this->getState($this->getName() . '.client');
 
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
-		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
-		$vendorXref->load(array('vendor_id' => $item->vendor_id));
-		$item->params = $vendorXref->params;
-
-		return $item;
-		*/
+		return TJVendors::vendor($pk, $client);
 	}
 
 	/**
@@ -202,6 +195,8 @@ class TjvendorsModelVendor extends AdminModel
 	 * Method to check duplicate user.
 	 *
 	 * @param   integer  $user_id  user name.
+	 *
+	 * @deprecated  __DEPLOY_VERSION__ use the alternative method TJVendors::vendor()->loadByUserId
 	 *
 	 * @return   array|boolean
 	 *

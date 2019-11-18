@@ -17,6 +17,8 @@ if (!JFactory::getUser()->authorise('core.manage', 'com_tjvendors'))
 	throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
+include_once  JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
+
 // Include dependancies
 jimport('joomla.application.component.controller');
 

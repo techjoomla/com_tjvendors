@@ -24,6 +24,8 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $name  Model name
 	 *
+	 * @deprecated  __DEPLOY_VERSION__ use the alternative method TJVendors::model
+	 *
 	 * @return null|object
 	 */
 	public static function getModel($name)
@@ -98,7 +100,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $currency   integer
 	 *
-	 * @return amount
+	 * @return array
 	 */
 	public static function getTotalDetails($vendor_id, $client, $currency)
 	{

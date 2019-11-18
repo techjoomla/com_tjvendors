@@ -8,13 +8,11 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-// No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modeladmin');
 /**
  * Tjvendors model.
  *
- * @since  1.6
+ * @since  1.0.0
  */
 JLoader::import('com_tjvendors.models.vendor', JPATH_SITE . '/components');

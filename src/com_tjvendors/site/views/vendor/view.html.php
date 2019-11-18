@@ -67,16 +67,16 @@ class TjvendorsViewVendor extends HtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$app = Factory::getApplication();
-		$this->params = TJVendors::config();
+		$app          = Factory::getApplication();
+		$this->vendor = $this->get('Item');
 		$this->form   = $this->get('Form');
-		$input  = Factory::getApplication()->input;
+		$this->state  = $this->get('State');
+		$this->params = $this->state->get('params');
+		$input        = $app->input;
 		$this->client = $input->get('client', '', 'STRING');
-		$layout = $input->get('layout', '', 'STRING');
-		$vendorId = $input->getInt('vendor_id');
-		$this->vendor = TJVendors::vendor()->loadByUserId();
-
-		$user = Factory::getUser();
+		$layout       = $input->get('layout', '', 'STRING');
+		$vendorId     = $input->getInt('vendor_id');
+		$user         = Factory::getUser();
 
 		if ($user->guest)
 		{
@@ -98,12 +98,6 @@ class TjvendorsViewVendor extends HtmlView
 			}
 			else
 			{
-				// Change to vendor provided in the url
-				if (!empty($vendorId))
-				{
-					$this->vendor = TJVendors::vendor($vendorId);
-				}
-
 				if (empty($this->vendor->vendor_id))
 				{
 					$app->enqueueMessage(Text::_('The vendor is not exist'), 'notice');

@@ -19,27 +19,32 @@
     "user_control": 1,
     "core": 1,
     "replacement_tags": [
-      {
-        "name": "info.vendor_title",
-        "description": "Vendor title"
-      },
-      {
-        "name": "{vendorer.name}",
-        "description": "Vendorer name"
-      },
-      {
-        "name": "info.allVendors",
-        "description": "Link to all vender view. (Admin user only)"
-      },
-      {
-        "name": "info.sitename",
-        "description": "Sitename"
-      },
-      {
-        "name": "info.adminname",
-        "description": "Siteadmin"
-      }
-    ]
+		{
+			"name": "{info.vendor_title}",
+			"description": "Vendor title",
+			"sampledata": "Techjoomla"
+		},
+		{
+			"name": "{vendorer.name}",
+			"description": "Vendorer name",
+			"sampledata": "Shikha"
+		},
+		{
+			"name": "{info.allVendors}",
+			"description": "Link to all vender view. (Admin user only)",
+			"sampledata": "https://techjoomla.com/products"
+		},
+		{
+			"name": "{info.sitename}",
+			"description": "Sitename",
+			"sampledata": "https://techjoomla.com"
+		},
+		{
+			"name": "{info.adminname}",
+			"description": "Siteadmin",
+			"sampledata": "admin"
+		}
+	]
   },
  "template2": {
     "id": "",
@@ -61,30 +66,36 @@
     "user_control": 1,
     "core": 1,
     "replacement_tags": [
-      {
-        "name": "info.vendor_title",
-        "description": "Vendor title"
-      },
-      {
-        "name": "{vendorer.name}",
-        "description": "Vendorer name"
-      },
-      {
-        "name": "info.allVendors",
-        "description": "Link to all vender view. (Admin user only)"
-      },
-      {
-        "name": "info.myVendor",
-        "description": "Vendor - edit view"
-      },
-      {
-        "name": "info.sitename",
-        "description": "Sitename"
-      },
-      {
-        "name": "info.adminname",
-        "description": "Siteadmin"
-      }
+		{
+			"name": "{info.vendor_title}",
+			"description": "Vendor title",
+			"sampledata": "Techjoomla"
+		},
+		{
+			"name": "{vendorer.name}",
+			"description": "Vendorer name",
+			"sampledata": "Jticketing"
+		},
+		{
+			"name": "{info.allVendors}",
+			"description": "Link to all vender view. (Admin user only)",
+			"sampledata": "https://jticketingdemo.techjoomla.com/"
+		},
+		{
+			"name": "{info.myVendor}",
+			"description": "Vendor - edit view",
+			"sampledata": "https://jticketingdemo.techjoomla.com/national-amateur-boxing-championship"
+		},
+		{
+			"name": "{info.sitename}",
+			"description": "Sitename",
+			"sampledata": "https://jticketingdemo.techjoomla.com/"
+		},
+		{
+			"name": "{info.adminname}",
+			"description": "Siteadmin",
+			"sampledata": "Smith"
+		}
     ]
   },
  "template3": {
@@ -149,30 +160,35 @@
     "user_control": 1,
     "core": 1,
     "replacement_tags": [
-      {
-        "name": "info.vendor_title",
-        "description": "Vendor title"
-      },
-      {
-        "name": "{vendorer.name}",
-        "description": "Vendorer name"
-      },
-      {
-        "name": "info.allVendors",
-        "description": "Link to all vender view. (Admin user only)"
-      },
-      {
-        "name": "info.myVendor",
-        "description": "Vendor - edit view"
-      },
-      {
-        "name": "info.sitename",
-        "description": "Sitename"
-      },
-      {
-        "name": "info.adminname",
-        "description": "Siteadmin"
-      }
+		{
+			"name": "{info.vendor_title}",
+			"description": "Vendor title",
+			"sampledata": "Techjoomla"
+		},
+		{
+			"name": "{vendorer.name}",
+			"description": "Vendorer name",
+			"sampledata": "Jticketing"
+		},
+		{
+			"name": "{info.allVendors}",
+			"description": "Link to all vender view. (Admin user only)",
+			"sampledata": "https://jticketingdemo.techjoomla.com/"
+		},
+		{
+			"name": "{info.myVendor}",
+			"description": "Vendor - edit view"
+		},
+		{
+			"name": "{info.sitename}",
+			"description": "Sitename",
+			"sampledata": "https://jticketingdemo.techjoomla.com/"
+		},
+		{
+			"name": "{info.adminname}",
+			"description": "Siteadmin",
+			"sampledata": "Kate"
+		}
     ]
   },
  "template5": {
@@ -195,22 +211,31 @@
     "user_control": 1,
     "core": 1,
     "replacement_tags": [
-      {
-        "name": "info.vendor_title",
-        "description": "Vendor title"
-      },
-      {
-        "name": "{vendorUser.name}",
-        "description": "Vendorer name"
-      },
-      {
-        "name": "info.sitename",
-        "description": "Sitename"
-      },
-      {
-        "name": "info.adminname",
-        "description": "Siteadmin"
-      }
+		 {
+			"name": "{info.vendor_title}",
+			"description": "Vendor title",
+			"sampledata": "ShopKart"
+		},
+		{
+			"name": "{vendor_user.name}",
+			"description": "Vendorer name",
+			"sampledata": "Mikel"
+		},
+		{
+			"name": "{info.sitename}",
+			"description": "Sitename",
+			"sampledata": "https://www.yo-kart.com/multivendor-store-demo.html"
+		},
+		{
+			"name": "{info.adminname}",
+			"description": "Siteadmin",
+			"sampledata": "Mikel"
+		},
+		{
+			"name": "{vendor_data.vendor_title}",
+			"description": "Vendor Title",
+			"sampledata": "TJ-Vendor"
+		}
     ]
   },
  "template6": {
@@ -233,26 +258,31 @@
     "user_control": 1,
     "core": 1,
     "replacement_tags": [
-      {
-        "name": "info.vendor_title",
-        "description": "Vendor title"
-      },
-      {
-        "name": "{vendorer.name}",
-        "description": "Vendorer name"
-      },
-      {
-        "name": "info.vendorClient",
-        "description": "Vendor client"
-      },
-      {
-        "name": "info.sitename",
-        "description": "Sitename"
-      },
-      {
-        "name": "info.adminname",
-        "description": "Siteadmin"
-      }
+		{
+			"name": "{info.vendor_title}",
+			"description": "Vendor title",
+			"sampledata": "SAP"
+		},
+		{
+			"name": "{vendorer.name}",
+			"description": "Vendorer name",
+			"sampledata": "shopkart"
+		},
+		{
+			"name": "{info.vendorClient}",
+			"description": "Vendor client",
+			"sampledata": "IndiaMart"
+		},
+		{
+			"name": "{info.sitename}",
+			"description": "Sitename",
+			"sampledata": "http://www.shopkartapp.com"
+		},
+		{
+			"name": "{info.adminname}",
+			"description": "Siteadmin",
+			"sampledata": "john"
+		}
     ]
   }
 }

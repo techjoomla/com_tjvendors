@@ -10,15 +10,14 @@
 
 // No direct access
 defined('_JEXEC') or die();
-use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Session\Session;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
 
-jimport('joomla.application.component.controllerform');
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
 
 /**

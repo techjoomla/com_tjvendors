@@ -9,11 +9,11 @@
  */
 
 defined('_JEXEC') or die;
-use Joomla\CMS\Table\Table;
-use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Table\Table;
 
 JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
 Table::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');

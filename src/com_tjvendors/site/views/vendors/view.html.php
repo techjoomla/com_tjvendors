@@ -10,11 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die;
-use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
-
-JLoader::import('joomla.application.component.model');
+use Joomla\CMS\MVC\View\HtmlView;
 
 /**
  * List view : Pending Payouts

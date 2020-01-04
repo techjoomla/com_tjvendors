@@ -12,8 +12,6 @@
 defined('_JEXEC') or die;
 use Joomla\CMS\MVC\Controller\AdminController;
 
-jimport('joomla.application.component.controlleradmin');
-
 /**
  * Vendors list controller class.
  *

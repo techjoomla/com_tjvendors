@@ -10,12 +10,10 @@
 
 // No direct access.
 defined('_JEXEC') or die;
-use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Log\Log;
 use Joomla\CMS\Language\Text;
-
-jimport('joomla.application.component.controlleradmin');
+use Joomla\CMS\Log\Log;
+use Joomla\CMS\MVC\Controller\AdminController;
 
 /**
  * Vendors list controller class.

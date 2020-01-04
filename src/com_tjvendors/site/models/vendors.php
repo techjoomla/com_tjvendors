@@ -10,11 +10,9 @@
 
 // No direct access.
 defined('_JEXEC') or die();
-use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
-
-jimport('joomla.application.component.modeladmin');
+use Joomla\CMS\MVC\Model\ListModel;
 
 /**
  * Tjvendors model.

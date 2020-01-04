@@ -10,9 +10,8 @@
 
 // No direct access
 defined('_JEXEC') or die;
-use Joomla\CMS\MVC\Controller\BaseController;
-use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 /**
  * Class TjvendorsController

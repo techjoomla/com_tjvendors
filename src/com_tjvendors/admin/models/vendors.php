@@ -10,15 +10,13 @@
 
 // No direct access
 defined('_JEXEC') or die;
-use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
-
-jimport('joomla.application.component.modellist');
 
 /**
  * Methods supporting a list of Tjvendors records.

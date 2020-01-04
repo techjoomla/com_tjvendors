@@ -31,7 +31,7 @@ class TjvendorsTablePayout extends Table
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('ContentHistory', 'TjpayoutsTablepayout', array('typeAlias' => 'com_tjvendors.payout'));
+		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjpayoutsTablepayout', array('typeAlias' => 'com_tjvendors.payout'));
 		parent::__construct('#__tjvendors_passbook', 'id', $db);
 	}
 

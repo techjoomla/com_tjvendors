@@ -40,10 +40,10 @@ tjVAdmin.vendor.initVendorJs();
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
 					<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->item->vendor_id; ?>" />
-					<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->item->checked_out_time; ?>" />
-					<input type="hidden" name="jform[checked_out]" value="<?php echo $this->item->checked_out; ?>" />
-					<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
-					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
+					<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->form->getValue('checked_out_time'); ?>" />
+					<input type="hidden" name="jform[checked_out]" value="<?php echo $this->form->getValue('checked_out'); ?>" />
+					<input type="hidden" name="jform[state]" value="<?php echo $this->form->getValue('state'); ?>" />
+					<input type="hidden" name="jform[ordering]" value="<?php echo $this->form->getValue('ordering'); ?>" />
 					<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 
 					<?php
@@ -52,15 +52,15 @@ tjVAdmin.vendor.initVendorJs();
 							$input=JFactory::getApplication()->input;
 							$client=$input->get('client', '', 'STRING');
 						?>
-							<input type="hidden" name="jform[vendor_title]" id="jform_vendor_titile_hidden" value="<?php echo $this->item->vendor_title; ?>" />
-							<input type="hidden" name="jform[vendor_description]" id="jform_vendor_description_hidden" value="<?php echo $this->item->vendor_description; ?>" />
-							<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
+							<input type="hidden" name="jform[vendor_title]" id="jform_vendor_titile_hidden" value="<?php echo $this->item->getTitle();; ?>" />
+							<input type="hidden" name="jform[vendor_description]" id="jform_vendor_description_hidden" value="<?php echo $this->form->getValue('vendor_description'); ?>" />
+							<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->getLogo(); ?>" />
 						<?php echo $this->form->renderField('user_id');?>
 							<div class="pull-left alert alert-info">
 						<?php echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
 							<a href="<?php echo JRoute::_(JURI::root() . '/administrator/index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id='.$this->item->vendor_id);?>"><strong>
 							<?php
-								echo $this->item->vendor_title."</a></strong>";
+								echo $this->item->getTitle() . "</a></strong>";
 								echo " ".JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
 								$tjvendorFrontHelper = new TjvendorFrontHelper();
 								echo $clientTitle = $tjvendorFrontHelper->getClientName($client);

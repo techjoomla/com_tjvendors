@@ -8,15 +8,16 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-// No direct access
 defined('_JEXEC') or die;
+
+use Joomla\CMS\Table\Table;
 
 /**
  * vendor Table class
  *
- * @since  1.6
+ * @since  1.0.0
  */
-class TjvendorsTablevendorclientxref extends JTable
+class TjvendorsTablevendorclientxref extends Table
 {
 	/**
 	 * Constructor
@@ -27,6 +28,7 @@ class TjvendorsTablevendorclientxref extends JTable
 	{
 		$tableName = 'TjvendorsTablevendorclientxref';
 		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', $tableName, array('typeAlias' => 'com_tjvendors.vendorclientxref'));
+
 		parent::__construct('#__vendor_client_xref', 'vendor_id', $db);
 	}
 }

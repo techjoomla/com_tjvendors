@@ -8,18 +8,17 @@
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
-// No direct access
 defined('_JEXEC') or die();
 
-jimport('joomla.application.component.controllerform');
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\FormController;
 
 /**
  * Vendor controller class.
  *
- * @since  1.6
+ * @since  1.0.0
  */
-class TjvendorsControllerVendor extends JControllerForm
+class TjvendorsControllerVendor extends FormController
 {
 	/**
 	 * Constructor
@@ -28,8 +27,8 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	public function __construct()
 	{
-		$this->view_list = 'vendors';
-		$this->input = JFactory::getApplication()->input;
+		$this->view_list     = 'vendors';
+		$this->input         = Factory::getApplication()->input;
 
 		$this->vendor_client = $this->input->get('client', '', 'STRING');
 

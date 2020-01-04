@@ -32,7 +32,7 @@ tjVAdmin.vendor.initVendorJs();
 
 <form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&client='.$this->input->get('client', '', 'INTEGER').'&vendor_id=' . (int) $this->item->vendor_id); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
-	<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
+	<input type="hidden" name="jform[state]" value="<?php echo $this->item->get('state'); ?>" />
 	<div class="form-horizontal">
 		<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'personal')); ?>
 		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'personal', JText::_('COM_TJVENDORS_TITLE_PERSONAL', true)); ?>
@@ -40,10 +40,10 @@ tjVAdmin.vendor.initVendorJs();
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
 					<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->item->vendor_id; ?>" />
-					<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->item->checked_out_time; ?>" />
-					<input type="hidden" name="jform[checked_out]" value="<?php echo $this->item->checked_out; ?>" />
-					<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
-					<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
+					<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->form->getValue('checked_out_time'); ?>" />
+					<input type="hidden" name="jform[checked_out]" value="<?php echo $this->form->getValue('checked_out'); ?>" />
+					<input type="hidden" name="jform[state]" value="<?php echo $this->form->getValue('state'); ?>" />
+					<input type="hidden" name="jform[ordering]" value="<?php echo $this->form->getValue('ordering'); ?>" />
 					<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 
 					<?php
@@ -62,7 +62,7 @@ tjVAdmin.vendor.initVendorJs();
 						?>
 						</div>
 
-						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
+						<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->form->getValue('vendor_logo'); ?>" />
 						<?php if (!empty($this->item->vendor_logo)) : ?>
 							<div class="control-group">
 								<div><img src="<?php echo JUri::root() . $this->item->vendor_logo; ?>" class="span3 col-md-3 img-thumbnail pull-left marginb10 img-polaroid"></div>

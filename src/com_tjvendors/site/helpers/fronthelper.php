@@ -24,6 +24,8 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $name  Model name
 	 *
+	 * @deprecated  __DEPLOY_VERSION__ use the alternative method TJVendors::model
+	 *
 	 * @return null|object
 	 */
 	public static function getModel($name)
@@ -98,7 +100,7 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string  $currency   integer
 	 *
-	 * @return amount
+	 * @return array
 	 */
 	public static function getTotalDetails($vendor_id, $client, $currency)
 	{
@@ -190,6 +192,8 @@ class TjvendorFrontHelper
 
 	/**
 	 * Get vendor for that user
+	 *
+	 * @deprecated  __DEPLOY_VERSION__ use the alternative method TJVendors::vendor()->loadByUserId
 	 *
 	 * @return integer
 	 */
@@ -293,6 +297,8 @@ class TjvendorFrontHelper
 	 * @param   integer  $user_id  user id
 	 *
 	 * @param   string   $client   client
+	 *
+	 * @deprecated  __DEPLOY_VERSION__ use the alternative method from TJVendorsVendor class
 	 *
 	 * @return   mixed
 	 *
@@ -633,6 +639,8 @@ class TjvendorFrontHelper
 	 *
 	 * @param   string   $client    client
 	 * @param   integer  $vendorId  Venodor ID
+	 *
+	 * @deprecated  __DEPLOY_VERSION__ use the alternative method TJVendors::vendor()->isAssociatedToClient
 	 *
 	 * @return  Boolean Client exist or not
 	 *

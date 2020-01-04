@@ -8,16 +8,20 @@
  */
 	// No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Language\Text;
 
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
-JHtml::_('formbehavior.chosen', 'select');
-JHtml::_('behavior.keepalive');
+HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+HTMLHelper::_('behavior.tooltip');
+HTMLHelper::_('behavior.formvalidation');
+HTMLHelper::_('formbehavior.chosen', 'select');
+HTMLHelper::_('behavior.keepalive');
 
 // Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
+$document = Factory::getDocument();
+$document->addStyleSheet(Uri::root() . 'media/com_tjvendors/css/form.css');
 ?>
 <script type="text/javascript">
 
@@ -35,7 +39,7 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 	function confirmationMsg()
 	{
 		var txt;
-		var r = confirm("<?php echo JText::_('CONFIRM_MESSAGE_YES_NO'); ?>");
+		var r = confirm("<?php echo Text::_('CONFIRM_MESSAGE_YES_NO'); ?>");
 
 		if (r == true)
 		{
@@ -50,8 +54,8 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 </script>
 <form method="post" enctype="multipart/form-data" name="adminForm" id="payout-form" class="form-validate">
 	<div class="form-horizontal">
-		<?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
-		<?php echo JHtml::_('bootstrap.addTab', 'myTab', 'general', JText::_('COM_TJVENDORS_TITLE_PAYOUT', true)); ?>
+		<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
+		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJVENDORS_TITLE_PAYOUT', true)); ?>
 		<div class="row-fluid">
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">
@@ -74,10 +78,10 @@ $document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/form.css');
 				</fieldset>
 			</div>
 		</div>
-		<?php echo JHtml::_('bootstrap.endTab'); ?>
-		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
+		<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
+		<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value="payout.save"/>
 		<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</div>
 </form>

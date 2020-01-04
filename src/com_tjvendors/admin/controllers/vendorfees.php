@@ -10,6 +10,9 @@
 
 // No direct access.
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
 
 jimport('joomla.application.component.controlleradmin');
 
@@ -18,7 +21,7 @@ jimport('joomla.application.component.controlleradmin');
  *
  * @since  1.6
  */
-class TjvendorsControllerVendorFees extends JControllerAdmin
+class TjvendorsControllerVendorFees extends AdminController
 {
 	/**
 	 * Proxy for getModel.
@@ -46,10 +49,10 @@ class TjvendorsControllerVendorFees extends JControllerAdmin
 	public function back()
 	{
 		// Get the input
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$pks = $input->post->get('cid', array(), 'array');
 
 		// Redirect to the list screen.
-		$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $input->get('client', '', 'STRING'), false));
+		$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendors&client=' . $input->get('client', '', 'STRING'), false));
 	}
 }

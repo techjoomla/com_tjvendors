@@ -7,8 +7,12 @@
  */
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Router\Route;
 
-JHtml::_('formbehavior.chosen', 'select');
+HTMLHelper::_('formbehavior.chosen', 'select');
 
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
@@ -35,15 +39,15 @@ $listDirn  = $this->state->get('list.direction');
 
 <div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
 	<h1>
-		<?php echo JText::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS'); ?>
+		<?php echo Text::_('COM_TJVENDOR_VENDOR_PAYOUT_REPORTS'); ?>
 	</h1>
 
 	<?php
-	$user_id = JFactory::getUser()->id;
+	$user_id = Factory::getUser()->id;
 	if (!empty($this->vendor_id))
 	{
 		?>
-		<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING'));?>" method="post" id="adminForm" name="adminForm">
+		<form action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING'));?>" method="post" id="adminForm" name="adminForm">
 
 			<div id="j-main-container" class="vendor-report">
 				<!-----"vendor-report" is a page cover class--->
@@ -51,15 +55,15 @@ $listDirn  = $this->state->get('list.direction');
 					<div class="col-xs-12 col-md-6 date">
 						<div class="btn-group input-group">
 							<span class="input-group-btn">
-								<?php echo JHtml::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
+								<?php echo HTMLHelper::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
 							</span>
 
 							<span class="input-group-btn">
-								<?php echo JHtml::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
+								<?php echo HTMLHelper::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
 							</span>
 
 							<span>
-								<button class="btn btn-primary" id="clear-calendar" type="button" title="<?php echo JText::_('JSEARCH_CALENDAR_CLEAR'); ?>">
+								<button class="btn btn-primary" id="clear-calendar" type="button" title="<?php echo Text::_('JSEARCH_CALENDAR_CLEAR'); ?>">
 									<i class="fa fa-remove"></i>
 								</button>
 							</span>
@@ -75,7 +79,7 @@ $listDirn  = $this->state->get('list.direction');
 								<li>
 									<div class="input-group-btn hidden-xs">
 										<?php
-										echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
+										echo HTMLHelper::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
 										$currency = $this->state->get('filter.currency');
 										?>
 									</div>
@@ -89,7 +93,7 @@ $listDirn  = $this->state->get('list.direction');
 								<li>
 									<div class="input-group-btn">
 										<?php
-										echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "clientType", "clientValue", $this->state->get('filter.vendor_client'));
+										echo HTMLHelper::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "clientType", "clientValue", $this->state->get('filter.vendor_client'));
 										$clientFilter = $this->state->get('filter.vendor_client');
 										?>
 									</div>
@@ -101,11 +105,11 @@ $listDirn  = $this->state->get('list.direction');
 							<li>
 								<div class="input-group-btn hidden-xs">
 									<?php
-									$transactionType[] = array("transactionType" => JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'), "transactionValue" => "0");
-									$transactionType[] = array("transactionType" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'), "transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
-									$transactionType[] = array("transactionType" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'), "transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
+									$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'), "transactionValue" => "0");
+									$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'), "transactionValue" => Text::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
+									$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'), "transactionValue" => Text::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
 
-									echo JHtml::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));
+									echo HTMLHelper::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));
 
 									$transactionType = $this->state->get('filter.transactionType'); ?>
 								</div>
@@ -114,7 +118,7 @@ $listDirn  = $this->state->get('list.direction');
 							<li class="pr-0">
 								<div  class="input-group-btn hidden">
 									<label for="limit" >
-										<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+										<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
 									</label>
 									<?php echo $this->pagination->getLimitBox();?>
 								</div>
@@ -132,7 +136,7 @@ $listDirn  = $this->state->get('list.direction');
 						?>
 						<div class="col-xs-12">
 							<div class="alert alert-info">
-								<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
+								<?php echo Text::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 							</div>
 						</div>
 						<?php
@@ -142,8 +146,8 @@ $listDirn  = $this->state->get('list.direction');
 						?>
 						<div class="col-xs-12">
 							<div class="alert alert-info">
-								<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE'); ?>
-								<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE'); ?>
+								<?php echo Text::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE'); ?>
+								<?php echo Text::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE'); ?>
 							</div>
 						</div>
 
@@ -154,11 +158,11 @@ $listDirn  = $this->state->get('list.direction');
 										<thead>
 											<tr>
 												<th width="1%">
-													<?php echo JText::_('COM_TJVENDORS_VENDORS_SR_NO');?>
+													<?php echo Text::_('COM_TJVENDORS_VENDORS_SR_NO');?>
 												</th>
 
 												<th width="5%">
-													<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder);?>
+													<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder);?>
 												</th>
 
 												<?php
@@ -166,7 +170,7 @@ $listDirn  = $this->state->get('list.direction');
 												{
 													?>
 													<th width="5%">
-														<?php echo JText::_('COM_TJVENDORS_REPORTS_CLIENT');?>
+														<?php echo Text::_('COM_TJVENDORS_REPORTS_CLIENT');?>
 													</th>
 													<?php
 												}
@@ -175,7 +179,7 @@ $listDirn  = $this->state->get('list.direction');
 												{
 													?>
 													<th width="5%">
-														<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
+														<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
 													</th>
 													<?php
 												}
@@ -184,7 +188,7 @@ $listDirn  = $this->state->get('list.direction');
 												{
 													?>
 													<th class='left' width="10%">
-														<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
+														<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
 													</th>
 													<?php
 												}
@@ -193,30 +197,30 @@ $listDirn  = $this->state->get('list.direction');
 												{
 													?>
 													<th class='left' width="10%">
-														<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
+														<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
 													</th>
 													<?php
 												}
 												?>
 
 												<th width="10%">
-													<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID', 'pass.`reference_order_id`', $listDirn, $listOrder);?>
+													<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID', 'pass.`reference_order_id`', $listDirn, $listOrder);?>
 												</th>
 
 												<th width="15%">
-													<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder);?>
+													<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder);?>
 												</th>
 
 												<th width="10%">
-													<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_REPORTS_PENDING_AMOUNT', 'pass.`total`', $listDirn, $listOrder);?>
+													<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_PENDING_AMOUNT', 'pass.`total`', $listDirn, $listOrder);?>
 												</th>
 
 												<th>
-													<?php echo JText::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS'); ?>
+													<?php echo Text::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS'); ?>
 												</th>
 
 												<th>
-													<?php echo JText::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE'); ?>
+													<?php echo Text::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE'); ?>
 												</th>
 											</tr>
 										</thead>
@@ -227,19 +231,19 @@ $listDirn  = $this->state->get('list.direction');
 													<div class="pull-right">
 														<tr>
 															<th colspan="12">
-																<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['creditAmount'] . '&nbsp' . $currency; ?>
+																<?php echo Text::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['creditAmount'] . '&nbsp' . $currency; ?>
 															</th>
 														</tr>
 
 														<tr>
 															<th colspan="12">
-																<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount'] . '&nbsp' . $currency; ?>
+																<?php echo Text::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount'] . '&nbsp' . $currency; ?>
 															</th>
 														</tr>
 
 														<tr>
 															<th colspan="12">
-																<?php echo JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount'] . '&nbsp' . $currency; ?>
+																<?php echo Text::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount'] . '&nbsp' . $currency; ?>
 															</th>
 														</tr>
 													</div>
@@ -261,7 +265,7 @@ $listDirn  = $this->state->get('list.direction');
 														<?php echo $this->pagination->getRowOffset($i);?>
 													</td>
 
-													<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_ID'); ?>">
+													<td data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_TRANSACTION_ID'); ?>">
 														<?php echo htmlspecialchars($row->transaction_id, ENT_COMPAT, 'UTF-8'); ?>
 													</td>
 
@@ -269,7 +273,7 @@ $listDirn  = $this->state->get('list.direction');
 													if ($this->vendorClient == '' && $clientFilter == 'all')
 													{
 														?>
-														<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_CLIENT');?>">
+														<td data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_CLIENT');?>">
 															<?php
 															$tjvendorFrontHelper = new TjvendorFrontHelper;
 															$client = $tjvendorFrontHelper->getClientName($row->client);
@@ -282,7 +286,7 @@ $listDirn  = $this->state->get('list.direction');
 													if ($currency == '0')
 													{
 														?>
-														<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_CURRENCY');?>">
+														<td data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_CURRENCY');?>">
 															<?php echo htmlspecialchars($row->currency, ENT_COMPAT, 'UTF-8');?>
 														</td>
 														<?php
@@ -291,7 +295,7 @@ $listDirn  = $this->state->get('list.direction');
 													if ($transactionType == "Credit" || empty($transactionType))
 													{
 														?>
-														<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT');?>">
+														<td data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT');?>">
 															<?php
 															if ($row->credit <='0')
 															{
@@ -309,26 +313,26 @@ $listDirn  = $this->state->get('list.direction');
 													if ($transactionType == "Debit" || empty($transactionType))
 													{
 														?>
-														<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT');?>">
+														<td data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_DEBIT_AMOUNT');?>">
 															<?php echo htmlspecialchars($row->debit, ENT_COMPAT, 'UTF-8');?>
 														</td>
 														<?php
 													}
 													?>
 
-													<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID');?>">
+													<td data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID');?>">
 														<?php echo htmlspecialchars($row->reference_order_id, ENT_COMPAT, 'UTF-8');?>
 													</td>
 
-													<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_TRANSACTION_TIME');?>">
+													<td data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_TRANSACTION_TIME');?>">
 														<?php echo htmlspecialchars($row->transaction_time, ENT_COMPAT, 'UTF-8');?>
 													</td>
 
-													<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT');?>">
+													<td data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_PENDING_AMOUNT');?>">
 														<?php echo htmlspecialchars(abs($row->total), ENT_COMPAT, 'UTF-8');?>
 													</td>
 
-													<td data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS');?>">
+													<td data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_ENTRY_STATUS');?>">
 														<?php
 														$status = json_decode($row->params, true);
 
@@ -336,21 +340,21 @@ $listDirn  = $this->state->get('list.direction');
 														{
 															if ($row->status == 1)
 															{
-																echo JText::_('COM_TJVENDOR_PAYOUT_DONE');
+																echo Text::_('COM_TJVENDOR_PAYOUT_DONE');
 															}
 															else
 															{
-																echo JText::_('COM_TJVENDOR_PAYOUT_PENDING');
+																echo Text::_('COM_TJVENDOR_PAYOUT_PENDING');
 															}
 														}
 														elseif ($status['entry_status'] == "credit_for_ticket_buy")
 														{
-															echo JText::_('COM_TJVENDOR_CREDIT_DONE');
+															echo Text::_('COM_TJVENDOR_CREDIT_DONE');
 														}
 														?>
 													</td>
 
-													<td class="center" data-title="<?php echo JText::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE');?>">
+													<td class="center" data-title="<?php echo Text::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE');?>">
 														<?php
 														if (!empty($status['customer_note']))
 														{
@@ -382,20 +386,20 @@ $listDirn  = $this->state->get('list.direction');
 			<input type="hidden" name="boxchecked" value="0"/>
 			<input type="hidden" name="filter_order" value="<?php echo $listOrder;?>"/>
 			<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
-			<?php echo JHtml::_('form.token');?>
+			<?php echo HTMLHelper::_('form.token');?>
 		</form>
 		<?php
 	}
 	elseif (!$this->vendor_id &&  $user_id)
 	{
 		?>
-		<div class="alert alert-info"><?php echo JText::_('COM_TJVENDOR_REPORTS_ERROR');?></div>
+		<div class="alert alert-info"><?php echo Text::_('COM_TJVENDOR_REPORTS_ERROR');?></div>
 		<?php
 	}
 	else
 	{
-		$link = JRoute::_('index.php?option=com_users');
-		$app = JFactory::getApplication();
+		$link = Route::_('index.php?option=com_users');
+		$app = Factory::getApplication();
 		$app->redirect($link);
 	}
 	?>

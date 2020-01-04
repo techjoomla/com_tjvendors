@@ -10,6 +10,8 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Factory;
 
 jimport('joomla.application.component.controllerform');
 
@@ -18,7 +20,7 @@ jimport('joomla.application.component.controllerform');
  *
  * @since  1.6
  */
-class TjvendorsControllerPayout extends JControllerForm
+class TjvendorsControllerPayout extends FormController
 {
 	/**
 	 * Constructor
@@ -28,7 +30,7 @@ class TjvendorsControllerPayout extends JControllerForm
 	public function __construct()
 	{
 		$this->view_list = 'payouts';
-		$this->input = JFactory::getApplication()->input;
+		$this->input = Factory::getApplication()->input;
 
 		if (empty($this->client))
 		{
@@ -48,7 +50,7 @@ class TjvendorsControllerPayout extends JControllerForm
 
 	protected function getRedirectToListAppend()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$client = $input->get('client', '', 'STRING');
 		$append = parent::getRedirectToListAppend();
@@ -80,7 +82,7 @@ class TjvendorsControllerPayout extends JControllerForm
 	 */
 	public function changePayoutStatus()
 	{
-		$input  = JFactory::getApplication()->input->post;
+		$input  = Factory::getApplication()->input->post;
 		$payout_id = $input->get('payout_id', '', 'STRING');
 		$paidUnpaid = $input->get('paidUnpaid', '', 'STRING');
 		$model = $this->getModel('Payout');

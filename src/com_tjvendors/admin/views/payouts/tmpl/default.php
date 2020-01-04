@@ -9,32 +9,37 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 
-JHtml::_('bootstrap.tooltip');
-JHtml::_('behavior.multiselect');
-JHtml::_('formbehavior.chosen', 'select');
+HTMLHelper::_('bootstrap.tooltip');
+HTMLHelper::_('behavior.multiselect');
+HTMLHelper::_('formbehavior.chosen', 'select');
 
 JLoader::import('vendor', JPATH_SITE . '/components/com_tjvendors/models');
 $tjvendorsModelVendor = new TjvendorsModelVendor;
 
 // Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
-$document->addStyleSheet(JUri::root() . 'media/com_tjvendors/css/list.css');
+$document = Factory::getDocument();
+$document->addStyleSheet(Uri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
+$document->addStyleSheet(Uri::root() . 'media/com_tjvendors/css/list.css');
 
-$user      = JFactory::getUser();
+$user      = Factory::getUser();
 $userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
 $saveOrder = $listOrder == 'a.`ordering`';
-$input = JFactory::getApplication()->input;
+$input = Factory::getApplication()->input;
 $client = $input->get('client', '', 'STRING');
 
 if ($saveOrder)
 {
 	$saveOrderingUrl = 'index.php?option=com_tjvendors&task=payouts.saveOrderAjax&tmpl=component';
-	JHtml::_('sortablelist.sortable', 'payoutList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+	HTMLHelper::_('sortablelist.sortable', 'payoutList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 
 ?>
@@ -65,7 +70,7 @@ if (!empty($this->extra_sidebar))
 }
 ?>
 
-<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')); ?>"
+<form action="<?php echo Route::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
 if(!empty($this->sidebar))
@@ -86,30 +91,30 @@ else
 		<?php
 			if($this->bulkPayoutStatus != 0)
 			{
-				echo JText::_('COM_TJVENDOR_PAYOUTS_BULK_PAYOUT_NOTICE');
+				echo Text::_('COM_TJVENDOR_PAYOUTS_BULK_PAYOUT_NOTICE');
 			}
 			else
 			{
-				echo JText::_('COM_TJVENDOR_PAYOUTS_SINGLE_CLIENT_PAYOUT_NOTICE');
+				echo Text::_('COM_TJVENDOR_PAYOUTS_SINGLE_CLIENT_PAYOUT_NOTICE');
 			}
 		?>
 	</div>
 	<div id="filter-bar" class="btn-toolbar">
 		<div class="filter-search btn-group pull-left">
 			<label for="filter_search" class="element-invisible">
-				<?php echo JText::_('JSEARCH_FILTER'); ?>
+				<?php echo Text::_('JSEARCH_FILTER'); ?>
 			</label>
 			<input type="text" name="filter_search" id="filter_search"
-				placeholder="<?php echo JText::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_VENDOR_TITLE'); ?>"
+				placeholder="<?php echo Text::_('COM_TJVENDOR_PAYOUTS_SEARCH_BY_VENDOR_TITLE'); ?>"
 				value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-				title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
+				title="<?php echo Text::_('JSEARCH_FILTER'); ?>"/>
 		</div>
 
 		<div class="btn-group pull-left">
-			<button class="btn hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>">
+			<button class="btn hasTooltip" type="submit" title="<?php echo Text::_('JSEARCH_FILTER_SUBMIT'); ?>">
 				<i class="icon-search"></i>
 			</button>
-			<button class="btn hasTooltip" id="clear-search-button" type="button" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>">
+			<button class="btn hasTooltip" id="clear-search-button" type="button" title="<?php echo Text::_('JSEARCH_FILTER_CLEAR'); ?>">
 				<i class="icon-remove"></i>
 			</button>
 		</div>
@@ -121,11 +126,11 @@ else
 			<?php
 			if ($this->bulkPayoutStatus != 0)
 			{
-				echo JText::_('COM_TJVENDOR_PAYOUTS_BULK_PAYOUT_NOTICE');
+				echo Text::_('COM_TJVENDOR_PAYOUTS_BULK_PAYOUT_NOTICE');
 			}
 			else
 			{
-				echo JHtml::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
+				echo HTMLHelper::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
 				$filterClient = $this->state->get('filter.vendor_client');
 			}
 			?>
@@ -138,7 +143,7 @@ else
 				<div class="btn-group pull-right hidden-phone">
 					<?php
 						// Making custom filter list
-					 echo JHtml::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
+					 echo HTMLHelper::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 				</div>
 		<?php
 			}
@@ -154,28 +159,28 @@ else
 				<tr>
 					<?php if (isset($this->items[0]->ordering)): ?>
 					<th width="1%" class="nowrap center hidden-phone">
-						<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+						<?php echo HTMLHelper::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 					</th>
 					<?php endif; ?>
 
 					<?php if (isset($this->items[0]->state)){} ?>
 
 					<th width="8%">
-						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th  width="5%">
-						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_CURRENCY', 'fees.`currency`', $listDirn, $listOrder); ?>
 					</th>
 					<th width="10%">
-						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_PAID_UPTO');  ?>
+						<?php echo Text::_('COM_TJVENDORS_PAYOUTS_PAID_UPTO');  ?>
 					</th>
 					<th  width="10%">
-						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 					</th>
 
 					<th  width="10%">
-						<?php echo JText::_('COM_TJVENDORS_PAYOUTS_ACTION'); ?>
+						<?php echo Text::_('COM_TJVENDORS_PAYOUTS_ACTION'); ?>
 					</th>
 				</tr>
 			</thead>
@@ -260,7 +265,7 @@ else
 						</td>
 
 						<td>
-							<a href= "<?php echo JRoute::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' . $item->vendor_id . '&id=' . $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>"
+							<a href= "<?php echo Route::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' . $item->vendor_id . '&id=' . $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>"
 							<button class="validate btn btn-primary">PAY</button>
 						</td>
 					</tr>
@@ -274,7 +279,7 @@ else
 		{
 		?>
 			<div class="alert alert-no-items">
-				<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
+				<?php echo Text::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 			</div>
 		<?php
 		}
@@ -283,6 +288,6 @@ else
 		<input type="hidden" name="boxchecked" value="0"/>
 		<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</div>
 </form>

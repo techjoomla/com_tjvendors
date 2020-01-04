@@ -10,6 +10,13 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
 
 jimport('joomla.application.component.modellist');
 
@@ -18,7 +25,7 @@ jimport('joomla.application.component.modellist');
  *
  * @since  1.6
  */
-class TjvendorsModelVendors extends JModelList
+class TjvendorsModelVendors extends ListModel
 {
 /**
 	* Constructor.
@@ -58,7 +65,7 @@ class TjvendorsModelVendors extends JModelList
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication('administrator');
+		$app = Factory::getApplication('administrator');
 
 		// Set ordering.
 		$orderCol = $app->getUserStateFromRequest($this->context . '.filter_order', 'filter_order');
@@ -78,7 +85,7 @@ class TjvendorsModelVendors extends JModelList
 		$this->setState('filter.state', $published);
 
 		// Load the parameters.
-		$params = JComponentHelper::getParams('com_tjvendors');
+		$params = ComponentHelper::getParams('com_tjvendors');
 		$this->setState('params', $params);
 
 		// List state information.
@@ -95,7 +102,7 @@ class TjvendorsModelVendors extends JModelList
 	protected function getListQuery()
 	{
 		// Get client
-		$input  = JFactory::getApplication()->input;
+		$input  = Factory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
 
 		// Create a new query object.
@@ -163,7 +170,7 @@ class TjvendorsModelVendors extends JModelList
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (empty($result))
@@ -206,9 +213,9 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function deleteClientFromVendor($vendor_id, $client)
 	{
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
-		$tjvendorsModelVendor     = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
-		$tjvendorsModelVendorFees = JModelLegacy::getInstance('VendorFees', 'TjvendorsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
+		$tjvendorsModelVendor     = BaseDatabaseModel::getInstance('Vendor', 'TjvendorsModel');
+		$tjvendorsModelVendorFees = BaseDatabaseModel::getInstance('VendorFees', 'TjvendorsModel');
 		$vendorData               = $tjvendorsModelVendor->getItem($vendor_id);
 		$db                       = $this->getDbo();
 
@@ -226,7 +233,7 @@ class TjvendorsModelVendors extends JModelList
 				// If Vendor Payable amount is remaining then don't allow to delete vendor
 				if (!empty($result))
 				{
-					JFactory::getApplication()->enqueueMessage(sprintf(JText::_("COM_TJVENDORS_VENDOR_DELETE_ERROR_MESSAGE"), $vendorData->vendor_title), 'error');
+					Factory::getApplication()->enqueueMessage(sprintf(Text::_("COM_TJVENDORS_VENDOR_DELETE_ERROR_MESSAGE"), $vendorData->vendor_title), 'error');
 
 					return false;
 				}
@@ -250,7 +257,7 @@ class TjvendorsModelVendors extends JModelList
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (empty($result))
@@ -266,7 +273,7 @@ class TjvendorsModelVendors extends JModelList
 		}
 
 		$dispatcher = JDispatcher::getInstance();
-		JPluginHelper::importPlugin('tjvendors');
+		PluginHelper::importPlugin('tjvendors');
 		$dispatcher->trigger('tjvendorOnAfterVendorDelete', array($vendorData, $client));
 	}
 
@@ -283,12 +290,12 @@ class TjvendorsModelVendors extends JModelList
 	 */
 	public function setItemState($items, $state, $client)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		foreach ($items as $id)
 		{
-			JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
-			$tjvendorsTablevendorclientxref = JTable::getInstance('vendorclientxref', 'TjvendorsTable', array());
+			Table::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
+			$tjvendorsTablevendorclientxref = Table::getInstance('vendorclientxref', 'TjvendorsTable', array());
 			$tjvendorsTablevendorclientxref->load(array('vendor_id' => $id, 'client'    => $client));
 			$updateState = new stdClass;
 
@@ -297,7 +304,7 @@ class TjvendorsModelVendors extends JModelList
 			$updateState->state = $state;
 
 			// Update their details in the users table using id as the primary key.
-			JFactory::getDbo()->updateObject('#__vendor_client_xref', $updateState, 'id');
+			Factory::getDbo()->updateObject('#__vendor_client_xref', $updateState, 'id');
 
 			/* Send Mail when Admin users change vendor state of vendor, these mails are not needed.. */
 			/*
@@ -315,7 +322,7 @@ class TjvendorsModelVendors extends JModelList
 		}
 
 		$dispatcher = JDispatcher::getInstance();
-		JPluginHelper::importPlugin('tjvendors');
+		PluginHelper::importPlugin('tjvendors');
 		$dispatcher->trigger('tjVendorsOnAfterVendorStateChange', array($items, $state, $client));
 
 		return true;

@@ -9,6 +9,9 @@
  */
 
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
 
 jimport('joomla.application.component.modellist');
 
@@ -17,7 +20,7 @@ jimport('joomla.application.component.modellist');
  *
  * @since  1.6
  */
-class TjvendorsModelReports extends JModelList
+class TjvendorsModelReports extends ListModel
 {
 /**
 	* Constructor.
@@ -65,7 +68,7 @@ class TjvendorsModelReports extends JModelList
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication('administrator');
+		$app = Factory::getApplication('administrator');
 
 		// Set ordering.
 		$orderCol = $app->getUserStateFromRequest($this->context . '.filter_order', 'filter_order');
@@ -103,7 +106,7 @@ class TjvendorsModelReports extends JModelList
 		$this->setState('filter.search', $search);
 
 		// Load the parameters.
-		$params = JComponentHelper::getParams('com_tjvendors');
+		$params = ComponentHelper::getParams('com_tjvendors');
 		$this->setState('params', $params);
 
 		// List state information.
@@ -125,7 +128,7 @@ class TjvendorsModelReports extends JModelList
 		$currency = $this->getState('filter.currency', '');
 		$vendor_id = $this->getState('filter.vendor_id', '');
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		$query = $db->getQuery(true);
 		$query->select(array('vendors.vendor_id', 'vendors.vendor_title', 'pass.*'));

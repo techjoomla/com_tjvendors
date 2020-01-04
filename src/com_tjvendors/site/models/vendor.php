@@ -10,6 +10,12 @@
 
 // No direct access.
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
 
 jimport('joomla.application.component.modeladmin');
 JLoader::import('fronthelper', JPATH_SITE . '/components/com_tjvendors/helpers');
@@ -20,7 +26,7 @@ JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/he
  *
  * @since  1.6
  */
-class TjvendorsModelVendor extends JModelAdmin
+class TjvendorsModelVendor extends AdminModel
 {
 	/**
 	 * @var    string  client data
@@ -53,7 +59,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * @param   string  $prefix  A prefix for the table class name. Optional.
 	 * @param   array   $config  Configuration array for model. Optional.
 	 *
-	 * @return    JTable    A database object
+	 * @return    Table    A database object
 	 *
 	 * @since    1.6
 	 */
@@ -61,9 +67,9 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		// Load tables to fix - unable to load the vendors data using the model object,
 		// When it is created outside the tjvendors component
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 
-		return JTable::getInstance($type, $prefix, $config);
+		return Table::getInstance($type, $prefix, $config);
 	}
 
 	/**
@@ -72,14 +78,14 @@ class TjvendorsModelVendor extends JModelAdmin
 	 * @param   array    $data      An optional array of data for the form to interogate.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  JForm  A JForm object on success, false on failure
+	 * @return  Form  A Form object on success, false on failure
 	 *
 	 * @since    1.6
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get the form.
 		$form = $this->loadForm(
@@ -106,11 +112,11 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	protected function loadFormData()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$input = $app->input;
 		$client = $input->get('client', '', 'STRING');
 
-		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
+		$data = Factory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
 
 		if (empty($data))
 		{
@@ -152,8 +158,8 @@ class TjvendorsModelVendor extends JModelAdmin
 	{
 		$item = parent::getItem($pk);
 
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
-		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorXref = Table::getInstance('VendorClientXref', 'TjvendorsTable');
 		$vendorXref->load(array('vendor_id' => $item->vendor_id));
 		$item->params = $vendorXref->params;
 
@@ -173,7 +179,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function addMultiVendor($vendor_id, $payment_gateway, $paymentDetails)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('max(' . $db->quoteName('id') . ')');
 		$query->from($db->quoteName('#__vendor_client_xref'));
@@ -196,7 +202,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		return true;
@@ -213,7 +219,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function checkDuplicateUser($user_id)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_vendors'));
@@ -231,7 +237,7 @@ class TjvendorsModelVendor extends JModelAdmin
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (empty($rows))
@@ -257,7 +263,7 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public function generateGatewayFields($payment_gateway, $parentTag)
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$client = $app->getUserStateFromRequest('vendor.client', 'vendor.client');
 		$vendor_id = $app->getUserStateFromRequest('vendor.vendor_id', 'vendor.vendor_id');
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
@@ -274,7 +280,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 		if (jFile::exists($form_path))
 		{
-			$form = JForm::getInstance($test, $form_path, array('control' => $parentTag));
+			$form = Form::getInstance($test, $form_path, array('control' => $parentTag));
 
 			if ($vendor_id)
 			{
@@ -334,9 +340,9 @@ class TjvendorsModelVendor extends JModelAdmin
 	public function save($data)
 	{
 		$table    = $this->getTable();
-		$db       = JFactory::getDbo();
-		$user     = JFactory::getUser();
-		$app      = JFactory::getApplication();
+		$db       = Factory::getDbo();
+		$user     = Factory::getUser();
+		$app      = Factory::getApplication();
 		$input    = $app->input;
 		$layout   = $input->get('layout', '', 'STRING');
 		$xrefData = array();
@@ -374,7 +380,7 @@ class TjvendorsModelVendor extends JModelAdmin
 
 			if ($authorised !== true)
 			{
-				throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+				throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 			}
 		}
 
@@ -424,7 +430,7 @@ class TjvendorsModelVendor extends JModelAdmin
 				$client_entry->approved = $data['approved'];
 
 				// Insert the object into the user profile table.
-				JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+				Factory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
 				$tjvendorsTriggerVendor->onAfterVendorSave($data, true);
 
 				return true;
@@ -479,7 +485,7 @@ class TjvendorsModelVendor extends JModelAdmin
 					$client_entry->approved = $data['approved'];
 
 					// Insert the object into the vendor_client_xref table.
-					$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+					$result = Factory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
 				}
 
 				/* Send mail on vendor creation */
@@ -552,14 +558,14 @@ class TjvendorsModelVendor extends JModelAdmin
 	 */
 	public static function getPayableAmount($vendorId, $client = '', $currency = '')
 	{
-		$date              = JFactory::getDate();
-		$com_params        = JComponentHelper::getParams('com_tjvendors');
+		$date              = Factory::getDate();
+		$com_params        = ComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus  = $com_params->get('bulk_payout');
 		$payoutDayLimit  = $com_params->get('payout_limit_days', '0', 'INT');
 		$payoutDateLimit = $date->modify("-" . $payoutDayLimit . " day");
 
 		// Query to get the credit amount
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('SUM(credit) as credit');
 		$query->select('SUM(debit) as debit');
@@ -630,8 +636,8 @@ class TjvendorsModelVendor extends JModelAdmin
 			return false;
 		}
 
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
-		$vendorXref = JTable::getInstance('VendorClientXref', 'TjvendorsTable');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorXref = Table::getInstance('VendorClientXref', 'TjvendorsTable');
 		$vendorXref->load(array('id' => $xrefId));
 		$item = parent::getItem($vendorXref->vendor_id);
 

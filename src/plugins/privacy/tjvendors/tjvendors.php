@@ -10,6 +10,9 @@
 
 // No direct access.
 defined('_JEXEC') or die();
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\User\User;
+
 jimport('joomla.application.component.model');
 
 JLoader::register('PrivacyPlugin', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php');
@@ -51,8 +54,8 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 		$this->loadLanguage();
 
 		return array(
-			JText::_('PLG_PRIVACY_TJVENDORS') => array(
-				JText::_('PLG_PRIVACY_TJVENDORS_PRIVACY_CAPABILITY_USER_DETAIL'),
+			Text::_('PLG_PRIVACY_TJVENDORS') => array(
+				Text::_('PLG_PRIVACY_TJVENDORS_PRIVACY_CAPABILITY_USER_DETAIL'),
 			),
 		);
 	}
@@ -68,21 +71,21 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	 * - #__tjvendors_passbook
 	 *
 	 * @param   PrivacyTableRequest  $request  The request record being processed
-	 * @param   JUser                $user     The user account associated with this request if available
+	 * @param   User                $user     The user account associated with this request if available
 	 *
 	 * @return  PrivacyExportDomain[]
 	 *
 	 * @since   1.3.1
 	 */
-	public function onPrivacyExportRequest(PrivacyTableRequest $request, JUser $user = null)
+	public function onPrivacyExportRequest(PrivacyTableRequest $request, User $user = null)
 	{
 		if (!$user)
 		{
 			return array();
 		}
 
-		/** @var JTableUser $userTable */
-		$userTable = JUser::getTable();
+		/** @var User $userTable */
+		$userTable = User::getTable();
 		$userTable->load($user->id);
 
 		// Create the domain for the TJVendors vednor data
@@ -107,13 +110,13 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	/**
 	 * Create the domain for the TJvendor user data
 	 *
-	 * @param   JTableUser  $user  The JTableUser object to process
+	 * @param   User  $user  The User object to process
 	 *
 	 * @return  PrivacyExportDomain
 	 *
 	 * @since  1.3.1
 	 */
-	private function createVendorDomain(JTableUser $user)
+	private function createVendorDomain(User $user)
 	{
 		$domain = $this->createDomain('TJvendor user', 'TJvendor user data');
 
@@ -135,13 +138,13 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	/**
 	 * Create the domain for the TJvendor to get vendor client data
 	 *
-	 * @param   JTableUser  $user  The JTableUser object to process
+	 * @param   User  $user  The User object to process
 	 *
 	 * @return  PrivacyExportDomain
 	 *
 	 * @since  1.3.1
 	 */
-	private function createVendorClientDomain(JTableUser $user)
+	private function createVendorClientDomain(User $user)
 	{
 		$domain = $this->createDomain('TJvendor user client', 'TJvendor user clients data');
 
@@ -175,13 +178,13 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	/**
 	 * Create the domain for the TJvendor to get vendor Fee data
 	 *
-	 * @param   JTableUser  $user  The JTableUser object to process
+	 * @param   User  $user  The User object to process
 	 *
 	 * @return  PrivacyExportDomain
 	 *
 	 * @since  1.3.1
 	 */
-	private function createVendorFessDomain(JTableUser $user)
+	private function createVendorFessDomain(User $user)
 	{
 		$domain = $this->createDomain('TJvendor user fees', 'TJvendor user fees data');
 
@@ -215,13 +218,13 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	/**
 	 * Create the domain for the TJvendor to get vendor passbook data
 	 *
-	 * @param   JTableUser  $user  The JTableUser object to process
+	 * @param   User  $user  The User object to process
 	 *
 	 * @return  PrivacyExportDomain
 	 *
 	 * @since  1.3.1
 	 */
-	private function createVendorPassbookDomain(JTableUser $user)
+	private function createVendorPassbookDomain(User $user)
 	{
 		$domain = $this->createDomain('TJvendor user passbook', 'TJvendor user passbook data');
 
@@ -258,13 +261,13 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	 * This event will not allow a super user account to be removed
 	 *
 	 * @param   PrivacyTableRequest  $request  The request record being processed
-	 * @param   JUser                $user     The user account associated with this request if available
+	 * @param   User                $user     The user account associated with this request if available
 	 *
 	 * @return  PrivacyRemovalStatus
 	 *
 	 * @since   1.3.1
 	 */
-	public function onPrivacyCanRemoveData(PrivacyTableRequest $request, JUser $user = null)
+	public function onPrivacyCanRemoveData(PrivacyTableRequest $request, User $user = null)
 	{
 		$status = new PrivacyRemovalStatus;
 
@@ -283,7 +286,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 		if ($vendorId)
 		{
 			$status->canRemove = false;
-			$status->reason    = JText::_('PLG_PRIVACY_TJVENDORS_ERROR_CANNOT_REMOVE_USER_DATA');
+			$status->reason    = Text::_('PLG_PRIVACY_TJVENDORS_ERROR_CANNOT_REMOVE_USER_DATA');
 		}
 
 		return $status;

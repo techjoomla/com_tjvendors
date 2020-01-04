@@ -8,6 +8,7 @@
  */
 
 defined('_JEXEC') or die;
+use Joomla\CMS\Form\Form;
 
 /*
  * As Joomla doesn't provide bootstrap 3 layout and TJVendor run on bootstrap 3 templates added the overrides for the Joomla subform layout
@@ -15,7 +16,7 @@ defined('_JEXEC') or die;
 /**
  * Make thing clear
  *
- * @var JForm   $form       The form instance for render the section
+ * @var Form   $form       The form instance for render the section
  * @var string  $basegroup  The base group name
  * @var string  $group      Current group name
  * @var array   $buttons    Array of the buttons that will be rendered

@@ -10,6 +10,7 @@
 
 // No direct access.
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\Controller\AdminController;
 
 jimport('joomla.application.component.controlleradmin');
 
@@ -18,7 +19,7 @@ jimport('joomla.application.component.controlleradmin');
  *
  * @since  1.6
  */
-class TjvendorsControllerReports extends JControllerAdmin
+class TjvendorsControllerReports extends AdminController
 {
 	/**
 	 * Proxy for getModel.

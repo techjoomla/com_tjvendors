@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Language\Text;
 
 /**
  * Tjvendors Listhelper.
@@ -34,15 +35,15 @@ abstract class JHtmlListhelper
 	public static function toggle($view, $field, $i, $value = 0)
 	{
 		$states = array(
-			0 => array('icon-remove', JText::_('Toggle'), 'inactive btn-danger'),
-			1 => array('icon-checkmark', JText::_('Toggle'), 'active btn-success'),
+			0 => array('icon-remove', Text::_('Toggle'), 'inactive btn-danger'),
+			1 => array('icon-checkmark', Text::_('Toggle'), 'active btn-success'),
 		);
 
 		$state  = \Joomla\Utilities\ArrayHelper::getValue($states, (int) $value, $states[0]);
 		$text   = '<span aria-hidden="true" class="' . $state[0] . '"></span>';
 		$html   = '<a href="#" class="btn btn-micro ' . $state[2] . '"';
 		$html  .= 'onclick="return toggleField(\'cb' . $i . '\',\'' . $view . '.toggle\',\'' .
-		$field . '\')" title="' . JText::_($state[1]) . '">' . $text . '</a>';
+		$field . '\')" title="' . Text::_($state[1]) . '">' . $text . '</a>';
 
 		return $html;
 	}

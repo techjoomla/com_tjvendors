@@ -8,6 +8,8 @@
  */
 
 defined('_JEXEC') or die;
+use Joomla\CMS\Form\Form;
+
 /*
  * As Joomla doesn't provide bootstrap 3 layout and TJVendor run on bootstrap 3 templates added the overrides for the Joomla subform layout
 */
@@ -15,8 +17,8 @@ defined('_JEXEC') or die;
 /**
  * Make thing clear
  *
- * @var JForm   $tmpl             The Empty form for template
- * @var array   $forms            Array of JForm instances for render the rows
+ * @var Form   $tmpl             The Empty form for template
+ * @var array   $forms            Array of Form instances for render the rows
  * @var bool    $multiple         The multiple state for the form field
  * @var int     $min              Count of minimum repeating in multiple mode
  * @var int     $max              Count of maximum repeating in multiple mode

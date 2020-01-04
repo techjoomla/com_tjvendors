@@ -10,6 +10,15 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Access\Rules;
+use Joomla\CMS\Access\Rule;
+use Joomla\CMS\Filter\OutputFilter;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Filesystem\File;
 
 use Joomla\Utilities\ArrayHelper;
 
@@ -18,7 +27,7 @@ use Joomla\Utilities\ArrayHelper;
  *
  * @since  1.6
  */
-class TjvendorsTablevendor extends JTable
+class TjvendorsTablevendor extends Table
 {
 	/**
 	 * Constructor
@@ -27,7 +36,7 @@ class TjvendorsTablevendor extends JTable
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendor', array('typeAlias' => 'com_tjvendors.vendor'));
+		JObserverMapper::addObserverClassToClass('ContentHistory', 'TjvendorsTablevendor', array('typeAlias' => 'com_tjvendors.vendor'));
 
 		parent::__construct('#__tjvendors_vendors', 'vendor_id', $db);
 	}
@@ -40,32 +49,32 @@ class TjvendorsTablevendor extends JTable
 	 *
 	 * @return  null|string  null is operation was satisfactory, otherwise returns an error
 	 *
-	 * @see     JTable:bind
+	 * @see     Table:bind
 	 * @since   1.5
 	 */
 	public function bind($array, $ignore = '')
 	{
 		if (isset($array['params']) && is_array($array['params']))
 		{
-			$registry = new JRegistry;
+			$registry = new Registry;
 			$registry->loadArray($array['params']);
 			$array['params'] = (string) $registry;
 		}
 
 		if (isset($array['metadata']) && is_array($array['metadata']))
 		{
-			$registry = new JRegistry;
+			$registry = new Registry;
 			$registry->loadArray($array['metadata']);
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
+		if (!Factory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
 		{
-			$actions = JAccess::getActionsFromFile(
+			$actions = Access::getActionsFromFile(
 				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',
 				"/access/section[@name='vendor']/"
 			);
-			$default_actions = JAccess::getAssetRules('com_tjvendors.vendor.' . $array['vendor_id'])->getData();
+			$default_actions = Access::getAssetRules('com_tjvendors.vendor.' . $array['vendor_id'])->getData();
 			$array_jaccess   = array();
 
 			foreach ($actions as $action)
@@ -86,9 +95,9 @@ class TjvendorsTablevendor extends JTable
 	}
 
 	/**
-	 * This function convert an array of JAccessRule objects into an rules array.
+	 * This function convert an array of Rule objects into an rules array.
 	 *
-	 * @param   array  $jaccessrules  An array of JAccessRule objects.
+	 * @param   array  $jaccessrules  An array of Rule objects.
 	 *
 	 * @return  array
 	 */
@@ -120,7 +129,7 @@ class TjvendorsTablevendor extends JTable
 	{
 		jimport('joomla.filesystem.file');
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$this->alias = trim($this->alias);
 
 		if (!$this->alias)
@@ -130,29 +139,29 @@ class TjvendorsTablevendor extends JTable
 
 		if ($this->alias)
 		{
-			if (JFactory::getConfig()->get('unicodeslugs') == 1)
+			if (Factory::getConfig()->get('unicodeslugs') == 1)
 			{
-				$this->alias = JFilterOutput::stringURLUnicodeSlug($this->alias);
+				$this->alias = OutputFilter::stringURLUnicodeSlug($this->alias);
 			}
 			else
 			{
-				$this->alias = JFilterOutput::stringURLSafe($this->alias);
+				$this->alias = OutputFilter::stringURLSafe($this->alias);
 			}
 		}
 
 		// Check if event with same alias is present
-		$table = JTable::getInstance('Vendor', 'TjVendorsTable', array('dbo', $db));
+		$table = Table::getInstance('Vendor', 'TjVendorsTable', array('dbo', $db));
 
 		if ($table->load(array('alias' => $this->alias)) && ($table->vendor_id != $this->vendor_id || $this->vendor_id == 0))
 		{
-			$msg = JText::_('COM_TJVENDORS_SAVE_ALIAS_WARNING');
+			$msg = Text::_('COM_TJVENDORS_SAVE_ALIAS_WARNING');
 
 			while ($table->load(array('alias' => $this->alias)))
 			{
 				$this->alias = JString::increment($this->alias, 'dash');
 			}
 
-			JFactory::getApplication()->enqueueMessage($msg, 'warning');
+			Factory::getApplication()->enqueueMessage($msg, 'warning');
 		}
 
 		// If there is an ordering column and this is a new row then get the next ordering value
@@ -161,7 +170,7 @@ class TjvendorsTablevendor extends JTable
 			$this->ordering = self::getNextOrder();
 		}
 
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$vendor_id = $app->input->get('vendor_id');
 
 		$files = $app->input->files->get('jform', array(), 'raw');
@@ -181,13 +190,13 @@ class TjvendorsTablevendor extends JTable
 				switch ($fileError)
 				{
 					case 1:
-						$message = JText::_('COM_TJVENDOR_FILE_SIZE_EXCEEDS');
+						$message = Text::_('COM_TJVENDOR_FILE_SIZE_EXCEEDS');
 						break;
 					case 2:
-						$message = JText::_('COM_TJVENDOR_FILE_SIZE_EXCEEDS_FORM');
+						$message = Text::_('COM_TJVENDOR_FILE_SIZE_EXCEEDS_FORM');
 						break;
 					case 3:
-						$message = JText::_('COM_TJVENDOR_FILE_PARTIAL_UPLOAD_ERROR');
+						$message = Text::_('COM_TJVENDOR_FILE_PARTIAL_UPLOAD_ERROR');
 						break;
 				}
 
@@ -212,14 +221,14 @@ class TjvendorsTablevendor extends JTable
 
 				if ($fileSize > 26214400)
 				{
-					$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'), 'warning');
-					$this->setError(JText::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'));
+					$app->enqueueMessage(Text::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'), 'warning');
+					$this->setError(Text::_('COM_TJVENDOR_FILE_BIGGER_UPLOAD_ERROR'));
 
 					return false;
 				}
 
-				$filename   = JFile::stripExt($singleFile['name']);
-				$extension  = JFile::getExt($singleFile['name']);
+				$filename   = File::stripExt($singleFile['name']);
+				$extension  = File::getExt($singleFile['name']);
 				$fileType   = $singleFile['type'];
 				$filename   = md5(time()) . $filename;
 				$filepath   = '/media/com_tjvendor/vendor/' . $filename . '.' . $extension;
@@ -240,24 +249,24 @@ class TjvendorsTablevendor extends JTable
 						// If the mime type is not allowed we don't upload it and show the mime code error to the user
 						if ($result === false)
 						{
-							$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
-							$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+							$app->enqueueMessage(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+							$this->setError(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
 
 							return false;
 						}
 					}
 					else
 					{
-						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
-						$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+						$app->enqueueMessage(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+						$this->setError(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
 
 						return false;
 					}
 				}
 				else
 				{
-					$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
-					$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+					$app->enqueueMessage(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+					$this->setError(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
 
 					return false;
 				}
@@ -267,16 +276,16 @@ class TjvendorsTablevendor extends JTable
 				{
 					if (($extension !== "png") && ($extension !== "jpg") && ($extension !== "jpeg"))
 					{
-						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
-						$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+						$app->enqueueMessage(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+						$this->setError(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
 
 						return false;
 					}
 				}
 				else
 				{
-					$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
-					$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+					$app->enqueueMessage(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+					$this->setError(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
 
 					return false;
 				}
@@ -286,26 +295,26 @@ class TjvendorsTablevendor extends JTable
 				{
 					if (($fileType !== "image/png") && ($fileType !== "image/jpg") && ($fileType !== "image/jpeg"))
 					{
-						$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
-						$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+						$app->enqueueMessage(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+						$this->setError(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
 
 						return false;
 					}
 				}
 				else
 				{
-					$app->enqueueMessage(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
-					$this->setError(JText::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
+					$app->enqueueMessage(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'), 'warning');
+					$this->setError(Text::_('COM_TJVENDORS_WRONG_FILE_UPLOAD'));
 
 					return false;
 				}
 
-				if (! JFile::exists($uploadPath))
+				if (! File::exists($uploadPath))
 				{
-					if (! JFile::upload($fileTemp, $uploadPath))
+					if (! File::upload($fileTemp, $uploadPath))
 					{
-						$app->enqueueMessage(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'), 'warning');
-						$this->setError(JText::_('COM_TJVENDOR_FILE_MOVING_ERROR'));
+						$app->enqueueMessage(Text::_('COM_TJVENDOR_FILE_MOVING_ERROR'), 'warning');
+						$this->setError(Text::_('COM_TJVENDOR_FILE_MOVING_ERROR'));
 
 						return false;
 					}
@@ -411,7 +420,7 @@ class TjvendorsTablevendor extends JTable
 			// Nothing to set publishing state on, return false.
 			else
 			{
-				throw new Exception(500, JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+				throw new Exception(500, Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 			}
 		}
 
@@ -442,7 +451,7 @@ class TjvendorsTablevendor extends JTable
 			}
 		}
 
-		// If the JTable instance value is in the list of primary keys that were set, set the instance.
+		// If the Table instance value is in the list of primary keys that were set, set the instance.
 		if (in_array($this->$k, $pks))
 		{
 			$this->state = $state;
@@ -456,7 +465,7 @@ class TjvendorsTablevendor extends JTable
 	 *
 	 * @return string The asset name
 	 *
-	 * @see JTable::_getAssetName
+	 * @see Table::_getAssetName
 	 */
 	protected function _getAssetName()
 	{
@@ -468,17 +477,17 @@ class TjvendorsTablevendor extends JTable
 	/**
 	 * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
 	 *
-	 * @param   JTable   $table  Table name
+	 * @param   Table    $table  Table name
 	 * @param   integer  $id     Id
 	 *
-	 * @see JTable::_getAssetParentId
+	 * @see Table::_getAssetParentId
 	 *
 	 * @return mixed The id on success, false on failure.
 	 */
-	protected function _getAssetParentId(JTable $table = null, $id = null)
+	protected function _getAssetParentId(Table $table = null, $id = null)
 	{
 		// We will retrieve the parent-asset from the Asset-table
-		$assetParent = JTable::getInstance('Asset');
+		$assetParent = Table::getInstance('Asset');
 
 		// Default: if no asset-parent can be found we take the global asset
 		$assetParentId = $assetParent->getRootId();

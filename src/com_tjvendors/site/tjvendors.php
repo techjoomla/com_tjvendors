@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
-include_once  JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
+include_once JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT);
 

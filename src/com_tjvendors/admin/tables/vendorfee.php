@@ -10,13 +10,19 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Access\Rules;
+use Joomla\CMS\Access\Rule;
 
 /**
  * vendor Table class
  *
  * @since  1.6
  */
-class TjvendorsTablevendorfee extends JTable
+class TjvendorsTablevendorfee extends Table
 {
 	/**
 	 * Constructor
@@ -25,7 +31,7 @@ class TjvendorsTablevendorfee extends JTable
 	 */
 	public function __construct(&$db)
 	{
-	JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendorfee', array('typeAlias' => 'com_tjvendors.vendorfee'));
+	JObserverMapper::addObserverClassToClass('ContentHistory', 'TjvendorsTablevendorfee', array('typeAlias' => 'com_tjvendors.vendorfee'));
 	parent::__construct('#__tjvendors_fee', 'id', $db);
 	}
 
@@ -37,32 +43,32 @@ class TjvendorsTablevendorfee extends JTable
 	 *
 	 * @return  null|string  null is operation was satisfactory, otherwise returns an error
 	 *
-	 * @see     JTable:bind
+	 * @see     Table:bind
 	 * @since   1.5
 	 */
 	public function bind($array, $ignore = '')
 	{
 		if (isset($array['params']) && is_array($array['params']))
 		{
-			$registry = new JRegistry;
+			$registry = new Registry;
 			$registry->loadArray($array['params']);
 			$array['params'] = (string) $registry;
 		}
 
 		if (isset($array['metadata']) && is_array($array['metadata']))
 		{
-			$registry = new JRegistry;
+			$registry = new Registry;
 			$registry->loadArray($array['metadata']);
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.vendorfee.' . $array['id']))
+		if (!Factory::getUser()->authorise('core.admin', 'com_tjvendors.vendorfee.' . $array['id']))
 		{
-			$actions = JAccess::getActionsFromFile(
+			$actions = Access::getActionsFromFile(
 				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',
 				"/access/section[@name='vendor']/"
 			);
-			$default_actions = JAccess::getAssetRules('com_tjvendors.vendorfee.' . $array['id'])->getData();
+			$default_actions = Access::getAssetRules('com_tjvendors.vendorfee.' . $array['id'])->getData();
 			$array_jaccess   = array();
 
 			foreach ($actions as $action)
@@ -83,9 +89,9 @@ class TjvendorsTablevendorfee extends JTable
 	}
 
 	/**
-	 * This function convert an array of JAccessRule objects into an rules array.
+	 * This function convert an array of Rule objects into an rules array.
 	 *
-	 * @param   array  $jaccessrules  An array of JAccessRule objects.
+	 * @param   array  $jaccessrules  An array of Rule objects.
 	 *
 	 * @return  array
 	 */
@@ -129,7 +135,7 @@ class TjvendorsTablevendorfee extends JTable
 	 *
 	 * @return string The asset name
 	 *
-	 * @see JTable::_getAssetName
+	 * @see Table::_getAssetName
 	 */
 	protected function _getAssetName()
 	{

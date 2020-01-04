@@ -10,6 +10,9 @@
 
 // No direct access to this file
 defined('_JEXEC') or die;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 JLoader::import('joomla.application.component.model');
 
@@ -18,7 +21,7 @@ JLoader::import('joomla.application.component.model');
  *
  * @since  1.6
  */
-class TjvendorsViewVendors extends JViewLegacy
+class TjvendorsViewVendors extends HtmlView
 {
 	protected $user_id;
 
@@ -51,12 +54,12 @@ class TjvendorsViewVendors extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$app = JFactory::getApplication();
-		$this->user_id = JFactory::getUser()->id;
+		$app = Factory::getApplication();
+		$this->user_id = Factory::getUser()->id;
 		$this->input = $app->input;
 
 		// Get data from the model
-		$items_model = JModelLegacy::getInstance('vendors', 'TjvendorsModel');
+		$items_model = BaseDatabaseModel::getInstance('vendors', 'TjvendorsModel');
 		$this->items = $items_model->getItems();
 		$this->pagination	= $items_model->getPagination();
 		$this->state		= $items_model->getState();

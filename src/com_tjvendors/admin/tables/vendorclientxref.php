@@ -10,13 +10,14 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Table\Table;
 
 /**
  * vendor Table class
  *
  * @since  1.6
  */
-class TjvendorsTablevendorclientxref extends JTable
+class TjvendorsTablevendorclientxref extends Table
 {
 	/**
 	 * Constructor
@@ -26,7 +27,7 @@ class TjvendorsTablevendorclientxref extends JTable
 	public function __construct(&$db)
 	{
 		$tableName = 'TjvendorsTablevendorclientxref';
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', $tableName, array('typeAlias' => 'com_tjvendors.vendorclientxref'));
+		JObserverMapper::addObserverClassToClass('ContentHistory', $tableName, array('typeAlias' => 'com_tjvendors.vendorclientxref'));
 		parent::__construct('#__vendor_client_xref', 'vendor_id', $db);
 	}
 }

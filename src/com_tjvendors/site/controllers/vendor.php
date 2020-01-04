@@ -10,16 +10,23 @@
 
 // No direct access
 defined('_JEXEC') or die();
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Session\Session;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Router\Route;
 
 jimport('joomla.application.component.controllerform');
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
+HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
 
 /**
  * Vendor controller class.
  *
  * @since  1.6
  */
-class TjvendorsControllerVendor extends JControllerForm
+class TjvendorsControllerVendor extends FormController
 {
 	/**
 	 * Constructor
@@ -29,7 +36,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	public function __construct()
 	{
 		$this->view_list = 'vendors';
-		$this->input = JFactory::getApplication()->input;
+		$this->input = Factory::getApplication()->input;
 
 		$this->vendor_client = $this->input->get('client', '', 'STRING');
 
@@ -82,19 +89,19 @@ class TjvendorsControllerVendor extends JControllerForm
 	public function save($key = null, $urlVar = null)
 	{
 		// Check for request forgeries.
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-		$params = JComponentHelper::getParams('com_tjvendors');
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+		$params = ComponentHelper::getParams('com_tjvendors');
 		$vendorApproval = $params->get('vendor_approval');
 
 		// Initialise variables.
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$model = $this->getModel('Vendor', 'TjvendorsModel');
 
 		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+		$data = Factory::getApplication()->input->get('jform', array(), 'array');
 		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
 
-		$data['user_id'] = JFactory::getUser()->id;
+		$data['user_id'] = Factory::getUser()->id;
 
 		// Validate the posted data.
 		$form = $model->getForm();
@@ -147,11 +154,11 @@ class TjvendorsControllerVendor extends JControllerForm
 
 			if ($id != 0)
 			{
-				$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&vendor_id=' . $id . '&client=' . $client, false));
+				$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=profile&vendor_id=' . $id . '&client=' . $client, false));
 			}
 			else
 			{
-				$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
+				$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
 			}
 
 			return false;
@@ -170,13 +177,13 @@ class TjvendorsControllerVendor extends JControllerForm
 			$client = $app->input->get('client', '', 'STRING');
 
 			$id = $app->getUserState('com_tjvendors.edit.vendor.data.vendor_id');
-			$this->setMessage(JText::sprintf('Save failed', $model->getError()), 'warning');
+			$this->setMessage(Text::sprintf('Save failed', $model->getError()), 'warning');
 			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $id;
 
 			$layout = $id != 0 ? 'profile' : 'edit';
 
 			$this->setRedirect(
-					JRoute::_(
+					Route::_(
 					'index.php?option=com_tjvendors&view=vendor&layout=' . $layout . $dynamicLink, false
 					)
 					);
@@ -187,7 +194,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		$user_id = Jfactory::getUser()->id;
 
 		// Get a db connection.
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		// Create a new query object.
 		$query = $db->getQuery(true);
@@ -197,12 +204,12 @@ class TjvendorsControllerVendor extends JControllerForm
 		$query->where($db->quoteName('user_id') . ' = ' . $user_id);
 		$db->setQuery($query);
 		$vendor_id = $db->loadResult();
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		// Redirect to the list screen.
-		$this->setMessage(JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR'));
+		$this->setMessage(Text::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR'));
 		$this->setRedirect(
-				JRoute::_(
+				Route::_(
 				'index.php?option=com_tjvendors&view=vendor&layout=default&vendor_id=' . $vendor_id . '&client=' . $input->get('client', '', 'STRING'), false
 				)
 				);
@@ -220,10 +227,10 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	public function cancel($key=null)
 	{
-		$input = JFactory::getApplication()->input;
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+		$input = Factory::getApplication()->input;
+		$data = Factory::getApplication()->input->get('jform', array(), 'array');
 		$this->setRedirect(
-		JRoute::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $input->get('client', '', 'STRING'), false)
+		Route::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $input->get('client', '', 'STRING'), false)
 		);
 	}
 
@@ -236,7 +243,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	public function generateGatewayFields()
 	{
-		$input  = JFactory::getApplication()->input->post;
+		$input  = Factory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
 		$parentTag = $input->get('parent_tag', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');

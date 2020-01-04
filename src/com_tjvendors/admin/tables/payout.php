@@ -10,6 +10,13 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Access\Rules;
+use Joomla\CMS\Access\Rule;
+use Joomla\CMS\Language\Text;
 
 use Joomla\Utilities\ArrayHelper;
 
@@ -18,7 +25,7 @@ use Joomla\Utilities\ArrayHelper;
  *
  * @since  1.6
  */
-class TjvendorsTablePayout extends JTable
+class TjvendorsTablePayout extends Table
 {
 	/**
 	 * Constructor
@@ -27,7 +34,7 @@ class TjvendorsTablePayout extends JTable
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjpayoutsTablepayout', array('typeAlias' => 'com_tjvendors.payout'));
+		JObserverMapper::addObserverClassToClass('ContentHistory', 'TjpayoutsTablepayout', array('typeAlias' => 'com_tjvendors.payout'));
 		parent::__construct('#__tjvendors_passbook', 'id', $db);
 	}
 
@@ -39,32 +46,32 @@ class TjvendorsTablePayout extends JTable
 	 *
 	 * @return  null|string  null is operation was satisfactory, otherwise returns an error
 	 *
-	 * @see     JTable:bind
+	 * @see     Table:bind
 	 * @since   1.5
 	 */
 	public function bind($array, $ignore = '')
 	{
 		if (isset($array['params']) && is_array($array['params']))
 		{
-			$registry = new JRegistry;
+			$registry = new Registry;
 			$registry->loadArray($array['params']);
 			$array['params'] = (string) $registry;
 		}
 
 		if (isset($array['metadata']) && is_array($array['metadata']))
 		{
-			$registry = new JRegistry;
+			$registry = new Registry;
 			$registry->loadArray($array['metadata']);
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (!JFactory::getUser()->authorise('core.admin', 'com_tjvendors.payout.' . $array['id']))
+		if (!Factory::getUser()->authorise('core.admin', 'com_tjvendors.payout.' . $array['id']))
 		{
-			$actions = JAccess::getActionsFromFile(
+			$actions = Access::getActionsFromFile(
 				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',
 				"/access/section[@name='payout']/"
 			);
-			$default_actions = JAccess::getAssetRules('com_tjvendors.payout.' . $array['id'])->getData();
+			$default_actions = Access::getAssetRules('com_tjvendors.payout.' . $array['id'])->getData();
 			$array_jaccess   = array();
 
 			foreach ($actions as $action)
@@ -85,9 +92,9 @@ class TjvendorsTablePayout extends JTable
 	}
 
 	/**
-	 * This function convert an array of JAccessRule objects into an rules array.
+	 * This function convert an array of Rule objects into an rules array.
 	 *
-	 * @param   array  $jaccessrules  An array of JAccessRule objects.
+	 * @param   array  $jaccessrules  An array of Rule objects.
 	 *
 	 * @return  array
 	 */
@@ -162,7 +169,7 @@ class TjvendorsTablePayout extends JTable
 			// Nothing to set publishing state on, return false.
 			else
 			{
-				throw new Exception(500, JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+				throw new Exception(500, Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 			}
 		}
 
@@ -198,7 +205,7 @@ class TjvendorsTablePayout extends JTable
 			}
 		}
 
-		// If the JTable instance value is in the list of primary keys that were set, set the instance.
+		// If the Table instance value is in the list of primary keys that were set, set the instance.
 		if (in_array($this->$k, $pks))
 		{
 			$this->state = $state;
@@ -212,7 +219,7 @@ class TjvendorsTablePayout extends JTable
 	 *
 	 * @return string The asset name
 	 *
-	 * @see JTable::_getAssetName
+	 * @see Table::_getAssetName
 	 */
 	protected function _getAssetName()
 	{
@@ -224,17 +231,17 @@ class TjvendorsTablePayout extends JTable
 	/**
 	 * Returns the parent asset's id. If you have a tree structure, retrieve the parent's id using the external key field
 	 *
-	 * @param   JTable   $table  Table name
+	 * @param   Table    $table  Table name
 	 * @param   integer  $id     Id
 	 *
-	 * @see JTable::_getAssetParentId
+	 * @see Table::_getAssetParentId
 	 *
 	 * @return mixed The id on success, false on failure.
 	 */
-	protected function _getAssetParentId(JTable $table = null, $id = null)
+	protected function _getAssetParentId(Table $table = null, $id = null)
 	{
 		// We will retrieve the parent-asset from the Asset-table
-		$assetParent = JTable::getInstance('Asset');
+		$assetParent = Table::getInstance('Asset');
 
 		// Default: if no asset-parent can be found we take the global asset
 		$assetParentId = $assetParent->getRootId();

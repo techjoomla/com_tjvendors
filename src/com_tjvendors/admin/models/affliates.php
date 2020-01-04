@@ -162,7 +162,7 @@ class TjvendorsModelAffliates extends JModelList
 	 *
 	 * @since   2.3
 	 */
-/*	public function delete($indID)
+	public function delete($indID)
 	{
 		$db = JFactory::getDbo();
 
@@ -185,5 +185,5 @@ class TjvendorsModelAffliates extends JModelList
 		}
 
 		return true;
-	}*/
+	}
 }

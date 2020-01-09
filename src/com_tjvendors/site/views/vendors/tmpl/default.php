@@ -40,6 +40,7 @@ $listDirn  = $this->state->get('list.direction');
 
 	<?php
 	$user_id = JFactory::getUser()->id;
+
 	if (!empty($this->vendor_id))
 	{
 		?>
@@ -48,14 +49,20 @@ $listDirn  = $this->state->get('list.direction');
 			<div id="j-main-container" class="vendor-report">
 				<!-----"vendor-report" is a page cover class--->
 				<div class="row">
-					<div class="col-xs-12 col-md-6 date">
-						<div class="btn-group input-group">
-							<span class="input-group-btn">
-								<?php echo JHtml::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
+					<div class="col-xs-12 col-md-12 date">
+						<div class="btn-group col-xs-12 col-md-6" style="display: flex;">
+							<span>
+								<?php echo JHtml::_('calendar', 
+								$this->state->get('filter.fromDate'), 'fromDates', 'fromDates', 
+								'%Y-%m-%d %H:%M', ['class' => 'inputbox date__field','showTime' => 'showTime','onchange' =>'document.adminForm.submit()','filter'=> 'user_utc']); ?>
 							</span>
 
-							<span class="input-group-btn">
-								<?php echo JHtml::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
+							<span>
+								<?php echo JHtml::_('calendar', 
+								$this->state->get('filter.toDate'), 'toDates', 'toDates', 
+								'%Y-%m-%d %H:%M', ['class' => 'inputbox date__field', 
+								'onchange' => 'document.adminForm.submit()','showTime' => 
+								'showTime']); ?>
 							</span>
 
 							<span>
@@ -66,14 +73,14 @@ $listDirn  = $this->state->get('list.direction');
 						</div>
 					</div>
 
-					<div class="col-xs-12 col-md-6 btn-group">
-						<ul class="input-group list-inline pull-right">
+					<div class="btn-group col-xs-12 col-md-6">
+							<ul class="input-group list-inline pull-right">
 							<?php
 							if (!empty($this->currencies))
 							{
 								?>
 								<li>
-									<div class="input-group-btn hidden-xs">
+									<div>
 										<?php
 										echo JHtml::_('select.genericlist', $this->currencies, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));
 										$currency = $this->state->get('filter.currency');
@@ -99,7 +106,7 @@ $listDirn  = $this->state->get('list.direction');
 							?>
 
 							<li>
-								<div class="input-group-btn hidden-xs">
+								<div>
 									<?php
 									$transactionType[] = array("transactionType" => JText::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'), "transactionValue" => "0");
 									$transactionType[] = array("transactionType" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'), "transactionValue" => JText::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
@@ -112,7 +119,7 @@ $listDirn  = $this->state->get('list.direction');
 							</li>
 
 							<li class="pr-0">
-								<div  class="input-group-btn hidden">
+								<div  class="input-group-btn">
 									<label for="limit" >
 										<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
 									</label>

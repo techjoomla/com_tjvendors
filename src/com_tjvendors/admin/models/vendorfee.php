@@ -10,6 +10,7 @@
 
 // No direct access.
 defined('_JEXEC') or die;
+use Joomla\CMS\Language\Text;
 
 jimport('joomla.application.component.modeladmin');
 
@@ -122,7 +123,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 				$this->item = $this->getItem();
 			}
 
-			$this->item->currency_unchange = $this->item->currency;
 			$data = $this->item;
 		}
 
@@ -138,15 +138,23 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$isNew             = (empty($data['id']))? true : false;
-		$app               = JFactory::getApplication();
+		$app   = JFactory::getApplication();
+		$isNew = (empty($data['id']))? true : false;
+
+		if ($isNew && empty($data['currency']))
+		{
+			$this->setError(Text::_('COM_TJVENDORS_VENDORFEE_INVALID_CURRENCY'));
+
+			return false;
+		}
+
 		$table             = $this->getTable();
 		$db                = JFactory::getDbo();
 		$input             = $app->input;
 		$data['vendor_id'] = $input->get('vendor_id', '', 'INTEGER');
-		$uniqueCurrency    = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client']);
+		$uniqueCurrency    = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client'], $data['id']);
 
-		if (!empty($uniqueCurrency))
+		if ($uniqueCurrency)
 		{
 			if (parent::save($data))
 			{
@@ -164,7 +172,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		}
 		else
 		{
-			$app->enqueueMessage(JText::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'), 'error');
+			$this->setError(Text::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'));
 		}
 
 		return false;

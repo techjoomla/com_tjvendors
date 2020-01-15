@@ -11,6 +11,7 @@
 // No direct access.
 defined('_JEXEC') or die;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 
 jimport('joomla.application.component.modeladmin');
 
@@ -138,7 +139,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 */
 	public function save($data)
 	{
-		$app   = JFactory::getApplication();
+		$app   = Factory::getApplication();
 		$isNew = (empty($data['id']))? true : false;
 
 		if ($isNew && empty($data['currency']))
@@ -148,7 +149,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 			return false;
 		}
 
-		$db                = JFactory::getDbo();
 		$input             = $app->input;
 		$data['vendor_id'] = $input->get('vendor_id', '', 'INTEGER');
 		$uniqueCurrency    = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client'], $data['id']);

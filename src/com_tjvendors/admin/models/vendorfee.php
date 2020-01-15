@@ -155,6 +155,11 @@ class TjvendorsModelVendorFee extends JModelAdmin
 
 		if ($uniqueCurrency)
 		{
+			if($data['id'])
+			{
+				unset($data['currency']);
+			}
+
 			if (parent::save($data))
 			{
 				if (empty($data['id']))

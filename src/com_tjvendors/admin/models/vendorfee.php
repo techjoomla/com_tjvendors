@@ -134,7 +134,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 *
 	 * @param   Array  $data  Data
 	 *
-	 * @return id
+	 * @return boolean  true or false
 	 */
 	public function save($data)
 	{
@@ -148,7 +148,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 			return false;
 		}
 
-		$table             = $this->getTable();
 		$db                = JFactory::getDbo();
 		$input             = $app->input;
 		$data['vendor_id'] = $input->get('vendor_id', '', 'INTEGER');

@@ -30,15 +30,16 @@ method="post" enctype="multipart/form-data" name="adminform" id="vendorfee-form"
 				<fieldset class="adminform">
 
 					<?php
+						echo $this->form->renderField('vendor_title');
+
 						if($this->item->vendor_id == 0)
 						{
-							echo $this->form->renderField('vendor_title');
 							echo $this->form->renderField('currency');
 						}
 						else
 						{
-							echo $this->form->renderField('vendor_title');
-							echo $this->form->renderField('currency_unchange');
+							$this->form->setFieldAttribute('currency', 'readonly', 'true');
+							echo $this->form->renderField('currency');
 						?>
 						<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->vendor_id; ?>" />
 						<?php

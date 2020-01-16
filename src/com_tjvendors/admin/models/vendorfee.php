@@ -155,6 +155,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 
 		if ($uniqueCurrency)
 		{
+			// While editing the fees don't allow to edit currency
 			if($data['id'])
 			{
 				unset($data['currency']);

@@ -10,6 +10,8 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 
 /**
  * Tjvendors helper.
@@ -278,18 +280,20 @@ class TjvendorsHelper
 	/**
 	 * Get get unique Currency
 	 *
-	 * @param   string  $currency   integer
+	 * @param   string   $currency   integer
 	 *
-	 * @param   string  $vendor_id  integer
+	 * @param   string   $vendor_id  integer
 	 *
-	 * @param   string  $client     integer
+	 * @param   string   $client     integer
+	 *
+	 * @param   integer  $id         tjvendors_fee
 	 *
 	 * @return boolean
 	 */
 
-	public static function checkUniqueCurrency($currency, $vendor_id, $client)
+	public static function checkUniqueCurrency($currency, $vendor_id, $client, $id)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('currency'));
 		$query->from($db->quoteName('#__tjvendors_fee'));
@@ -304,6 +308,12 @@ class TjvendorsHelper
 			$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		}
 
+		// If site admin wants to edit the commission
+		if ($id)
+		{
+			$query->where($db->quoteName('id') . ' = ' . (int) $id);
+		}
+
 		$db->setQuery($query);
 
 		try
@@ -312,19 +322,30 @@ class TjvendorsHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
-		foreach ($currencies as $i)
+		if (!empty($currencies))
 		{
-			if ($currency == $i['currency'])
+			// If site admin want to edit the commission with same id, currency, client and same vendor id
+			if ($id && count($currencies) == 1)
 			{
-				return false;
-				break;
+				return true;
 			}
 			else
 			{
-				continue;
+				foreach ($currencies as $i)
+				{
+					if ($currency == $i['currency'])
+					{
+						return false;
+						break;
+					}
+					else
+					{
+						continue;
+					}
+				}
 			}
 		}
 

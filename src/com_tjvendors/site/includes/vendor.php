@@ -264,6 +264,30 @@ class TjvendorsVendor extends CMSObject
 	}
 
 	/**
+	 * Get the alias of the vendor
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getAlias()
+	{
+		return $this->alias;
+	}
+
+	/**
+	 * Get the user id of the vendor
+	 *
+	 * @return  Integer
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getUserId()
+	{
+		return $this->user_id;
+	}
+
+	/**
 	 * Get the title of the vendor
 	 *
 	 * @return  String
@@ -382,7 +406,7 @@ class TjvendorsVendor extends CMSObject
 	}
 
 	/**
-	 * Returns an associative array of object properties.
+	 * Method to return all the key and values of all properties
 	 *
 	 * @param   boolean  $public  If true, returns only the public properties.
 	 *

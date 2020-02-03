@@ -420,36 +420,14 @@ class TjvendorsVendor extends CMSObject
 	}
 
 	/**
-	 * Method to get gateway details
+	 * Method to get payment config
 	 *
-	 * @return  boolean  True if empty false otherwise
+	 * @return  Mixed  Payment config object or false otherwise
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function checkPaymentGateway()
+	public function getPaymentConfig()
 	{
-		// Check for the client in the xref
-		$xreftable = TJVendors::table("vendorclientxref");
-
-		if (!$xreftable->load(array('vendor_id' => $this->vendor_id, 'client' => $this->client)))
-		{
-			return false;
-		}
-
-		$params = json_decode($xreftable->params);
-
-		if (empty($params) || !isset($params->payment_gateway))
-		{
-			return false;
-		}
-
-		$params = $params->payment_gateway;
-
-		if (empty($params->payment_gateway0) || !isset($params->payment_gateway0->payment_gateways))
-		{
-			return false;
-		}
-
-		return empty($params->payment_gateway0->payment_gateways);
+		return !empty($this->payment_gateway) ? new Registry($this->payment_gateway) : false;
 	}
 }

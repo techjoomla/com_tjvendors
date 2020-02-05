@@ -1,13 +1,15 @@
 <?php
 /**
- * @package     Joomla.Site
+ * @package     TJVendors
  * @subpackage  Layout
  *
- * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
 /*
  * As Joomla doesn't provide bootstrap 3 layout and TJVendor run on bootstrap 3 templates added the overrides for the Joomla subform layout
 */
@@ -15,8 +17,8 @@ defined('_JEXEC') or die;
 /**
  * Make thing clear
  *
- * @var JForm   $tmpl             The Empty form for template
- * @var array   $forms            Array of JForm instances for render the rows
+ * @var Form   $tmpl             The Empty form for template
+ * @var array   $forms            Array of Form instances for render the rows
  * @var bool    $multiple         The multiple state for the form field
  * @var int     $min              Count of minimum repeating in multiple mode
  * @var int     $max              Count of maximum repeating in multiple mode

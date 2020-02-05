@@ -1,47 +1,53 @@
 <?php
 /**
- * @package    TJ-Vendors
- * @author     TechJoomla <extensions@techjoomla.com>
- * @website    http://techjoomla.com
- * @copyright  Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
- * @license    GNU General Public License version 2 or later; see LICENSE.txt
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.tooltip');
-JHtml::_('behavior.formvalidation');
-JHtml::_('formbehavior.chosen', 'select');
-JHtml::_('behavior.keepalive');
+HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+HTMLHelper::_('behavior.tooltip');
+HTMLHelper::_('behavior.formvalidation');
+HTMLHelper::_('formbehavior.chosen', 'select');
+HTMLHelper::_('behavior.keepalive');
 ?>
 <script type="text/javascript">
 	var layout = '<?php echo "edit";?>';
 	var _URL                              = window.URL || window.webkitURL;
-	var allowedMediaSizeErrorMessage      = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
-	var allowedImageDimensionErrorMessage = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
-	var allowedImageTypeErrorMessage      = "<?php echo JText::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
+	var allowedMediaSizeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
+	var allowedImageDimensionErrorMessage = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
+	var allowedImageTypeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
 	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
 	tjVSite.vendor.initVendorJs();
 </script>
 
 <div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
 <?php
-if (JFactory::getUser()->id )
+if (Factory::getUser()->id )
 {
 	?>
 	<h1>
-		<?php echo JText::_('COM_TJVENDOR_CREATE_VENDOR');?>
+		<?php echo Text::_('COM_TJVENDOR_CREATE_VENDOR');?>
 	</h1>
-	<form action="<?php echo JRoute::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
+	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
 		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
 			<?php if(!$this->isClientExist): ?>
 				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
-				  <li class="active"><a data-toggle="tab" href="#tab1"><?php echo JText::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
-				  <li><a data-toggle="tab" href="#tab2"><?php echo JText::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
+				  <li class="active"><a data-toggle="tab" href="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
+				  <li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
 				</ul>
 			<?php endif; ?>
 				<!----Tab Container Start----->
@@ -55,7 +61,7 @@ if (JFactory::getUser()->id )
 							<input type="hidden" name="jform[ordering]" value="<?php echo $this->vendor->ordering; ?>" />
 							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
 							<?php
-							$input = JFactory::getApplication()->input;
+							$input = Factory::getApplication()->input;
 
 							if ($this->vendor_id != 0)
 							{
@@ -63,19 +69,19 @@ if (JFactory::getUser()->id )
 								<div class="pull-left alert alert-info">
 
 									<?php
-										echo JText::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');
+										echo Text::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');
 									?>
 
-									<a href="<?php echo JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);?>">
+									<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);?>">
 									<strong><?php echo $this->escape($this->VendorDetail->vendor_title);?></a></strong>
 
 									<?php
 									if (!$this->isClientExist)
 									{
-										echo " " . JText::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
+										echo " " . Text::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
 										$tjvendorFrontHelper = new TjvendorFrontHelper;
 										echo $client = $tjvendorFrontHelper->getClientName($this->client);
-										echo JText::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
+										echo Text::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
 									}
 									?>
 								</div>
@@ -102,7 +108,7 @@ if (JFactory::getUser()->id )
 										<div class="form-group">
 											<div class="row">
 												<div class="col-xs-12 col-sm-10 col-md-7">
-													<img src="<?php echo JUri::root() . $this->vendor->vendor_logo; ?>">
+													<img src="<?php echo Uri::root() . $this->vendor->vendor_logo; ?>">
 												</div>
 											</div>
 										</div>
@@ -116,7 +122,7 @@ if (JFactory::getUser()->id )
 										<div class="form-group">
 											<div class="row">
 												<div class="col-xs-12 col-sm-10 col-md-7">
-													<img src="<?php echo JUri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>">
+													<img src="<?php echo Uri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>">
 												</div>
 											</div>
 											<div class="mt-10">
@@ -127,7 +133,7 @@ if (JFactory::getUser()->id )
 									}
 									?>
 									<div class="alert alert-info">
-										<?php echo sprintf(JText::_("COM_TJVENDORS_MAXIMUM_LOGO_UPLOAD_SIZE_NOTE"), $this->params->get('image_size', '', 'STRING'));?>
+										<?php echo sprintf(Text::_("COM_TJVENDORS_MAXIMUM_LOGO_UPLOAD_SIZE_NOTE"), $this->params->get('image_size', '', 'STRING'));?>
 									</div>
 								</div>
 							</div>
@@ -156,11 +162,11 @@ if (JFactory::getUser()->id )
 			?>
 			<div class="mt-10">
 				<button type="button" class="btn btn-default btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-					<span><?php echo JText::_('JSUBMIT'); ?></span>
+					<span><?php echo Text::_('JSUBMIT'); ?></span>
 				</button>
 
 				<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-					<?php echo JText::_('JCANCEL'); ?>
+					<?php echo Text::_('JCANCEL'); ?>
 				</button>
 			</div>
 		<?php
@@ -170,24 +176,24 @@ if (JFactory::getUser()->id )
 			?>
 			<div class="mt-10">
 				<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-					<span><?php echo JText::_('COM_TJVENDORS_CLIENT_APPROVAL'); ?></span>
+					<span><?php echo Text::_('COM_TJVENDORS_CLIENT_APPROVAL'); ?></span>
 				</button>
 				<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-					<?php echo JText::_('COM_TJVENDORS_CLIENT_REJECTION'); ?>
+					<?php echo Text::_('COM_TJVENDORS_CLIENT_REJECTION'); ?>
 				</button>
 			</div>
 			<?php
 		}
 		?>
 		<input type="hidden" name="task" value="vendor.save"/>
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>
 	<?php
 }
 else
 {
-	$link = JRoute::_('index.php?option=com_users');
-	$app = JFactory::getApplication();
+	$link = Route::_('index.php?option=com_users');
+	$app = Factory::getApplication();
 	$app->redirect($link);
 }
 ?>

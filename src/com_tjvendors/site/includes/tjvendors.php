@@ -4,7 +4,7 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2020 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -21,9 +21,6 @@ use Joomla\String\StringHelper;
  * TJVendors factory class.
  *
  * This class perform the helpful operation required to  TJVendors package
- *
- * @method  TjvendorsVersion  version()
- * @method  TjvendorsVendor   vendor()
  *
  * @since  __DEPLOY_VERSION__
  */

@@ -10,8 +10,12 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
-jimport('joomla.application.component.view');
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
@@ -19,7 +23,7 @@ JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components')
  *
  * @since  1.6
  */
-class TjvendorsViewVendors extends JViewLegacy
+class TjvendorsViewVendors extends HtmlView
 {
 	protected $items;
 
@@ -41,10 +45,10 @@ class TjvendorsViewVendors extends JViewLegacy
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
-		$this->input = JFactory::getApplication()->input;
-		$this->params = JComponentHelper::getParams('com_tjvendors');
-		JText::script('COM_TJVENDOR_VENDOR_APPROVAL');
-		JText::script('COM_TJVENDOR_VENDOR_DENIAL');
+		$this->input = Factory::getApplication()->input;
+		$this->params = ComponentHelper::getParams('com_tjvendors');
+		Text::script('COM_TJVENDOR_VENDOR_APPROVAL');
+		Text::script('COM_TJVENDOR_VENDOR_DENIAL');
 
 		$this->vendorApproval = $this->params->get('vendor_approval');
 		$client = $this->input->get('client', '', 'STRING');
@@ -76,7 +80,7 @@ class TjvendorsViewVendors extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$this->client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
@@ -88,7 +92,7 @@ class TjvendorsViewVendors extends JViewLegacy
 
 		$title = !empty($this->client) ? $clientTitle . ' : ' : '';
 
-		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_VENDORS'), 'list.png');
+		ToolbarHelper::title($title . Text::_('COM_TJVENDORS_TITLE_VENDORS'), 'list.png');
 
 		if ($canDo->get('core.edit') && isset($this->items[0]))
 		{

@@ -9,16 +9,21 @@
  */
 
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Table\Table;
 
 JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
-JTable::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
+Table::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
 
 /**
  * TJVendors Actions Logging Plugin.
  *
  * @since  1.3.1
  */
-class PlgActionlogTjvendors extends JPlugin
+class PlgActionlogTjvendors extends CMSPlugin
 {
 	/**
 	 * Load plugin language file automatically so that it can be used inside component
@@ -47,22 +52,22 @@ class PlgActionlogTjvendors extends JPlugin
 			return;
 		}
 
-		$app      = JFactory::getApplication();
+		$app      = Factory::getApplication();
 		$context  = $app->input->get('option');
-		$jUser    = JFactory::getUser();
+		$jUser    = Factory::getUser();
 		$userId   = $jUser->id;
 		$userName = $jUser->username;
 
 		if ($vendorData['vendor_client'])
 		{
-			$language = JFactory::getLanguage();
+			$language = Factory::getLanguage();
 			$language->load($vendorData['vendor_client']);
 		}
 
 		// If admin create user as vendor from backend
 		if ($app->isAdmin())
 		{
-			$vendorInfor    = JFactory::getUser($vendorData['user_id']);
+			$vendorInfor    = Factory::getUser($vendorData['user_id']);
 			$vendorID       = $vendorInfor->id;
 			$vendorUserName = $vendorInfor->username;
 			$action         = ($isNew) ? 'add' : 'update';
@@ -77,7 +82,7 @@ class PlgActionlogTjvendors extends JPlugin
 					$message = array(
 						'action'         => $action,
 						'type'           => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-						'clientname'     => JText::_(strtoupper($vendorData['vendor_client'])),
+						'clientname'     => Text::_(strtoupper($vendorData['vendor_client'])),
 						'clientlink'     => 'index.php?option=' . $vendorData['vendor_client'],
 						'vendorusername' => $vendorUserName,
 						'vendoruserlink' => 'index.php?option=com_users&task=user.edit&id=' . $vendorID,
@@ -106,7 +111,7 @@ class PlgActionlogTjvendors extends JPlugin
 				$message = array(
 					'action'           => $action,
 					'type'             => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-					'clientname'       => JText::_(strtoupper($vendorData['vendor_client'])),
+					'clientname'       => Text::_(strtoupper($vendorData['vendor_client'])),
 					'clientlink'       => 'index.php?option=' . $vendorData['vendor_client'],
 					'vendorname'	   => $vendorData['vendor_title'],
 					'vendorusername'   => $vendorUserName,
@@ -128,7 +133,7 @@ class PlgActionlogTjvendors extends JPlugin
 				$message = array(
 					'action'      => $action,
 					'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-					'clientname'  => JText::_(strtoupper($vendorData['vendor_client'])),
+					'clientname'  => Text::_(strtoupper($vendorData['vendor_client'])),
 					'clientlink'  => 'index.php?option=' . $vendorData['vendor_client'],
 					'userid'      => $userId,
 					'username'    => $userName,
@@ -140,7 +145,7 @@ class PlgActionlogTjvendors extends JPlugin
 				$message = array(
 					'action'      => $action,
 					'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
-					'clientname'  => JText::_(strtoupper($vendorData['vendor_client'])),
+					'clientname'  => Text::_(strtoupper($vendorData['vendor_client'])),
 					'clientlink'  => 'index.php?option=' . $vendorData['vendor_client'],
 					'userid'      => $userId,
 					'username'    => $userName,
@@ -172,12 +177,12 @@ class PlgActionlogTjvendors extends JPlugin
 			return;
 		}
 
-		$jUser                = JFactory::getUser();
+		$jUser                = Factory::getUser();
 		$userId               = $jUser->id;
 		$userName             = $jUser->username;
-		$context              = JFactory::getApplication()->input->get('option');
-		$tjvendorsTableVendor = JTable::getInstance('vendor', 'TjvendorsTable', array());
-		$language = JFactory::getLanguage();
+		$context              = Factory::getApplication()->input->get('option');
+		$tjvendorsTableVendor = Table::getInstance('vendor', 'TjvendorsTable', array());
+		$language = Factory::getLanguage();
 		$language->load($client);
 
 		switch ($state)
@@ -206,7 +211,7 @@ class PlgActionlogTjvendors extends JPlugin
 				'vendorname'   => $tjvendorsTableVendor->vendor_title,
 				'vendorid'     => $tjvendorsTableVendor->user_id,
 				'vendorlink'   => 'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
-				'clientname'   => JText::_(strtoupper($client)),
+				'clientname'   => Text::_(strtoupper($client)),
 				'clientlink'   => 'index.php?option=' . $client,
 				'userid'       => $userId,
 				'username'     => $userName,
@@ -236,8 +241,8 @@ class PlgActionlogTjvendors extends JPlugin
 			return;
 		}
 
-		$context            = JFactory::getApplication()->input->get('option');
-		$jUser              = JFactory::getUser();
+		$context            = Factory::getApplication()->input->get('option');
+		$jUser              = Factory::getUser();
 		$messageLanguageKey = 'PLG_ACTIONLOG_TJVENDORS_VENDOR_DELETED';
 		$action             = 'delete';
 		$userId             = $jUser->id;
@@ -245,7 +250,7 @@ class PlgActionlogTjvendors extends JPlugin
 
 		if ($client)
 		{
-			$language = JFactory::getLanguage();
+			$language = Factory::getLanguage();
 			$language->load($client);
 		}
 
@@ -253,7 +258,7 @@ class PlgActionlogTjvendors extends JPlugin
 			'action'      => $action,
 			'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
 			'vendorname'  => $vendorData->vendor_title,
-			'clientname'  => JText::_(strtoupper($client)),
+			'clientname'  => Text::_(strtoupper($client)),
 			'clientlink'  => 'index.php?option=' . $client,
 			'userid'      => $userId,
 			'username'    => $userName,
@@ -282,18 +287,18 @@ class PlgActionlogTjvendors extends JPlugin
 			return;
 		}
 
-		$context              = JFactory::getApplication()->input->get('option');
-		$jUser                = JFactory::getUser();
+		$context              = Factory::getApplication()->input->get('option');
+		$jUser                = Factory::getUser();
 		$messageLanguageKey   = ($isNew) ? 'PLG_ACTIONLOG_TJVENDORS_VENDOR_FEE_SAVE' : 'PLG_ACTIONLOG_TJVENDORS_VENDOR_FEE_UPDATE';
 		$action               = ($isNew) ? 'add' : 'update';
 		$userId               = $jUser->id;
 		$userName             = $jUser->username;
-		$tjvendorsTableVendor = JTable::getInstance('vendor', 'TjvendorsTable', array());
+		$tjvendorsTableVendor = Table::getInstance('vendor', 'TjvendorsTable', array());
 		$tjvendorsTableVendor->load(array('vendor_id' => $vendorFeeData['vendor_id']));
 
 		if ($vendorFeeData['client'])
 		{
-			$language = JFactory::getLanguage();
+			$language = Factory::getLanguage();
 			$language->load($vendorFeeData['client']);
 		}
 
@@ -304,7 +309,7 @@ class PlgActionlogTjvendors extends JPlugin
 			'vendorlink'  => 'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
 			'feelink'     => 'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $vendorFeeData['id'] . '&vendor_id=' . $vendorFeeData['vendor_id'] . '&client=' . $vendorFeeData['client'],
 			'clientlink'  => 'index.php?option=' . $vendorFeeData['client'],
-			'clientname'  => JText::_(strtoupper($vendorFeeData['client'])),
+			'clientname'  => Text::_(strtoupper($vendorFeeData['client'])),
 			'userid'      => $userId,
 			'username'    => $userName,
 			'accountlink' => 'index.php?option=com_users&task=user.edit&id=' . $userId,
@@ -332,7 +337,7 @@ class PlgActionlogTjvendors extends JPlugin
 		JLoader::register('ActionlogsModelActionlog', JPATH_ADMINISTRATOR . '/components/com_actionlogs/models/actionlog.php');
 
 		/* @var ActionlogsModelActionlog $model */
-		$model = JModelLegacy::getInstance('Actionlog', 'ActionlogsModel');
+		$model = BaseDatabaseModel::getInstance('Actionlog', 'ActionlogsModel');
 		$model->addLog($messages, $messageLanguageKey, $context, $userId);
 	}
 }

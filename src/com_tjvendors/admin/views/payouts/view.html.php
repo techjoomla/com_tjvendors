@@ -10,8 +10,13 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
-jimport('joomla.application.component.view');
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
@@ -19,7 +24,7 @@ JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components')
  *
  * @since  1.6
  */
-class TjvendorsViewPayouts extends JViewLegacy
+class TjvendorsViewPayouts extends HtmlView
 {
 	protected $items;
 
@@ -47,16 +52,16 @@ class TjvendorsViewPayouts extends JViewLegacy
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->model = $this->getModel('payouts');
-		$this->input = JFactory::getApplication()->input;
+		$this->input = Factory::getApplication()->input;
 
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
-		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
+		$tjvendorsModelVendors = BaseDatabaseModel::getInstance('Vendors', 'TjvendorsModel');
 		$vendorsDetail = $tjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
 		$this->uniqueClients = TjvendorsHelper::getUniqueClients();
-		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$com_params = ComponentHelper::getParams('com_tjvendors');
 		$this->bulkPayoutStatus = $com_params->get('bulk_payout');
 
 		// Check for errors.
@@ -82,7 +87,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
@@ -94,7 +99,7 @@ class TjvendorsViewPayouts extends JViewLegacy
 
 		$title = !empty($client) ? $clientTitle . ' : ' : '';
 
-		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'list.png');
+		ToolbarHelper::title($title . Text::_('COM_TJVENDORS_TITLE_PAYOUTS'), 'list.png');
 
 		if ($canDo->get('core.admin'))
 		{

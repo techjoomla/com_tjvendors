@@ -1,13 +1,17 @@
 <?php
 /**
- * @package     Joomla.Site
+ * @package     TJVendors
  * @subpackage  Layout
  *
- * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
 /*
  * As Joomla doesn't provide bootstrap 3 layout and TJVendor run on bootstrap 3 templates added the overrides for the Joomla subform layout
 */
@@ -15,8 +19,8 @@ defined('_JEXEC') or die;
 /**
  * Make thing clear
  *
- * @var JForm   $tmpl             The Empty form for template
- * @var array   $forms            Array of JForm instances for render the rows
+ * @var Form   $tmpl             The Empty form for template
+ * @var array   $forms            Array of Form instances for render the rows
  * @var bool    $multiple         The multiple state for the form field
  * @var int     $min              Count of minimum repeating in multiple mode
  * @var int     $max              Count of maximum repeating in multiple mode
@@ -33,8 +37,8 @@ extract($displayData);
 // Add script
 if ($multiple)
 {
-	JHtml::_('jquery.ui', array('core', 'sortable'));
-	JHtml::_('script', 'system/subform-repeatable.js', array('version' => 'auto', 'relative' => true));
+	HTMLHelper::_('jquery.ui', array('core', 'sortable'));
+	HTMLHelper::_('script', 'system/subform-repeatable.js', array('version' => 'auto', 'relative' => true));
 }
 
 $sublayout = empty($groupByFieldset) ? 'section' : 'section-byfieldsets';
@@ -54,7 +58,7 @@ $sublayout = empty($groupByFieldset) ? 'section' : 'section-byfieldsets';
 			<div class="btn-toolbar hidden">
 				<div class="btn-group">
 					<a class="btn btn-mini button btn-success group-add-<?php echo $unique_subform_id; ?>"
-					aria-label="<?php echo JText::_('JGLOBAL_FIELD_ADD'); ?>">
+					aria-label="<?php echo Text::_('JGLOBAL_FIELD_ADD'); ?>">
 						<span class="icon-plus"></span>
 					</a>
 				</div>

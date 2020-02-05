@@ -1,3 +1,6 @@
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Factory;
 <?php
 /**
  * @package     TJVendors
@@ -38,7 +41,7 @@ class JFormFieldModifiedby extends JFormField
 	{
 		// Initialize variables.
 		$html   = array();
-		$user   = JFactory::getUser();
+		$user   = Factory::getUser();
 		$html[] = '<input type="hidden" name="' . $this->name . '" value="' . $user->id . '" />';
 		$html[] = "<div>" . $user->name . " (" . $user->username . ")</div>";
 

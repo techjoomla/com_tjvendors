@@ -10,8 +10,11 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
-jimport('joomla.application.component.view');
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
@@ -19,7 +22,7 @@ JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components')
  *
  * @since  1.6
  */
-class TjvendorsViewVendorFees extends JViewLegacy
+class TjvendorsViewVendorFees extends HtmlView
 {
 	protected $items;
 
@@ -38,12 +41,12 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
-		$this->input = JFactory::getApplication()->input;
+		$this->input = Factory::getApplication()->input;
 		$this->client = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
@@ -68,7 +71,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		$state = $this->get('State');
 		$canDo = TjvendorsHelper::getActions();
@@ -78,7 +81,7 @@ class TjvendorsViewVendorFees extends JViewLegacy
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
-		JToolbarHelper::title($clientTitle . ' : ' . JText::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'list.png');
+		ToolbarHelper::title($clientTitle . ' : ' . Text::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'list.png');
 
 		if ($canDo->get('core.edit.state'))
 		{
@@ -109,8 +112,8 @@ class TjvendorsViewVendorFees extends JViewLegacy
 	protected function getSortFields()
 	{
 		return array(
-			'b.`percent_commission`' => JText::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),
-			'b.`flat_commission`' => JText::_('COM_TJVENDORS_VENDORS_FLAT_COMMISSION'),
+			'b.`percent_commission`' => Text::_('COM_TJVENDORS_VENDORS_PERCENT_COMMISSION'),
+			'b.`flat_commission`' => Text::_('COM_TJVENDORS_VENDORS_FLAT_COMMISSION'),
 		);
 	}
 }

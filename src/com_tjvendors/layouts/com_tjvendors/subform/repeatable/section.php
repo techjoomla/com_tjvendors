@@ -1,10 +1,11 @@
 <?php
 /**
- * @package     Joomla.Site
+ * @package     TJVendors
  * @subpackage  Layout
  *
- * @copyright   Copyright (C) 2005 - 2018 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
@@ -15,7 +16,7 @@ defined('_JEXEC') or die;
 /**
  * Make thing clear
  *
- * @var JForm   $form       The form instance for render the section
+ * @var Form   $form       The form instance for render the section
  * @var string  $basegroup  The base group name
  * @var string  $group      Current group name
  * @var array   $buttons    Array of the buttons that will be rendered

@@ -10,15 +10,18 @@
 
 // No direct access
 defined('_JEXEC') or die;
-
-jimport('joomla.application.component.view');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 /**
  * View to edit
  *
  * @since  1.6
  */
-class TjvendorsViewPayout extends JViewLegacy
+class TjvendorsViewPayout extends HtmlView
 {
 	protected $state;
 
@@ -40,8 +43,8 @@ class TjvendorsViewPayout extends JViewLegacy
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
-		$this->input = JFactory::getApplication()->input;
-		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$this->input = Factory::getApplication()->input;
+		$com_params = ComponentHelper::getParams('com_tjvendors');
 		$this->bulkPayoutStatus = $com_params->get('bulk_payout');
 
 		// Check for errors.
@@ -63,16 +66,16 @@ class TjvendorsViewPayout extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		JFactory::getApplication()->input->set('hidemainmenu', true);
+		Factory::getApplication()->input->set('hidemainmenu', true);
 
-		$user  = JFactory::getUser();
+		$user  = Factory::getUser();
 
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		// Let's get the extension name
 		$client = $input->get('client', '', 'STRING');
 
-		$viewTitle = JText::_('COM_TJVENDOR_EDIT_PAYOUT');
+		$viewTitle = Text::_('COM_TJVENDOR_EDIT_PAYOUT');
 
 		if (isset($this->item->checked_out))
 		{
@@ -84,7 +87,7 @@ class TjvendorsViewPayout extends JViewLegacy
 		}
 
 		$clientTitle = TjvendorFrontHelper::getClientName($client);
-		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
+		ToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 
 		if (empty($this->item->id))
 		{

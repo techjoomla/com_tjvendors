@@ -24,6 +24,8 @@ if (!Factory::getUser()->authorise('core.manage', 'com_tjvendors'))
 // Include dependancies
 jimport('joomla.application.component.controller');
 
+include_once  JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
+
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT_ADMINISTRATOR);
 
 $controller = BaseController::getInstance('Tjvendors');

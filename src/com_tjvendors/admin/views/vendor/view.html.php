@@ -53,6 +53,9 @@ class TjvendorsViewVendor extends HtmlView
 		Text::script('COM_TJVENDOR_USER_ERROR');
 		$this->client = $this->input->get('client', '', 'STRING');
 
+		$utilitiesObj = TJVendors::utilities();
+		$this->countries = $utilitiesObj->getCountries();
+
 		if (empty($this->item->vendor_id))
 		{
 			$currUrl = $this->input->get('currency', '', 'ARRAY');

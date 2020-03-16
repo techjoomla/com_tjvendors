@@ -157,6 +157,41 @@ if (Factory::getUser()->id )
 								echo $this->form->renderField('last_name');
 								echo $this->form->renderField('address');
 								echo $this->form->renderField('address2');
+							?>
+							<div class="control-group" id="country_group">
+								<div class="control-label">
+									<label for="jform_country">
+										<?php echo $this->form->getLabel('country'); ?>
+									</label>
+								</div>
+								<div class="controls">
+									<?php
+										$countries = $this->countries;
+										$default = null;
+
+										if (isset($this->item->country))
+										{
+											$default = $this->item->country;
+										}
+
+										$options = array();
+										$options[] = JHtml::_('select.option', "", JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+
+										foreach ($countries as $key => $value)
+										{
+											$country = $countries[$key];
+											$id = $country['id'];
+											$value = $country['country'];
+											$options[] = JHtml::_('select.option', $id, $value);
+										}
+
+										echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
+										'aria-invalid="false" size="1" onchange="com_jgive.UI.Common.generateStates(id,\'' .
+										1 . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $default, 'jform_country');
+									?>
+								</div>
+							</div>
+							<?php
 								echo $this->form->renderField('region');
 								echo $this->form->renderField('city');
 								echo $this->form->renderField('other_city');

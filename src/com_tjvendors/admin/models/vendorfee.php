@@ -10,6 +10,7 @@
 
 // No direct access.
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
@@ -126,7 +127,6 @@ class TjvendorsModelVendorFee extends AdminModel
 				$this->item = $this->getItem();
 			}
 
-			$this->item->currency_unchange = $this->item->currency;
 			$data = $this->item;
 		}
 
@@ -138,7 +138,7 @@ class TjvendorsModelVendorFee extends AdminModel
 	 *
 	 * @param   Array  $data  Data
 	 *
-	 * @return id
+	 * @return boolean  true or false
 	 */
 	public function save($data)
 	{
@@ -148,10 +148,16 @@ class TjvendorsModelVendorFee extends AdminModel
 		$db                = Factory::getDbo();
 		$input             = $app->input;
 		$data['vendor_id'] = $input->get('vendor_id', '', 'INTEGER');
-		$uniqueCurrency    = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client']);
+		$uniqueCurrency    = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client'], $data['id']);
 
-		if (!empty($uniqueCurrency))
+		if ($uniqueCurrency)
 		{
+			// While editing the fees don't allow to edit currency
+			if ($data['id'])
+			{
+				unset($data['currency']);
+			}
+
 			if (parent::save($data))
 			{
 				if (empty($data['id']))

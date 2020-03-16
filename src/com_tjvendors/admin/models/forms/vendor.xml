@@ -121,7 +121,7 @@
 		<field
 			name="address"
 			required="true"
-			type="textarea"
+			type="address"
 			default=""
 			label="COM_TJVENDORS_FORM_LBL_ADDRESS"
 			description="COM_TJVENDORS_FORM_DESC_ADDRESS"
@@ -131,13 +131,14 @@
 
 		<field
 			name="address2"
-			type="textarea"
+			type="address"
 			label="COM_TJVENDORS_FORM_LBL_ADDRESS2"
 			description="COM_TJVENDORS_FORM_DESC_ADDRESS2"
 			rows="5"
 			cols="150"
 			filter="raw" />
 
+<!--
 		<field
 			name="country"
 			type="list"
@@ -175,7 +176,7 @@
 			hint="COM_TJVENDORS_FORM_HINT_OTHER_CITY"
 			filter="string"
 			maxlength="255"/>
-
+-->
 		<field
 			name="zip"
 			required="true"

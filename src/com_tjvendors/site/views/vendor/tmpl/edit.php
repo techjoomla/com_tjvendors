@@ -40,16 +40,21 @@ if (Factory::getUser()->id )
 	<h1>
 		<?php echo Text::_('COM_TJVENDOR_CREATE_VENDOR');?>
 	</h1>
-	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
+	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING') ); ?>"
 		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
-			<?php if(!$this->isClientExist): ?>
-				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
-				  <li class="active"><a data-toggle="tab" href="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
-				  <li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
-				</ul>
-			<?php endif; ?>
+			<?php
+				if (!$this->isClientExist)
+				{
+					?>
+					<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
+						<li class="active"><a data-toggle="tab" href="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
+						<li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_ADDRESS'); ?></a></li>
+						<li><a data-toggle="tab" href="#tab3"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
+					</ul>
+			<?php
+				} ?>
 				<!----Tab Container Start----->
 				<div class="tab-content">
 					<!----Tab 1 Start----->
@@ -147,10 +152,28 @@ if (Factory::getUser()->id )
 					<!----Tab 2 Start----->
 					<div id="tab2" class="tab-pane fade">
 						<div class="row">
-							<?php echo $this->form->getInput('payment_gateway');?>
+							<?php
+								echo $this->form->renderField('first_name');
+								echo $this->form->renderField('last_name');
+								echo $this->form->renderField('address');
+								echo $this->form->renderField('address2');
+								echo $this->form->renderField('region');
+								echo $this->form->renderField('city');
+								echo $this->form->renderField('other_city');
+								echo $this->form->renderField('zip');
+								echo $this->form->renderField('phone_number');
+							?>
 						</div>
 					</div>
 					<!----Tab 2 End----->
+
+					<!----Tab 3 Start----->
+					<div id="tab3" class="tab-pane fade">
+						<div class="row">
+							<?php echo $this->form->getInput('payment_gateway');?>
+						</div>
+					</div>
+					<!----Tab 3 End----->
 				</div>
 				<!----Tab Container End----->
 			</div>

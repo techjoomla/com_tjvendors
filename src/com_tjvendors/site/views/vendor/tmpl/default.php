@@ -14,15 +14,11 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+
+if (!empty($this->vendor_id))
+{
 ?>
-<?php if (!empty($this->vendor_id) )
-	{
-	?>
-	<h1>
-		<?php
-			echo Text::_('COM_TJVENDOR_VENDOR_PROFILE');
-			?>
-	</h1>
+	<h1><?php echo Text::_('COM_TJVENDOR_VENDOR_PROFILE');?></h1>
 	<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 	<div class="profile row <?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>" id="tjv-wrapper">
 		<div class="col-sm-12">
@@ -37,30 +33,53 @@ use Joomla\CMS\Uri\Uri;
 			</h3>
 		</div>
 		<?php
-			if(!empty($this->VendorDetail->vendor_logo))
-			{
-			?>
-				<div class="controls col-sm-3 center">
-					<img  src="<?php echo Uri::root() . $this->VendorDetail->vendor_logo; ?>" width="100%">
+		$profileImage = Uri::root() . "/administrator/components/com_tjvendors/assets/images/default.png";
+		
+		if (!empty($this->VendorDetail->vendor_logo))
+		{
+			$profileImage = Uri::root() . $this->VendorDetail->vendor_logo;
+		}
+		?>
+		<div class="controls col-sm-3 center">
+			<img src="<?php echo $profileImage; ?>" width="100%">
+		</div>
+		<div class="col-sm-9">
+			<div>
+				<div class='profile__content text-muted'>
+				<?php echo $this->escape($this->VendorDetail->vendor_description);?>
 				</div>
-		<?php
-			}
-			else
-			{
+			</div>
+		</div>	
+		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_NAME')?></div>
+		<div class="col-sm-6">
+			<?php echo htmlspecialchars($this->VendorDetail->first_name, ENT_COMPAT, 'UTF-8') . ' ' . htmlspecialchars($this->VendorDetail->last_name, ENT_COMPAT, 'UTF-8')?>
+		</div>	
+		
+		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_ADDRESS')?></div>
+		<div class="col-sm-6">
+			<?php 
+				echo htmlspecialchars($this->VendorDetail->address, ENT_COMPAT, 'UTF-8');
+				
+				if ($this->VendorDetail->address2)
+				{
+					echo ', ' . htmlspecialchars($this->VendorDetail->address2, ENT_COMPAT, 'UTF-8');
+				}
+				
+				echo ', ' . htmlspecialchars($this->VendorDetail->country_name, ENT_COMPAT, 'UTF-8');
+				echo ', ' . htmlspecialchars($this->VendorDetail->region_name, ENT_COMPAT, 'UTF-8');
+				echo ', ' . htmlspecialchars($this->VendorDetail->city_name, ENT_COMPAT, 'UTF-8');
 			?>
-				<div class="controls col-sm-3 center">
-					<img src="<?php echo Uri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>" width="100%">
-				</div>
-		<?php
-			}
-			?>
-				<div class="col-sm-9">
-					<div>
-						<div class='profile__content text-muted'>
-						<?php echo $this->escape($this->VendorDetail->vendor_description);?>
-						</div>
-					</div>
-				</div>
+		</div>
+				
+		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_ZIP')?></div>
+		<div class="col-sm-6">
+			<?php echo htmlspecialchars($this->VendorDetail->zip, ENT_COMPAT, 'UTF-8')?>
+		</div>
+		
+		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_PHONE_NUMBER')?></div>
+		<div class="col-sm-6">
+			<?php echo htmlspecialchars($this->VendorDetail->phone_number, ENT_COMPAT, 'UTF-8')?>
+		</div>	
 	</div>
 	<?php
 	}

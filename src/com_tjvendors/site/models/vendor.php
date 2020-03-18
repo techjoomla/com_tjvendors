@@ -161,7 +161,35 @@ class TjvendorsModelVendor extends AdminModel
 		$vendorXref = Table::getInstance('VendorClientXref', 'TjvendorsTable');
 		$vendorXref->load(array('vendor_id' => $item->vendor_id));
 		$item->params = $vendorXref->params;
+		
+		$TjGeoHelper = JPATH_ROOT . '/components/com_tjfields/helpers/geo.php';
 
+		if (!class_exists('TjGeoHelper'))
+		{
+			JLoader::register('TjGeoHelper', $TjGeoHelper);
+			JLoader::load('TjGeoHelper');
+		}
+
+		$tjGeoHelperObj = new TjGeoHelper;
+		
+		if ($item->country)
+		{
+			$item->country_name = $tjGeoHelperObj->getCountryNameFromId((int) $item->country);
+		}
+		if ($item->region)
+		{
+			$item->region_name = $tjGeoHelperObj->getRegionNameFromId((int) $item->region);
+		}
+
+		if (isset($item->other_city))
+		{
+			$item->city_name = $item->city;
+		}
+		else
+		{
+			$item->city_name = $tjGeoHelperObj->getCityNameFromId((int) $item->country);
+		}
+		
 		return $item;
 	}
 
@@ -401,7 +429,12 @@ class TjvendorsModelVendor extends AdminModel
 		{
 			$xrefData['params'] = '';
 		}
-
+	
+		if (isset($data['other_city']))
+		{
+			$data['city'] = $data['option_city'];
+		}
+		
 		// To check if editing in registration form
 		if ($data['vendor_id'])
 		{

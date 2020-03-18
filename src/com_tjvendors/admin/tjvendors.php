@@ -23,6 +23,16 @@ if (!Factory::getUser()->authorise('core.manage', 'com_tjvendors'))
 
 // Include dependancies
 jimport('joomla.application.component.controller');
+include_once  JPATH_SITE . '/media/com_tjvendor/js/load_js.php';
+include_once  JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
+
+$tjStrapperPath = JPATH_SITE . '/media/techjoomla_strapper/tjstrapper.php';
+
+if (JFile::exists($tjStrapperPath))
+{
+	require_once $tjStrapperPath;
+	TjStrapper::loadTjAssets('com_tjvendor');
+}
 
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT_ADMINISTRATOR);
 

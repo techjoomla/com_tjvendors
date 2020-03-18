@@ -29,6 +29,10 @@ HTMLHelper::_('behavior.keepalive');
 	var allowedImageDimensionErrorMessage = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
 	var allowedImageTypeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
 	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
+	var country   = "<?php echo $this->vendor->country; ?>";
+	var region    = "<?php echo $this->vendor->region; ?>";
+	var city      = "<?php echo $this->vendor->city; ?>";
+	var otherCity = "<?php echo $this->vendor->other_city;?>";
 	tjVSite.vendor.initVendorJs();
 </script>
 <div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
@@ -49,7 +53,8 @@ HTMLHelper::_('behavior.keepalive');
 				<div class="col-sm-12">
 					<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
 					  <li class="active"><a data-toggle="tab" href="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?> </a></li>
-					  <li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
+					  <li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_ADDRESS'); ?></a></li>
+					  <li><a data-toggle="tab" href="#tab3"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
 					</ul>
 					<!----Tab Container Start----->
 					<div class="tab-content">
@@ -111,10 +116,97 @@ HTMLHelper::_('behavior.keepalive');
 						<!----Tab 2 Start----->
 						<div id="tab2" class="tab-pane fade">
 							<div class="row">
-								<?php echo $this->form->getInput('payment_gateway');?>
+								<div class="col-sm-6">
+									<?php
+										echo $this->form->renderField('first_name');
+										echo $this->form->renderField('last_name');
+										echo $this->form->renderField('address');
+										echo $this->form->renderField('address2');
+										echo $this->form->renderField('zip');										
+									?>
+								</div>
+								<div class="col-sm-6">								
+									<div class="control-group" id="country_group">
+										<div class="control-label">
+											<label for="jform_country">
+												<?php echo $this->form->getLabel('country'); ?>
+											</label>
+										</div>
+										<div class="controls">
+											<?php
+												$countries = $this->countries;
+												$default = null;
+
+												if (isset($this->vendor->country))
+												{
+													$default = $this->vendor->country;
+												}
+
+												$options = array();
+												$options[] = JHtml::_('select.option', "", JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+
+												foreach ($countries as $key => $value)
+												{
+													$country = $countries[$key];
+													$id = $country['id'];
+													$value = $country['country'];
+													$options[] = JHtml::_('select.option', $id, $value);
+												}
+										
+												if ($this->vendor->region == null)
+												{
+													$this->vendor->region = '';
+													$this->vendor->city = '';
+												}
+										
+												echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
+												'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
+												1 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $default, 'jform_country');
+											?>
+										</div>
+									</div>								
+									<div class="control-group" id="region_group">
+										<div class="control-label">
+											<label for="jform_region">
+												<?php echo $this->form->getLabel('region'); ?>
+											</label>
+										</div>
+										<div class="controls">
+											<select name="jform[region]" id="jform_region"></select>
+										</div>
+									</div>
+									<div class="control-group" id="city_group">
+										<div class="control-label">
+											<label for="jform_city">
+												<?php echo $this->form->getLabel('city'); ?>
+											</label>
+										</div>
+										<div class="controls">
+											<select name="jform[city]" id="jform_city"></select>
+										</div>
+									</div>
+									<?php echo $this->form->renderField('other_city');?>
+
+									<input 
+										type="text" 
+										name="jform[option_city]" 
+										id="jform_option_city"
+										value="<?php echo  !empty($this->vendor->other_city)?$this->vendor->city:''; ?>" 
+										aria-invalid="false">	
+									<?php
+									echo $this->form->renderField('phone_number');?>
+								</div>
 						   </div>
 						</div>
 						<!----Tab 2 Start----->
+						
+						<!----Tab 3 Start----->
+						<div id="tab2" class="tab-pane fade">
+							<div class="row">
+								<?php echo $this->form->getInput('payment_gateway');?>
+						   </div>
+						</div>
+						<!----Tab 3 Start----->
 					</div>
 				<!----Tab Container End----->
 				</div>
@@ -143,7 +235,3 @@ HTMLHelper::_('behavior.keepalive');
 	}
 	?>
 </div>
-<script>
-	/* Not Using this code*/
-	/*tjVSite.vendor.tabToAccordion();*/
-</script>

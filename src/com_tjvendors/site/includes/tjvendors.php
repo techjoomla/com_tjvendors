@@ -167,6 +167,12 @@ class TJVendors
 			return;
 		}
 
+		if (file_exists(JPATH_ROOT . '/media/techjoomla_strapper/tjstrapper.php'))
+		{
+			require_once JPATH_ROOT . '/media/techjoomla_strapper/tjstrapper.php';
+			TjStrapper::loadTjAssets('com_tjvendor');
+		}
+		
 		$version = $versionClass->getMediaVersion();
 		$options = array("version" => $version);
 

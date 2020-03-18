@@ -77,6 +77,9 @@ class TjvendorsViewVendor extends HtmlView
 		$this->vendorClientXrefTable->load(array('vendor_id' => $this->vendor_id, 'client' => $this->client));
 		$this->VendorDetail          = $tjvendorsModelVendor->getItem($this->vendor_id);
 
+		$utilitiesObj = TJVendors::utilities();
+		$this->countries = $utilitiesObj->getCountries();
+
 		$app = Factory::getApplication();
 		$app->setUserState("vendor.client", $this->client);
 		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);

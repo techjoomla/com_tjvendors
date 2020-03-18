@@ -29,6 +29,10 @@ HTMLHelper::_('behavior.keepalive');
 	var allowedImageDimensionErrorMessage = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
 	var allowedImageTypeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
 	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
+	var country   = "<?php echo $this->vendor->country; ?>";
+	var region    = "<?php echo $this->vendor->region; ?>";
+	var city      = "<?php echo $this->vendor->city; ?>";
+	var otherCity = "<?php echo $this->vendor->other_city; ?>";
 	tjVSite.vendor.initVendorJs();
 </script>
 
@@ -40,16 +44,21 @@ if (Factory::getUser()->id )
 	<h1>
 		<?php echo Text::_('COM_TJVENDOR_CREATE_VENDOR');?>
 	</h1>
-	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .$this->input->get('vendor_id', '', 'INTEGER') .'&client=' . $this->input->get('client', '', 'STRING') ); ?>"
+	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING') ); ?>"
 		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
-			<?php if(!$this->isClientExist): ?>
-				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
-				  <li class="active"><a data-toggle="tab" href="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
-				  <li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
-				</ul>
-			<?php endif; ?>
+			<?php
+				if (!$this->isClientExist)
+				{
+					?>
+					<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
+						<li class="active"><a data-toggle="tab" href="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
+						<li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_ADDRESS'); ?></a></li>
+						<li><a data-toggle="tab" href="#tab3"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
+					</ul>
+			<?php
+				} ?>
 				<!----Tab Container Start----->
 				<div class="tab-content">
 					<!----Tab 1 Start----->
@@ -147,10 +156,81 @@ if (Factory::getUser()->id )
 					<!----Tab 2 Start----->
 					<div id="tab2" class="tab-pane fade">
 						<div class="row">
-							<?php echo $this->form->getInput('payment_gateway');?>
+							<div class="col-sm-6">
+								<?php
+									echo $this->form->renderField('first_name');
+									echo $this->form->renderField('last_name');
+									echo $this->form->renderField('address');
+									echo $this->form->renderField('address2');
+									echo $this->form->renderField('zip');
+								?>
+							</div>
+							<div class="col-sm-6">							
+								<div class="control-group" id="country_group">
+									<div class="control-label">
+										<label for="jform_country">
+											<?php echo $this->form->getLabel('country'); ?>
+										</label>
+									</div>
+									<div class="controls">
+										<?php
+											$countries = $this->countries;
+											$default = null;
+
+											if (isset($this->vendor->country))
+											{
+												$default = $this->vendor->country;
+											}
+
+											$options = array();
+											$options[] = JHtml::_('select.option', "", JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+
+											foreach ($countries as $key => $value)
+											{
+												$country = $countries[$key];
+												$id = $country['id'];
+												$value = $country['country'];
+												$options[] = JHtml::_('select.option', $id, $value);
+											}
+									
+											if ($this->vendor->region == null)
+											{
+												$this->vendor->region = '';
+												$this->vendor->city = '';
+											}
+									
+											echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
+											'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
+											1 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $default, 'jform_country');
+										?>
+									</div>
+								</div>
+								<?php
+									echo $this->form->renderField('region');
+									echo $this->form->renderField('city');
+									echo $this->form->renderField('other_city');
+								?>
+									<input 
+										type="text" 
+										name="jform[option_city]" 
+										id="jform_option_city"
+										value="<?php echo  !empty($this->vendor->other_city)?$this->vendor->city:''; ?>" 
+										aria-invalid="false">	
+								<?php							
+									echo $this->form->renderField('phone_number');
+								?>
+							</div>
 						</div>
 					</div>
 					<!----Tab 2 End----->
+
+					<!----Tab 3 Start----->
+					<div id="tab3" class="tab-pane fade">
+						<div class="row">
+							<?php echo $this->form->getInput('payment_gateway');?>
+						</div>
+					</div>
+					<!----Tab 3 End----->
 				</div>
 				<!----Tab Container End----->
 			</div>

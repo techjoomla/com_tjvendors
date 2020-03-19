@@ -35,6 +35,9 @@ const vendorAllowedMediaSize          = '<?php echo $max_images_size = $this->pa
 var vendor_id                         = '<?php echo $this->item->vendor_id;?>';
 var client                            = '<?php echo $this->client;?>';
 var layout                            = '<?php echo "default";?>';
+var country                           = "<?php echo $this->item->country; ?>";
+var region                            = "<?php echo $this->item->region; ?>";
+var city                              = "<?php echo $this->item->city; ?>";
 tjVAdmin.vendor.initVendorJs();
 </script>
 
@@ -156,7 +159,7 @@ tjVAdmin.vendor.initVendorJs();
 
 								echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
 								'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
-								1 . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $default, 'jform_country');
+								$this->isAdmin . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $default, 'jform_country');
 							?>
 						</div>
 					</div>

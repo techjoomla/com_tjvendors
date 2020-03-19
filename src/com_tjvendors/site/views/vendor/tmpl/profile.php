@@ -182,18 +182,11 @@ HTMLHelper::_('behavior.keepalive');
 											</label>
 										</div>
 										<div class="controls">
-											<select name="jform[city]" id="jform_city"></select>
+											<select name="jform[city]" id="jform_city" onchange="com_tjvendor.UI.Common.showOtherCity('jform_city')"></select>
 										</div>
 									</div>
-									<?php echo $this->form->renderField('other_city');?>
-
-									<input 
-										type="text" 
-										name="jform[option_city]" 
-										id="jform_option_city"
-										value="<?php echo  !empty($this->vendor->other_city)?$this->vendor->city:''; ?>" 
-										aria-invalid="false">	
-									<?php
+									<?php 
+									echo $this->form->renderField('other_city');
 									echo $this->form->renderField('phone_number');?>
 								</div>
 						   </div>

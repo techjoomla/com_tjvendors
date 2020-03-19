@@ -1,7 +1,7 @@
 "use strict";
 window.com_tjvendor.UI.Common = {
 	generateStates: function (countryId, isAdmin, state, city) {
-        var jform_state = jQuery('#jform_region');
+	var jform_state = jQuery('#jform_region');
         jform_state.find('option').remove().end();
         var jform_city = jQuery('#jform_city');
         jform_city.find('option').remove().end();
@@ -118,5 +118,32 @@ window.com_tjvendor.UI.Common = {
 
         jQuery("jform_city").trigger("liszt:updated");
     },
+    showOtherCity: function (cityId, cityValue = ''){
+		var city = jQuery('#' + cityId).val();
+		
+		if (cityValue)
+		{
+			city = cityValue;
+		}		
+
+		if (city == 'other')
+		{
+			jQuery('#jform_other_city').removeClass('hide');
+			jQuery('#jform_other_city-lbl').removeClass('hide');
+			jQuery('#jform_other_city-lbl').addClass('hasPopover');
+			jQuery('#jform_other_city').addClass('show');		
+			jQuery('#jform_other_city-lbl').addClass('show');
+		}
+		else
+		{
+			jQuery("#jform_option_city").val('');
+			jQuery('#jform_other_city').removeClass('show');
+			jQuery('#jform_other_city-lbl').removeClass('show');
+			
+			jQuery('#jform_other_city').addClass('hide');			
+			jQuery('#jform_other_city-lbl').addClass('hide');
+			jQuery('#jform_other_city-lbl').removeClass('hasPopover');
+		}
+	},
     init: (function() {})()
 };

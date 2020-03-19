@@ -31,7 +31,7 @@ $tjStrapperPath = JPATH_SITE . '/media/techjoomla_strapper/tjstrapper.php';
 if (JFile::exists($tjStrapperPath))
 {
 	require_once $tjStrapperPath;
-	TjStrapper::loadTjAssets('com_tjvendor');
+	TjStrapper::loadTjAssets('com_tjvendors');
 }
 
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT_ADMINISTRATOR);

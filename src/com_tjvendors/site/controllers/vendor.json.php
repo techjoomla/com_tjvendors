@@ -54,6 +54,10 @@ class TjvendorsControllerVendor extends TjvendorsController
 		$utilitiesObj  = TJVendors::utilities();
 		$city = $utilitiesObj->getCities($country);
 		array_unshift($city, $defaultCity);
+		
+		$otherCity = array("id" => 'other', "city" => JText::_('COM_TJVENDORS_VENDOR_OTHER_CITY'),"city_jtext" => JText::_('COM_TJVENDORS_VENDOR_OTHER_CITY'));
+		array_push($city,$otherCity);
+
 		echo new JResponseJson($city, JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 	}
 }

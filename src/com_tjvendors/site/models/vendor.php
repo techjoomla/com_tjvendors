@@ -181,13 +181,13 @@ class TjvendorsModelVendor extends AdminModel
 			$item->region_name = $tjGeoHelperObj->getRegionNameFromId((int) $item->region);
 		}
 
-		if (isset($item->other_city))
+		if (!empty($item->other_city))
 		{
-			$item->city_name = $item->city;
+			$item->city_name = $item->other_city;
 		}
 		else
 		{
-			$item->city_name = $tjGeoHelperObj->getCityNameFromId((int) $item->country);
+			$item->city_name = $tjGeoHelperObj->getCityNameFromId((int) $item->city);
 		}
 		
 		return $item;
@@ -429,12 +429,12 @@ class TjvendorsModelVendor extends AdminModel
 		{
 			$xrefData['params'] = '';
 		}
-	
-		if (isset($data['other_city']))
+
+		if (is_numeric($data['city']))
 		{
-			$data['city'] = $data['option_city'];
+			$data['other_city'] = '';
 		}
-		
+
 		// To check if editing in registration form
 		if ($data['vendor_id'])
 		{

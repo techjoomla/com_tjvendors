@@ -48,6 +48,8 @@ var tjVAdmin = {
 				jQuery(document).on("change", "#jform_user_id", function() {
 					tjVAdmin.vendor.checkVendor();
 				});
+				com_tjvendor.UI.Common.generateStates('jform_country', 1, region, city);
+				com_tjvendor.UI.Common.showOtherCity('jform_city', city);
 			});
 
 			jQuery(window).load(function() {
@@ -216,7 +218,7 @@ var tjVSite = {
 			jQuery(document).ready(function() {
 				jQuery(document).on("change", "#jform_payment_gateway", function() {});
 				com_tjvendor.UI.Common.generateStates('jform_country', 1, region, city);
-				toggleCity.toggleOtherCity(otherCity);
+				com_tjvendor.UI.Common.showOtherCity('jform_city', city)
 			});
 
 			jQuery(window).load(function() {
@@ -343,32 +345,3 @@ var tjCommon = {
 			});
 		}
 }
-
-/* To toggle between city and other city*/
-var toggleCity = {
-	toggleOtherCity: function(element) {
-
-		// Condition for on load form
-		if (element != 1) {
-			var otherCityTrue = element.checked;
-		} else {
-			var otherCityTrue = true;
-		}
-
-		// Toggle city with other city field
-		if (!otherCityTrue || otherCity === 0) {
-			jQuery("#jform_option_city").val('');
-			jQuery("#jform_option_city").hide();
-			jQuery("#jform_other_city-lbl").hide();			
-			jQuery("#jform_city_chzn").parent().parent().show();
-			jQuery("#jform_city").parent().parent().show();
-			jQuery("#jform_city-lbl").show();
-		} else {
-			jQuery("#jform_option_city").show();
-			jQuery("#jform_other_city-lbl").show();			
-			jQuery("#jform_city_chzn").parent().parent().hide();
-			jQuery("#jform_city").parent().parent().hide();
-			jQuery("#jform_city-lbl").hide();
-		}
-	},
-};

@@ -168,7 +168,6 @@
 			required="true"
 			label="COM_TJVENDORS_FORM_LBL_REGION"
 			description="COM_TJVENDORS_FORM_DESC_REGION"
-			onchange="jgiveCountryStateCity.generateCity('jform_country', '')"
 			filter="integer">
 			<option value="">COM_TJVENDORS_FORM_LIST_SELECT_OPTION</option>
 		</field>
@@ -178,7 +177,8 @@
 			type="list"
 			label="COM_TJVENDORS_FORM_LBL_CITY"
 			description="COM_TJVENDORS_FORM_DESC_CITY"
-			filter="integer">
+			onchange="com_tjvendor.UI.Common.showOtherCity('jform_city')"
+			filter="">
 			<option value="">COM_TJVENDORS_FORM_LIST_SELECT_OPTION</option>
 		</field>
 
@@ -186,9 +186,8 @@
 			name="other_city"
 			type="text"
 			label="COM_TJVENDORS_FORM_LBL_OTHER_CITY"
-			class="no-whitespace"
+			class="no-whitespace hide"
 			description="COM_TJVENDORS_FORM_DESC_OTHER_CITY"
-			hint="COM_TJVENDORS_FORM_HINT_OTHER_CITY"
 			filter="string"
 			maxlength="255"/>
 

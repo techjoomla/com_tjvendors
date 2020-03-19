@@ -88,6 +88,13 @@ class TjvendorsViewVendor extends HtmlView
 		Text::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
 		Text::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
 
+		$this->isAdmin = 0;
+		
+		if ($app->isAdmin())
+		{
+			$this->isAdmin = 1;
+		}
+		
 		if ($this->layout == 'profile' && $this->vendor_id != $this->vendor->vendor_id)
 		{
 			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);

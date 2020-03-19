@@ -56,6 +56,13 @@ class TjvendorsViewVendor extends HtmlView
 		$utilitiesObj = TJVendors::utilities();
 		$this->countries = $utilitiesObj->getCountries();
 
+		$this->isAdmin = 0;
+		
+		if ($app->isAdmin())
+		{
+			$this->isAdmin = 1;
+		}
+		
 		if (empty($this->item->vendor_id))
 		{
 			$currUrl = $this->input->get('currency', '', 'ARRAY');

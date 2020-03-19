@@ -32,7 +32,6 @@ HTMLHelper::_('behavior.keepalive');
 	var country   = "<?php echo $this->vendor->country; ?>";
 	var region    = "<?php echo $this->vendor->region; ?>";
 	var city      = "<?php echo $this->vendor->city; ?>";
-	var otherCity = "<?php echo $this->vendor->other_city; ?>";
 	tjVSite.vendor.initVendorJs();
 </script>
 
@@ -201,22 +200,14 @@ if (Factory::getUser()->id )
 									
 											echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
 											'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
-											1 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $default, 'jform_country');
+											$this->isAdmin . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $default, 'jform_country');
 										?>
 									</div>
 								</div>
 								<?php
 									echo $this->form->renderField('region');
 									echo $this->form->renderField('city');
-									echo $this->form->renderField('other_city');
-								?>
-									<input 
-										type="text" 
-										name="jform[option_city]" 
-										id="jform_option_city"
-										value="<?php echo  !empty($this->vendor->other_city)?$this->vendor->city:''; ?>" 
-										aria-invalid="false">	
-								<?php							
+									echo $this->form->renderField('other_city');					
 									echo $this->form->renderField('phone_number');
 								?>
 							</div>

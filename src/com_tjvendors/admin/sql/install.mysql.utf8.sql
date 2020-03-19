@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
   `address2` text NOT NULL,
   `country` int(3) NOT NULL,
   `region` int(5) NOT NULL,
-  `city` int(5) NOT NULL,
+  `city` varchar(255) NOT NULL,
   `other_city` varchar(255) NOT NULL,
   `zip` varchar(50) NOT NULL,
   `phone_number` varchar(50) NOT NULL,

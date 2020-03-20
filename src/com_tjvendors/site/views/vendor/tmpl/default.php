@@ -49,22 +49,12 @@ if (!empty($this->vendor_id))
 				<?php echo $this->escape($this->VendorDetail->vendor_description);?>
 				</div>
 			</div>
-		</div>	
-		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_NAME')?></div>
-		<div class="col-sm-6">
-			<?php echo htmlspecialchars($this->VendorDetail->first_name, ENT_COMPAT, 'UTF-8') . ' ' . htmlspecialchars($this->VendorDetail->last_name, ENT_COMPAT, 'UTF-8')?>
-		</div>	
+		</div>
 		
 		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_ADDRESS')?></div>
 		<div class="col-sm-6">
 			<?php 
-				echo htmlspecialchars($this->VendorDetail->address, ENT_COMPAT, 'UTF-8');
-				
-				if ($this->VendorDetail->address2)
-				{
-					echo ', ' . htmlspecialchars($this->VendorDetail->address2, ENT_COMPAT, 'UTF-8');
-				}
-				
+				echo htmlspecialchars($this->VendorDetail->address, ENT_COMPAT, 'UTF-8');			
 				echo ', ' . htmlspecialchars($this->VendorDetail->country_name, ENT_COMPAT, 'UTF-8');
 				echo ', ' . htmlspecialchars($this->VendorDetail->region_name, ENT_COMPAT, 'UTF-8');
 				echo ', ' . htmlspecialchars($this->VendorDetail->city_name, ENT_COMPAT, 'UTF-8');
@@ -75,11 +65,34 @@ if (!empty($this->vendor_id))
 		<div class="col-sm-6">
 			<?php echo htmlspecialchars($this->VendorDetail->zip, ENT_COMPAT, 'UTF-8')?>
 		</div>
-		
-		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_PHONE_NUMBER')?></div>
-		<div class="col-sm-6">
-			<?php echo htmlspecialchars($this->VendorDetail->phone_number, ENT_COMPAT, 'UTF-8')?>
-		</div>	
+		<?php 
+		if (!empty($this->VendorDetail->phone_number))
+		{
+		?>
+			<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_PHONE_NUMBER')?></div>
+			<div class="col-sm-6">
+				<?php echo htmlspecialchars($this->VendorDetail->phone_number, ENT_COMPAT, 'UTF-8')?>
+			</div>
+		<?php 
+		}
+		if (!empty($this->VendorDetail->website_address))
+		{
+		?>
+			<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_WEBSITE_ADDRESS')?></div>
+			<div class="col-sm-6">
+				<?php echo htmlspecialchars($this->VendorDetail->website_address, ENT_COMPAT, 'UTF-8')?>
+			</div>
+		<?php 
+		}
+		if (!empty($this->VendorDetail->gst_number))
+		{
+		?>
+			<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_GST_NUMBER')?></div>
+			<div class="col-sm-6">
+				<?php echo htmlspecialchars($this->VendorDetail->gst_number, ENT_COMPAT, 'UTF-8')?>
+			</div>
+		<?php
+		}?>	
 	</div>
 	<?php
 	}

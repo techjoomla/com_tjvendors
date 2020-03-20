@@ -32,7 +32,6 @@ HTMLHelper::_('behavior.keepalive');
 	var country   = "<?php echo $this->vendor->country; ?>";
 	var region    = "<?php echo $this->vendor->region; ?>";
 	var city      = "<?php echo $this->vendor->city; ?>";
-	var otherCity = "<?php echo $this->vendor->other_city;?>";
 	tjVSite.vendor.initVendorJs();
 </script>
 <div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
@@ -118,11 +117,10 @@ HTMLHelper::_('behavior.keepalive');
 							<div class="row">
 								<div class="col-sm-6">
 									<?php
-										echo $this->form->renderField('first_name');
-										echo $this->form->renderField('last_name');
 										echo $this->form->renderField('address');
-										echo $this->form->renderField('address2');
-										echo $this->form->renderField('zip');										
+										echo $this->form->renderField('zip');	
+										echo $this->form->renderField('website_address');
+										echo $this->form->renderField('gst_number');									
 									?>
 								</div>
 								<div class="col-sm-6">								
@@ -186,8 +184,9 @@ HTMLHelper::_('behavior.keepalive');
 										</div>
 									</div>
 									<?php 
-									echo $this->form->renderField('other_city');
-									echo $this->form->renderField('phone_number');?>
+										echo $this->form->renderField('other_city');
+										echo $this->form->renderField('phone_number');									
+									?>
 								</div>
 						   </div>
 						</div>

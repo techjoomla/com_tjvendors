@@ -93,32 +93,6 @@
 			filter="" />
 
 		<field
-			name="first_name"
-			required="true"
-			type="text"
-			class="no-whitespace"
-			default=""
-			label="COM_TJVENDORS_FORM_LBL_FIRST_NAME"
-			description="COM_TJVENDORS_FORM_DESC_FIRST_NAME"
-			rows="5"
-			cols="7"
-			filter="string"
-			maxlength="255"/>
-
-		<field
-			name="last_name"
-			required="true"
-			type="text"
-			class="no-whitespace"
-			default=""
-			label="COM_TJVENDORS_FORM_LBL_LAST_NAME"
-			description="COM_TJVENDORS_FORM_DESC_LAST_NAME"
-			rows="5"
-			cols="7"
-			filter="string"
-			maxlength="255"/>
-
-		<field
 			name="address"
 			required="true"
 			type="address"
@@ -128,15 +102,6 @@
 			rows="5"
 			cols="150"
 			filter="raw"/>
-
-		<field
-			name="address2"
-			type="address"
-			label="COM_TJVENDORS_FORM_LBL_ADDRESS2"
-			description="COM_TJVENDORS_FORM_DESC_ADDRESS2"
-			rows="5"
-			cols="150"
-			filter="raw" />
 
 		<field
 			name="country"
@@ -194,6 +159,25 @@
 			rows="2"
 			cols="3"
 			filter="integer"
+			maxlength="50"/>
+		
+		<field
+			name="website_address"
+			type="url"
+			default=""
+			label="COM_TJVENDORS_FORM_LBL_WEBSITE"
+			description="COM_TJVENDORS_FORM_DESC_WEBSITE"
+			validate="url"
+			schemes="http,https"
+			maxlength="255"/>
+			
+		<field
+			name="gst_number"
+			type="text"
+			default=""
+			label="COM_TJVENDORS_FORM_LBL_GST_NUMBER"
+			description="COM_TJVENDORS_FORM_DESC_GST_NUMBER"
+			filter=""
 			maxlength="50"/>
 
 		<field

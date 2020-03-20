@@ -1,10 +1,9 @@
-ALTER TABLE `#__tjvendors_vendors` ADD first_name varchar(255) NOT NULL AFTER vendor_title;
-ALTER TABLE `#__tjvendors_vendors` ADD last_name varchar(255) NOT NULL AFTER first_name;
-ALTER TABLE `#__tjvendors_vendors` ADD address text NOT NULL AFTER last_name;
-ALTER TABLE `#__tjvendors_vendors` ADD address2 text NOT NULL AFTER address;
-ALTER TABLE `#__tjvendors_vendors` ADD country int(3) NOT NULL AFTER address2;
+ALTER TABLE `#__tjvendors_vendors` ADD address text NOT NULL AFTER vendor_title;
+ALTER TABLE `#__tjvendors_vendors` ADD country int(3) NOT NULL AFTER address;
 ALTER TABLE `#__tjvendors_vendors` ADD region int(5) NOT NULL AFTER country;
 ALTER TABLE `#__tjvendors_vendors` ADD city varchar(255) NOT NULL AFTER region;
 ALTER TABLE `#__tjvendors_vendors` ADD other_city varchar(255) NOT NULL AFTER city;
 ALTER TABLE `#__tjvendors_vendors` ADD zip varchar(50) NOT NULL AFTER other_city;
 ALTER TABLE `#__tjvendors_vendors` ADD phone_number varchar(50)  NOT NULL AFTER zip;
+ALTER TABLE `#__tjvendors_vendors` ADD website_address varchar(255)  NOT NULL AFTER phone_number;
+ALTER TABLE `#__tjvendors_vendors` ADD gst_number varchar(50)  NOT NULL AFTER website_address;

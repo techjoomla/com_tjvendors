@@ -79,10 +79,9 @@ tjVAdmin.vendor.initVendorJs();
 		<?php 
 			echo HTMLHelper::_('bootstrap.endTab'); 
 			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'address', Text::_('COM_TJVENDORS_ADDRESS', true));
-				echo $this->form->renderField('first_name');
-				echo $this->form->renderField('last_name');
 				echo $this->form->renderField('address');
-				echo $this->form->renderField('address2');
+				echo $this->form->renderField('website_address');
+				echo $this->form->renderField('gst_number');
 			?>
 				<div class="control-group" id="country_group">
 					<div class="control-label">

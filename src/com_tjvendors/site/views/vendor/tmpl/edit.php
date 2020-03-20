@@ -157,11 +157,10 @@ if (Factory::getUser()->id )
 						<div class="row">
 							<div class="col-sm-6">
 								<?php
-									echo $this->form->renderField('first_name');
-									echo $this->form->renderField('last_name');
 									echo $this->form->renderField('address');
-									echo $this->form->renderField('address2');
 									echo $this->form->renderField('zip');
+									echo $this->form->renderField('website_address');
+									echo $this->form->renderField('gst_number');
 								?>
 							</div>
 							<div class="col-sm-6">							

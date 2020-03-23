@@ -13,6 +13,7 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Response\JsonResponse;
 /**
  * Vendor Json controller class
  *
@@ -30,7 +31,7 @@ class TjvendorsControllerVendor extends TjvendorsController
 	{		
 		$input         = Factory::getApplication()->input;
 		$country       = $input->get('country', 0, 'INT');
-		$defaultRegion = array("id" => 0, "region" => JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),"region_jtext" => JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+		$defaultRegion = array("id" => 0, "region" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),"region_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 		$utilitiesObj  = TJVendors::utilities();
 		$regions       = $utilitiesObj->getRegions($country);
 		array_unshift($regions, $defaultRegion);
@@ -48,16 +49,16 @@ class TjvendorsControllerVendor extends TjvendorsController
 	{
 		$input       = Factory::getApplication()->input;
 		$country     = $input->get('country', 0, 'INT');
-		$defaultCity = array("id" => 0, "city" => JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),"city_jtext" => JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+		$defaultCity = array("id" => 0, "city" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),"city_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 
 		// Use helper file function
 		$utilitiesObj  = TJVendors::utilities();
 		$city = $utilitiesObj->getCities($country);
 		array_unshift($city, $defaultCity);
 		
-		$otherCity = array("id" => 'other', "city" => JText::_('COM_TJVENDORS_VENDOR_OTHER_CITY'),"city_jtext" => JText::_('COM_TJVENDORS_VENDOR_OTHER_CITY'));
+		$otherCity = array("id" => 'other', "city" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY'),"city_jtext" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY'));
 		array_push($city,$otherCity);
 
-		echo new JResponseJson($city, JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+		echo new JResponseJson($city, Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 	}
 }

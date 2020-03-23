@@ -141,14 +141,14 @@ HTMLHelper::_('behavior.keepalive');
 												}
 
 												$options = array();
-												$options[] = JHtml::_('select.option', "", JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+												$options[] = HTMLHelper::_('select.option', "", Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 
 												foreach ($countries as $key => $value)
 												{
 													$country = $countries[$key];
 													$id = $country['id'];
 													$value = $country['country'];
-													$options[] = JHtml::_('select.option', $id, $value);
+													$options[] = HTMLHelper::_('select.option', $id, $value);
 												}
 										
 												if ($this->vendor->region == null)
@@ -157,7 +157,7 @@ HTMLHelper::_('behavior.keepalive');
 													$this->vendor->city = '';
 												}
 										
-												echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
+												echo $this->dropdown = HTMLHelper::_('select.genericlist', $options, 'jform[country]',
 												'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
 												1 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $default, 'jform_country');
 											?>

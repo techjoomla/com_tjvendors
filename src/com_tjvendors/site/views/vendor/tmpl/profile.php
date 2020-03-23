@@ -193,7 +193,7 @@ HTMLHelper::_('behavior.keepalive');
 						<!----Tab 2 Start----->
 						
 						<!----Tab 3 Start----->
-						<div id="tab2" class="tab-pane fade">
+						<div id="tab3" class="tab-pane fade">
 							<div class="row">
 								<?php echo $this->form->getInput('payment_gateway');?>
 						   </div>

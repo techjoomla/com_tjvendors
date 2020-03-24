@@ -9,6 +9,9 @@
  */
 
 defined('_JEXEC') or die();
+use Joomla\CMS\Table\Table;
+
+Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjfields/tables');
 
 /**
  * TJVendors utilities class for common methods.
@@ -89,5 +92,70 @@ class TjvendorsUtilities
 		$rows = $this->tjGeoHelperObj->getCityList($countryId, 'com_tjvendors');
 
 		return $rows;
+	}
+	
+	/**
+	 * Method to get country.
+	 *
+	 * @param   int  $countryId  country id
+	 *
+	 * @return object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getCountry($countryId)
+	{
+		$countryTable = Table::getInstance('Country', 'TjfieldsTable');
+		$countryTable->load(array('id' => $countryId));
+
+		$countryObj = new stdClass;
+		$countryObj->id = $countryTable->id;
+		$countryObj->country = $countryTable->country;
+
+		return $countryObj;
+	}
+	
+		/**
+	 * Method to get state.
+	 *
+	 * @param   int  $regionId  region id
+	 *
+	 * @return object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getRegion($regionId)
+	{
+		$regionTable = Table::getInstance('Region', 'TjfieldsTable');
+		$regionTable->load(array('id' => $regionId));
+
+		$regionObj = new stdClass;
+		$regionObj->id = $regionTable->id;
+		$regionObj->country_id = $regionTable->country_id;
+		$regionObj->region = $regionTable->region;
+
+		return $regionObj;
+	}
+	
+		/**
+	 * Method to get city.
+	 *
+	 * @param   int  $cityId  city id
+	 *
+	 * @return object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getCity($cityId)
+	{
+		$cityTable = Table::getInstance('City', 'TjfieldsTable');
+		$cityTable->load(array('id' => $cityId));
+
+		$cityObj = new stdClass;
+		$cityObj->id = $cityTable->id;
+		$cityObj->city = $cityTable->city;
+		$cityObj->country_id = $cityTable->country_id;
+
+		return $cityObj;
 	}
 }

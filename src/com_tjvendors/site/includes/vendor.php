@@ -47,7 +47,79 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $vendor_title = '';
+	
+	/**
+	 * The address of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $address = '';
+	
+	/**
+	 * The country of the vendor.
+	 *
+	 * @var    Integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $country = 0;
 
+	/**
+	 * The region of the vendor.
+	 *
+	 * @var    Integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $region = 0;
+	
+	/**
+	 * The city of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $city = '';
+	
+	/**
+	 * The other_city of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $other_city = '';
+	
+	/**
+	 * The zip of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $zip = '';
+	
+	/**
+	 * The phone_number of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $phone_number = '';
+	
+	/**
+	 * The website_address of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $website_address = '';
+	
+	/**
+	 * The gst_number of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $gst_number = '';
+	
 	/**
 	 * Unique string representation of the vendor
 	 *
@@ -221,6 +293,15 @@ class TjvendorsVendor extends CMSObject
 		$this->vendor_id           = (int) $table->get('vendor_id');
 		$this->user_id             = (int) $table->get('user_id');
 		$this->vendor_title        = $table->get('vendor_title');
+		$this->address             = $table->get('address');
+		$this->country             = TJVendors::utilities()->getCountry((int) $table->get('country'));
+		$this->region              = TJVendors::utilities()->getCountry((int) $table->get('region'));
+		$this->city                = TJVendors::utilities()->getCountry((int) $table->get('city'));
+		$this->other_city          = $table->get('other_city');
+		$this->zip                 = $table->get('zip');
+		$this->phone_number        = $table->get('phone_number');
+		$this->website_address     = $table->get('website_address');
+		$this->gst_number          = $table->get('gst_number');
 		$this->alias               = $table->get('alias');
 		$this->vendor_description  = $table->get('vendor_description');
 		$this->vendor_logo         = $table->get('vendor_logo');
@@ -429,5 +510,77 @@ class TjvendorsVendor extends CMSObject
 	public function getPaymentConfig()
 	{
 		return !empty($this->payment_gateway) ? new Registry($this->payment_gateway) : false;
+	}
+
+	/**
+	 * Get the vendor address
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getAddress()
+	{
+		return $this->address;
+	}
+	
+	/**
+	 * Get the vendor other city
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getOtherCity()
+	{
+		return $this->other_city;
+	}
+	
+	/**
+	 * Get the vendor zip
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getZip()
+	{
+		return $this->zip;
+	}
+	
+	/**
+	 * Get the vendor phone number
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getPhoneNumber()
+	{
+		return $this->phone_number;
+	}
+	
+	/**
+	 * Get the vendor website address
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getWebsiteAddress()
+	{
+		return $this->website_address;
+	}
+
+	/**
+	 * Get the vendor gst number
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getGstNumber()
+	{
+		return $this->gst_number;
 	}
 }

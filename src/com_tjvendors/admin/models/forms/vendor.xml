@@ -94,7 +94,6 @@
 
 		<field
 			name="address"
-			required="true"
 			type="address"
 			default=""
 			label="COM_TJVENDORS_FORM_LBL_ADDRESS"
@@ -106,7 +105,6 @@
 		<field
 			name="country"
 			type="list"
-			required="true"
 			label="COM_TJVENDORS_FORM_LBL_COUNTRY"
 			description="COM_TJVENDORS_FORM_DESC_COUNTRY"
 			filter="integer"/>
@@ -114,7 +112,6 @@
 		<field
 			name="region"
 			type="list"
-			required="true"
 			label="COM_TJVENDORS_FORM_LBL_REGION"
 			description="COM_TJVENDORS_FORM_DESC_REGION"
 			filter="integer">
@@ -142,7 +139,6 @@
 
 		<field
 			name="zip"
-			required="true"
 			type="text"
 			default=""
 			label="COM_TJVENDORS_FORM_LBL_ZIP"

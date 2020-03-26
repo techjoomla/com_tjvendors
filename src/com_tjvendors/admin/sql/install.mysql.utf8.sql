@@ -41,12 +41,12 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
   `address` text NOT NULL,
   `country` int(3) NOT NULL,
   `region` int(5) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `other_city` varchar(255) NOT NULL,
+  `city` varchar(50) NOT NULL,
+  `other_city` varchar(50) NOT NULL,
   `zip` varchar(50) NOT NULL,
   `phone_number` varchar(50) NOT NULL,
-  `website_address` varchar(255) NOT NULL,
-  `gst_number` varchar(50) NOT NULL,
+  `website_address` varchar(100) NOT NULL,
+  `vat_number` varchar(50) NOT NULL,
   `alias` varchar(255) NOT NULL,
   `vendor_description` text NOT NULL,
   `vendor_logo` varchar(255) NOT NULL,
@@ -55,6 +55,10 @@ CREATE TABLE IF NOT EXISTS `#__tjvendors_vendors` (
   `checked_out` int(11) NOT NULL,
   `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `params` varchar(255) NOT NULL,
+  `created_by` int(11) NOT NULL,
+  `modified_by` int(11) NOT NULL,
+  `created_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`vendor_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 

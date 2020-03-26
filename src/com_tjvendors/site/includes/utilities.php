@@ -11,8 +11,6 @@
 defined('_JEXEC') or die();
 use Joomla\CMS\Table\Table;
 
-Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjfields/tables');
-
 /**
  * TJVendors utilities class for common methods.
  *
@@ -105,6 +103,7 @@ class TjvendorsUtilities
 	 */
 	public function getCountry($countryId)
 	{
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjfields/tables');
 		$countryTable = Table::getInstance('Country', 'TjfieldsTable');
 		$countryTable->load(array('id' => $countryId));
 
@@ -126,6 +125,7 @@ class TjvendorsUtilities
 	 */
 	public function getRegion($regionId)
 	{
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjfields/tables');
 		$regionTable = Table::getInstance('Region', 'TjfieldsTable');
 		$regionTable->load(array('id' => $regionId));
 
@@ -148,6 +148,7 @@ class TjvendorsUtilities
 	 */
 	public function getCity($cityId)
 	{
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjfields/tables');
 		$cityTable = Table::getInstance('City', 'TjfieldsTable');
 		$cityTable->load(array('id' => $cityId));
 

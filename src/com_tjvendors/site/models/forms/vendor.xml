@@ -97,6 +97,30 @@
 			filter=""/>
 
 		<field
+			name="created_by"
+			type="hidden"
+			default="0"
+			filter="INT" />
+
+		<field
+			name="modified_by"
+			type="hidden"
+			default="0"
+			filter="INT" />
+		
+		<field
+			name="created_time"
+			default="0000-00-00 00:00:00"
+			type="hidden"
+			filter="" />
+		
+		<field
+			name="modified_time"
+			default="0000-00-00 00:00:00"
+			type="hidden"
+			filter="" />
+
+		<field
 			name="checked_out_time"
 			default="0000-00-00 00:00:00"
 			type="hidden"
@@ -145,6 +169,7 @@
 			label="COM_TJVENDORS_FORM_LBL_CITY"
 			description="COM_TJVENDORS_FORM_DESC_CITY"
 			onchange="com_tjvendor.UI.Common.showOtherCity('jform_city')"
+			maxlength="50"
 			filter="">
 			<option value="">COM_TJVENDORS_FORM_LIST_SELECT_OPTION</option>
 		</field>
@@ -156,7 +181,7 @@
 			class="no-whitespace hide"
 			description="COM_TJVENDORS_FORM_DESC_OTHER_CITY"
 			filter="string"
-			maxlength="255"/>
+			maxlength="50"/>
 
 		<field
 			name="zip"
@@ -169,7 +194,7 @@
 
 		<field
 			name="phone_number"
-			type="text"
+			type="tel"
 			default=""
 			label="COM_TJVENDORS_FORM_LBL_PHONE_NUMBER"
 			description="COM_TJVENDORS_FORM_DESC_PHONE_NUMBER"
@@ -186,14 +211,14 @@
 			description="COM_TJVENDORS_FORM_DESC_WEBSITE"
 			validate="url"
 			schemes="http,https"
-			maxlength="255"/>
-			
+			maxlength="100"/>
+
 		<field
-			name="gst_number"
+			name="vat_number"
 			type="text"
 			default=""
-			label="COM_TJVENDORS_FORM_LBL_GST_NUMBER"
-			description="COM_TJVENDORS_FORM_DESC_GST_NUMBER"
+			label="COM_TJVENDORS_FORM_LBL_VAT_NUMBER"
+			description="COM_TJVENDORS_FORM_DESC_VAT_NUMBER"
 			filter=""
 			maxlength="50"/>
 

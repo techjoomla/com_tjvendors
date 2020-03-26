@@ -4,7 +4,7 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2010 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2020 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -53,13 +53,13 @@ class TjvendorsControllerVendor extends TjvendorsController
 		$defaultCity   = array("id" => 0, "city" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),"city_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 
 		// Use helper file function
-		$utilitiesObj  = TJVendors::utilities();
-		$city = $utilitiesObj->getCities($country);
+		$utilitiesObj = TJVendors::utilities();
+		$city         = $utilitiesObj->getCities($country);
 		array_unshift($city, $defaultCity);
 		
-		$otherCity = array("id" => 'other', "city" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY'),"city_jtext" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY'));
+		$otherCity = array("id" => 'other', "city" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY_OPTION'),"city_jtext" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY_VALUE'));
 		array_push($city,$otherCity);
-		
+
 		echo new JResponseJson($city, Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 	}
 }

@@ -53,11 +53,11 @@ if (!empty($this->vendor_id))
 		
 		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_ADDRESS')?></div>
 		<div class="col-sm-6">
-			<?php 
-				echo htmlspecialchars($this->VendorDetail->address, ENT_COMPAT, 'UTF-8');			
-				echo ', ' . htmlspecialchars($this->VendorDetail->country_name, ENT_COMPAT, 'UTF-8');
-				echo ', ' . htmlspecialchars($this->VendorDetail->region_name, ENT_COMPAT, 'UTF-8');
-				echo ', ' . htmlspecialchars($this->VendorDetail->city_name, ENT_COMPAT, 'UTF-8');
+			<?php
+				echo $this->escape($this->VendorDetail->address);			
+				echo ', ' . $this->escape($this->VendorDetail->country_name);
+				echo ', ' . $this->escape($this->VendorDetail->region_name);
+				echo ', ' . $this->escape($this->VendorDetail->city_name);
 			?>
 		</div>
 				
@@ -84,12 +84,12 @@ if (!empty($this->vendor_id))
 			</div>
 		<?php 
 		}
-		if (!empty($this->VendorDetail->gst_number))
+		if (!empty($this->VendorDetail->vat_number))
 		{
 		?>
-			<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_GST_NUMBER')?></div>
+			<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_VAT_NUMBER')?></div>
 			<div class="col-sm-6">
-				<?php echo htmlspecialchars($this->VendorDetail->gst_number, ENT_COMPAT, 'UTF-8')?>
+				<?php echo htmlspecialchars($this->VendorDetail->vat_number, ENT_COMPAT, 'UTF-8')?>
 			</div>
 		<?php
 		}?>	

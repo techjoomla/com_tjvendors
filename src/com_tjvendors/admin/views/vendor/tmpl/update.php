@@ -45,7 +45,7 @@ tjVAdmin.vendor.initVendorJs();
 		echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'personal')); 
 			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'personal', Text::_('COM_TJVENDORS_TITLE_PERSONAL', true)); ?>
 			<div class="row-fluid">
-				<div class="span10 form-horizontal">
+				<div class="span6 form-horizontal">
 					<fieldset class="adminform">
 						<input type="hidden" name="jform[vendor_id]" value="<?php echo $this->item->vendor_id; ?>" />
 						<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->item->checked_out_time; ?>" />
@@ -53,6 +53,11 @@ tjVAdmin.vendor.initVendorJs();
 						<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
 						<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 						<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
+						
+						<input type="hidden" name="jform[created_by]" value="<?php echo $this->item->created_by; ?>" />
+						<input type="hidden" name="jform[modified_by]" value="<?php echo Factory::getUser()->id; ?>" />
+						<input type="hidden" name="jform[created_time]" value="<?php echo $this->item->created_time; ?>" />
+						<input type="hidden" name="jform[modified_time]" value="<?php echo $this->item->modified_time; ?>" />
 							<?php
 							echo $this->form->renderField('user_id');
 							echo $this->form->renderField('client');
@@ -75,78 +80,79 @@ tjVAdmin.vendor.initVendorJs();
 							</div>
 					</fieldset>
 				</div>
+				<div class="span6 form-horizontal">
+					<fieldset class="adminform">
+						<?php
+						echo $this->form->renderField('address');
+						echo $this->form->renderField('website_address');
+						echo $this->form->renderField('vat_number');?>
+						<div class="control-group" id="country_group">
+							<div class="control-label">
+								<label for="jform_country">
+									<?php echo $this->form->getLabel('country'); ?>
+								</label>
+							</div>
+							<div class="controls">
+								<?php
+									$default = null;
+
+									if (isset($this->item->country))
+									{
+										$default = $this->item->country;
+									}
+
+									$options = array();
+									$options[] = JHtml::_('select.option', "", JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+
+									foreach ($this->countries as $key => $value)
+									{
+										$country = $this->countries[$key];
+										$id = $country['id'];
+										$value = $country['country'];
+										$options[] = JHtml::_('select.option', $id, $value);
+									}
+
+									if (empty($this->item->region))
+									{
+										$this->item->region = '';
+										$this->item->city = '';
+									}
+
+									echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
+									'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
+									1 . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $default, 'jform_country');
+								?>
+							</div>
+						</div>
+						<div class="control-group" id="region_group">
+							<div class="control-label">
+								<label for="jform_region">
+									<?php echo $this->form->getLabel('region'); ?>
+								</label>
+							</div>
+							<div class="controls">
+								<select name="jform[region]" id="jform_region"></select>
+							</div>
+						</div>
+						<div class="control-group" id="city_group">
+							<div class="control-label">
+								<label for="jform_city">
+									<?php echo $this->form->getLabel('city'); ?>
+								</label>
+							</div>
+							<div class="controls">
+								<select name="jform[city]" id="jform_city" onchange="com_tjvendor.UI.Common.showOtherCity('jform_city')"></select>
+							</div>
+						</div>
+						<?php
+						echo $this->form->renderField('other_city');
+						echo $this->form->renderField('zip');
+						echo $this->form->renderField('phone_number');?>
+					</fieldset>
+				</div>
 			</div>
 		<?php 
-			echo HTMLHelper::_('bootstrap.endTab'); 
-			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'address', Text::_('COM_TJVENDORS_ADDRESS', true));
-				echo $this->form->renderField('address');
-				echo $this->form->renderField('website_address');
-				echo $this->form->renderField('gst_number');
-			?>
-				<div class="control-group" id="country_group">
-					<div class="control-label">
-						<label for="jform_country">
-							<?php echo $this->form->getLabel('country'); ?>
-						</label>
-					</div>
-					<div class="controls">
-						<?php
-							$countries = $this->countries;
-							$default = null;
-
-							if (isset($this->item->country))
-							{
-								$default = $this->item->country;
-							}
-
-							$options = array();
-							$options[] = HTMLHelper::_('select.option', "", Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
-
-							foreach ($countries as $key => $value)
-							{
-								$country = $countries[$key];
-								$id = $country['id'];
-								$value = $country['country'];
-								$options[] = HTMLHelper::_('select.option', $id, $value);
-							}
-
-							if (empty($this->item->region))
-							{
-								$this->item->region = '';
-								$this->item->city = '';
-							}
-
-							echo $this->dropdown = HTMLHelper::_('select.genericlist', $options, 'jform[country]',
-							'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
-							$this->isAdmin . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $default, 'jform_country');
-						?>
-					</div>
-				</div>
-				<div class="control-group" id="region_group">
-					<div class="control-label">
-						<label for="jform_region">
-							<?php echo $this->form->getLabel('region'); ?>
-						</label>
-					</div>
-					<div class="controls">
-						<select name="jform[region]" id="jform_region"></select>
-					</div>
-				</div>
-				<div class="control-group" id="city_group">
-					<div class="control-label">
-						<label for="jform_city">
-							<?php echo $this->form->getLabel('city'); ?>
-						</label>
-					</div>
-					<div class="controls">
-						<select name="jform[city]" id="jform_city" onchange="com_tjvendor.UI.Common.showOtherCity('jform_city')"></select>
-					</div>
-				</div>
-			<?php
-				echo $this->form->renderField('other_city');
-				echo $this->form->renderField('zip');
-				echo $this->form->renderField('phone_number');
-			echo HTMLHelper::_('bootstrap.endTab');
+			echo HTMLHelper::_('bootstrap.endTab'); 			
 			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'name', Text::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS')); 
 				echo $this->form->getInput('payment_gateway');?>
 				<div id="payment_details"></div>

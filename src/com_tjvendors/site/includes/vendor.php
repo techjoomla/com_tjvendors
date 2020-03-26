@@ -113,12 +113,12 @@ class TjvendorsVendor extends CMSObject
 	private $website_address = '';
 	
 	/**
-	 * The gst_number of the vendor.
+	 * The vat number of the vendor.
 	 *
 	 * @var    String
 	 * @since  __DEPLOY_VERSION__
 	 */
-	private $gst_number = '';
+	private $vat_number = '';
 	
 	/**
 	 * Unique string representation of the vendor
@@ -301,7 +301,7 @@ class TjvendorsVendor extends CMSObject
 		$this->zip                 = $table->get('zip');
 		$this->phone_number        = $table->get('phone_number');
 		$this->website_address     = $table->get('website_address');
-		$this->gst_number          = $table->get('gst_number');
+		$this->vat_number          = $table->get('vat_number');
 		$this->alias               = $table->get('alias');
 		$this->vendor_description  = $table->get('vendor_description');
 		$this->vendor_logo         = $table->get('vendor_logo');
@@ -573,14 +573,14 @@ class TjvendorsVendor extends CMSObject
 	}
 
 	/**
-	 * Get the vendor gst number
+	 * Get the vendor vat number
 	 *
 	 * @return  String
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getGstNumber()
+	public function getVatNumber()
 	{
-		return $this->gst_number;
+		return $this->vat_number;
 	}
 }

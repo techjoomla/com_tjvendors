@@ -37,7 +37,7 @@ HTMLHelper::_('behavior.keepalive');
 
 <div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
 <?php
-if (Factory::getUser()->id )
+if (Factory::getUser()->id)
 {
 	?>
 	<h1>
@@ -53,8 +53,7 @@ if (Factory::getUser()->id )
 					?>
 					<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
 						<li class="active"><a data-toggle="tab" href="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
-						<li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_ADDRESS'); ?></a></li>
-						<li><a data-toggle="tab" href="#tab3"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
+						<li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
 					</ul>
 			<?php
 				} ?>
@@ -67,7 +66,11 @@ if (Factory::getUser()->id )
 							<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->vendor->checked_out_time; ?>" />
 							<input type="hidden" name="jform[checked_out]" value="<?php echo $this->vendor->checked_out; ?>" />
 							<input type="hidden" name="jform[ordering]" value="<?php echo $this->vendor->ordering; ?>" />
-							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
+							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />							
+							<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
+							<input type="hidden" name="jform[modified_by]" value="0" />
+							<input type="hidden" name="jform[created_time]" value="<?php echo $this->vendor->created_time; ?>" />
+							<input type="hidden" name="jform[modified_time]" value="<?php echo $this->vendor->modified_time; ?>" />
 							<?php
 							$input = Factory::getApplication()->input;
 
@@ -75,10 +78,7 @@ if (Factory::getUser()->id )
 							{
 								?>
 								<div class="pull-left alert alert-info">
-
-									<?php
-										echo Text::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');
-									?>
+									<?php echo Text::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
 
 									<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);?>">
 									<strong><?php echo $this->escape($this->VendorDetail->vendor_title);?></a></strong>
@@ -103,9 +103,16 @@ if (Factory::getUser()->id )
 							?>
 							<div class="row">
 								<div class="col-sm-6">
-									<?php echo $this->form->renderField('vendor_title'); ?>
-									<?php echo $this->form->renderField('alias'); ?>
-									<?php echo $this->form->renderField('vendor_description'); ?>
+									<?php 
+										echo $this->form->renderField('vendor_title');
+										echo $this->form->renderField('alias');
+										echo $this->form->renderField('vendor_description');
+										echo $this->form->renderField('address');
+										echo $this->form->renderField('zip');
+										echo $this->form->renderField('website_address');
+										echo $this->form->renderField('vat_number');															
+										echo $this->form->renderField('phone_number');
+									?>
 								</div>
 								<div class="col-sm-6">
 									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
@@ -143,6 +150,50 @@ if (Factory::getUser()->id )
 									<div class="alert alert-info">
 										<?php echo sprintf(Text::_("COM_TJVENDORS_MAXIMUM_LOGO_UPLOAD_SIZE_NOTE"), $this->params->get('image_size', '', 'STRING'));?>
 									</div>
+									
+									<div class="control-group" id="country_group">
+										<div class="control-label">
+											<label for="jform_country">
+												<?php echo $this->form->getLabel('country'); ?>
+											</label>
+										</div>
+										<div class="controls">
+											<?php
+												$default = null;
+
+												if (isset($this->vendor->country))
+												{
+													$default = $this->vendor->country;
+												}
+
+												$options = array();
+												$options[] = JHtml::_('select.option', "", JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+
+												foreach ($this->countries as $key => $value)
+												{
+													$country = $this->countries[$key];
+													$id = $country['id'];
+													$value = $country['country'];
+													$options[] = JHtml::_('select.option', $id, $value);
+												}
+										
+												if ($this->vendor->region == null)
+												{
+													$this->vendor->region = '';
+													$this->vendor->city = '';
+												}
+										
+												echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
+												'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
+												0 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $default, 'jform_country');
+											?>
+										</div>
+									</div>	
+									<?php
+										echo $this->form->renderField('region');
+										echo $this->form->renderField('city');
+										echo $this->form->renderField('other_city');
+									?>								
 								</div>
 							</div>
 							<?php
@@ -151,76 +202,13 @@ if (Factory::getUser()->id )
 						</fieldset>
 					</div>
 					<!----Tab 1 End----->
-
 					<!----Tab 2 Start----->
 					<div id="tab2" class="tab-pane fade">
-						<div class="row">
-							<div class="col-sm-6">
-								<?php
-									echo $this->form->renderField('address');
-									echo $this->form->renderField('zip');
-									echo $this->form->renderField('website_address');
-									echo $this->form->renderField('gst_number');
-								?>
-							</div>
-							<div class="col-sm-6">							
-								<div class="control-group" id="country_group">
-									<div class="control-label">
-										<label for="jform_country">
-											<?php echo $this->form->getLabel('country'); ?>
-										</label>
-									</div>
-									<div class="controls">
-										<?php
-											$countries = $this->countries;
-											$default = null;
-
-											if (isset($this->vendor->country))
-											{
-												$default = $this->vendor->country;
-											}
-
-											$options = array();
-											$options[] = HTMLHelper::_('select.option', "", Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
-
-											foreach ($countries as $key => $value)
-											{
-												$country = $countries[$key];
-												$id = $country['id'];
-												$value = $country['country'];
-												$options[] = HTMLHelper::_('select.option', $id, $value);
-											}
-									
-											if ($this->vendor->region == null)
-											{
-												$this->vendor->region = '';
-												$this->vendor->city = '';
-											}
-									
-											echo $this->dropdown = HTMLHelper::_('select.genericlist', $options, 'jform[country]',
-											'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
-											$this->isAdmin . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $default, 'jform_country');
-										?>
-									</div>
-								</div>
-								<?php
-									echo $this->form->renderField('region');
-									echo $this->form->renderField('city');
-									echo $this->form->renderField('other_city');					
-									echo $this->form->renderField('phone_number');
-								?>
-							</div>
-						</div>
-					</div>
-					<!----Tab 2 End----->
-
-					<!----Tab 3 Start----->
-					<div id="tab3" class="tab-pane fade">
 						<div class="row">
 							<?php echo $this->form->getInput('payment_gateway');?>
 						</div>
 					</div>
-					<!----Tab 3 End----->
+					<!----Tab 2 End----->
 				</div>
 				<!----Tab Container End----->
 			</div>

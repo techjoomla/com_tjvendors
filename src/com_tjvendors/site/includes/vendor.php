@@ -295,8 +295,8 @@ class TjvendorsVendor extends CMSObject
 		$this->vendor_title        = $table->get('vendor_title');
 		$this->address             = $table->get('address');
 		$this->country             = TJVendors::utilities()->getCountry((int) $table->get('country'));
-		$this->region              = TJVendors::utilities()->getCountry((int) $table->get('region'));
-		$this->city                = TJVendors::utilities()->getCountry((int) $table->get('city'));
+		$this->region              = TJVendors::utilities()->getRegion((int) $table->get('region'));
+		$this->city                = TJVendors::utilities()->getCity((int) $table->get('city'));
 		$this->other_city          = $table->get('other_city');
 		$this->zip                 = $table->get('zip');
 		$this->phone_number        = $table->get('phone_number');
@@ -582,5 +582,41 @@ class TjvendorsVendor extends CMSObject
 	public function getVatNumber()
 	{
 		return $this->vat_number;
+	}
+	
+	/**
+	 * This function return vendor profile complete/incomplete status
+	 *
+	 * @return  boolean  true or false
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getVendorProfileStatus($userId, $client)
+	{
+		$data = $this->loadByUserId($userId, $client);
+
+		$total = 0;
+		
+		$total += (!empty($data->vendor_title)) ? 20 : 0;
+		$total += (!empty($data->address)) ? 10 : 0;
+		$total += (!empty($data->country)) ? 10: 0;
+		$total += (!empty($data->region)) ? 10: 0;
+		$total += (!empty($data->city)) ? 10: 0;
+		$total += (!empty($data->zip)) ? 10: 0;
+		$total += (!empty($data->phone_number)) ? 5: 0;
+		$total += (!empty($data->website_address)) ? 5: 0;
+		$total += (!empty($data->vat_number)) ? 5: 0;
+		$total += (!empty($data->vendor_description)) ? 5: 0;
+		$total += (!empty($data->vendor_logo))? 5: 0;
+		$total += (!empty($data->payment_gateway)) ? 5: 0;
+	
+		if ((int) $total < 100)
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}		
 	}
 }

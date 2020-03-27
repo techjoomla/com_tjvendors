@@ -125,8 +125,7 @@ tjVAdmin.vendor.initVendorJs();
 							<fieldset class="adminform">
 								<?php
 								echo $this->form->renderField('address');
-								echo $this->form->renderField('website_address');
-								echo $this->form->renderField('vat_number');
+								echo $this->form->renderField('phone_number');
 								?>
 								<div class="control-group" id="country_group">
 									<div class="control-label">
@@ -171,7 +170,8 @@ tjVAdmin.vendor.initVendorJs();
 								echo $this->form->renderField('city');
 								echo $this->form->renderField('other_city');
 								echo $this->form->renderField('zip');
-								echo $this->form->renderField('phone_number');?>
+								echo $this->form->renderField('website_address');
+								echo $this->form->renderField('vat_number');?>
 							</fieldset>
 						</div>
 					</div>

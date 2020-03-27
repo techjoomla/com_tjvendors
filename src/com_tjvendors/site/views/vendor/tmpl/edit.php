@@ -108,10 +108,9 @@ if (Factory::getUser()->id)
 										echo $this->form->renderField('alias');
 										echo $this->form->renderField('vendor_description');
 										echo $this->form->renderField('address');
-										echo $this->form->renderField('zip');
-										echo $this->form->renderField('website_address');
-										echo $this->form->renderField('vat_number');															
 										echo $this->form->renderField('phone_number');
+										echo $this->form->renderField('website_address');
+										echo $this->form->renderField('vat_number');													
 									?>
 								</div>
 								<div class="col-sm-6">
@@ -193,6 +192,7 @@ if (Factory::getUser()->id)
 										echo $this->form->renderField('region');
 										echo $this->form->renderField('city');
 										echo $this->form->renderField('other_city');
+										echo $this->form->renderField('zip');
 									?>								
 								</div>
 							</div>

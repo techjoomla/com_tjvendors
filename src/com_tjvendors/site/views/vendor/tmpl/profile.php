@@ -77,10 +77,10 @@ HTMLHelper::_('behavior.keepalive');
 										echo$this->form->renderField('alias');
 										echo $this->form->renderField('vendor_description');
 										echo $this->form->renderField('address');
-										echo $this->form->renderField('zip');
+										echo $this->form->renderField('phone_number');										
 										echo $this->form->renderField('website_address');
 										echo $this->form->renderField('vat_number');															
-										echo $this->form->renderField('phone_number');?>
+										?>
 									</div>
 									<div class="col-sm-6">
 									<?php
@@ -173,7 +173,9 @@ HTMLHelper::_('behavior.keepalive');
 												<select name="jform[city]" id="jform_city" onchange="com_tjvendor.UI.Common.showOtherCity('jform_city')"></select>
 											</div>
 										</div>
-										<?php echo $this->form->renderField('other_city');?>								
+										<?php 
+										echo $this->form->renderField('other_city');
+										echo $this->form->renderField('zip');?>								
 									</div>
 								</div>
 								<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />

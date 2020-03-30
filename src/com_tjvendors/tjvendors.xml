@@ -39,6 +39,7 @@
 		<folder>controllers</folder>
 		<folder>helpers</folder>
 		<folder>tables</folder>
+		<folder>includes</folder>
 	</files>
 	<media destination="com_tjvendor" folder="media">
 		<folder>js</folder>

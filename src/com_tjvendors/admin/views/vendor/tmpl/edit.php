@@ -17,7 +17,6 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-HTMLHelper::_('behavior.tooltip');
 HTMLHelper::_('behavior.formvalidation');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
@@ -27,6 +26,7 @@ $lang->load('plg_payment_paypal', JPATH_ADMINISTRATOR);
 
 ?>
 <script type="text/javascript">
+let CommonObj = new tjvendor.UI.CommonUI();
 var _URL                              = window.URL || window.webkitURL;
 var allowedMediaSizeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
 var allowedImageDimensionErrorMessage = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
@@ -143,7 +143,7 @@ tjVAdmin.vendor.initVendorJs();
 											}
 
 											$options = array();
-											$options[] = HTMLHelper::_('select.option', "", JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+											$options[] = HTMLHelper::_('select.option', 0, JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 
 											foreach ($this->countries as $key => $value)
 											{
@@ -160,7 +160,7 @@ tjVAdmin.vendor.initVendorJs();
 											}
 
 											echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
-											'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
+											'aria-invalid="false" size="1" onchange="CommonObj.generateStates(id,\'' .
 											1 . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $default, 'jform_country');
 										?>
 									</div>

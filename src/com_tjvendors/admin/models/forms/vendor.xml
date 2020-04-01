@@ -115,7 +115,6 @@
 			label="COM_TJVENDORS_FORM_LBL_REGION"
 			description="COM_TJVENDORS_FORM_DESC_REGION"
 			filter="integer">
-			<option value="">COM_TJVENDORS_FORM_LIST_SELECT_OPTION</option>
 		</field>
 
 		<field
@@ -123,10 +122,9 @@
 			type="list"
 			label="COM_TJVENDORS_FORM_LBL_CITY"
 			description="COM_TJVENDORS_FORM_DESC_CITY"
-			onchange="com_tjvendor.UI.Common.showOtherCity('jform_city')"
+			onchange="CommonObj.showOtherCity('jform_city')"
 			maxlength="50"
 			filter="">
-			<option value="">COM_TJVENDORS_FORM_LIST_SELECT_OPTION</option>
 		</field>
 
 		<field

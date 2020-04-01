@@ -159,4 +159,16 @@ class TjvendorsUtilities
 
 		return $cityObj;
 	}
+	
+	/**
+	 * Set the language constant used in the javascript operation
+	 *
+	 * @return   void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function defineLanguageConstant()
+	{
+		Text::script('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE');
+	}
 }

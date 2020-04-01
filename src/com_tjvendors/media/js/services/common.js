@@ -1,52 +1,56 @@
-/*
- * @package     TJVendors
- * @subpackage  com_tjvendors
- *
- * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2020 Techjoomla. All rights reserved.
- * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+import { Base  } from "./base";
+
+/**
+ * Common service to get regions,city by country
  */
-'use strict';
-/** global: com_tjvendor */
-com_tjvendor.Services.Common = new (com_tjvendor.Services.Base.extend({
-	getRegionsUrl: window.tjSiteRoot + "index.php?option=com_tjvendors&format=json&task=vendor.getRegion",
-    getCitysUrl: window.tjSiteRoot + "index.php?option=com_tjvendors&format=json&task=vendor.getCity",
-    config: {
-        headers: {}
-    },
-    response: {
-        "success": "",
-        "message": ""
-    },
-    getRegions: function (country, callback) {
-        let url;
+export class Common{
+	
+	/**
+     * Country Id
+     */
+    countryId;
+    
+    /**
+     * Init Common constructor
+     *
+     * @param int  Country id
+     *
+     */
+	constructor(countryId) {
+        this.countryId = countryId;
+    }
+    
+    /**
+     * Get Country id
+     *
+     * @return  int  Country id
+     */
+    getCountry()
+    {
+        return this.countryId;
+    }
 
-        if (country) {
-            url = this.getRegionsUrl + "&country=" + country;
-        } else {
-            this.response.success = false;
-
-            this.response.message = Joomla.JText._('COM_TJVENDORS_ERROR_NULL_COUNTRY');
-            callback(this.response);
-
-            return false;
-        }
-
-        return this.get(url, this.config, callback);
-    },
-    getCitys: function (country, callback) {
-        let url;
-
-        if (country) {
-            url = this.getCitysUrl + "&country=" + country;
-        } else {
-            this.response.success = false;
-            this.response.message = Joomla.JText._('COM_TJVENDORS_ERROR_NULL_COUNTRY');
-            callback(this.response);
-
-            return false;
-        }
-
-        return this.get(url, this.config, callback);
-    }    
-}));
+    /**
+     * Get Regions by country
+     *
+     * @param  cb  Callback function
+     *
+     * @return  void
+     */
+    getRegions (cb)
+    {
+        new Base(Joomla.getOptions('system.paths').base + '/index.php?option=com_tjvendors&task=vendor.getRegion&format=json&country=' + this.getCountry()).get(cb);
+    }
+    
+    /**
+     * Get Cities by country
+     *
+     * @param  cb  Callback function
+     *
+     * @return  void
+     */
+    getCities (cb)
+    {
+        new Base(Joomla.getOptions('system.paths').base + '/index.php?option=com_tjvendors&task=vendor.getCity&format=json&country=' + this.getCountry()).get(cb);
+    }
+}

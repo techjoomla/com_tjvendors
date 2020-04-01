@@ -13,7 +13,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
 include_once JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
-require_once JPATH_SITE . '/media/com_tjvendor/js/load_js.php';
 
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT);
 

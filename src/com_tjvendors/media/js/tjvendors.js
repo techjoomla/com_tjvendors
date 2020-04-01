@@ -48,8 +48,9 @@ var tjVAdmin = {
 				jQuery(document).on("change", "#jform_user_id", function() {
 					tjVAdmin.vendor.checkVendor();
 				});
-				com_tjvendor.UI.Common.generateStates('jform_country', 1, region, city);
-				com_tjvendor.UI.Common.showOtherCity('jform_city', city);
+				let CommonObj = new tjvendor.UI.CommonUI();
+				CommonObj.generateStates('jform_country', 1, region, city);
+				CommonObj.showOtherCity('jform_city', city);
 			});
 
 			jQuery(window).load(function() {
@@ -217,8 +218,9 @@ var tjVSite = {
 		initVendorJs: function() {
 			jQuery(document).ready(function() {
 				jQuery(document).on("change", "#jform_payment_gateway", function() {});
-				com_tjvendor.UI.Common.generateStates('jform_country', 1, region, city);
-				com_tjvendor.UI.Common.showOtherCity('jform_city', city)
+				let CommonObj = new tjvendor.UI.CommonUI();
+				CommonObj.generateStates('jform_country', 1, region, city);
+				CommonObj.showOtherCity('jform_city', city)
 			});
 
 			jQuery(window).load(function() {

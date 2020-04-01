@@ -23,6 +23,7 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
 ?>
 <script type="text/javascript">
+	let CommonObj = new tjvendor.UI.CommonUI();
 	var layout = '<?php echo "profile";?>';
 	var _URL                              = window.URL || window.webkitURL;
 	var allowedMediaSizeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
@@ -131,7 +132,7 @@ HTMLHelper::_('behavior.keepalive');
 													}
 
 													$options = array();
-													$options[] = JHtml::_('select.option', "", JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+													$options[] = JHtml::_('select.option', 0, JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 
 													foreach ($this->countries as $key => $value)
 													{
@@ -148,7 +149,7 @@ HTMLHelper::_('behavior.keepalive');
 													}
 											
 													echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
-													'aria-invalid="false" size="1" onchange="com_tjvendor.UI.Common.generateStates(id,\'' .
+													'aria-invalid="false" size="1" onchange="CommonObj.generateStates(id,\'' .
 													1 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $default, 'jform_country');
 												?>
 											</div>
@@ -170,7 +171,7 @@ HTMLHelper::_('behavior.keepalive');
 												</label>
 											</div>
 											<div class="controls">
-												<select name="jform[city]" id="jform_city" onchange="com_tjvendor.UI.Common.showOtherCity('jform_city')"></select>
+												<select name="jform[city]" id="jform_city" onchange="CommonObj.showOtherCity('jform_city')"></select>
 											</div>
 										</div>
 										<?php 

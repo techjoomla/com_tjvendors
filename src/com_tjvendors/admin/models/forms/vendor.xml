@@ -94,12 +94,12 @@
 
 		<field
 			name="address"
-			type="address"
+			type="textarea"
 			default=""
 			label="COM_TJVENDORS_FORM_LBL_ADDRESS"
 			description="COM_TJVENDORS_FORM_DESC_ADDRESS"
-			rows="5"
-			cols="150"
+			rows="3"
+			cols="5"
 			filter="raw"/>
 
 		<field

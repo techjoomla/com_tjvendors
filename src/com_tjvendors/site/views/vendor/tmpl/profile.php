@@ -77,8 +77,8 @@ HTMLHelper::_('behavior.keepalive');
 										echo$this->form->renderField('vendor_title');
 										echo$this->form->renderField('alias');
 										echo $this->form->renderField('vendor_description');
-										echo $this->form->renderField('address');
-										echo $this->form->renderField('phone_number');										
+										echo $this->form->renderField('phone_number');
+										echo $this->form->renderField('address');									
 										echo $this->form->renderField('website_address');
 										echo $this->form->renderField('vat_number');															
 										?>

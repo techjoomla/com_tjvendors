@@ -139,12 +139,12 @@
 
 		<field
 			name="address"
-			type="address"
-			default=""
+			type="textarea"
+			class="inputbox"
 			label="COM_TJVENDORS_FORM_LBL_ADDRESS"
 			description="COM_TJVENDORS_FORM_DESC_ADDRESS"
-			rows="5"
-			cols="150"
+			rows="3"
+			cols="45"
 			filter="raw"/>
 
 		<field

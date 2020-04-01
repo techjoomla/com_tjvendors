@@ -83,8 +83,9 @@ var CommonObj = new tjvendor.UI.CommonUI();
 				<div class="span6 form-horizontal">
 					<fieldset class="adminform">
 						<?php
+						echo $this->form->renderField('phone_number');
 						echo $this->form->renderField('address');
-						echo $this->form->renderField('phone_number');?>
+						?>
 						<div class="control-group" id="country_group">
 							<div class="control-label">
 								<label for="jform_country">

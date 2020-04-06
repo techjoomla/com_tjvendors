@@ -46,8 +46,7 @@ export class CommonUI{
             
             if (!err && resp) 
             {
-				let regions = JSON.parse(resp);			
-				let option = document.createElement("option");
+				let regions = JSON.parse(resp);
 
                 if(regions.success === true)
 				{
@@ -106,7 +105,6 @@ export class CommonUI{
             if (!err && resp) 
             {
 				let cities = JSON.parse(resp);			
-				let option = document.createElement("option");
 				
 				if(cities.success === true)
 				{
@@ -168,7 +166,6 @@ export class CommonUI{
 			jQuery("#jform_option_city").val('');
 			jQuery('#jform_other_city').removeClass('show');
 			jQuery('#jform_other_city-lbl').removeClass('show');
-			
 			jQuery('#jform_other_city').addClass('hide');			
 			jQuery('#jform_other_city-lbl').addClass('hide');
 			jQuery('#jform_other_city-lbl').removeClass('hasPopover');

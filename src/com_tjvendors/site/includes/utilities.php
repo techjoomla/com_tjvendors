@@ -10,6 +10,7 @@
 
 defined('_JEXEC') or die();
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
 
 /**
  * TJVendors utilities class for common methods.
@@ -18,6 +19,8 @@ use Joomla\CMS\Table\Table;
  */
 class TjvendorsUtilities
 {
+	public $tjGeoHelperObj = new stdClass;
+
 	/**
 	 * Constructor activating the default information of the utilities
 	 *
@@ -39,7 +42,7 @@ class TjvendorsUtilities
 	/**
 	 * Methods to get countries
 	 *
-	 * @return  countries
+	 * @return  Array  country
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -76,7 +79,7 @@ class TjvendorsUtilities
 	 *
 	 * @param   INT  $country_id  Country Id
 	 *
-	 * @return  countries
+	 * @return  array   city list
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -108,8 +111,12 @@ class TjvendorsUtilities
 		$countryTable->load(array('id' => $countryId));
 
 		$countryObj = new stdClass;
-		$countryObj->id = $countryTable->id;
-		$countryObj->country = $countryTable->country;
+		
+		if ($countryTable)
+		{
+			$countryObj->id = $countryTable->id;
+			$countryObj->country = $countryTable->country;
+		}
 
 		return $countryObj;
 	}
@@ -130,9 +137,13 @@ class TjvendorsUtilities
 		$regionTable->load(array('id' => $regionId));
 
 		$regionObj = new stdClass;
-		$regionObj->id = $regionTable->id;
-		$regionObj->country_id = $regionTable->country_id;
-		$regionObj->region = $regionTable->region;
+		
+		if ($regionTable)
+		{
+			$regionObj->id = $regionTable->id;
+			$regionObj->country_id = $regionTable->country_id;
+			$regionObj->region = $regionTable->region;
+		}
 
 		return $regionObj;
 	}
@@ -153,9 +164,13 @@ class TjvendorsUtilities
 		$cityTable->load(array('id' => $cityId));
 
 		$cityObj = new stdClass;
-		$cityObj->id = $cityTable->id;
-		$cityObj->city = $cityTable->city;
-		$cityObj->country_id = $cityTable->country_id;
+		
+		if ($cityTable)
+		{
+			$cityObj->id = $cityTable->id;
+			$cityObj->city = $cityTable->city;
+			$cityObj->country_id = $cityTable->country_id;
+		}
 
 		return $cityObj;
 	}

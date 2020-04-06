@@ -32,7 +32,6 @@ class TjvendorsControllerVendor extends TjvendorsController
 	{
 		$app           = Factory::getApplication();
 		$input         = $app->input;
-		$regions       = array();
 		$country       = $input->get('country', 0, 'INT');
 		$defaultRegion = array("id" => 0, "region" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),"region_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 		$utilitiesObj  = TJVendors::utilities();
@@ -61,7 +60,6 @@ class TjvendorsControllerVendor extends TjvendorsController
 	{
 		$app           = Factory::getApplication();
 		$input         = $app->input;
-		$city          = array();
 		$country       = $input->get('country', 0, 'INT');
 		$defaultCity   = array("id" => 0, "city" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),"city_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
 

@@ -49,6 +49,12 @@ class TjvendorsViewVendor extends HtmlView
 	protected $params;
 
 	protected $isClientExist;
+	
+	protected $default;
+
+	protected $options;
+
+	protected $countries;
 
 	/**
 	 * Display the view

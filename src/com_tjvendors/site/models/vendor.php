@@ -162,23 +162,13 @@ class TjvendorsModelVendor extends AdminModel
 		$vendorXref->load(array('vendor_id' => $item->vendor_id));
 		$item->params = $vendorXref->params;
 
-		$TjGeoHelper = JPATH_ROOT . '/components/com_tjfields/helpers/geo.php';
-
-		if (!class_exists('TjGeoHelper'))
-		{
-			JLoader::register('TjGeoHelper', $TjGeoHelper);
-			JLoader::load('TjGeoHelper');
-		}
-
-		$tjGeoHelperObj = new TjGeoHelper;
-
-		if ($item->country)
+		if (isset($item->country))
 		{
 			$country = TJVendors::utilities()->getCountry((int) $item->country);
 			$item->country_name = $country->country;
 		}
 
-		if ($item->region)
+		if (isset($item->region))
 		{
 			$region = TJVendors::utilities()->getRegion((int) $item->region);
 			$item->region_name = $region->region;

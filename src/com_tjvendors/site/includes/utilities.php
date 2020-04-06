@@ -19,6 +19,8 @@ use Joomla\CMS\Language\Text;
  */
 class TjvendorsUtilities
 {
+	public $tjGeoHelperObj;
+
 	/**
 	 * Constructor activating the default information of the utilities
 	 *

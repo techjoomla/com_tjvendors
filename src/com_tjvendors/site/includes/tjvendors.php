@@ -176,9 +176,9 @@ class TJVendors
 		$version = $versionClass->getMediaVersion();
 		$options = array("version" => $version);
 
-		HTMLHelper::_('jquery.framework');
-		HTMLHelper::script('media/com_tjvendor/dist/app.min.js', $options);
-		HTMLHelper::script('media/com_tjvendor/js/tjvendors.js', $options);
+		HTMLHelper::_('jquery.framework');	
+		HTMLHelper::_('script', 'media/com_tjvendor/dist/app.min.js', $options);
+		HTMLHelper::_('script', 'media/com_tjvendor/js/tjvendors.js', $options);
 		HTMLHelper::stylesheet('media/com_tjvendor/css/tjvendors.css', $options);
 		HTMLHelper::stylesheet('media/techjoomla_strapper/vendors/no-more-tables.css', $options);
 

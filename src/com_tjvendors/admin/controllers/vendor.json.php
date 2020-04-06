@@ -72,7 +72,7 @@ class TjvendorsControllerVendor extends TjvendorsController
 		if (!empty($city))
 		{
 			array_unshift($city, $defaultCity);
-			$otherCity = array("id" => 'other', "city" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY_OPTION'),"city_jtext" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY_VALUE'));
+			$otherCity = array("id" => 'other', "city" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY_OPTION'),"city_jtext" => 'other');
 			array_push($city,$otherCity);
 		}
 		else

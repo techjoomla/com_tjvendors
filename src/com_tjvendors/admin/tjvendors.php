@@ -14,6 +14,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Filesystem\File;
 
 // Access check.
 if (!Factory::getUser()->authorise('core.manage', 'com_tjvendors'))
@@ -27,7 +28,7 @@ include_once  JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
 $tjStrapperPath = JPATH_SITE . '/media/techjoomla_strapper/tjstrapper.php';
 
-if (JFile::exists($tjStrapperPath))
+if (File::exists($tjStrapperPath))
 {
 	require_once $tjStrapperPath;
 	TjStrapper::loadTjAssets('com_tjvendors');

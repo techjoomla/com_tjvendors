@@ -94,33 +94,9 @@ var CommonObj = new tjvendor.UI.CommonUI();
 							</div>
 							<div class="controls">
 								<?php
-									$default = null;
-
-									if (isset($this->item->country))
-									{
-										$default = $this->item->country;
-									}
-
-									$options = array();
-									$options[] = JHtml::_('select.option', 0, JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
-
-									foreach ($this->countries as $key => $value)
-									{
-										$country = $this->countries[$key];
-										$id = $country['id'];
-										$value = $country['country'];
-										$options[] = JHtml::_('select.option', $id, $value);
-									}
-
-									if (empty($this->item->region))
-									{
-										$this->item->region = '';
-										$this->item->city = '';
-									}
-
-									echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
+									echo $this->dropdown = HTMLHelper::_('select.genericlist', $this->options, 'jform[country]',
 									'aria-invalid="false" size="1" onchange="CommonObj.generateStates(id,\'' .
-									1 . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $default, 'jform_country');
+									1 . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $this->default, 'jform_country');
 								?>
 							</div>
 						</div>

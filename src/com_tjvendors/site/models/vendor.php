@@ -174,11 +174,13 @@ class TjvendorsModelVendor extends AdminModel
 		
 		if ($item->country)
 		{
-			$item->country_name = $tjGeoHelperObj->getCountryNameFromId((int) $item->country);
+			$country = TJVendors::utilities()->getCountry((int) $item->country);
+			$item->country_name = $country->country;
 		}
 		if ($item->region)
 		{
-			$item->region_name = $tjGeoHelperObj->getRegionNameFromId((int) $item->region);
+			$region = TJVendors::utilities()->getRegion((int) $item->region);
+			$item->region_name = $region->region;
 		}
 
 		if (!empty($item->other_city))
@@ -187,9 +189,10 @@ class TjvendorsModelVendor extends AdminModel
 		}
 		else
 		{
-			$item->city_name = $tjGeoHelperObj->getCityNameFromId((int) $item->city);
+			$city = TJVendors::utilities()->getCity((int) $item->city);
+			$item->city_name = $city->city;
 		}
-		
+
 		return $item;
 	}
 

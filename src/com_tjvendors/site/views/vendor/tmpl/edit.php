@@ -75,31 +75,7 @@ if (Factory::getUser()->id)
 							<?php
 							$input = Factory::getApplication()->input;
 
-							if ($this->vendor_id != 0)
-							{
-								?>
-								<div class="pull-left alert alert-info">
-									<?php echo Text::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
-
-									<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);?>">
-									<strong><?php echo $this->escape($this->VendorDetail->vendor_title);?></a></strong>
-
-									<?php
-									if (!$this->isClientExist)
-									{
-										echo " " . Text::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
-										$tjvendorFrontHelper = new TjvendorFrontHelper;
-										echo $client = $tjvendorFrontHelper->getClientName($this->client);
-										echo Text::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
-									}
-									?>
-								</div>
-								<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
-								<input type="hidden" name="jform[vendor_title]" value="<?php echo $this->escape($this->VendorDetail->vendor_title); ?>" />
-								<input type="hidden" name="jform[vendor_description]" value="<?php echo $this->escape($this->VendorDetail->vendor_description); ?>" />
-								<?php
-							}
-							elseif($this->vendor_id == 0)
+							if($this->vendor_id == 0)
 							{
 							?>
 							<div class="row">
@@ -158,34 +134,10 @@ if (Factory::getUser()->id)
 											</label>
 										</div>
 										<div class="controls">
-											<?php
-												$default = null;
-
-												if (isset($this->vendor->country))
-												{
-													$default = $this->vendor->country;
-												}
-
-												$options = array();
-												$options[] = JHtml::_('select.option', 0, JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
-
-												foreach ($this->countries as $key => $value)
-												{
-													$country = $this->countries[$key];
-													$id = $country['id'];
-													$value = $country['country'];
-													$options[] = JHtml::_('select.option', $id, $value);
-												}
-										
-												if ($this->vendor->region == null)
-												{
-													$this->vendor->region = '';
-													$this->vendor->city = '';
-												}
-										
-												echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
+											<?php									
+												echo $this->dropdown = JHtml::_('select.genericlist', $this->options, 'jform[country]',
 												'aria-invalid="false" size="1" onchange="CommonObj.generateStates(id,\'' .
-												0 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $default, 'jform_country');
+												0 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $this->default, 'jform_country');
 											?>
 										</div>
 									</div>	

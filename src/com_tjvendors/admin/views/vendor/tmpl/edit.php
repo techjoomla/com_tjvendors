@@ -60,33 +60,7 @@ tjVAdmin.vendor.initVendorJs();
 								<input type="hidden" name="jform[created_time]" value="<?php echo $this->item->created_time; ?>" />
 								<input type="hidden" name="jform[modified_time]" value="<?php echo $this->item->modified_time; ?>" />
 								<?php
-								if ($this->item->vendor_id != 0)
-								{
-									$input = Factory::getApplication()->input;
-									$client = $input->get('client', '', 'STRING');
-									?>
-									<input type="hidden" name="jform[vendor_title]" id="jform_vendor_titile_hidden" value="<?php echo $this->item->vendor_title; ?>" />
-									<input type="hidden" name="jform[vendor_description]" id="jform_vendor_description_hidden" value="<?php echo $this->item->vendor_description; ?>" />
-									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->item->vendor_logo; ?>" />
-									<?php echo $this->form->renderField('user_id');?>
-									<div class="pull-left alert alert-info">
-										<?php echo Text::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS');?>
-										<a
-										href="<?php echo Route::_(
-											JURI::root() . '/administrator/index.php?option=com_tjvendors&view=vendor&layout=update&client=' .
-											$client . '&vendor_id=' . $this->item->vendor_id
-										);?>">
-										<strong><?php echo $this->item->vendor_title?></a></strong>
-										<?php 
-										echo " " . Text::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD');
-										$tjvendorFrontHelper = new TjvendorFrontHelper;
-										echo $clientTitle = $tjvendorFrontHelper->getClientName($client);
-										echo Text::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
-									?>
-									</div>
-								<?php
-								}
-								elseif ($this->item->vendor_id == 0)
+								if ($this->item->vendor_id == 0)
 								{
 									echo $this->form->renderField('user_id');
 									echo $this->form->renderField('client');
@@ -135,33 +109,9 @@ tjVAdmin.vendor.initVendorJs();
 									</div>
 									<div class="controls">
 										<?php
-											$default = null;
-
-											if (isset($this->item->country))
-											{
-												$default = $this->item->country;
-											}
-
-											$options = array();
-											$options[] = HTMLHelper::_('select.option', 0, JText::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
-
-											foreach ($this->countries as $key => $value)
-											{
-												$country = $this->countries[$key];
-												$id = $country['id'];
-												$value = $country['country'];
-												$options[] = HTMLHelper::_('select.option', $id, $value);
-											}
-
-											if (empty($this->item->region))
-											{
-												$this->item->region = '';
-												$this->item->city = '';
-											}
-
-											echo $this->dropdown = JHtml::_('select.genericlist', $options, 'jform[country]',
+											echo $this->dropdown = HTMLHelper::_('select.genericlist', $this->options, 'jform[country]',
 											'aria-invalid="false" size="1" onchange="CommonObj.generateStates(id,\'' .
-											1 . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $default, 'jform_country');
+											1 . '\',\'' . $this->item->region . '\',\'' . $this->item->city . '\')"', 'value', 'text', $this->default, 'jform_country');
 										?>
 									</div>
 								</div>

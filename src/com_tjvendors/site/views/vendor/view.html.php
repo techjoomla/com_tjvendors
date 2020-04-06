@@ -17,6 +17,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\HTML\HTMLHelper;
 
 /**
  * View to edit
@@ -79,6 +80,24 @@ class TjvendorsViewVendor extends HtmlView
 
 		$utilitiesObj = TJVendors::utilities();
 		$this->countries = $utilitiesObj->getCountries();
+
+		$this->default = null;
+
+		if (isset($this->vendor->country))
+		{
+			$this->default = $this->vendor->country;
+		}
+
+		$this->options = array();
+		$this->options[] = HTMLHelper::_('select.option', 0, Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+
+		foreach ($this->countries as $key => $value)
+		{
+			$country = $this->countries[$key];
+			$id      = $country['id'];
+			$value   = $country['country'];
+			$this->options[] = HTMLHelper::_('select.option', $id, $value);
+		}
 
 		$app = Factory::getApplication();
 		$app->setUserState("vendor.client", $this->client);

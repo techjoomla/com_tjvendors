@@ -44,7 +44,9 @@ if (Factory::getUser()->id)
 	<h1>
 		<?php echo Text::_('COM_TJVENDOR_CREATE_VENDOR');?>
 	</h1>
-	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING') ); ?>"
+	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .
+	$this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')
+	); ?>"
 		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
@@ -75,7 +77,7 @@ if (Factory::getUser()->id)
 							<?php
 							$input = Factory::getApplication()->input;
 
-							if($this->vendor_id == 0)
+							if ($this->vendor_id == 0)
 							{
 							?>
 							<div class="row">
@@ -87,7 +89,7 @@ if (Factory::getUser()->id)
 										echo $this->form->renderField('phone_number');
 										echo $this->form->renderField('address');
 										echo $this->form->renderField('website_address');
-										echo $this->form->renderField('vat_number');													
+										echo $this->form->renderField('vat_number');
 									?>
 								</div>
 								<div class="col-sm-6">
@@ -109,7 +111,9 @@ if (Factory::getUser()->id)
 									if (empty($this->vendor->vendor_logo))
 									{
 									?>
-										<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="/administrator/components/com_tjvendors/assets/images/default.png" />
+										<input type="hidden" 
+										name="jform[vendor_logo]" id="jform_vendor_logo_hidden" 
+										value="/administrator/components/com_tjvendors/assets/images/default.png" />
 										<div class="form-group">
 											<div class="row">
 												<div class="col-xs-12 col-sm-10 col-md-7">
@@ -134,8 +138,7 @@ if (Factory::getUser()->id)
 											</label>
 										</div>
 										<div class="controls">
-											<?php									
-												echo $this->dropdown = JHtml::_('select.genericlist', $this->options, 'jform[country]',
+											<?php echo $this->dropdown = JHtml::_('select.genericlist', $this->options, 'jform[country]',
 												'aria-invalid="false" size="1" onchange="CommonObj.generateStates(id,\'' .
 												0 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $this->default, 'jform_country');
 											?>

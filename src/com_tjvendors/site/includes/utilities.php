@@ -19,8 +19,6 @@ use Joomla\CMS\Language\Text;
  */
 class TjvendorsUtilities
 {
-	public $tjGeoHelperObj = new stdClass;
-
 	/**
 	 * Constructor activating the default information of the utilities
 	 *
@@ -52,7 +50,7 @@ class TjvendorsUtilities
 
 		return $rows;
 	}
-	
+
 	/**
 	 * Methods to get regions
 	 *
@@ -73,11 +71,11 @@ class TjvendorsUtilities
 
 		return $rows;
 	}
-	
+
 	/**
 	 * This methods returns the cities for given country
 	 *
-	 * @param   INT  $country_id  Country Id
+	 * @param   INT  $countryId  Country Id
 	 *
 	 * @return  array   city list
 	 *
@@ -94,7 +92,7 @@ class TjvendorsUtilities
 
 		return $rows;
 	}
-	
+
 	/**
 	 * Method to get country.
 	 *
@@ -111,7 +109,7 @@ class TjvendorsUtilities
 		$countryTable->load(array('id' => $countryId));
 
 		$countryObj = new stdClass;
-		
+
 		if ($countryTable)
 		{
 			$countryObj->id = $countryTable->id;
@@ -120,8 +118,8 @@ class TjvendorsUtilities
 
 		return $countryObj;
 	}
-	
-		/**
+
+	/**
 	 * Method to get state.
 	 *
 	 * @param   int  $regionId  region id
@@ -137,7 +135,7 @@ class TjvendorsUtilities
 		$regionTable->load(array('id' => $regionId));
 
 		$regionObj = new stdClass;
-		
+
 		if ($regionTable)
 		{
 			$regionObj->id = $regionTable->id;
@@ -147,8 +145,8 @@ class TjvendorsUtilities
 
 		return $regionObj;
 	}
-	
-		/**
+
+	/**
 	 * Method to get city.
 	 *
 	 * @param   int  $cityId  city id
@@ -164,7 +162,7 @@ class TjvendorsUtilities
 		$cityTable->load(array('id' => $cityId));
 
 		$cityObj = new stdClass;
-		
+
 		if ($cityTable)
 		{
 			$cityObj->id = $cityTable->id;
@@ -174,7 +172,7 @@ class TjvendorsUtilities
 
 		return $cityObj;
 	}
-	
+
 	/**
 	 * Set the language constant used in the javascript operation
 	 *

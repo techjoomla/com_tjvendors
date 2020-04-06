@@ -161,7 +161,7 @@ class TjvendorsModelVendor extends AdminModel
 		$vendorXref = Table::getInstance('VendorClientXref', 'TjvendorsTable');
 		$vendorXref->load(array('vendor_id' => $item->vendor_id));
 		$item->params = $vendorXref->params;
-		
+
 		$TjGeoHelper = JPATH_ROOT . '/components/com_tjfields/helpers/geo.php';
 
 		if (!class_exists('TjGeoHelper'))
@@ -171,12 +171,13 @@ class TjvendorsModelVendor extends AdminModel
 		}
 
 		$tjGeoHelperObj = new TjGeoHelper;
-		
+
 		if ($item->country)
 		{
 			$country = TJVendors::utilities()->getCountry((int) $item->country);
 			$item->country_name = $country->country;
 		}
+
 		if ($item->region)
 		{
 			$region = TJVendors::utilities()->getRegion((int) $item->region);
@@ -443,7 +444,6 @@ class TjvendorsModelVendor extends AdminModel
 		{
 			$data['modified_time'] = Factory::getDate()->format('Y-m-d H:m:s');
 			$data['modified_by']   = Factory::getUser()->id;
-		
 			$table->save($data);
 			$tjvendorFrontHelper = new TjvendorFrontHelper;
 			$vendorClients = $tjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
@@ -511,7 +511,7 @@ class TjvendorsModelVendor extends AdminModel
 		{
 			$data['created_time'] = Factory::getDate()->format('Y-m-d H:m:s');
 			$data['created_by']   = Factory::getUser()->id;
-		
+
 			// Vendor registers for the first time for a client
 			if ($table->save($data) === true)
 			{

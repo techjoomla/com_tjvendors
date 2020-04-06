@@ -47,7 +47,7 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $vendor_title = '';
-	
+
 	/**
 	 * The address of the vendor.
 	 *
@@ -55,7 +55,7 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $address = '';
-	
+
 	/**
 	 * The country of the vendor.
 	 *
@@ -71,7 +71,7 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $region = 0;
-	
+
 	/**
 	 * The city of the vendor.
 	 *
@@ -79,7 +79,7 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $city = '';
-	
+
 	/**
 	 * The other_city of the vendor.
 	 *
@@ -87,7 +87,7 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $other_city = '';
-	
+
 	/**
 	 * The zip of the vendor.
 	 *
@@ -95,7 +95,7 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $zip = '';
-	
+
 	/**
 	 * The phone_number of the vendor.
 	 *
@@ -103,7 +103,7 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $phone_number = '';
-	
+
 	/**
 	 * The website_address of the vendor.
 	 *
@@ -111,7 +111,7 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $website_address = '';
-	
+
 	/**
 	 * The vat number of the vendor.
 	 *
@@ -119,7 +119,7 @@ class TjvendorsVendor extends CMSObject
 	 * @since  __DEPLOY_VERSION__
 	 */
 	private $vat_number = '';
-	
+
 	/**
 	 * Unique string representation of the vendor
 	 *
@@ -523,7 +523,7 @@ class TjvendorsVendor extends CMSObject
 	{
 		return $this->address;
 	}
-	
+
 	/**
 	 * Get the vendor other city
 	 *
@@ -535,7 +535,7 @@ class TjvendorsVendor extends CMSObject
 	{
 		return $this->other_city;
 	}
-	
+
 	/**
 	 * Get the vendor zip
 	 *
@@ -547,7 +547,7 @@ class TjvendorsVendor extends CMSObject
 	{
 		return $this->zip;
 	}
-	
+
 	/**
 	 * Get the vendor phone number
 	 *
@@ -559,7 +559,7 @@ class TjvendorsVendor extends CMSObject
 	{
 		return $this->phone_number;
 	}
-	
+
 	/**
 	 * Get the vendor website address
 	 *
@@ -583,10 +583,13 @@ class TjvendorsVendor extends CMSObject
 	{
 		return $this->vat_number;
 	}
-	
+
 	/**
 	 * This function return vendor profile complete/incomplete status
 	 *
+	 * @param   Integer  $userId  userId
+	 * @param   Integer  $client  client
+	 * 
 	 * @return  boolean  true or false
 	 *
 	 * @since   __DEPLOY_VERSION__
@@ -596,7 +599,7 @@ class TjvendorsVendor extends CMSObject
 		$data = $this->loadByUserId($userId, $client);
 
 		$total = 0;
-		
+
 		$total += (!empty($data->vendor_title)) ? 20 : 0;
 		$total += (!empty($data->address)) ? 10 : 0;
 		$total += (!empty($data->country)) ? 10: 0;
@@ -609,7 +612,7 @@ class TjvendorsVendor extends CMSObject
 		$total += (!empty($data->vendor_description)) ? 5: 0;
 		$total += (!empty($data->vendor_logo))? 5: 0;
 		$total += (!empty($data->payment_gateway)) ? 5: 0;
-	
+
 		if ((int) $total < 100)
 		{
 			return false;
@@ -617,6 +620,6 @@ class TjvendorsVendor extends CMSObject
 		else
 		{
 			return true;
-		}		
+		}
 	}
 }

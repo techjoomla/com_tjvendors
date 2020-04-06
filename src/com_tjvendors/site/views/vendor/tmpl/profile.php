@@ -46,7 +46,10 @@ HTMLHelper::_('behavior.keepalive');
 			echo ':&nbsp' . htmlspecialchars($this->vendor->vendor_title, ENT_COMPAT, 'UTF-8');
 			?>
 	</h1>
-	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING') ); ?>"
+	<form 
+		action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') .
+		'&client=' . $this->input->get('client', '', 'STRING')
+		);?>"
 		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm">
 		<div class="vendorForm">
 			<div class="row">
@@ -78,9 +81,9 @@ HTMLHelper::_('behavior.keepalive');
 										echo$this->form->renderField('alias');
 										echo $this->form->renderField('vendor_description');
 										echo $this->form->renderField('phone_number');
-										echo $this->form->renderField('address');									
+										echo $this->form->renderField('address');
 										echo $this->form->renderField('website_address');
-										echo $this->form->renderField('vat_number');															
+										echo $this->form->renderField('vat_number');
 										?>
 									</div>
 									<div class="col-sm-6">
@@ -123,8 +126,7 @@ HTMLHelper::_('behavior.keepalive');
 												</label>
 											</div>
 											<div class="controls">
-												<?php											
-													echo $this->dropdown = JHtml::_('select.genericlist', $this->options, 'jform[country]',
+												<?php echo $this->dropdown = JHtml::_('select.genericlist', $this->options, 'jform[country]',
 													'aria-invalid="false" size="1" onchange="CommonObj.generateStates(id,\'' .
 													1 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $this->default, 'jform_country');
 												?>

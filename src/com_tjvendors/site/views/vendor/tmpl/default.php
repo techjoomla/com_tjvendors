@@ -26,7 +26,11 @@ if (!empty($this->vendor_id))
 				<?php echo htmlspecialchars($this->VendorDetail->vendor_title, ENT_COMPAT, 'UTF-8');?>
 				<span class="pull-right">
 					<small>
-						<a  href="<?php echo Route::_('index.php?option=com_tjvendors&view=vendor&&layout=profile&client=' .$this->input->get('client', '', 'STRING'). '&vendor_id=' . $this->vendor_id );?>">
+						<a  
+						href="<?php echo Route::_(
+						'index.php?option=com_tjvendors&view=vendor&&layout=profile&client=' . $this->input->get('client', '', 'STRING') .
+						'&vendor_id=' . $this->vendor_id
+						);?>">
 						<i class="fa fa-wrench" aria-hidden="true"></i>  <?php echo Text::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a>
 					</small>
 				</span>
@@ -34,7 +38,7 @@ if (!empty($this->vendor_id))
 		</div>
 		<?php
 		$profileImage = Uri::root() . "/administrator/components/com_tjvendors/assets/images/default.png";
-		
+
 		if (!empty($this->VendorDetail->vendor_logo))
 		{
 			$profileImage = Uri::root() . $this->VendorDetail->vendor_logo;
@@ -54,7 +58,7 @@ if (!empty($this->vendor_id))
 		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_ADDRESS')?></div>
 		<div class="col-sm-6">
 			<?php
-				echo $this->escape($this->VendorDetail->address);			
+				echo $this->escape($this->VendorDetail->address);
 				echo ', ' . $this->escape($this->VendorDetail->country_name);
 				echo ', ' . $this->escape($this->VendorDetail->region_name);
 				echo ', ' . $this->escape($this->VendorDetail->city_name);
@@ -75,6 +79,7 @@ if (!empty($this->vendor_id))
 			</div>
 		<?php 
 		}
+
 		if (!empty($this->VendorDetail->website_address))
 		{
 		?>
@@ -84,6 +89,7 @@ if (!empty($this->vendor_id))
 			</div>
 		<?php 
 		}
+
 		if (!empty($this->VendorDetail->vat_number))
 		{
 		?>
@@ -94,23 +100,23 @@ if (!empty($this->vendor_id))
 		<?php
 		}?>	
 	</div>
-	<?php
-	}
-	elseif(Factory::getUser()->id && !$this->vendor_id)
-	{
-		$app = Factory::getApplication();
-		$client = $app->input->get('client', '', 'STRING');
-		$link =Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
-		$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'warning');
-		$app->redirect($link);
-	}
-	else
-	{
-		$link =Route::_('index.php?option=com_users');
-		$app = Factory::getApplication();
-		$app->redirect($link);
-	}
-	?>
+<?php
+}
+elseif (Factory::getUser()->id && !$this->vendor_id)
+{
+	$app = Factory::getApplication();
+	$client = $app->input->get('client', '', 'STRING');
+	$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
+	$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'warning');
+	$app->redirect($link);
+}
+else
+{
+	$link = Route::_('index.php?option=com_users');
+	$app = Factory::getApplication();
+	$app->redirect($link);
+}
+?>
 <script>
 	tjVAdmin.vendor.readMore();
 </script>

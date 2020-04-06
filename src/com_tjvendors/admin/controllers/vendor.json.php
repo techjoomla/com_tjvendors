@@ -33,13 +33,17 @@ class TjvendorsControllerVendor extends TjvendorsController
 		$app           = Factory::getApplication();
 		$input         = $app->input;
 		$country       = $input->get('country', 0, 'INT');
-		$defaultRegion = array("id" => 0, "region" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),"region_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+		$defaultRegion = array(
+				"id" => 0,
+				"region" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),
+				"region_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION')
+				);
 		$utilitiesObj  = TJVendors::utilities();
 		$regions       = $utilitiesObj->getRegions($country);
 
 		if (!empty($regions))
 		{
-			array_unshift($regions, $defaultRegion);	
+			array_unshift($regions, $defaultRegion);
 		}
 		else
 		{
@@ -61,7 +65,11 @@ class TjvendorsControllerVendor extends TjvendorsController
 		$app           = Factory::getApplication();
 		$input         = $app->input;
 		$country       = $input->get('country', 0, 'INT');
-		$defaultCity   = array("id" => 0, "city" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),"city_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+		$defaultCity   = array(
+				"id" => 0,
+				"city" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),
+				"city_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION')
+				);
 
 		// Use helper file function
 		$utilitiesObj = TJVendors::utilities();
@@ -70,8 +78,12 @@ class TjvendorsControllerVendor extends TjvendorsController
 		if (!empty($city))
 		{
 			array_unshift($city, $defaultCity);
-			$otherCity = array("id" => 'other', "city" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY_OPTION'),"city_jtext" => 'other');
-			array_push($city,$otherCity);
+			$otherCity = array(
+								"id" => 'other',
+								"city" => Text::_('COM_TJVENDORS_VENDOR_OTHER_CITY_OPTION'),
+								"city_jtext" => 'other'
+							);
+			array_push($city, $otherCity);
 		}
 		else
 		{

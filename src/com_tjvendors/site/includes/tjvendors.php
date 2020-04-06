@@ -172,7 +172,7 @@ class TJVendors
 			require_once JPATH_ROOT . '/media/techjoomla_strapper/tjstrapper.php';
 			TjStrapper::loadTjAssets('com_tjvendors');
 		}
-		
+
 		$version = $versionClass->getMediaVersion();
 		$options = array("version" => $version);
 

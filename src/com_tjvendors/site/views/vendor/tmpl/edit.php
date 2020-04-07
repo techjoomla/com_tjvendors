@@ -86,13 +86,7 @@ if (Factory::getUser()->id)
 										echo $this->form->renderField('vendor_title');
 										echo $this->form->renderField('alias');
 										echo $this->form->renderField('vendor_description');
-										echo $this->form->renderField('phone_number');
-										echo $this->form->renderField('address');
-										echo $this->form->renderField('website_address');
-										echo $this->form->renderField('vat_number');
 									?>
-								</div>
-								<div class="col-sm-6">
 									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
 									<?php
 									if (!empty($this->vendor->vendor_logo))
@@ -107,7 +101,6 @@ if (Factory::getUser()->id)
 										</div>
 										<?php
 									}
-
 									if (empty($this->vendor->vendor_logo))
 									{
 									?>
@@ -127,10 +120,15 @@ if (Factory::getUser()->id)
 										<?php
 									}
 									?>
-									<div class="alert alert-info">
+									<div class="alert alert-info col-sm-8">
 										<?php echo sprintf(Text::_("COM_TJVENDORS_MAXIMUM_LOGO_UPLOAD_SIZE_NOTE"), $this->params->get('image_size', '', 'STRING'));?>
 									</div>
-									
+								</div>
+								<div class="col-sm-6">							
+									<?php
+										echo $this->form->renderField('phone_number');
+										echo $this->form->renderField('address');
+									?>
 									<div class="control-group" id="country_group">
 										<div class="control-label">
 											<label for="jform_country">
@@ -149,6 +147,8 @@ if (Factory::getUser()->id)
 										echo $this->form->renderField('city');
 										echo $this->form->renderField('other_city');
 										echo $this->form->renderField('zip');
+										echo $this->form->renderField('website_address');
+										echo $this->form->renderField('vat_number');
 									?>								
 								</div>
 							</div>

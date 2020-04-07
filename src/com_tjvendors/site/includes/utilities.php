@@ -114,8 +114,8 @@ class TjvendorsUtilities
 
 		if ($countryTable)
 		{
-			$countryObj->id = $countryTable->id;
-			$countryObj->country = $countryTable->country;
+			$countryObj->id      = $countryTable->id;
+			$countryObj->country = (property_exists($countryTable, 'country') ? $countryTable->country : '');
 		}
 
 		return $countryObj;
@@ -140,9 +140,9 @@ class TjvendorsUtilities
 
 		if ($regionTable)
 		{
-			$regionObj->id = $regionTable->id;
-			$regionObj->country_id = $regionTable->country_id;
-			$regionObj->region = $regionTable->region;
+			$regionObj->id         = $regionTable->id;
+			$regionObj->country_id = (property_exists($regionTable, 'country_id') ? $regionTable->country_id : '');
+			$regionObj->region     = (property_exists($regionTable, 'region') ? $regionTable->region : '');
 		}
 
 		return $regionObj;
@@ -167,9 +167,9 @@ class TjvendorsUtilities
 
 		if ($cityTable)
 		{
-			$cityObj->id = $cityTable->id;
-			$cityObj->city = $cityTable->city;
-			$cityObj->country_id = $cityTable->country_id;
+			$cityObj->id         = $cityTable->id;
+			$cityObj->city       = (property_exists($cityTable, 'city') ? $cityTable->city : '');
+			$cityObj->country_id = (property_exists($cityTable, 'country_id') ? $cityTable->country_id : '');
 		}
 
 		return $cityObj;

@@ -176,12 +176,12 @@ class TjvendorsModelVendor extends AdminModel
 
 		if (!empty($item->other_city))
 		{
-			$item->city_name = (property_exists($item, 'other_city') ? $item->other_city : '')
+			$item->city_name = (property_exists($item, 'other_city') ? $item->other_city : '');
 		}
 		else
 		{
 			$city = TJVendors::utilities()->getCity((int) $item->city);
-			$item->city_name = (property_exists($city, 'city') ? $city->city : '');			
+			$item->city_name = (property_exists($city, 'city') ? $city->city : '');
 		}
 
 		return $item;

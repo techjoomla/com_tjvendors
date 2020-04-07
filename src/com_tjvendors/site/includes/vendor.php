@@ -590,7 +590,7 @@ class TjvendorsVendor extends CMSObject
 	 * @param   Integer  $userId  userId
 	 * @param   Integer  $client  client
 	 * 
-	 * @return  boolean  true or false
+	 * @return  Interger  Percentage of vendor profile completion 
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -613,13 +613,6 @@ class TjvendorsVendor extends CMSObject
 		$total += (!empty($data->vendor_logo))? 5: 0;
 		$total += (!empty($data->payment_gateway)) ? 5: 0;
 
-		if ((int) $total < 100)
-		{
-			return false;
-		}
-		else
-		{
-			return true;
-		}
+		return $total;
 	}
 }

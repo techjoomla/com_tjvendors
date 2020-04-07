@@ -36,7 +36,7 @@
 			description="COM_TJVENDORS_FORM_DESC_VENDOR_CLIENT"
 			hint="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT"
 			menu_published="0"
-			filter=""
+			filter="string"
 			directory_stripext="true"
 			directory_hidenode="true"
 			directory_hidedefault="true"
@@ -64,7 +64,7 @@
 			label="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE"
 			description="COM_TJVENDORS_FORM_DESC_VENDOR_TITLE"
 			hint="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE"
-			filter=""/>
+			filter="string"/>
 
 		<field
 			name="alias"
@@ -84,7 +84,7 @@
 			hint="COM_TJVENDORS_FORM_LBL_VENDOR_PROFILE_DESCRIPTION"
 			rows="5"
 			cols="45"
-			filter=""/>
+			filter="string"/>
 
 		<field
 			name="vendor_logo"
@@ -112,25 +112,26 @@
 			name="created_time"
 			default="0000-00-00 00:00:00"
 			type="hidden"
-			filter="" />
+			filter="user_utc" />
 		
 		<field
 			name="modified_time"
 			default="0000-00-00 00:00:00"
 			type="hidden"
-			filter="" />
+			filter="user_utc" />
 
 		<field
 			name="checked_out_time"
 			default="0000-00-00 00:00:00"
 			type="hidden"
-			filter="" />
+			filter="unset" />
 
 		<field 	
 			name="state" 
 			default="1" 
 			type="list" 
-			label="JSTATUS" 
+			label="JSTATUS"
+			filter="intval"
 			description="JFIELD_PUBLISHED_DESC" 
 			class="inputbox" size="1">
 				<option value="1">JPUBLISHED</option>
@@ -145,7 +146,7 @@
 			description="COM_TJVENDORS_FORM_DESC_ADDRESS"
 			rows="3"
 			cols="22"
-			filter="raw"/>
+			filter="string"/>
 
 		<field
 			name="country"
@@ -169,7 +170,7 @@
 			description="COM_TJVENDORS_FORM_DESC_CITY"
 			onchange="CommonObj.showOtherCity('jform_city')"
 			maxlength="50"
-			filter="">
+			filter="string">
 		</field>
 
 		<field
@@ -187,7 +188,7 @@
 			default=""
 			label="COM_TJVENDORS_FORM_LBL_ZIP"
 			description="COM_TJVENDORS_FORM_DESC_ZIP"
-			filter=""
+			filter="string"
 			maxlength="50"/>
 
 		<field
@@ -209,6 +210,7 @@
 			description="COM_TJVENDORS_FORM_DESC_WEBSITE"
 			validate="url"
 			schemes="http,https"
+			filter="url"
 			maxlength="100"/>
 
 		<field
@@ -217,7 +219,7 @@
 			default=""
 			label="COM_TJVENDORS_FORM_LBL_VAT_NUMBER"
 			description="COM_TJVENDORS_FORM_DESC_VAT_NUMBER"
-			filter=""
+			filter="string"
 			maxlength="50"/>
 
 		<field name="checked_out" type="hidden" />

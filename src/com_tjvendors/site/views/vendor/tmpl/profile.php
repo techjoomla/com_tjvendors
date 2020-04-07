@@ -21,20 +21,21 @@ HTMLHelper::_('behavior.tooltip');
 HTMLHelper::_('behavior.formvalidation');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
+$script   = array();
+$script[] = 'let CommonObj = new tjvendor.UI.CommonUI();';
+$script[] = 'var layout = "profile"';
+$script[] = 'var _URL = window.URL || window.webkitURL;';
+$script[] = 'var allowedMediaSizeErrorMessage = "' . Text::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get("image_size") . "KB" . '"';
+$script[] = 'var allowedImageDimensionErrorMessage = "' . Text::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE") . '"';
+$script[] = 'var allowedImageTypeErrorMessage = "' . Text::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION") . '"';
+$script[] = 'const vendorAllowedMediaSize = "' . $max_images_size = $this->params->get("image_size") * 1024 . '"';
+$script[] = 'var country = "' . $this->vendor->country . '"';
+$script[] = 'var region = "' . $this->vendor->region . '"';
+$script[] = 'var city   = "' . $this->vendor->city . '"';
+$script[] = 'tjVSite.vendor.initVendorJs();';
+
+Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 ?>
-<script type="text/javascript">
-	let CommonObj = new tjvendor.UI.CommonUI();
-	var layout = '<?php echo "profile";?>';
-	var _URL                              = window.URL || window.webkitURL;
-	var allowedMediaSizeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
-	var allowedImageDimensionErrorMessage = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
-	var allowedImageTypeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
-	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
-	var country   = "<?php echo $this->vendor->country; ?>";
-	var region    = "<?php echo $this->vendor->region; ?>";
-	var city      = "<?php echo $this->vendor->city; ?>";
-	tjVSite.vendor.initVendorJs();
-</script>
 <div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
 <?php
 	if (Factory::getUser()->id )

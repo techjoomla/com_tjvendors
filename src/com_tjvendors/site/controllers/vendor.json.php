@@ -34,10 +34,10 @@ class TjvendorsControllerVendor extends TjvendorsController
 		$input         = $app->input;
 		$country       = $input->get('country', 0, 'INT');
 		$defaultRegion = array(
-						"id" => 0,
-						"region" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),
-						"region_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION')
-					);
+		"id" => 0,
+		"region" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),
+		"region_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION')
+		);
 		$utilitiesObj  = TJVendors::utilities();
 		$regions       = $utilitiesObj->getRegions($country);
 
@@ -55,7 +55,7 @@ class TjvendorsControllerVendor extends TjvendorsController
 	}
 
 	/**
-	 * loads city according to selected country
+	 * Loads city according to selected country
 	 * called via jquery ajax
 	 *
 	 * @return  void

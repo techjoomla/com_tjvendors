@@ -24,23 +24,22 @@ HTMLHelper::_('behavior.keepalive');
 $lang = Factory::getLanguage();
 $lang->load('plg_payment_paypal', JPATH_ADMINISTRATOR);
 
-?>
-<script type="text/javascript">
-let CommonObj = new tjvendor.UI.CommonUI();
-var _URL                              = window.URL || window.webkitURL;
-var allowedMediaSizeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
-var allowedImageDimensionErrorMessage = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
-var allowedImageTypeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
-const vendorAllowedMediaSize          = '<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>';
-var vendor_id                         = '<?php echo $this->item->vendor_id;?>';
-var client                            = '<?php echo $this->client;?>';
-var layout                            = '<?php echo "default";?>';
-var country                           = "<?php echo $this->item->country; ?>";
-var region                            = "<?php echo $this->item->region; ?>";
-var city                              = "<?php echo $this->item->city; ?>";
-tjVAdmin.vendor.initVendorJs();
-</script>
+$script   = array();
+$script[] = 'var _URL = window.URL || window.webkitURL;';
+$script[] = 'var allowedMediaSizeErrorMessage = "' . Text::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get("image_size") . "KB" . '"';
+$script[] = 'var allowedImageTypeErrorMessage = "' . Text::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION") . '"';
+$script[] = 'const vendorAllowedMediaSize = "' . $max_images_size = $this->params->get('image_size') * 1024 . '"';
+$script[] = 'var vendor_id = "' . $this->item->vendor_id . '"';
+$script[] = 'var client = "' . $this->client . '"';
+$script[] = 'var layout = "default"';
+$script[] = 'var country = "' . $this->item->country . '"';
+$script[] = 'var region = "' . $this->item->region . '"';
+$script[] = 'var city   = "' . $this->item->city . '"';
+$script[] = 'let CommonObj = new tjvendor.UI.CommonUI()';
+$script[] = 'tjVAdmin.vendor.initVendorJs();';
 
+Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
+?>
 <form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&client=' . $this->input->get('client', '', 'INTEGER') . '&vendor_id=' . (int) $this->item->vendor_id); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 	<div class="form-horizontal">
 		<?php

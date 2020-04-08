@@ -166,7 +166,8 @@
 			schemes="http,https"
 			filter="url"
 			size="40"
-			maxlength="250"/>
+			maxlength="250"
+			/>
 
 		<field
 			name="vat_number"

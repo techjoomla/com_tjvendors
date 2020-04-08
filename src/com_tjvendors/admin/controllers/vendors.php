@@ -11,6 +11,7 @@
 // No direct access.
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Session\Session;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
@@ -48,6 +49,9 @@ class TjvendorsControllerVendors extends AdminController
 	 */
 	public function delete()
 	{
+		// Check for request forgeries
+		Session::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
 		$input  = Factory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');

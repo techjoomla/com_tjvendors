@@ -154,7 +154,8 @@
 			rows="2"
 			cols="3"
 			filter="integer"
-			maxlength="50"/>
+			maxlength="50"
+		/>
 		
 		<field
 			name="website_address"

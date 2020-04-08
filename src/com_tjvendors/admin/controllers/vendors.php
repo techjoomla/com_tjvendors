@@ -49,14 +49,10 @@ class TjvendorsControllerVendors extends AdminController
 	 */
 	public function delete()
 	{
-<<<<<<< HEAD
 		// Check for request forgeries
 		Session::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		$input  = JFactory::getApplication()->input;
-=======
 		$input  = Factory::getApplication()->input;
->>>>>>> 3b628a228b2f33abe5f80f23a5a5aac47af0f6e2
 		$client = $input->get('client', '', 'STRING');
 		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		$model = $this->getModel("vendors");

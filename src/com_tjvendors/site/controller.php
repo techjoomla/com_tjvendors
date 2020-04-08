@@ -10,33 +10,31 @@
 
 // No direct access
 defined('_JEXEC') or die;
-
-jimport('joomla.application.component.controller');
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 /**
  * Class TjvendorsController
  *
- * @since  1.6
+ * @since  1.0.0
  */
-class TjvendorsController extends JControllerLegacy
+class TjvendorsController extends BaseController
 {
 	/**
 	 * Method to display a view.
 	 *
 	 * @param   boolean  $cachable   If true, the view output will be cached
-	 * @param   mixed    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+	 * @param   mixed    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link InputFilter::clean()}.
 	 *
 	 * @return  JController   This object to support chaining.
 	 *
-	 * @since    1.5
+	 * @since    1.0.0
 	 */
 	public function display($cachable = false, $urlparams = false)
 	{
-		$view = JFactory::getApplication()->input->getCmd('view', 'vendors');
-		JFactory::getApplication()->input->set('view', $view);
+		$view = Factory::getApplication()->input->getCmd('view', 'vendors');
+		Factory::getApplication()->input->set('view', $view);
 
-		parent::display($cachable, $urlparams);
-
-		return $this;
+		return parent::display($cachable, $urlparams);
 	}
 }

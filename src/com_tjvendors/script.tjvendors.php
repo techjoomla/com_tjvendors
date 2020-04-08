@@ -9,10 +9,15 @@
  */
 
 defined('_JEXEC') or die();
-
-jimport('joomla.filesystem.folder');
-jimport('joomla.filesystem.file');
-jimport('joomla.application.component.controller');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Table\Table;
 
 /**
  * script for migration
@@ -98,9 +103,9 @@ class Com_TjvendorsInstallerScript
 	{
 		jimport('joomla.installer.installer');
 
-		$db = JFactory::getDBO();
+		$db = Factory::getDBO();
 
-		$status          = new JObject;
+		$status          = new CMSObject;
 		$status->plugins = array();
 
 		$src = $parent->getParent()->getPath('source');
@@ -125,7 +130,7 @@ class Com_TjvendorsInstallerScript
 
 						if ($id)
 						{
-							$installer         = new JInstaller;
+							$installer         = new Installer;
 							$result            = $installer->uninstall('plugin', $id);
 							$status->plugins[] = array(
 								'name' => 'plg_' . $plugin,
@@ -153,9 +158,9 @@ class Com_TjvendorsInstallerScript
 		jimport('joomla.installer.installer');
 		$src = $parent->getParent()->getPath('source');
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
-		$status = new JObject;
+		$status = new CMSObject;
 		$status->plugins = array();
 
 		// Plugins installation
@@ -198,7 +203,7 @@ class Com_TjvendorsInstallerScript
 						$db->setQuery($query);
 						$count = $db->loadResult();
 
-						$installer = new JInstaller;
+						$installer = new Installer;
 						$result = $installer->install($path);
 
 						$status->plugins[] = array('name' => 'plg_' . $plugin, 'group' => $folder, 'result' => $result);
@@ -252,7 +257,7 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function installSqlFiles($parent)
 	{
-		$db = JFactory::getDBO();
+		$db = Factory::getDBO();
 
 		// Lets create the table
 		$this->runSQL($parent, 'install.mysql.utf8.sql');
@@ -269,7 +274,7 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function runSQL($parent, $sqlfile)
 	{
-		$db = JFactory::getDBO();
+		$db = Factory::getDBO();
 
 		// Obviously you may have to change the path and name if your installation SQL file ;)
 		if (method_exists($parent, 'extension_root'))
@@ -287,7 +292,7 @@ class Com_TjvendorsInstallerScript
 		if ($buffer !== false)
 		{
 			jimport('joomla.installer.helper');
-			$queries = JInstallerHelper::splitSql($buffer);
+			$queries = InstallerHelper::splitSql($buffer);
 
 			if (count($queries) != 0)
 			{
@@ -301,7 +306,7 @@ class Com_TjvendorsInstallerScript
 
 						if (!$db->query())
 						{
-							JError::raiseWarning(1, JText::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
+							JError::raiseWarning(1, Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
 
 							return false;
 						}
@@ -324,20 +329,20 @@ class Com_TjvendorsInstallerScript
 		{
 			foreach ($oldVendorsData as $oldData)
 			{
-				$com_params = JComponentHelper::getParams('com_jticketing');
+				$com_params = ComponentHelper::getParams('com_jticketing');
 				$currency = $com_params->get('currency');
 				$newVendorData = new stdClass;
 				$newVendorData->user_id = $oldData->user_id;
 				$newVendorData->vendor_id = $oldData->id;
 				$newVendorData->state = 1;
-				$newVendorData->vendor_title = JFactory::getUser($oldData->user_id)->name;
-				$result = JFactory::getDbo()->insertObject('#__tjvendors_vendors', $newVendorData);
+				$newVendorData->vendor_title = Factory::getUser($oldData->user_id)->name;
+				$result = Factory::getDbo()->insertObject('#__tjvendors_vendors', $newVendorData);
 
 				$newXrefData = new stdClass;
 				$newXrefData->vendor_id = $oldData->id;
 				$newXrefData->id = $oldData->id;
 				$newXrefData->client = 'com_jticketing';
-				$result = JFactory::getDbo()->insertObject('#__vendor_client_xref', $newXrefData);
+				$result = Factory::getDbo()->insertObject('#__vendor_client_xref', $newXrefData);
 
 				$newFeeData = new stdClass;
 				$newFeeData->vendor_id = $oldData->id;
@@ -346,7 +351,7 @@ class Com_TjvendorsInstallerScript
 				$newFeeData->currency = $currency;
 				$newFeeData->percent_commission = $oldData->percent_commission;
 				$newFeeData->flat_commission = $oldData->flat_commission;
-				$result = JFactory::getDbo()->insertObject('#__tjvendors_fee', $newFeeData);
+				$result = Factory::getDbo()->insertObject('#__tjvendors_fee', $newFeeData);
 			}
 
 			return true;
@@ -362,8 +367,8 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function checkTableExists($table)
 	{
-		$db = JFactory::getDBO();
-		$config = JFactory::getConfig();
+		$db = Factory::getDBO();
+		$config = Factory::getConfig();
 
 		$dbname = $config->get('db');
 		$dbprefix = $config->get('dbprefix');
@@ -393,7 +398,7 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function getOldData()
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__tj_vendors'));
@@ -411,9 +416,9 @@ class Com_TjvendorsInstallerScript
 	public function _insertTjNotificationTemplates()
 	{
 		jimport('joomla.application.component.model');
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('key'));
 		$query->from($db->quoteName('#__tj_notification_templates'));
@@ -421,14 +426,14 @@ class Com_TjvendorsInstallerScript
 		$db->setQuery($query);
 		$existingKeys = $db->loadColumn();
 
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/models');
-		$notificationsModel = JModelLegacy::getInstance('Notification', 'TJNotificationsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/models');
+		$notificationsModel = BaseDatabaseModel::getInstance('Notification', 'TJNotificationsModel');
 
 		$filePath = JPATH_ADMINISTRATOR . '/components/com_tjvendors/tjvendorsTemplate.json';
 		$str = file_get_contents($filePath);
 		$json = json_decode($str, true);
 
-		$app   = JFactory::getApplication();
+		$app   = Factory::getApplication();
 
 		if (count($json) != 0)
 		{
@@ -449,7 +454,7 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function defaultPermissionsFix()
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$columnArray = array('id', 'rules');
 		$query = $db->getQuery(true);
 
@@ -469,7 +474,7 @@ class Com_TjvendorsInstallerScript
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 	}
 
@@ -482,8 +487,8 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function updatePaymentGatewayConfig()
 	{
-		$db = JFactory::getDBO();
-		$config   = JFactory::getConfig();
+		$db = Factory::getDBO();
+		$config   = Factory::getConfig();
 		$dbprefix = $config->get('dbprefix');
 		$query = "SHOW TABLES LIKE '" . $dbprefix . "vendor_client_xref';";
 		$db->setQuery($query);
@@ -531,7 +536,7 @@ class Com_TjvendorsInstallerScript
 			$vendorData->vendor_id = $value->vendor_id;
 			$vendorData->params    = $vendorParams;
 
-			JFactory::getDbo()->updateObject('#__vendor_client_xref', $vendorData, 'id');
+			Factory::getDbo()->updateObject('#__vendor_client_xref', $vendorData, 'id');
 		}
 
 		return true;
@@ -552,11 +557,11 @@ class Com_TjvendorsInstallerScript
 		$src = $parent->getParent()->getPath('source');
 		$VendorSubformLayouts = $src . "/layouts/com_tjvendors";
 
-		if (JFolder::exists(JPATH_SITE . '/layouts/com_tjvendors'))
+		if (Folder::exists(JPATH_SITE . '/layouts/com_tjvendors'))
 		{
-			JFolder::delete(JPATH_SITE . '/layouts/com_tjvendors');
+			Folder::delete(JPATH_SITE . '/layouts/com_tjvendors');
 		}
 
-		JFolder::copy($VendorSubformLayouts, JPATH_SITE . '/layouts/com_tjvendors');
+		Folder::copy($VendorSubformLayouts, JPATH_SITE . '/layouts/com_tjvendors');
 	}
 }

@@ -12,15 +12,17 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Session\Session;
-
-jimport('joomla.application.component.controlleradmin');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
+use Joomla\CMS\MVC\Controller\AdminController;
 
 /**
  * Vendors list controller class.
  *
  * @since  1.6
  */
-class TjvendorsControllerVendors extends JControllerAdmin
+class TjvendorsControllerVendors extends AdminController
 {
 	/**
 	 * Proxy for getModel.
@@ -47,12 +49,16 @@ class TjvendorsControllerVendors extends JControllerAdmin
 	 */
 	public function delete()
 	{
+<<<<<<< HEAD
 		// Check for request forgeries
 		Session::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
 		$input  = JFactory::getApplication()->input;
+=======
+		$input  = Factory::getApplication()->input;
+>>>>>>> 3b628a228b2f33abe5f80f23a5a5aac47af0f6e2
 		$client = $input->get('client', '', 'STRING');
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		$model = $this->getModel("vendors");
 
 		foreach ($cid as $vendor_id)
@@ -71,10 +77,10 @@ class TjvendorsControllerVendors extends JControllerAdmin
 	 */
 	public function publish()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$post = $input->post;
 		$client = $input->get('client', '', 'STRING');
-		$cid = JFactory::getApplication()->input->get('cid', array(), 'array');
+		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
 		$data = array('publish' => 1, 'unpublish' => 0, 'archive' => 2, 'trash' => -2, 'report' => -3);
 		$task = $this->getTask();
 		$value = JArrayHelper::getValue($data, $task, 0, 'int');
@@ -83,7 +89,7 @@ class TjvendorsControllerVendors extends JControllerAdmin
 
 		if (empty($cid))
 		{
-			JLog::add(JText::_($this->text_prefix . '_NO_ITEM_SELECTED'), JLog::WARNING, 'jerror');
+			Log::add(Text::_($this->text_prefix . '_NO_ITEM_SELECTED'), Log::WARNING, 'jerror');
 		}
 		else
 		{
@@ -107,11 +113,11 @@ class TjvendorsControllerVendors extends JControllerAdmin
 					$ntext = $this->text_prefix . '_N_ITEMS_UNPUBLISHED';
 				}
 
-				$this->setMessage(JText::plural($ntext, count($cid)));
+				$this->setMessage(Text::plural($ntext, count($cid)));
 			}
 			catch (Exception $e)
 			{
-				$this->setMessage(JText::_('JLIB_DATABASE_ERROR_ANCESTOR_NODES_LOWER_STATE'), 'error');
+				$this->setMessage(Text::_('JLIB_DATABASE_ERROR_ANCESTOR_NODES_LOWER_STATE'), 'error');
 			}
 		}
 

@@ -10,15 +10,16 @@
 
 // No direct access.
 defined('_JEXEC') or die();
-
-jimport('joomla.application.component.modeladmin');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\ListModel;
 
 /**
  * Tjvendors model.
  *
  * @since  1.6
  */
-class TjvendorsModelVendors extends JModelList
+class TjvendorsModelVendors extends ListModel
 {
 /**
 	* Constructor.
@@ -64,7 +65,7 @@ class TjvendorsModelVendors extends JModelList
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication('administrator');
+		$app = Factory::getApplication('administrator');
 
 		// Set ordering.
 		$orderCol = $app->getUserStateFromRequest($this->context . '.filter_order', 'filter_order');
@@ -98,7 +99,7 @@ class TjvendorsModelVendors extends JModelList
 		$this->setState('filter.search', $search);
 
 		// Load the parameters.
-		$params = JComponentHelper::getParams('com_tjvendors');
+		$params = ComponentHelper::getParams('com_tjvendors');
 		$this->setState('params', $params);
 
 		parent::populateState();
@@ -114,7 +115,7 @@ class TjvendorsModelVendors extends JModelList
 
 	protected function getListQuery()
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 
 		$filterClient = $this->getState('filter.vendor_client', '');

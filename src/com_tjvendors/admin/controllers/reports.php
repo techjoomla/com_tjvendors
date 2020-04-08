@@ -10,15 +10,14 @@
 
 // No direct access.
 defined('_JEXEC') or die;
-
-jimport('joomla.application.component.controlleradmin');
+use Joomla\CMS\MVC\Controller\AdminController;
 
 /**
  * Vendors list controller class.
  *
  * @since  1.6
  */
-class TjvendorsControllerReports extends JControllerAdmin
+class TjvendorsControllerReports extends AdminController
 {
 	/**
 	 * Proxy for getModel.

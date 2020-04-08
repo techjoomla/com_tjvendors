@@ -10,8 +10,13 @@
 
 // No direct access.
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Table\Table;
 
-jimport('joomla.application.component.modeladmin');
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
@@ -19,7 +24,7 @@ JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components')
  *
  * @since  1.6
  */
-class TjvendorsModelPayout extends JModelAdmin
+class TjvendorsModelPayout extends AdminModel
 {
 	/**
 	 * @var      string    The prefix to use with controller messages.
@@ -46,13 +51,13 @@ class TjvendorsModelPayout extends JModelAdmin
 	 * @param   string  $prefix  A prefix for the table class name. Optional.
 	 * @param   array   $config  Configuration array for model. Optional.
 	 *
-	 * @return    JTable    A database object
+	 * @return    Table    A database object
 	 *
 	 * @since    1.6
 	 */
 	public function getTable($type = 'payout', $prefix = 'TjvendorsTable', $config = array())
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return Table::getInstance($type, $prefix, $config);
 	}
 
 	/**
@@ -61,14 +66,14 @@ class TjvendorsModelPayout extends JModelAdmin
 	 * @param   array    $data      An optional array of data for the form to interogate.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  JForm  A JForm object on success, false on failure
+	 * @return  Form  A Form object on success, false on failure
 	 *
 	 * @since    1.6
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get the form.
 		$form = $this->loadForm(
@@ -95,12 +100,12 @@ class TjvendorsModelPayout extends JModelAdmin
 	 */
 	protected function loadFormData()
 	{
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
-		$tjvendorsModelVendor     = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models');
+		$tjvendorsModelVendor     = BaseDatabaseModel::getInstance('Vendor', 'TjvendorsModel');
 
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.payout.data', array());
-		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$data = Factory::getApplication()->getUserState('com_tjvendors.edit.payout.data', array());
+		$com_params = ComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
 
 		if (empty($data))
@@ -126,8 +131,8 @@ class TjvendorsModelPayout extends JModelAdmin
 		}
 
 			$this->item->reference_order_id = '';
-			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-			$tjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+			$tjvendorsModelVendor = BaseDatabaseModel::getInstance('Vendor', 'TjvendorsModel');
 			$vendorDetail = $tjvendorsModelVendor->getItem();
 			$this->item->vendor_title = $vendorDetail->vendor_title;
 		}
@@ -146,12 +151,12 @@ class TjvendorsModelPayout extends JModelAdmin
 	{
 		if (!isset($data['adaptive_payout']))
 		{
-			$com_params = JComponentHelper::getParams('com_tjvendors');
+			$com_params = ComponentHelper::getParams('com_tjvendors');
 			$bulkPayoutStatus = $com_params->get('bulk_payout');
 			$tjvendorFrontHelper = new TjvendorFrontHelper;
 
-			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
-			$tjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
+			$tjvendorsModelPayout = BaseDatabaseModel::getInstance('Payout', 'TjvendorsModel');
 
 			$vendorDetail = $tjvendorsModelPayout->getItem();
 
@@ -169,7 +174,7 @@ class TjvendorsModelPayout extends JModelAdmin
 					$pending_amount = TjvendorsHelper::getTotalAmount($vendorDetail->vendor_id, $vendorDetail->currency, $client['client']);
 					$data['debit'] = $pending_amount['total'];
 					$data['total'] = 0;
-					$data['transaction_time'] = JFactory::getDate()->toSql();
+					$data['transaction_time'] = Factory::getDate()->toSql();
 					$data['client'] = $client['client'];
 					$transactionClient = $tjvendorFrontHelper->getClientName($client['client']);
 					$data['transaction_id'] = $transactionClient . '-' . $vendorDetail->currency . '-' . $vendorDetail->vendor_id . '-';
@@ -189,11 +194,11 @@ class TjvendorsModelPayout extends JModelAdmin
 						$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
 
 						// Update their details in the users table using id as the primary key.
-						JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+						Factory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
 					}
 
-					$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
-					JFactory::getApplication()->enqueueMessage($message);
+					$message = Text::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
+					Factory::getApplication()->enqueueMessage($message);
 				}
 
 				return true;
@@ -202,7 +207,7 @@ class TjvendorsModelPayout extends JModelAdmin
 			$data['debit'] = $data['total'];
 			$payableAmount = TjvendorsHelper::getTotalAmount($item->vendor_id, $item->currency, $item->client);
 			$data['total'] = $payableAmount['total'] - $data['debit'];
-			$data['transaction_time'] = JFactory::getDate()->toSql();
+			$data['transaction_time'] = Factory::getDate()->toSql();
 			$data['client'] = $vendorDetail->client;
 			$transactionClient = $tjvendorFrontHelper->getClientName($data['client']);
 			$data['transaction_id'] = $transactionClient . '-' . $vendorDetail->currency . '-' . $vendorDetail->vendor_id . '-';
@@ -223,10 +228,10 @@ class TjvendorsModelPayout extends JModelAdmin
 			$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
 
 			// Update their details in the users table using id as the primary key.
-			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
+			$result = Factory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
 
-			$message = JText::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
-			JFactory::getApplication()->enqueueMessage($message);
+			$message = Text::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
+			Factory::getApplication()->enqueueMessage($message);
 
 			return true;
 		}
@@ -256,11 +261,11 @@ class TjvendorsModelPayout extends JModelAdmin
 		try
 		{
 			// Update their details in the users table using id as the primary key.
-			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
+			$result = Factory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (empty($result))
@@ -295,11 +300,11 @@ class TjvendorsModelPayout extends JModelAdmin
 		try
 		{
 			// Insert the object into the passbook table.
-			$result = JFactory::getDbo()->insertObject('#__tjvendors_passbook', $creditEntry);
+			$result = Factory::getDbo()->insertObject('#__tjvendors_passbook', $creditEntry);
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (empty($result))
@@ -335,13 +340,13 @@ class TjvendorsModelPayout extends JModelAdmin
 		try
 		{
 			// Update their details in the users table using id as the primary key.
-			$result = JFactory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
+			$result = Factory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
 
 			return true;
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 	}
 }

@@ -225,6 +225,7 @@ class TjvendorsTablevendor extends Table
 				}
 
 				$filename   = File::stripExt($singleFile['name']);
+				$filename   = File::makeSafe($filename);
 				$extension  = File::getExt($singleFile['name']);
 				$fileType   = $singleFile['type'];
 				$filename   = md5(time()) . $filename;

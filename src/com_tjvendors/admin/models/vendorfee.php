@@ -142,10 +142,16 @@ class TjvendorsModelVendorFee extends AdminModel
 	 */
 	public function save($data)
 	{
-		$isNew             = (empty($data['id']))? true : false;
-		$app               = Factory::getApplication();
-		$table             = $this->getTable();
-		$db                = Factory::getDbo();
+		$app   = Factory::getApplication();
+		$isNew = (empty($data['id']))? true : false;
+
+		if ($isNew && empty($data['currency']))
+		{
+			$this->setError(Text::_('COM_TJVENDORS_VENDORFEE_INVALID_CURRENCY'));
+
+			return false;
+		}
+
 		$input             = $app->input;
 		$data['vendor_id'] = $input->get('vendor_id', '', 'INTEGER');
 		$uniqueCurrency    = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client'], $data['id']);
@@ -174,7 +180,7 @@ class TjvendorsModelVendorFee extends AdminModel
 		}
 		else
 		{
-			$app->enqueueMessage(Text::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'), 'error');
+			$this->setError(Text::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'));
 		}
 
 		return false;

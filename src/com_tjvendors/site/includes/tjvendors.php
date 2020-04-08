@@ -167,11 +167,18 @@ class TJVendors
 			return;
 		}
 
+		if (file_exists(JPATH_ROOT . '/media/techjoomla_strapper/tjstrapper.php'))
+		{
+			require_once JPATH_ROOT . '/media/techjoomla_strapper/tjstrapper.php';
+			TjStrapper::loadTjAssets('com_tjvendors');
+		}
+
 		$version = $versionClass->getMediaVersion();
 		$options = array("version" => $version);
 
-		HTMLHelper::script('media/com_tjvendor/js/tjvendors.js', $options);
-		HTMLHelper::stylesheet('media/com_tjvendor/css/tjvendors.css', $options);
+		HTMLHelper::_('jquery.framework');
+		HTMLHelper::_('script', 'media/com_tjvendor/dist/app.min.js', $options);
+		HTMLHelper::_('script', 'media/com_tjvendor/js/tjvendors.js', $options);
 		HTMLHelper::stylesheet('media/techjoomla_strapper/vendors/no-more-tables.css', $options);
 
 		// Load Boostrap

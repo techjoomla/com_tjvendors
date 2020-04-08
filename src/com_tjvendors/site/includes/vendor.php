@@ -49,6 +49,78 @@ class TjvendorsVendor extends CMSObject
 	private $vendor_title = '';
 
 	/**
+	 * The address of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $address = '';
+
+	/**
+	 * The country of the vendor.
+	 *
+	 * @var    Integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $country = 0;
+
+	/**
+	 * The region of the vendor.
+	 *
+	 * @var    Integer
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $region = 0;
+
+	/**
+	 * The city of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $city = '';
+
+	/**
+	 * The other_city of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $other_city = '';
+
+	/**
+	 * The zip of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $zip = '';
+
+	/**
+	 * The phone_number of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $phone_number = '';
+
+	/**
+	 * The website_address of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $website_address = '';
+
+	/**
+	 * The vat number of the vendor.
+	 *
+	 * @var    String
+	 * @since  __DEPLOY_VERSION__
+	 */
+	private $vat_number = '';
+
+	/**
 	 * Unique string representation of the vendor
 	 *
 	 * @var    string
@@ -221,6 +293,15 @@ class TjvendorsVendor extends CMSObject
 		$this->vendor_id           = (int) $table->get('vendor_id');
 		$this->user_id             = (int) $table->get('user_id');
 		$this->vendor_title        = $table->get('vendor_title');
+		$this->address             = $table->get('address');
+		$this->country             = TJVendors::utilities()->getCountry((int) $table->get('country'));
+		$this->region              = TJVendors::utilities()->getRegion((int) $table->get('region'));
+		$this->city                = TJVendors::utilities()->getCity((int) $table->get('city'));
+		$this->other_city          = $table->get('other_city');
+		$this->zip                 = $table->get('zip');
+		$this->phone_number        = $table->get('phone_number');
+		$this->website_address     = $table->get('website_address');
+		$this->vat_number          = $table->get('vat_number');
 		$this->alias               = $table->get('alias');
 		$this->vendor_description  = $table->get('vendor_description');
 		$this->vendor_logo         = $table->get('vendor_logo');
@@ -429,5 +510,109 @@ class TjvendorsVendor extends CMSObject
 	public function getPaymentConfig()
 	{
 		return !empty($this->payment_gateway) ? new Registry($this->payment_gateway) : false;
+	}
+
+	/**
+	 * Get the vendor address
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getAddress()
+	{
+		return $this->address;
+	}
+
+	/**
+	 * Get the vendor other city
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getOtherCity()
+	{
+		return $this->other_city;
+	}
+
+	/**
+	 * Get the vendor zip
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getZip()
+	{
+		return $this->zip;
+	}
+
+	/**
+	 * Get the vendor phone number
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getPhoneNumber()
+	{
+		return $this->phone_number;
+	}
+
+	/**
+	 * Get the vendor website address
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getWebsiteAddress()
+	{
+		return $this->website_address;
+	}
+
+	/**
+	 * Get the vendor vat number
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getVatNumber()
+	{
+		return $this->vat_number;
+	}
+
+	/**
+	 * This function return vendor profile complete/incomplete status
+	 *
+	 * @param   Integer  $userId  userId
+	 * @param   Integer  $client  client
+	 * 
+	 * @return  Interger  Percentage of vendor profile completion 
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getVendorProfileStatus($userId, $client)
+	{
+		$data = $this->loadByUserId($userId, $client);
+
+		$total = 0;
+
+		$total += (!empty($data->vendor_title)) ? 20 : 0;
+		$total += (!empty($data->address)) ? 10 : 0;
+		$total += (!empty($data->country)) ? 10: 0;
+		$total += (!empty($data->region)) ? 10: 0;
+		$total += (!empty($data->city)) ? 10: 0;
+		$total += (!empty($data->zip)) ? 10: 0;
+		$total += (!empty($data->phone_number)) ? 5: 0;
+		$total += (!empty($data->website_address)) ? 5: 0;
+		$total += (!empty($data->vat_number)) ? 5: 0;
+		$total += (!empty($data->vendor_description)) ? 5: 0;
+		$total += (!empty($data->vendor_logo))? 5: 0;
+		$total += (!empty($data->payment_gateway)) ? 5: 0;
+
+		return $total;
 	}
 }

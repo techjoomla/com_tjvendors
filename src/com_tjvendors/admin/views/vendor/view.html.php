@@ -15,6 +15,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 
 /**
  * View to edit
@@ -30,6 +31,12 @@ class TjvendorsViewVendor extends HtmlView
 	protected $form;
 
 	protected $params;
+
+	protected $default;
+
+	protected $options;
+
+	protected $countries;
 
 	/**
 	 * Display the view
@@ -52,6 +59,33 @@ class TjvendorsViewVendor extends HtmlView
 		Text::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
 		Text::script('COM_TJVENDOR_USER_ERROR');
 		$this->client = $this->input->get('client', '', 'STRING');
+
+		$utilitiesObj = TJVendors::utilities();
+		$this->countries = $utilitiesObj->getCountries();
+
+		$this->default = null;
+
+		if (isset($this->item->country))
+		{
+			$this->default = $this->item->country;
+		}
+
+		$this->options = array();
+		$this->options[] = HTMLHelper::_('select.option', 0, Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+
+		foreach ($this->countries as $key => $value)
+		{
+			$country = $this->countries[$key];
+			$id      = $country['id'];
+			$value   = $country['country'];
+			$this->options[] = HTMLHelper::_('select.option', $id, $value);
+		}
+
+		if (empty($this->item->region))
+		{
+			$this->item->region = '';
+			$this->item->city = '';
+		}
 
 		if (empty($this->item->vendor_id))
 		{

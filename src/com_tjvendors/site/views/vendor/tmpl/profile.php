@@ -21,16 +21,21 @@ HTMLHelper::_('behavior.tooltip');
 HTMLHelper::_('behavior.formvalidation');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
+$script   = array();
+$script[] = 'let CommonObj = new tjvendor.UI.CommonUI();';
+$script[] = 'var layout = "profile"';
+$script[] = 'var _URL = window.URL || window.webkitURL;';
+$script[] = 'var allowedMediaSizeErrorMessage = "' . Text::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get("image_size") . "KB" . '"';
+$script[] = 'var allowedImageDimensionErrorMessage = "' . Text::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE") . '"';
+$script[] = 'var allowedImageTypeErrorMessage = "' . Text::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION") . '"';
+$script[] = 'const vendorAllowedMediaSize = "' . $max_images_size = $this->params->get("image_size") * 1024 . '"';
+$script[] = 'var country = "' . $this->vendor->country . '"';
+$script[] = 'var region = "' . $this->vendor->region . '"';
+$script[] = 'var city   = "' . $this->vendor->city . '"';
+$script[] = 'tjVSite.vendor.initVendorJs();';
+
+Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 ?>
-<script type="text/javascript">
-	var layout = '<?php echo "profile";?>';
-	var _URL                              = window.URL || window.webkitURL;
-	var allowedMediaSizeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_SIZE_VALIDATE") . $this->params->get('image_size') . 'KB';?>";
-	var allowedImageDimensionErrorMessage = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_DIMENSIONS_VALIDATE");?>";
-	var allowedImageTypeErrorMessage      = "<?php echo Text::_("COM_TJVENDORS_VENDOR_LOGO_IMAGE_TYPE_VALIDATION");?>";
-	const vendorAllowedMediaSize          = "<?php echo $max_images_size = $this->params->get('image_size') * 1024; ?>";
-	tjVSite.vendor.initVendorJs();
-</script>
 <div id="tjv-wrapper" class="<?php echo COM_TJVENDORS_WRAPPAER_CLASS;?>">
 <?php
 	if (Factory::getUser()->id )
@@ -42,7 +47,10 @@ HTMLHelper::_('behavior.keepalive');
 			echo ':&nbsp' . htmlspecialchars($this->vendor->vendor_title, ENT_COMPAT, 'UTF-8');
 			?>
 	</h1>
-	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING') ); ?>"
+	<form 
+		action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') .
+		'&client=' . $this->input->get('client', '', 'STRING')
+		);?>"
 		method="post" enctype="multipart/form-data" name="adminForm" id="adminForm">
 		<div class="vendorForm">
 			<div class="row">
@@ -62,14 +70,19 @@ HTMLHelper::_('behavior.keepalive');
 								<input type="hidden" name="jform[ordering]" value="<?php echo $this->vendor->ordering; ?>" />
 								<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
 								<input type="hidden" name="jform[approved]" value="<?php echo $this->vendorClientXrefTable->approved; ?>" />
+								<input type="hidden" name="jform[created_by]" value="<?php echo $this->vendor->created_by; ?>" />
+								<input type="hidden" name="jform[modified_by]" value="<?php echo Factory::getUser()->id; ?>" />
+								<input type="hidden" name="jform[created_time]" value="<?php echo $this->vendor->created_time; ?>" />
+								<input type="hidden" name="jform[modified_time]" value="<?php echo $this->vendor->modified_time; ?>" />
+							
 								<div class="row">
 									<div class="col-sm-6">
-										<?php echo$this->form->renderField('vendor_title'); ?>
-										<?php echo$this->form->renderField('alias'); ?>
-										<?php echo $this->form->renderField('vendor_description'); ?>
-									</div>
-									<div class="col-sm-6">
-									<?php
+										<?php 
+										echo$this->form->renderField('vendor_title');
+										echo$this->form->renderField('alias');
+										echo $this->form->renderField('vendor_description');
+										?>
+										<?php
 										if (!empty($this->vendor->vendor_logo))
 										{
 										?>
@@ -80,7 +93,7 @@ HTMLHelper::_('behavior.keepalive');
 												</div>
 											</div>
 										</div>
-									<?php
+										<?php
 										}
 										else
 										{
@@ -98,16 +111,60 @@ HTMLHelper::_('behavior.keepalive');
 										<div class="form-group">
 											<?php echo $this->form->renderField('vendor_logo'); ?>
 										</div>
-										<div class="alert alert-info">
+										<div class="alert alert-info col-sm-8">
 											<?php echo sprintf(Text::_("COM_TJVENDORS_MAXIMUM_LOGO_UPLOAD_SIZE_NOTE"), $this->params->get('image_size', '', 'STRING'));?>
 										</div>
+									</div>
+									<div class="col-sm-6">
+										<?php
+											echo $this->form->renderField('phone_number');
+											echo $this->form->renderField('address');
+										?>							
+										<div class="control-group" id="country_group">
+											<div class="control-label">
+												<label for="jform_country">
+													<?php echo $this->form->getLabel('country'); ?>
+												</label>
+											</div>
+											<div class="controls">
+												<?php echo $this->dropdown = JHtml::_('select.genericlist', $this->options, 'jform[country]',
+													'aria-invalid="false" size="1" onchange="CommonObj.generateStates(id,\'' .
+													1 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $this->default, 'jform_country');
+												?>
+											</div>
+										</div>								
+										<div class="control-group" id="region_group">
+											<div class="control-label">
+												<label for="jform_region">
+													<?php echo $this->form->getLabel('region'); ?>
+												</label>
+											</div>
+											<div class="controls">
+												<select name="jform[region]" id="jform_region"></select>
+											</div>
+										</div>
+										<div class="control-group" id="city_group">
+											<div class="control-label">
+												<label for="jform_city">
+													<?php echo $this->form->getLabel('city'); ?>
+												</label>
+											</div>
+											<div class="controls">
+												<select name="jform[city]" id="jform_city" onchange="CommonObj.showOtherCity('jform_city')"></select>
+											</div>
+										</div>
+										<?php 
+										echo $this->form->renderField('other_city');
+										echo $this->form->renderField('zip');
+										echo $this->form->renderField('website_address');
+										echo $this->form->renderField('vat_number');?>								
 									</div>
 								</div>
 								<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
 							</fieldset>
 						</div>
 						<!----Tab 1 End----->
-
+					
 						<!----Tab 2 Start----->
 						<div id="tab2" class="tab-pane fade">
 							<div class="row">
@@ -143,7 +200,3 @@ HTMLHelper::_('behavior.keepalive');
 	}
 	?>
 </div>
-<script>
-	/* Not Using this code*/
-	/*tjVSite.vendor.tabToAccordion();*/
-</script>

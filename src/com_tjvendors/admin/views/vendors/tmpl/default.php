@@ -24,7 +24,6 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 // Import CSS
 $document = Factory::getDocument();
 $document->addStyleSheet(Uri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
-$document->addStyleSheet(Uri::root() . 'media/com_tjvendors/css/list.css');
 
 $user      = Factory::getUser();
 $userId    = $user->id;
@@ -183,34 +182,46 @@ else
 		<?php
 		}
 		else
-		{?>
-
+		{
+			?>
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
-					<?php if (isset($this->items[0]->ordering)) :?>
-					<th width="1%" class="nowrap center hidden-phone">
-						<?php echo HTMLHelper::_('grid.sort', '<i class="icon-menu-2"></i>', 'v.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
-					</th>
-					<?php endif;?>
+					<?php 
+					if (isset($this->items[0]->ordering))
+					{
+						?>
+						<th width="1%" class="nowrap center hidden-phone">
+							<?php echo HTMLHelper::_('grid.sort', '<i class="icon-menu-2"></i>', 'v.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+						</th>
+					<?php 
+					}
+					?>
 					<th width="1%" class="hidden-phone">
 						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 
-					<?php if (isset($this->items[0]->state)) :?>
-					<th width="1%" >
-						<?php echo Text::_('JSTATUS');?>
-					</th>
-					<?php endif?>
-
+					<?php if (isset($this->items[0]->state))
+					{
+					?>
+						<th width="1%" >
+							<?php echo Text::_('JSTATUS');?>
+						</th>
+					<?php 
+					}
+					?>
 					<th width="5%">
 						<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'v.`vendor_title`', $listDirn, $listOrder); ?>
 					</th>
-					<?php	if ($this->vendorApproval) :?>
-					<th width="2%">
-						<?php echo Text::_('COM_TJVENDORS_VENDORS_VENDOR_APPROVE'); ?>
-					</th>
-					<?php endif?>
+					<?php
+					if ($this->vendorApproval)
+					{
+					?>
+						<th width="2%">
+							<?php echo Text::_('COM_TJVENDORS_VENDORS_VENDOR_APPROVE'); ?>
+						</th>
+					<?php 
+					}?>
 					<th width="5%">
 						<?php echo Text::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
 					</th>
@@ -228,8 +239,9 @@ else
 			</tfoot>
 			<tbody>
 				<?php
-				$options[] = array("type"=>Text::_('Approve'), "value" => "1");
-				$options[] = array("type"=>Text::_('UnApproved'), "value" => "0");
+				$options[] = array("type" => Text::_('Approve'), "value" => "1");
+				$options[] = array("type" => Text::_('UnApproved'), "value" => "0");
+
 				foreach ($this->items as $i => $item)
 				{
 					$ordering   = ($listOrder == 'a.ordering');
@@ -241,7 +253,8 @@ else
 					<tr class="row<?php echo $i % 2; ?>">
 					<?php
 						if (isset($this->items[0]->ordering))
-						{?>
+						{
+						?>
 							<td class="order nowrap center hidden-phone">
 								<?php
 								if ($canChange)
@@ -262,7 +275,8 @@ else
 								<?php
 								}
 								else
-								{?>
+								{
+								?>
 									<span class="sortable-handler inactive">
 										<i class="icon-menu"></i>
 									</span>
@@ -275,32 +289,52 @@ else
 							<td class="hidden-phone">
 								<?php echo HTMLHelper::_('grid.id', $i, $item->vendor_id); ?>
 							</td>
-							<?php if (isset($this->items[0]->state)) : ?>
-							<?php $class = ($canChange) ? 'active' : 'disabled'; ?>
-							<td >
-								<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'vendors.', $canChange, 'cb'); ?>
-							</td>
-							<?php endif; ?>
-
-
+							<?php 
+							if (isset($this->items[0]->state))
+							{
+							?>
+								<?php $class = ($canChange) ? 'active' : 'disabled'; ?>
+								<td >
+									<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'vendors.', $canChange, 'cb'); ?>
+								</td>
+							<?php 
+							} ?>
 							<td>
-								<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $this->input->get('client', '', 'STRING') . '&vendor_id=' . (int) $item->vendor_id);?>">
+								<a href="<?php echo Route::_(
+								'index.php?option=com_tjvendors&view=vendor&layout=update&client=' .
+								$this->input->get('client', '', 'STRING') . '&vendor_id=' . (int) $item->vendor_id
+								);?>">
 									<?php echo $this->escape($item->vendor_title); ?>
 								</a>
 							</td>
-							<?php	if ($this->vendorApproval) :?>
-							<td>
-								<?php
-								echo JHTML::_('select.genericlist', $options, "vendorApprove", 'class="input-medium" size="1" onChange="tjVAdmin.vendors.vendorApprove(' . $item->vendor_id . ',this);"', 'value', 'type', $item->approved);
-								?>
-							</td>
-							<?php endif;?>
+							<?php
+							if ($this->vendorApproval)
+							{
+							?>
+								<td>
+									<?php
+									echo JHTML::_(
+									'select.genericlist', $options, "vendorApprove", 'class="input-medium" size="1" onChange="tjVAdmin.vendors.vendorApprove(' .
+									$item->vendor_id . ',this);"', 'value', 'type', $item->approved
+									);
+									?>
+								</td>
+							<?php 
+							}?>
 							<td>
 
-								<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id) . '&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo Text::_('COM_TJVENDORS_VENDORS_FEE'); ?></a> |
-								<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id) . '&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo Text::_('COM_TJVENDORS_VENDORS_PAYOUTS'); ?></a> |
-								<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . (int) $item->vendor_id) . '&client=' . $this->input->get('client', '', 'STRING'); ?>"><?php echo Text::_('COM_TJVENDORS_VENDORS_REPORTS'); ?></a>
-
+								<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . (int) $item->vendor_id) .
+								'&client=' . $this->input->get('client', '', 'STRING'); ?>">
+									<?php echo Text::_('COM_TJVENDORS_VENDORS_FEE'); ?>
+								</a> |
+								<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=payouts&vendor_id=' . (int) $item->vendor_id) .
+								'&client=' . $this->input->get('client', '', 'STRING'); ?>">
+									<?php echo Text::_('COM_TJVENDORS_VENDORS_PAYOUTS'); ?>
+								</a> |
+								<a href="<?php echo Route::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . (int) $item->vendor_id) .
+								'&client=' . $this->input->get('client', '', 'STRING'); ?>">
+									<?php echo Text::_('COM_TJVENDORS_VENDORS_REPORTS'); ?>
+								</a>
 							</td>
 							<td >
 								<?php echo $item->vendor_id; ?>

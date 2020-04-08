@@ -25,7 +25,6 @@ $tjvendorsModelVendor = new TjvendorsModelVendor;
 // Import CSS
 $document = Factory::getDocument();
 $document->addStyleSheet(Uri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
-$document->addStyleSheet(Uri::root() . 'media/com_tjvendors/css/list.css');
 
 $user      = Factory::getUser();
 $userId    = $user->get('id');

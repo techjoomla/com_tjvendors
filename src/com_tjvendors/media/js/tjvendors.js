@@ -48,6 +48,12 @@ var tjVAdmin = {
 				jQuery(document).on("change", "#jform_user_id", function() {
 					tjVAdmin.vendor.checkVendor();
 				});
+				/** global: tjvendor */
+				/** global: region */
+				/** global: city */
+				let CommonObj = new tjvendor.UI.CommonUI();
+				CommonObj.generateStates('jform_country', 1, region, city);
+				CommonObj.showOtherCity('jform_city', city);
 			});
 
 			jQuery(window).load(function() {
@@ -215,6 +221,12 @@ var tjVSite = {
 		initVendorJs: function() {
 			jQuery(document).ready(function() {
 				jQuery(document).on("change", "#jform_payment_gateway", function() {});
+				/** global: tjvendor */
+				let CommonObj = new tjvendor.UI.CommonUI();
+				/** global: region */
+				/** global: city */
+				CommonObj.generateStates('jform_country', 1, region, city);
+				CommonObj.showOtherCity('jform_city', city)
 			});
 
 			jQuery(window).load(function() {

@@ -45,6 +45,11 @@
 		<folder>js</folder>
 		<folder>css</folder>
 		<folder>vendors</folder>
+		<folder>dist</folder>
+		<filename>package.json</filename>
+		<filename>webpack.common.js</filename>
+		<filename>webpack.dev.js</filename>
+		<filename>webpack.prod.js</filename>
 	</media>
 	<languages folder="site_language">
 		<language tag="en-GB">en-GB/en-GB.com_tjvendors.ini</language>

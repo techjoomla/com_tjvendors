@@ -11,9 +11,10 @@
 // No direct access
 defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Filesystem\File;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 // Access check.
 if (!Factory::getUser()->authorise('core.manage', 'com_tjvendors'))
@@ -23,6 +24,15 @@ if (!Factory::getUser()->authorise('core.manage', 'com_tjvendors'))
 
 // Include dependancies
 jimport('joomla.application.component.controller');
+include_once  JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
+
+$tjStrapperPath = JPATH_SITE . '/media/techjoomla_strapper/tjstrapper.php';
+
+if (File::exists($tjStrapperPath))
+{
+	require_once $tjStrapperPath;
+	TjStrapper::loadTjAssets('com_tjvendors');
+}
 
 JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT_ADMINISTRATOR);
 
@@ -47,3 +57,5 @@ if (!class_exists('TjvendorsHelper'))
 	JLoader::register('TjvendorsHelper', $tjvendorsHelper);
 	JLoader::load('TjvendorsHelper');
 }
+
+TJVendors::init();

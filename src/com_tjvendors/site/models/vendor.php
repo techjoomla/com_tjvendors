@@ -119,7 +119,7 @@ class TjvendorsModelVendor extends AdminModel
 
 		if (empty($data))
 		{
-			if ($this->item === null)
+			if (empty($this->item))
 			{
 				$this->item = $this->getItem();
 			}
@@ -161,6 +161,28 @@ class TjvendorsModelVendor extends AdminModel
 		$vendorXref = Table::getInstance('VendorClientXref', 'TjvendorsTable');
 		$vendorXref->load(array('vendor_id' => $item->vendor_id));
 		$item->params = $vendorXref->params;
+
+		if (isset($item->country))
+		{
+			$country = TJVendors::utilities()->getCountry((int) $item->country);
+			$item->country_name = $country->country;
+		}
+
+		if (isset($item->region))
+		{
+			$region = TJVendors::utilities()->getRegion((int) $item->region);
+			$item->region_name = $region->region;
+		}
+
+		if (!empty($item->other_city))
+		{
+			$item->city_name = (property_exists($item, 'other_city') ? $item->other_city : '');
+		}
+		else
+		{
+			$city = TJVendors::utilities()->getCity((int) $item->city);
+			$item->city_name = (property_exists($city, 'city') ? $city->city : '');
+		}
 
 		return $item;
 	}
@@ -402,9 +424,16 @@ class TjvendorsModelVendor extends AdminModel
 			$xrefData['params'] = '';
 		}
 
+		if (is_numeric($data['city']))
+		{
+			$data['other_city'] = '';
+		}
+
 		// To check if editing in registration form
 		if ($data['vendor_id'])
 		{
+			$data['modified_time'] = Factory::getDate()->format('Y-m-d H:m:s');
+			$data['modified_by']   = Factory::getUser()->id;
 			$table->save($data);
 			$tjvendorFrontHelper = new TjvendorFrontHelper;
 			$vendorClients = $tjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
@@ -470,6 +499,9 @@ class TjvendorsModelVendor extends AdminModel
 		}
 		else
 		{
+			$data['created_time'] = Factory::getDate()->format('Y-m-d H:m:s');
+			$data['created_by']   = Factory::getUser()->id;
+
 			// Vendor registers for the first time for a client
 			if ($table->save($data) === true)
 			{

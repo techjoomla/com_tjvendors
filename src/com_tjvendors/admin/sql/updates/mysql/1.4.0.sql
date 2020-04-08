@@ -5,7 +5,7 @@ ALTER TABLE `#__tjvendors_vendors` ADD city varchar(50) NOT NULL AFTER region;
 ALTER TABLE `#__tjvendors_vendors` ADD other_city varchar(50) NOT NULL AFTER city;
 ALTER TABLE `#__tjvendors_vendors` ADD zip varchar(50) NOT NULL AFTER other_city;
 ALTER TABLE `#__tjvendors_vendors` ADD phone_number varchar(50)  NOT NULL AFTER zip;
-ALTER TABLE `#__tjvendors_vendors` ADD website_address varchar(100)  NOT NULL AFTER phone_number;
+ALTER TABLE `#__tjvendors_vendors` ADD website_address varchar(250)  NOT NULL AFTER phone_number;
 ALTER TABLE `#__tjvendors_vendors` ADD vat_number varchar(50)  NOT NULL AFTER website_address;
 ALTER TABLE `#__tjvendors_vendors` ADD created_by int(11)  NOT NULL AFTER params;
 ALTER TABLE `#__tjvendors_vendors` ADD modified_by int(11)  NOT NULL AFTER created_by;

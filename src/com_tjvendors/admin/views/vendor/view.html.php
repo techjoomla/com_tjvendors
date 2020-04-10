@@ -62,7 +62,6 @@ class TjvendorsViewVendor extends HtmlView
 
 		$utilitiesObj = TJVendors::utilities();
 		$this->countries = $utilitiesObj->getCountries();
-
 		$this->default = null;
 
 		if (isset($this->item->country))

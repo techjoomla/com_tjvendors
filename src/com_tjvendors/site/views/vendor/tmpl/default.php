@@ -28,8 +28,7 @@ if (!empty($this->vendor_id))
 					<small>
 						<a  
 						href="<?php echo Route::_(
-						'index.php?option=com_tjvendors&view=vendor&&layout=profile&client=' . $this->input->get('client', '', 'STRING') .
-						'&vendor_id=' . $this->vendor_id
+						'index.php?option=com_tjvendors&view=vendor&&layout=edit&vendor_id='. $this->vendor_id .'&client=' . $this->input->get('client', '', 'STRING')
 						);?>">
 						<i class="fa fa-wrench" aria-hidden="true"></i>  <?php echo Text::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a>
 					</small>

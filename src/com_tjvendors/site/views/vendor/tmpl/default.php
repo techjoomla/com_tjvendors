@@ -44,61 +44,89 @@ if (!empty($this->vendor_id))
 			$profileImage = Uri::root() . $this->VendorDetail->vendor_logo;
 		}
 		?>
-		<div class="controls col-sm-3 center">
-			<img src="<?php echo $profileImage; ?>" width="100%">
-		</div>
-		<div class="col-sm-9">
-			<div>
-				<div class='profile__content text-muted'>
-				<?php echo $this->escape($this->VendorDetail->vendor_description);?>
+		<div class="row">
+			<div class="controls col-sm-3 center">
+				<img src="<?php echo $profileImage; ?>" width="100%">
+			</div>
+			<div class="col-sm-9">
+				<div>
+					<div class='profile__content text-muted'>
+					<?php echo $this->escape($this->VendorDetail->vendor_description);?>
+					</div>
 				</div>
 			</div>
 		</div>
 		
-		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_ADDRESS')?></div>
-		<div class="col-sm-6">
+		<div class="row">
 			<?php
-				echo $this->escape($this->VendorDetail->address);
-				echo ', ' . $this->escape($this->VendorDetail->country_name);
-				echo ', ' . $this->escape($this->VendorDetail->region_name);
-				echo ', ' . $this->escape($this->VendorDetail->city_name);
+			if (!empty($this->VendorDetail->address) || !empty($this->VendorDetail->city_name))
+			{
 			?>
-		</div>
-				
-		<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_ZIP')?></div>
-		<div class="col-sm-6">
-			<?php echo htmlspecialchars($this->VendorDetail->zip, ENT_COMPAT, 'UTF-8')?>
-		</div>
-		<?php 
-		if (!empty($this->VendorDetail->phone_number))
-		{
-		?>
-			<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_PHONE_NUMBER')?></div>
-			<div class="col-sm-6">
-				<?php echo htmlspecialchars($this->VendorDetail->phone_number, ENT_COMPAT, 'UTF-8')?>
-			</div>
-		<?php 
-		}
+			<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_ADDRESS')?></div>
+			<div class="col-sm-9">
+				<?php
+					if (!empty($this->VendorDetail->address))
+					{
+						echo $this->escape($this->VendorDetail->address);
+					}
 
-		if (!empty($this->VendorDetail->website_address))
-		{
-		?>
-			<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_WEBSITE_ADDRESS')?></div>
-			<div class="col-sm-6">
-				<?php echo htmlspecialchars($this->VendorDetail->website_address, ENT_COMPAT, 'UTF-8')?>
-			</div>
-		<?php 
-		}
+					if (!empty($this->VendorDetail->country_name))
+					{
+						echo ', ' . $this->escape($this->VendorDetail->country_name);
+					}
 
-		if (!empty($this->VendorDetail->vat_number))
-		{
-		?>
-			<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_VAT_NUMBER')?></div>
-			<div class="col-sm-6">
-				<?php echo htmlspecialchars($this->VendorDetail->vat_number, ENT_COMPAT, 'UTF-8')?>
+					if (!empty($this->VendorDetail->region_name))
+					{
+						echo ', ' . $this->escape($this->VendorDetail->region_name);
+					}
+
+					if (!empty($this->VendorDetail->city_name))
+					{
+						echo ', ' . $this->escape($this->VendorDetail->city_name);
+					}
+				?>
 			</div>
-		<?php
-		}?>	
+			<?php
+			}
+			if (!empty($this->VendorDetail->zip))
+			{
+			?>
+				<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_ZIP')?></div>
+				<div class="col-sm-9">
+					<?php echo htmlspecialchars($this->VendorDetail->zip, ENT_COMPAT, 'UTF-8')?>
+				</div>
+			<?php 
+			}
+			if (!empty($this->VendorDetail->phone_number))
+			{
+			?>
+				<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_PHONE_NUMBER')?></div>
+				<div class="col-sm-9">
+					<?php echo htmlspecialchars($this->VendorDetail->phone_number, ENT_COMPAT, 'UTF-8')?>
+				</div>
+			<?php 
+			}
+
+			if (!empty($this->VendorDetail->website_address))
+			{
+			?>
+				<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_WEBSITE_ADDRESS')?></div>
+				<div class="col-sm-9">
+					<?php echo htmlspecialchars($this->VendorDetail->website_address, ENT_COMPAT, 'UTF-8')?>
+				</div>
+			<?php 
+			}
+
+			if (!empty($this->VendorDetail->vat_number))
+			{
+			?>
+				<div class="col-sm-3"><?php echo Text::_('COM_TJVENDORS_VENDOR_VAT_NUMBER')?></div>
+				<div class="col-sm-9">
+					<?php echo htmlspecialchars($this->VendorDetail->vat_number, ENT_COMPAT, 'UTF-8')?>
+				</div>
+			<?php
+			}?>	
+		</div>
 	</div>
 <?php
 }

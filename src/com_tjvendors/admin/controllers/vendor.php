@@ -54,7 +54,7 @@ class TjvendorsControllerVendor extends FormController
 		$client = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'STRING');
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
-		$append .= '&client=' . $client . '&vendor_id=' . $vendor_id;
+		$append .= '&client=' . $client;
 
 		return $append;
 	}
@@ -155,7 +155,7 @@ class TjvendorsControllerVendor extends FormController
 		$client = $input->get('client', '', 'STRING');
 
 		// Get the user data.
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$all_jform_data = $data = Factory::getApplication()->input->get('jform', array(), 'array');
 
 		// Validate the posted data.
 		$form = $model->getForm();
@@ -202,12 +202,13 @@ class TjvendorsControllerVendor extends FormController
 		// Check for errors.
 		if ($return === false)
 		{
-			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
+			$app->setUserState('com_tjvendors.vendor.data', $all_jform_data);
 
 			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
-			$this->setMessage(Text::sprintf('COM_TJVENDORS_VENDOR_ERROR_MSG_SAVE', $model->getError()), 'warning');
-			$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false));
+			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id', (int) $all_jform_data['vendor_id']);
+
+			$this->setMessage($model->getError(), 'error');
+			$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor' . $this->getRedirectToItemAppend() . '&vendor_id=' . $id, false));
 
 			return false;
 		}
@@ -224,7 +225,7 @@ class TjvendorsControllerVendor extends FormController
 
 		if ($task == 'apply')
 		{
-			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id=' . $id, false);
+			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false);
 			$app->redirect($redirect, $msg);
 		}
 
@@ -235,7 +236,7 @@ class TjvendorsControllerVendor extends FormController
 		}
 
 		// Clear the profile id from the session.
-		$app->setUserState('com_tjvendors.edit.vendor.id', null);
+		$app->setUserState('com_tjvendors.edit.vendor.vendor_id', null);
 
 		// Check in the profile.
 		if ($return)

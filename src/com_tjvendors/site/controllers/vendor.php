@@ -97,7 +97,7 @@ class TjvendorsControllerVendor extends FormController
 		$model = $this->getModel('Vendor', 'TjvendorsModel');
 
 		// Get the user data.
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$all_jform_data = $data = Factory::getApplication()->input->get('jform', array(), 'array');
 		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
 
 		$data['user_id'] = Factory::getUser()->id;
@@ -151,14 +151,7 @@ class TjvendorsControllerVendor extends FormController
 			$id = $app->input->get('vendor_id', '', 'INTEGER');
 			$client = $app->input->get('client', '', 'STRING');
 
-			if ($id != 0)
-			{
-				$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=profile&vendor_id=' . $id . '&client=' . $client, false));
-			}
-			else
-			{
-				$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
-			}
+			$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
 
 			return false;
 		}
@@ -170,20 +163,18 @@ class TjvendorsControllerVendor extends FormController
 		if ($return === false)
 		{
 			// Save the data in the session.
-			$app->setUserState('com_tjvendors.edit.vendor.data', $all_jform_data);
+			$app->setUserState('com_tjvendors.vendor.data', $all_jform_data);
 
 			// Redirect back to the edit screen.
 			$client = $app->input->get('client', '', 'STRING');
 
-			$id = $app->getUserState('com_tjvendors.edit.vendor.data.vendor_id');
+			$id = $app->getUserState('com_tjvendors.edit.vendor.data.vendor_id', $all_jform_data['vendor_id']);
 			$this->setMessage(Text::sprintf('Save failed', $model->getError()), 'warning');
-			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $id;
-
-			$layout = $id != 0 ? 'profile' : 'edit';
+			$dynamicLink = '&vendor_id=' . $id . '&client=' . $data['vendor_client'];
 
 			$this->setRedirect(
 					Route::_(
-					'index.php?option=com_tjvendors&view=vendor&layout=' . $layout . $dynamicLink, false
+					'index.php?option=com_tjvendors&view=vendor&layout=edit' . $dynamicLink, false
 					)
 					);
 

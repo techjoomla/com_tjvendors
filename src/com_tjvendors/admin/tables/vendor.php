@@ -129,6 +129,13 @@ class TjvendorsTablevendor extends Table
 		$db = Factory::getDbo();
 		$this->alias = trim($this->alias);
 
+		if (empty(trim($this->vendor_title)))
+		{
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_VENDOR_TITLE_BLANK'), 'warning');
+
+			return false;
+		}
+		
 		if (!$this->alias)
 		{
 			$this->alias = $this->vendor_title;

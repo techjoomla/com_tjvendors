@@ -96,7 +96,7 @@ class TjvendorsViewVendors extends HtmlView
 
 		if ($canDo->get('core.edit') && isset($this->items[0]))
 		{
-			JToolBarHelper::editList('vendors.edit', 'JTOOLBAR_EDIT');
+			JToolBarHelper::editList('vendor.edit', 'JTOOLBAR_EDIT');
 		}
 
 		if ($canDo->get('core.edit.state'))

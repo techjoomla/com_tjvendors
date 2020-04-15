@@ -54,7 +54,7 @@ class TjvendorsControllerVendor extends FormController
 		$client = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'STRING');
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
-		$append .= '&client=' . $client . '&vendor_id=' . $vendor_id;
+		$append .= '&client=' . $client;
 
 		return $append;
 	}

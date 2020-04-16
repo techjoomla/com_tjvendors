@@ -148,7 +148,7 @@ class TjvendorsViewVendor extends HtmlView
 			elseif(!Factory::getUser()->id)
 			{
 				$link = Route::_('index.php?option=com_users');
-				$app = Factory::getApplication();
+				$app  = Factory::getApplication();
 				$app->redirect($link);
 			}
 		}

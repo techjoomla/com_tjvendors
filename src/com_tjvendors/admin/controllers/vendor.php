@@ -154,7 +154,7 @@ class TjvendorsControllerVendor extends FormController
 		$client = $input->get('client', '', 'STRING');
 
 		// Get the user data.
-		$all_jform_data = $data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$allJformData = $data = Factory::getApplication()->input->get('jform', array(), 'array');
 
 		// Validate the posted data.
 		$form = $model->getForm();
@@ -201,10 +201,10 @@ class TjvendorsControllerVendor extends FormController
 		// Check for errors.
 		if ($return === false)
 		{
-			$app->setUserState('com_tjvendors.vendor.data', $all_jform_data);
+			$app->setUserState('com_tjvendors.vendor.data', $allJformData);
 
 			// Redirect back to the edit screen.
-			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id', (int) $all_jform_data['vendor_id']);
+			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.vendor_id', (int) $allJformData['vendor_id']);
 
 			$this->setMessage($model->getError(), 'error');
 			$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor' . $this->getRedirectToItemAppend() . '&vendor_id=' . $id, false));

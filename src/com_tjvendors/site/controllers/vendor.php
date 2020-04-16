@@ -97,7 +97,7 @@ class TjvendorsControllerVendor extends FormController
 		$model = $this->getModel('Vendor', 'TjvendorsModel');
 
 		// Get the user data.
-		$all_jform_data = $data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$allJformData = $data = Factory::getApplication()->input->get('jform', array(), 'array');
 		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
 
 		$data['user_id'] = Factory::getUser()->id;
@@ -163,12 +163,12 @@ class TjvendorsControllerVendor extends FormController
 		if ($return === false)
 		{
 			// Save the data in the session.
-			$app->setUserState('com_tjvendors.vendor.data', $all_jform_data);
+			$app->setUserState('com_tjvendors.vendor.data', $allJformData);
 
 			// Redirect back to the edit screen.
 			$client = $app->input->get('client', '', 'STRING');
 
-			$id = $app->getUserState('com_tjvendors.edit.vendor.data.vendor_id', $all_jform_data['vendor_id']);
+			$id = $app->getUserState('com_tjvendors.edit.vendor.data.vendor_id', $allJformData['vendor_id']);
 			$this->setMessage(Text::sprintf('Save failed', $model->getError()), 'warning');
 			$dynamicLink = '&vendor_id=' . $id . '&client=' . $data['vendor_client'];
 

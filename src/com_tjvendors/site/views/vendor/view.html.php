@@ -57,6 +57,10 @@ class TjvendorsViewVendor extends HtmlView
 
 	protected $countries;
 
+	protected $vendorLogoProfileImg;
+
+	protected $vendorLogoProfileImgPath;
+
 	/**
 	 * Display the view
 	 *
@@ -130,7 +134,7 @@ class TjvendorsViewVendor extends HtmlView
 				{
 					if ($client == $this->client)
 					{
-						$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $this->vendor_id .'&client=' . $this->client);
+						$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $this->vendor_id . '&client=' . $this->client);
 						$app = Factory::getApplication();
 						$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
 						$app->redirect($link);

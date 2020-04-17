@@ -39,6 +39,10 @@ class TjvendorsViewVendor extends HtmlView
 
 	protected $countries;
 
+	protected $vendorLogoProfileImg;
+
+	protected $vendorLogoProfileImgPath;
+
 	/**
 	 * Display the view
 	 *

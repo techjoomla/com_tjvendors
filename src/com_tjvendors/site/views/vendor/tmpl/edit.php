@@ -88,15 +88,14 @@ if (Factory::getUser()->id)
 							<input type="hidden" name="jform[modified_time]" value="<?php echo $this->vendor->modified_time; ?>" />
 							<?php
 							$input = Factory::getApplication()->input;
-							$vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
-							$vendorLogoProfileImgPath = Uri::root() . $vendorLogoProfileImg;
 
 							if (!empty($this->vendor->vendor_logo))
 							{
-								$vendorLogoProfileImg = $this->vendor->vendor_logo;
-								$vendorLogoProfileImgPath = Uri::root() . $vendorLogoProfileImg;
+								$this->vendorLogoProfileImg = $this->vendor->vendor_logo;
+								$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 							}
 							?>
+
 							<div class="row">
 								<div class="col-sm-6">
 									<?php 
@@ -104,11 +103,11 @@ if (Factory::getUser()->id)
 										echo $this->form->renderField('alias');
 										echo $this->form->renderField('vendor_description');
 									?>
-									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $vendorLogoProfileImg ?>" />
+									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendorLogoProfileImg ?>" />
 									<div class="form-group">
 										<div class="row">
 											<div class="col-xs-12 col-sm-10 col-md-7">
-												<img src="<?php echo $vendorLogoProfileImgPath; ?>">
+												<img src="<?php echo $this->vendorLogoProfileImgPath; ?>">
 											</div>
 										</div>
 										<div class="mt-10">

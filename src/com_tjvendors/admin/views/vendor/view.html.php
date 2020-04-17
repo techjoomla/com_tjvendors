@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * View to edit
@@ -85,6 +86,9 @@ class TjvendorsViewVendor extends HtmlView
 			$this->item->region = '';
 			$this->item->city = '';
 		}
+
+		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
+		$this->vendorLogoProfileImgPath = Uri::root() . $vendorLogoProfileImg;
 
 		if (empty($this->item->vendor_id))
 		{

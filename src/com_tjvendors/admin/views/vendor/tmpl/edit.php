@@ -68,19 +68,17 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 									echo $this->form->renderField('vendor_description');
 									echo $this->form->renderField('vendor_logo');
 
-									$vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
-									$vendorLogoProfileImgPath = Uri::root() . $vendorLogoProfileImg;
-
 									if (!empty($this->item->vendor_logo))
 									{
-										$vendorLogoProfileImg = $this->item->vendor_logo;
-										$vendorLogoProfileImgPath = Uri::root() . $vendorLogoProfileImg;
+										$this->vendorLogoProfileImg = $this->item->vendor_logo;
+										$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 									}
 								?>
-									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $vendorLogoProfileImg?>" />
+									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" 
+									value="<?php echo $this->vendorLogoProfileImg?>" />
 									<div class="control-group">
 										<div class="controls ">
-											<img src="<?php echo $vendorLogoProfileImgPath; ?>"
+											<img src="<?php echo $this->vendorLogoProfileImgPath; ?>"
 											class="span3 col-md-3 img-thumbnail marginb10 img-polaroid">
 										</div>
 									</div>							

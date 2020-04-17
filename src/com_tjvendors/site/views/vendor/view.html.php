@@ -18,6 +18,7 @@ use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * View to edit
@@ -104,6 +105,9 @@ class TjvendorsViewVendor extends HtmlView
 			$value   = $country['country'];
 			$this->options[] = HTMLHelper::_('select.option', $id, $value);
 		}
+
+		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
+		$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 
 		$app = Factory::getApplication();
 		$app->setUserState("vendor.client", $this->client);

@@ -151,14 +151,7 @@ class TjvendorsControllerVendor extends FormController
 			$id = $app->input->get('vendor_id', '', 'INTEGER');
 			$client = $app->input->get('client', '', 'STRING');
 
-			if ($id != 0)
-			{
-				$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=profile&vendor_id=' . $id . '&client=' . $client, false));
-			}
-			else
-			{
-				$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
-			}
+			$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $id . '&client=' . $client, false));
 
 			return false;
 		}
@@ -179,11 +172,9 @@ class TjvendorsControllerVendor extends FormController
 			$this->setMessage(Text::sprintf('Save failed', $model->getError()), 'warning');
 			$dynamicLink = '&client=' . $data['vendor_client'] . '&vendor_id=' . $id;
 
-			$layout = $id != 0 ? 'profile' : 'edit';
-
 			$this->setRedirect(
 					Route::_(
-					'index.php?option=com_tjvendors&view=vendor&layout=' . $layout . $dynamicLink, false
+					'index.php?option=com_tjvendors&view=vendor&layout=edit' . $dynamicLink, false
 					)
 					);
 

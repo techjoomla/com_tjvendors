@@ -43,7 +43,17 @@ if (Factory::getUser()->id)
 {
 	?>
 	<h1>
-		<?php echo Text::_('COM_TJVENDOR_CREATE_VENDOR');?>
+		<?php 
+			if ($this->vendor_id)
+			{
+				echo Text::_('COM_TJVENDOR_UPDATE_VENDOR');
+				echo ':&nbsp' . htmlspecialchars($this->vendor->vendor_title, ENT_COMPAT, 'UTF-8');
+			}
+			else
+			{
+				echo Text::_('COM_TJVENDOR_CREATE_VENDOR');
+			}
+		?>
 	</h1>
 	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' .
 	$this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')
@@ -70,17 +80,22 @@ if (Factory::getUser()->id)
 							<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->vendor->checked_out_time; ?>" />
 							<input type="hidden" name="jform[checked_out]" value="<?php echo $this->vendor->checked_out; ?>" />
 							<input type="hidden" name="jform[ordering]" value="<?php echo $this->vendor->ordering; ?>" />
-							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />							
+							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />					
 							<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
-							<input type="hidden" name="jform[modified_by]" value="0" />
+							<input type="hidden" name="jform[modified_by]" 
+							value="<?php echo (isset($this->vendor_id)) ? Factory::getUser()->id : '0';?>" />
 							<input type="hidden" name="jform[created_time]" value="<?php echo $this->vendor->created_time; ?>" />
 							<input type="hidden" name="jform[modified_time]" value="<?php echo $this->vendor->modified_time; ?>" />
 							<?php
 							$input = Factory::getApplication()->input;
 
-							if ($this->vendor_id == 0)
+							if (!empty($this->vendor->vendor_logo))
 							{
+								$this->vendorLogoProfileImg = $this->vendor->vendor_logo;
+								$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
+							}
 							?>
+
 							<div class="row">
 								<div class="col-sm-6">
 									<?php 
@@ -88,39 +103,17 @@ if (Factory::getUser()->id)
 										echo $this->form->renderField('alias');
 										echo $this->form->renderField('vendor_description');
 									?>
-									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendor->vendor_logo ?>" />
-									<?php
-									if (!empty($this->vendor->vendor_logo))
-									{
-										?>
-										<div class="form-group">
-											<div class="row">
-												<div class="col-xs-12 col-sm-10 col-md-7">
-													<img src="<?php echo Uri::root() . $this->vendor->vendor_logo; ?>">
-												</div>
+									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendorLogoProfileImg ?>" />
+									<div class="form-group">
+										<div class="row">
+											<div class="col-xs-12 col-sm-10 col-md-7">
+												<img src="<?php echo $this->vendorLogoProfileImgPath; ?>">
 											</div>
 										</div>
-										<?php
-									}
-									if (empty($this->vendor->vendor_logo))
-									{
-									?>
-										<input type="hidden" 
-										name="jform[vendor_logo]" id="jform_vendor_logo_hidden" 
-										value="/administrator/components/com_tjvendors/assets/images/default.png" />
-										<div class="form-group">
-											<div class="row">
-												<div class="col-xs-12 col-sm-10 col-md-7">
-													<img src="<?php echo Uri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>">
-												</div>
-											</div>
-											<div class="mt-10">
-												<?php echo $this->form->renderField('vendor_logo'); ?>
-											</div>
+										<div class="mt-10">
+											<?php echo $this->form->renderField('vendor_logo'); ?>
 										</div>
-										<?php
-									}
-									?>
+									</div>
 									<div class="alert alert-info col-sm-8">
 										<?php echo sprintf(Text::_("COM_TJVENDORS_MAXIMUM_LOGO_UPLOAD_SIZE_NOTE"), $this->params->get('image_size', '', 'STRING'));?>
 									</div>
@@ -153,9 +146,6 @@ if (Factory::getUser()->id)
 									?>								
 								</div>
 							</div>
-							<?php
-							}
-							?>
 						</fieldset>
 					</div>
 					<!----Tab 1 End----->
@@ -171,35 +161,14 @@ if (Factory::getUser()->id)
 			</div>
 		</div>
 
-		<?php
-		if ($this->vendor_id == 0)
-		{
-			?>
-			<div class="mt-10">
-				<button type="button" class="btn btn-default btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-					<span><?php echo Text::_('JSUBMIT'); ?></span>
-				</button>
-
-				<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-					<?php echo Text::_('JCANCEL'); ?>
-				</button>
-			</div>
-		<?php
-		}
-		elseif (!$this->isClientExist)
-		{
-			?>
-			<div class="mt-10">
-				<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-					<span><?php echo Text::_('COM_TJVENDORS_CLIENT_APPROVAL'); ?></span>
-				</button>
-				<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-					<?php echo Text::_('COM_TJVENDORS_CLIENT_REJECTION'); ?>
-				</button>
-			</div>
-			<?php
-		}
-		?>
+		<div class="mt-10">
+			<button type="button" class="btn btn-default btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
+				<span><?php echo Text::_('JSUBMIT'); ?></span>
+			</button>
+			<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
+				<?php echo (!$this->isClientExist) ? Text::_('COM_TJVENDORS_CLIENT_REJECTION') : Text::_('JCANCEL'); ?>
+			</button>
+		</div>
 		<input type="hidden" name="task" value="vendor.save"/>
 		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>

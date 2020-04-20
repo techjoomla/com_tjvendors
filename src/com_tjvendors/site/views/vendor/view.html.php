@@ -18,6 +18,7 @@ use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * View to edit
@@ -55,6 +56,10 @@ class TjvendorsViewVendor extends HtmlView
 	protected $options;
 
 	protected $countries;
+
+	protected $vendorLogoProfileImg;
+
+	protected $vendorLogoProfileImgPath;
 
 	/**
 	 * Display the view
@@ -105,6 +110,9 @@ class TjvendorsViewVendor extends HtmlView
 			$this->options[] = HTMLHelper::_('select.option', $id, $value);
 		}
 
+		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
+		$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
+
 		$app = Factory::getApplication();
 		$app->setUserState("vendor.client", $this->client);
 		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);
@@ -113,7 +121,7 @@ class TjvendorsViewVendor extends HtmlView
 		Text::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
 		Text::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
 
-		if ($this->layout == 'profile' && $this->vendor_id != $this->vendor->vendor_id)
+		if (isset($this->vendor->vendor_id) && $this->vendor_id != $this->vendor->vendor_id)
 		{
 			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 		}
@@ -126,7 +134,7 @@ class TjvendorsViewVendor extends HtmlView
 				{
 					if ($client == $this->client)
 					{
-						$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);
+						$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $this->vendor_id . '&client=' . $this->client);
 						$app = Factory::getApplication();
 						$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
 						$app->redirect($link);

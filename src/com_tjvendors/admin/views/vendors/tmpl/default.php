@@ -301,7 +301,7 @@ else
 							} ?>
 							<td>
 								<a href="<?php echo Route::_(
-								'index.php?option=com_tjvendors&view=vendor&layout=update&client=' .
+								'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' .
 								$this->input->get('client', '', 'STRING') . '&vendor_id=' . (int) $item->vendor_id
 								);?>">
 									<?php echo $this->escape($item->vendor_title); ?>

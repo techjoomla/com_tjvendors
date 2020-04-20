@@ -77,7 +77,7 @@ class TjvendorsMailsHelper
 		$vendorItemID = $this->tjvendorFrontHelper->getItemId(
 		'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $vendorDetails->vendor_client
 		);
-		$myVendor = 'index.php?option=com_tjvendors&view=vendor&layout=profile&client='
+		$myVendor = 'index.php?option=com_tjvendors&view=vendor&layout=edit&client='
 		. $vendorDetails->vendor_client . '&vendor_id=' . $vendorDetails->vendor_id . '&Itemid=' . $vendorItemID;
 		$myVendorLink = Uri::root() . substr(Route::_($myVendor), strlen(Uri::base(true)) + 1);
 		$vendorDetails->myVendor = $myVendorLink;

@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * View to edit
@@ -37,6 +38,10 @@ class TjvendorsViewVendor extends HtmlView
 	protected $options;
 
 	protected $countries;
+
+	protected $vendorLogoProfileImg;
+
+	protected $vendorLogoProfileImgPath;
 
 	/**
 	 * Display the view
@@ -62,7 +67,6 @@ class TjvendorsViewVendor extends HtmlView
 
 		$utilitiesObj = TJVendors::utilities();
 		$this->countries = $utilitiesObj->getCountries();
-
 		$this->default = null;
 
 		if (isset($this->item->country))
@@ -86,6 +90,9 @@ class TjvendorsViewVendor extends HtmlView
 			$this->item->region = '';
 			$this->item->city = '';
 		}
+
+		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
+		$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 
 		if (empty($this->item->vendor_id))
 		{

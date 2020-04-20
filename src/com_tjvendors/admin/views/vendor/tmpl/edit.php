@@ -55,12 +55,11 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 								<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 								<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 								<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
-								<input type="hidden" name="jform[modified_by]" value="0" />
+								<input type="hidden" name="jform[modified_by]" 
+								value="<?php echo (isset($this->item->vendor_id)) ? Factory::getUser()->id : '0';?>" />
 								<input type="hidden" name="jform[created_time]" value="<?php echo $this->item->created_time; ?>" />
 								<input type="hidden" name="jform[modified_time]" value="<?php echo $this->item->modified_time; ?>" />
 								<?php
-								if ($this->item->vendor_id == 0)
-								{
 									echo $this->form->renderField('user_id');
 									echo $this->form->renderField('client');
 									echo $this->form->renderField('vendor_title');
@@ -69,29 +68,25 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 									echo $this->form->renderField('vendor_description');
 									echo $this->form->renderField('vendor_logo');
 
-									if (empty($this->item->vendor_logo))
+									if (!empty($this->item->vendor_logo))
 									{
-										?>
-										<input type="hidden"
-										name="jform[vendor_logo]" id="jform_vendor_logo_hidden"
-										value="/administrator/components/com_tjvendors/assets/images/default.png" />
-											<div class="control-group">
-												<div class="controls ">
-													<img src="<?php echo Uri::root() . "/administrator/components/com_tjvendors/assets/images/default.png"; ?>"
-													class="span3 col-md-3 img-thumbnail marginb10 img-polaroid">
-												</div>
-											</div>
-									<?php
+										$this->vendorLogoProfileImg = $this->item->vendor_logo;
+										$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 									}
-									?>
+								?>
+									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" 
+									value="<?php echo $this->vendorLogoProfileImg?>" />
+									<div class="control-group">
+										<div class="controls ">
+											<img src="<?php echo $this->vendorLogoProfileImgPath; ?>"
+											class="span3 col-md-3 img-thumbnail marginb10 img-polaroid">
+										</div>
+									</div>							
 									<div class="controls">
 										<div class="alert alert-warning">
 											<?php echo sprintf(Text::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png');?>
 										</div>
 									</div>
-									<?php
-								}
-								?>
 							</fieldset>
 						</div>
 						<div class="span6 form-horizontal">
@@ -128,21 +123,6 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 				echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'name', Text::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS'));
 					echo $this->form->getInput('payment_gateway');
 				echo HTMLHelper::_('bootstrap.endTab');
-
-				if ($this->item->vendor_id != 0)
-				{
-				?>
-					<div>
-						<button type="button" class="btn btn-default  btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
-							<span><?php echo Text::_('JSUBMIT'); ?></span>
-						</button>
-						<button class="btn  btn-default" onclick="Joomla.submitbutton('vendor.cancel')">
-							<span><?php echo Text::_('JCANCEL'); ?></span>
-						</button>
-					</div>
-				<?php
-				}
-
 		echo HTMLHelper::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>

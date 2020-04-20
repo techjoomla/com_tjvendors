@@ -226,11 +226,20 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function cancel($key=null)
 	{
-		$input = Factory::getApplication()->input;
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
-		$this->setRedirect(
-		Route::_('index.php?option=com_tjvendors&view=vendor&vendor_id=' . $data['vendor_id'] . '&client=' . $input->get('client', '', 'STRING'), false)
-		);
+		$app = Factory::getApplication();
+		$input = $app->input;
+		$data = $input->get('jform', array(), 'array');
+
+		if (!empty($data['vendor_id']))
+		{
+			$this->setRedirect(
+			Route::_('index.php?option=com_tjvendors&view=vendor&layout=default&vendor_id=' . $data['vendor_id'] . '&client=' . $input->get('client', '', 'STRING'), false)
+			);
+		}
+		else
+		{
+			$app->redirect("index.php");
+		}
 	}
 
 	/**

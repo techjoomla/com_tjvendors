@@ -143,6 +143,24 @@ class TjvendorsViewVendor extends HtmlView
 			}
 		}
 
+		if ($this->layout != "edit")
+		{
+			if (Factory::getUser()->id && !$this->vendor_id)
+			{
+				$app    = Factory::getApplication();
+				$client = $app->input->get('client', '', 'STRING');
+				$link   = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
+				$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'warning');
+				$app->redirect($link);
+			}
+			elseif(!Factory::getUser()->id)
+			{
+				$link = Route::_('index.php?option=com_users');
+				$app  = Factory::getApplication();
+				$app->redirect($link);
+			}
+		}
+
 		// Check for errors
 		if (count($errors = $this->get('Errors')))
 		{

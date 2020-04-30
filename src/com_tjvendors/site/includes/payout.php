@@ -21,7 +21,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 /**
  * Payout class.
  *
- * This class hold the property of the vendor entity and perform the appropriate operations
+ * This class hold the property of the vendor payout entity and perform the appropriate operations
  *
  * @since  __DEPLOY_VERSION__
  */
@@ -81,7 +81,7 @@ class TjvendorsPayout extends CMSObject
 	private $reference_order_id = '';
 
 	/**
-	 * The other_city of the vendor.
+	 * Transaction time.
 	 *
 	 * @var    String
 	 * @since  __DEPLOY_VERSION__
@@ -89,7 +89,7 @@ class TjvendorsPayout extends CMSObject
 	private $transaction_time = '';
 
 	/**
-	 * Integrated component client name eg. com_tjlms, com_jticketing
+	 * Integrated component client name eg. com_tjlms, com_jticketing, com_jgive
 	 *
 	 * @var    string
 	 * @since  __DEPLOY_VERSION__
@@ -372,8 +372,8 @@ class TjvendorsPayout extends CMSObject
 	 */
 	public function addEntry($orderData)
 	{
-		$com_params       = ComponentHelper::getParams($orderData['client']);
-		$currency         = $com_params->get('currency');
+		$clientParams     = ComponentHelper::getParams($orderData['client']);
+		$currency         = $clientParams->get('currency');
 		$vendorParams     = TJVendors::config();
 		$payoutDayLimit   = $vendorParams->get('payout_limit_days', 0, 'INT');
 		$date             = Factory::getDate();

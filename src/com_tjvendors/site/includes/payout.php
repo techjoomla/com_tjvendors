@@ -420,8 +420,80 @@ class TjvendorsPayout extends CMSObject
 		$entryData['params']   = json_encode($params);
 		$entryData['currency'] = $currency;
 		$entryData['client']   = $orderData['client'];
-		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
-		$tjvendorsModelPayout = BaseDatabaseModel::getInstance('Payout', 'TjvendorsModel');
-		$vendorDetail = $tjvendorsModelPayout->addCreditEntry($entryData);
+		$vendorDetail = $this->addCreditEntry($entryData);
+	}
+
+	/**
+	 * Method to add the amount when a product is purchased.
+	 *
+	 * @param   array  $data  data of order
+	 *
+	 * @return   boolean
+	 *
+	 * @since    __DEPLOY_VERSION__
+	 */
+	public function addCreditEntry($data)
+	{
+		$creditEntry = new stdClass;
+		$creditEntry->vendor_id          = $data['vendor_id'];
+		$creditEntry->currency           = $data['currency'];
+		$creditEntry->total              = $data['total'];
+		$creditEntry->credit             = $data['credit'];
+		$creditEntry->debit              = $data['debit'];
+		$creditEntry->reference_order_id = $data['reference_order_id'];
+		$creditEntry->transaction_time   = $data['transaction_time'];
+		$creditEntry->client             = $data['client'];
+		$creditEntry->transaction_id     = $data['transaction_id'];
+		$creditEntry->params             = $data['params'];
+
+		try
+		{
+			// Insert the object into the passbook table.
+			$result = Factory::getDbo()->insertObject('#__tjvendors_passbook', $creditEntry);
+		}
+		catch (Exception $e)
+		{
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
+
+		$this->updatingCreditData($data);
+	}
+
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @param   array  $data  An optional array of data for the form to interogate.
+	 *
+	 * @return   mixed  The data for the form.
+	 *
+	 * @since    1.6
+	 */
+	public function updatingCreditData($data)
+	{
+		$payout_detail = TjvendorsHelper::getTotalAmount($data['vendor_id'], $data['currency'], $data['client']);
+
+		$object                 = new stdClass;
+		$object->id             = $payout_detail['id'];
+		$object->transaction_id = $data['transaction_id'] . $object->id;
+
+		try
+		{
+			// Update their details in the users table using id as the primary key.
+			$result = Factory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
+		}
+		catch (Exception $e)
+		{
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+		}
+
+		if (empty($result))
+		{
+			return false;
+		}
 	}
 }

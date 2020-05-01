@@ -145,7 +145,7 @@ class TjvendorsModelPayout extends AdminModel
 	 *
 	 * @param   Array  $data  Data
 	 *
-	 * @return id
+	 * @return boolean
 	 */
 	public function save($data)
 	{

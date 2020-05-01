@@ -13,6 +13,7 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
 use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Component\ComponentHelper;
@@ -148,7 +149,7 @@ class TjvendorsPayout extends CMSObject
 	 *
 	 * @param   integer  $id  The primary key of the passbook to load (optional).
 	 * 
-	 * @return  TjvendorsVendor  The vendor object.
+	 * @return  TjvendorsPayout  The payout object.
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
@@ -197,8 +198,6 @@ class TjvendorsPayout extends CMSObject
 		$this->transaction_id     = $table->get('transaction_id');
 		$this->status             = $table->get('status');
 		$this->params             = $table->get('params');
-
-		$this->setClient($client);
 
 		return true;
 	}
@@ -375,18 +374,20 @@ class TjvendorsPayout extends CMSObject
 		$clientParams     = ComponentHelper::getParams($orderData['client']);
 		$currency         = $clientParams->get('currency');
 		$vendorParams     = TJVendors::config();
-		$payoutDayLimit   = $vendorParams->get('payout_limit_days', 0, 'INT');
 		$date             = Factory::getDate();
-		$payoutDayLimit   = $date->modify("-" . $payoutDayLimit . " day");
-		$checkOrderPayout = false;
+		$date->modify("-" . $vendorParams->get('payout_limit_days', 0, 'INT') . " day");
+
 		$payoutTable = Table::getInstance('payout', 'TjvendorsTable', array());
 		$payoutTable->load(array('reference_order_id' => $orderData['order_id']));
+
+		$checkOrderPayout = false;
 
 		if ($payoutTable->debit > 0)
 		{
 			$checkOrderPayout = $payoutTable->order_id;
 		}
 
+		$entryData              = array();
 		$entryData['vendor_id'] = $orderData['vendor_id'];
 		$totalAmount = TjvendorsHelper::getTotalAmount($entryData['vendor_id'], $currency, $orderData['client']);
 		$entryData['reference_order_id'] = $orderData['order_id'];
@@ -420,7 +421,7 @@ class TjvendorsPayout extends CMSObject
 		$entryData['params']   = json_encode($params);
 		$entryData['currency'] = $currency;
 		$entryData['client']   = $orderData['client'];
-		$vendorDetail = $this->addCreditEntry($entryData);
+		$this->addCreditEntry($entryData);
 	}
 
 	/**

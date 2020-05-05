@@ -432,7 +432,7 @@ class TjvendorsModelVendor extends AdminModel
 		// To check if editing in registration form
 		if ($data['vendor_id'])
 		{
-			$data['modified_time'] = Factory::getDate()->format('Y-m-d H:m:s');
+			$data['modified_time'] = Factory::getDate('now')->toSQL();
 			$data['modified_by']   = Factory::getUser()->id;
 			$table->save($data);
 			$tjvendorFrontHelper = new TjvendorFrontHelper;
@@ -499,7 +499,7 @@ class TjvendorsModelVendor extends AdminModel
 		}
 		else
 		{
-			$data['created_time'] = Factory::getDate()->format('Y-m-d H:m:s');
+			$data['created_time'] = Factory::getDate('now')->toSQL();
 			$data['created_by']   = Factory::getUser()->id;
 
 			// Vendor registers for the first time for a client

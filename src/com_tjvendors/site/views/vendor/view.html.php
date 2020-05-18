@@ -1,22 +1,31 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
+
 // No direct access
 defined('_JEXEC') or die;
-
-jimport('joomla.application.component.view');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * View to edit
  *
  * @since  1.6
  */
-class TjvendorsViewVendor extends JViewLegacy
+class TjvendorsViewVendor extends HtmlView
 {
 	protected $state;
 
@@ -42,6 +51,16 @@ class TjvendorsViewVendor extends JViewLegacy
 
 	protected $isClientExist;
 
+	protected $default;
+
+	protected $options;
+
+	protected $countries;
+
+	protected $vendorLogoProfileImg;
+
+	protected $vendorLogoProfileImgPath;
+
 	/**
 	 * Display the view
 	 *
@@ -53,34 +72,58 @@ class TjvendorsViewVendor extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$this->params = JComponentHelper::getParams('com_tjvendors');
+		$this->params = ComponentHelper::getParams('com_tjvendors');
 		$this->state  = $this->get('State');
 		$this->vendor = $this->get('Item');
 		$this->form   = $this->get('Form');
-		$this->input  = JFactory::getApplication()->input;
+		$this->input  = Factory::getApplication()->input;
 		$this->client = $this->input->get('client', '', 'STRING');
 
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
-		$tjvendorsModelVendor        = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
+		$tjvendorsModelVendor        = BaseDatabaseModel::getInstance('Vendor', 'TjvendorsModel');
 		$tjvendorFrontHelper         = new TjvendorFrontHelper;
 		$this->vendor_id             = $tjvendorFrontHelper->getvendor();
 		$this->client                = $this->input->get('client', '', 'STRING');
 		$this->isClientExist         = $tjvendorFrontHelper->isClientExist($this->client, $this->vendor_id);
-		$this->vendorClientXrefTable = JTable::getInstance('vendorclientxref', 'TjvendorsTable', array());
+		$this->vendorClientXrefTable = Table::getInstance('vendorclientxref', 'TjvendorsTable', array());
 		$this->vendorClientXrefTable->load(array('vendor_id' => $this->vendor_id, 'client' => $this->client));
 		$this->VendorDetail          = $tjvendorsModelVendor->getItem($this->vendor_id);
 
-		$app = JFactory::getApplication();
+		$utilitiesObj = TJVendors::utilities();
+		$this->countries = $utilitiesObj->getCountries();
+
+		$this->default = null;
+
+		if (isset($this->vendor->country))
+		{
+			$this->default = $this->vendor->country;
+		}
+
+		$this->options = array();
+		$this->options[] = HTMLHelper::_('select.option', 0, Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+
+		foreach ($this->countries as $key => $value)
+		{
+			$country = $this->countries[$key];
+			$id      = $country['id'];
+			$value   = $country['country'];
+			$this->options[] = HTMLHelper::_('select.option', $id, $value);
+		}
+
+		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
+		$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
+
+		$app = Factory::getApplication();
 		$app->setUserState("vendor.client", $this->client);
 		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);
 		$this->layout = $this->input->get('layout', '', 'STRING');
-		JText::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
-		JText::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
-		JText::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
+		Text::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+		Text::script('COM_TJVENDOR_DESCRIPTION_READ_MORE');
+		Text::script('COM_TJVENDOR_DESCRIPTION_READ_LESS');
 
-		if ($this->layout == 'profile' && $this->vendor_id != $this->vendor->vendor_id)
+		if (isset($this->vendor->vendor_id) && $this->vendor_id != $this->vendor->vendor_id)
 		{
-			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
 		}
 
 		if (!empty($this->vendor_id) && $this->layout == "edit")
@@ -91,12 +134,30 @@ class TjvendorsViewVendor extends JViewLegacy
 				{
 					if ($client == $this->client)
 					{
-						$link = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=profile&client=' . $this->client . '&vendor_id=' . $this->vendor_id);
-						$app = JFactory::getApplication();
-						$app->enqueueMessage(JText::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
+						$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $this->vendor_id . '&client=' . $this->client);
+						$app = Factory::getApplication();
+						$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
 						$app->redirect($link);
 					}
 				}
+			}
+		}
+
+		if ($this->layout != "edit")
+		{
+			if (Factory::getUser()->id && !$this->vendor_id)
+			{
+				$app    = Factory::getApplication();
+				$client = $app->input->get('client', '', 'STRING');
+				$link   = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
+				$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'warning');
+				$app->redirect($link);
+			}
+			elseif(!Factory::getUser()->id)
+			{
+				$link = Route::_('index.php?option=com_users');
+				$app  = Factory::getApplication();
+				$app->redirect($link);
 			}
 		}
 

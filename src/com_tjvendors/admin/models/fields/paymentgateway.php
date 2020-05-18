@@ -10,9 +10,15 @@
 
 // No direct access.
 defined('_JEXEC') or die();
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
 
 jimport('joomla.form.helper');
-JFormHelper::loadFieldClass('list');
+FormHelper::loadFieldClass('list');
 
 /**
  * Supports an HTML select list of courses
@@ -40,38 +46,38 @@ class JFormFieldPaymentGateway extends JFormFieldList
 	/**
 	 * Method to get a list of options for a list input.
 	 *
-	 * @return	array		An array of JHtml options.
+	 * @return	array		An array of HTMLHelper options.
 	 *
 	 * @since   11.4
 	 */
 	protected function getOptions()
 	{
 		$type = "payment";
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
 		$options = array();
-		$options[] = JHtml::_('select.option', '', JText::_('COM_TJVENDOR_PAYMENT_DETAILS_DEFAULT'));
+		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJVENDOR_PAYMENT_DETAILS_DEFAULT'));
 
 		if (!empty($client))
 		{
-			$com_params = JComponentHelper::getParams($client);
+			$com_params = ComponentHelper::getParams($client);
 			$gateways = (array) $com_params->get('gateways');
 
 			if (!empty($gateways))
 			{
 				foreach ($gateways as $detail)
 				{
-					$options[] = JHtml::_('select.option', $detail, $detail);
+					$options[] = HTMLHelper::_('select.option', $detail, $detail);
 				}
 			}
 		}
 		else
 		{
-			$gateways = JPluginHelper::getPlugin($type, $plugin = null);
+			$gateways = PluginHelper::getPlugin($type, $plugin = null);
 
 			foreach ($gateways as $detail)
 			{
-				$options[] = JHtml::_('select.option', $detail->name, $detail->name);
+				$options[] = HTMLHelper::_('select.option', $detail->name, $detail->name);
 			}
 		}
 

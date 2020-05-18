@@ -11,6 +11,8 @@
 // No direct access
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Component\Router\RouterBase;
+
 JLoader::registerPrefix('Tjvendors', JPATH_SITE . '/components/com_tjvendors/');
 require_once JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
 
@@ -19,7 +21,7 @@ require_once JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
  *
  * @since  3.3
  */
-class TjvendorsRouter extends JComponentRouterBase
+class TjvendorsRouter extends RouterBase
 {
 	/**
 	 * Build method for URLs
@@ -86,8 +88,6 @@ class TjvendorsRouter extends JComponentRouterBase
 
 		// View is always the first element of the array
 		$vars['view'] = array_shift($segments);
-		$TjvendorFrontHelper = new TjvendorFrontHelper;
-		$model        = $TjvendorFrontHelper->getModel($vars['view']);
 
 		while (!empty($segments))
 		{

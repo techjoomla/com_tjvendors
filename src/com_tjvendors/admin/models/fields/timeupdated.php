@@ -1,3 +1,8 @@
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 <?php
 /**
  * @package     TJVendors
@@ -50,13 +55,13 @@ class JFormFieldTimeupdated extends JFormField
 			}
 			else
 			{
-				$jdate       = new JDate($old_time_updated);
-				$pretty_date = $jdate->format(JText::_('DATE_FORMAT_LC2'));
+				$jdate       = new Date($old_time_updated);
+				$pretty_date = $jdate->format(Text::_('DATE_FORMAT_LC2'));
 				$html[]      = "<div>" . $pretty_date . "</div>";
 			}
 		}
 
-		$time_updated = JFactory::getDate('now', JFactory::getConfig()->get('offset'))->toSql(true);
+		$time_updated = Factory::getDate('now', Factory::getConfig()->get('offset'))->toSql(true);
 		$html[]       = '<input type="hidden" name="' . $this->name . '" value="' . $time_updated . '" />';
 
 		return implode($html);

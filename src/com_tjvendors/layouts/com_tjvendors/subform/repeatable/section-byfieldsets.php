@@ -1,13 +1,16 @@
 <?php
 /**
- * @package     Joomla.Site
+ * @package     TJVendors
  * @subpackage  Layout
  *
- * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+use Joomla\CMS\Language\Text;
+
 /*
  * As Joomla doesn't provide bootstrap 3 layout and TJVendor run on bootstrap 3 templates added the overrides for the Joomla subform layout
 */
@@ -15,7 +18,7 @@ defined('_JEXEC') or die;
 /**
  * Make thing clear
  *
- * @var JForm   $form       The form instance for render the section
+ * @var Form   $form       The form instance for render the section
  * @var string  $basegroup  The base group name
  * @var string  $group      Current group name
  * @var array   $buttons    Array of the buttons that will be rendered
@@ -37,7 +40,7 @@ extract($displayData);
 <?php foreach ($form->getFieldsets() as $fieldset) : ?>
 <fieldset class="<?php if (!empty($fieldset->class)){ echo $fieldset->class; } ?>">
 	<?php if (!empty($fieldset->label)) : ?>
-	<legend><?php echo JText::_($fieldset->label); ?></legend>
+	<legend><?php echo Text::_($fieldset->label); ?></legend>
 	<?php endif; ?>
 <?php foreach ($form->getFieldset($fieldset->name) as $field) : ?>
 	<?php echo $field->renderField(); ?>

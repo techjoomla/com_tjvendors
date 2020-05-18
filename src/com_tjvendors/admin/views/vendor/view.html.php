@@ -1,22 +1,29 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright  2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
-// No direct access
+
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.view');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 /**
  * View to edit
  *
  * @since  1.6
  */
-class TjvendorsViewVendor extends JViewLegacy
+class TjvendorsViewVendor extends HtmlView
 {
 	protected $state;
 
@@ -25,6 +32,16 @@ class TjvendorsViewVendor extends JViewLegacy
 	protected $form;
 
 	protected $params;
+
+	protected $default;
+
+	protected $options;
+
+	protected $countries;
+
+	protected $vendorLogoProfileImg;
+
+	protected $vendorLogoProfileImgPath;
 
 	/**
 	 * Display the view
@@ -37,16 +54,45 @@ class TjvendorsViewVendor extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
-		$this->params = JComponentHelper::getParams('com_tjvendors');
-		$this->input = JFactory::getApplication()->input;
-		JText::script('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR');
-		JText::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
-		JText::script('COM_TJVENDOR_USER_ERROR');
+		$this->params = ComponentHelper::getParams('com_tjvendors');
+		$this->input = Factory::getApplication()->input;
+		Text::script('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR');
+		Text::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+		Text::script('COM_TJVENDOR_USER_ERROR');
 		$this->client = $this->input->get('client', '', 'STRING');
+
+		$utilitiesObj = TJVendors::utilities();
+		$this->countries = $utilitiesObj->getCountries();
+		$this->default = null;
+
+		if (isset($this->item->country))
+		{
+			$this->default = $this->item->country;
+		}
+
+		$this->options = array();
+		$this->options[] = HTMLHelper::_('select.option', 0, Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'));
+
+		foreach ($this->countries as $key => $value)
+		{
+			$country = $this->countries[$key];
+			$id      = $country['id'];
+			$value   = $country['country'];
+			$this->options[] = HTMLHelper::_('select.option', $id, $value);
+		}
+
+		if (empty($this->item->region))
+		{
+			$this->item->region = '';
+			$this->item->city = '';
+		}
+
+		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
+		$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 
 		if (empty($this->item->vendor_id))
 		{
@@ -77,21 +123,21 @@ class TjvendorsViewVendor extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		JFactory::getApplication()->input->set('hidemainmenu', true);
+		Factory::getApplication()->input->set('hidemainmenu', true);
 
-		$user  = JFactory::getUser();
+		$user  = Factory::getUser();
 		$isNew = ($this->item->vendor_id == 0);
 
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$this->full_client = $input->get('client', '', 'STRING');
 
 		if ($isNew)
 		{
-			$viewTitle = JText::_('COM_TJVENDOR_VENDORS_ADD_USER_SPECIFIC_COMM');
+			$viewTitle = Text::_('COM_TJVENDOR_VENDORS_ADD_USER_SPECIFIC_COMM');
 		}
 		else
 		{
-			$viewTitle = JText::_('COM_TJVENDOR_VENDORS_EDIT_USER_SPECIFIC_COMM');
+			$viewTitle = Text::_('COM_TJVENDOR_VENDORS_EDIT_USER_SPECIFIC_COMM');
 		}
 
 		if (isset($this->item->checked_out))
@@ -105,7 +151,7 @@ class TjvendorsViewVendor extends JViewLegacy
 
 		$canDo = TjvendorsHelper::getActions();
 		$clientTitle = TjvendorFrontHelper::getClientName($this->client);
-		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
+		ToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 
 		// If not checked out, can save the item.
 		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create'))))

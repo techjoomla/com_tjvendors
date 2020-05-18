@@ -10,6 +10,9 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
+
 JLoader::import('components.com_tjvendors.helpers.mails', JPATH_SITE);
 
 /**
@@ -26,8 +29,8 @@ class TjvendorsTriggerVendor
 	 */
 	public function __construct()
 	{
-		$app = JFactory::getApplication();
-		$this->user = JFactory::getUser();
+		$app = Factory::getApplication();
+		$this->user = Factory::getUser();
 		$this->tjvendorsMailsHelper = new TjvendorsMailsHelper;
 	}
 
@@ -57,7 +60,7 @@ class TjvendorsTriggerVendor
 		}
 
 		$dispatcher = JDispatcher::getInstance();
-		JPluginHelper::importPlugin('tjvendors');
+		PluginHelper::importPlugin('tjvendors');
 		$dispatcher->trigger('tjVendorsOnAfterVendorSave', array($vendorDetails, $isNew));
 
 		return;

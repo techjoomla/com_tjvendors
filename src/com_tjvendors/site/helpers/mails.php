@@ -9,6 +9,14 @@
  */
 
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
+
 jimport('techjoomla.tjnotifications.tjnotifications');
 
 /**
@@ -25,17 +33,17 @@ class TjvendorsMailsHelper
 	 */
 	public function __construct()
 	{
-		$app = JFactory::getApplication();
-		$this->tjvendorsparams = JComponentHelper::getParams('com_tjvendors');
-		$this->siteConfig = JFactory::getConfig();
+		$app = Factory::getApplication();
+		$this->tjvendorsparams = ComponentHelper::getParams('com_tjvendors');
+		$this->siteConfig = Factory::getConfig();
 		$this->sitename = $this->siteConfig->get('sitename');
 		$this->siteadminname = $this->siteConfig->get('fromname');
-		$this->user = JFactory::getUser();
+		$this->user = Factory::getUser();
 		$this->client = "com_tjvendors";
 		$this->tjnotifications = new Tjnotifications;
 		$this->siteinfo = new stdClass;
 		$this->siteinfo->sitename	= $this->sitename;
-		$this->siteinfo->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
+		$this->siteinfo->adminname = Text::_('COM_TJVENDORS_SITEADMIN');
 
 		JLoader::import('components.com_tjvendors.helpers.fronthelper', JPATH_SITE);
 		$this->tjvendorFrontHelper = new TjvendorFrontHelper;
@@ -58,30 +66,30 @@ class TjvendorsMailsHelper
 		$vendorerkey = ($vendor_approval) ? "createVendorMailToOwnerWaitingForApproval" : "createVendorMailToOwner";
 
 		$promoterEmailObj = new stdClass;
-		$vendorer = JFactory::getUser($vendorDetails->user_id);
+		$vendorer = Factory::getUser($vendorDetails->user_id);
 		$promoterEmailObj->email = $vendorer->email;
 		$promoterRecipients[] = $promoterEmailObj;
 
 		$allVendors = 'index.php?option=com_tjvendors&view=vendors&client=' . $vendorDetails->vendor_client;
-		$allVendorsLink = JUri::root() . 'administrator/' . $allVendors;
+		$allVendorsLink = Uri::root() . 'administrator/' . $allVendors;
 		$vendorDetails->allVendors = $allVendorsLink;
 
 		$vendorItemID = $this->tjvendorFrontHelper->getItemId(
 		'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $vendorDetails->vendor_client
 		);
-		$myVendor = 'index.php?option=com_tjvendors&view=vendor&layout=profile&client='
+		$myVendor = 'index.php?option=com_tjvendors&view=vendor&layout=edit&client='
 		. $vendorDetails->vendor_client . '&vendor_id=' . $vendorDetails->vendor_id . '&Itemid=' . $vendorItemID;
-		$myVendorLink = JUri::root() . substr(JRoute::_($myVendor), strlen(JUri::base(true)) + 1);
+		$myVendorLink = Uri::root() . substr(Route::_($myVendor), strlen(Uri::base(true)) + 1);
 		$vendorDetails->myVendor = $myVendorLink;
 
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
-		$vendorDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
+		$vendorDetails->adminname = Text::_('COM_TJVENDORS_SITEADMIN');
 		$replacements->info = $vendorDetails;
 		$replacements->vendorer = $vendorer;
 
 		$ccMail = $this->siteConfig->get('mailfrom');
-		$options = new JRegistry;
+		$options = new Registry;
 		$options->set('info', $vendorDetails);
 
 		// Mail to site admin
@@ -104,20 +112,20 @@ class TjvendorsMailsHelper
 	{
 		$replacements = new stdClass;
 		$vendorDetails->sitename = $this->sitename;
-		$vendorDetails->adminname = JText::_('COM_TJVENDORS_SITEADMIN');
-		$loggedInUser = JFactory::getUser()->id;
+		$vendorDetails->adminname = Text::_('COM_TJVENDORS_SITEADMIN');
+		$loggedInUser = Factory::getUser()->id;
 
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
-		$vendorData = JTable::getInstance('Vendorclientxref', 'TjvendorsTable');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorData = Table::getInstance('Vendorclientxref', 'TjvendorsTable');
 		$vendorData->load(array('vendor_id' => $vendorDetails->vendor_id));
 		$vendor_client = $vendorData->client;
 
 		$vendorDetails->vendorClient = $this->tjvendorFrontHelper->getClientName($vendor_client);
 		$replacements->info = $vendorDetails;
-		$replacements->vendorer = JFactory::getUser($vendorDetails->user_id);
+		$replacements->vendorer = Factory::getUser($vendorDetails->user_id);
 
 		$ccMail = $this->siteConfig->get('mailfrom');
-		$options = new JRegistry;
+		$options = new Registry;
 		$options->set('info', $vendorDetails);
 
 		$vendor_approval = $this->tjvendorsparams->get('vendor_approval');
@@ -125,10 +133,10 @@ class TjvendorsMailsHelper
 		// Find admin has approved vendor, and add a new key
 		if ($vendor_approval && $vendorDetails->approved == 1)
 		{
-			JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
-			$vendorData = JTable::getInstance('Vendor', 'TjvendorsTable');
+			Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+			$vendorData = Table::getInstance('Vendor', 'TjvendorsTable');
 			$vendorData->load(array('vendor_id' => $vendorDetails->vendor_id));
-			$vendorUserDetails = JFactory::getUser($vendorData->user_id);
+			$vendorUserDetails = Factory::getUser($vendorData->user_id);
 
 			$approvalkey = "approvalOnVendorMailToOwner";
 			$promoterEmailObj = new stdClass;

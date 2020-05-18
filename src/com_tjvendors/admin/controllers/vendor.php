@@ -10,16 +10,21 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\Router\Route;
 
-jimport('joomla.application.component.controllerform');
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
+HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
 
 /**
  * Vendor controller class.
  *
  * @since  1.6
  */
-class TjvendorsControllerVendor extends JControllerForm
+class TjvendorsControllerVendor extends FormController
 {
 	/**
 	 * Constructor
@@ -45,11 +50,10 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
-		$input  = JFactory::getApplication()->input;
+		$input  = Factory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
-		$vendor_id = $input->get('vendor_id', '', 'STRING');
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
-		$append .= '&client=' . $client . '&vendor_id=' . $vendor_id;
+		$append .= '&client=' . $client;
 
 		return $append;
 	}
@@ -63,7 +67,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	public function checkDuplicateUser()
 	{
-		$input  = JFactory::getApplication()->input->post;
+		$input  = Factory::getApplication()->input->post;
 		$user = $input->get('user', '', 'STRING');
 		$model = $this->getModel('vendor');
 		$results = $model->checkDuplicateUser($user);
@@ -81,7 +85,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	public function vendorApprove()
 	{
-		$input  = JFactory::getApplication()->input;
+		$input  = Factory::getApplication()->input;
 		$vendor_id = $input->post->get('vendor_id', '', 'INTEGER');
 		$vendorApprove = $input->post->get('vendorApprove', '', 'INTEGER');
 		$client = $input->get('client', '', 'STRING');
@@ -91,7 +95,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		$data['approved'] = $vendorApprove;
 		$result = $model->save($data);
 
-		echo new JResponseJson($result, JText::_('COM_TJVENDORS_VENDOR_APPROVAL_ERROR'), true);
+		echo new JsonResponse($result, Text::_('COM_TJVENDORS_VENDOR_APPROVAL_ERROR'), true);
 	}
 
 	/**
@@ -103,7 +107,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	public function generateGatewayFields()
 	{
-		$input  = JFactory::getApplication()->input->post;
+		$input  = Factory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
 		$parentTag = $input->get('parent_tag', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
@@ -122,7 +126,7 @@ class TjvendorsControllerVendor extends JControllerForm
 	 */
 	protected function getRedirectToListAppend()
 	{
-		$input  = JFactory::getApplication()->input->post;
+		$input  = Factory::getApplication()->input->post;
 		$client = $input->get('client', '', 'STRING');
 		$append = parent::getRedirectToListAppend();
 		$append .= '&client=' . $client;
@@ -144,13 +148,13 @@ class TjvendorsControllerVendor extends JControllerForm
 	public function save($key = null, $urlVar = null)
 	{
 		// Initialise variables.
-		$app    = JFactory::getApplication();
+		$app    = Factory::getApplication();
 		$model  = $this->getModel('Vendor', 'TjvendorsModel');
 		$input  = $app->input;
 		$client = $input->get('client', '', 'STRING');
 
 		// Get the user data.
-		$data = JFactory::getApplication()->input->get('jform', array(), 'array');
+		$data = Factory::getApplication()->input->get('jform', array(), 'array');
 
 		// Validate the posted data.
 		$form = $model->getForm();
@@ -187,7 +191,7 @@ class TjvendorsControllerVendor extends JControllerForm
 			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
 			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
-			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false));
+			$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false));
 
 			return false;
 		}
@@ -201,13 +205,13 @@ class TjvendorsControllerVendor extends JControllerForm
 
 			// Redirect back to the edit screen.
 			$id = (int) $app->getUserState('com_tjvendors.edit.vendor.id');
-			$this->setMessage(JText::sprintf('COM_TJVENDORS_VENDOR_ERROR_MSG_SAVE', $model->getError()), 'warning');
-			$this->setRedirect(JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false));
+			$this->setMessage(Text::sprintf('COM_TJVENDORS_VENDOR_ERROR_MSG_SAVE', $model->getError()), 'warning');
+			$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false));
 
 			return false;
 		}
 
-		$msg = JText::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR');
+		$msg = Text::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR');
 		$id = $input->get('vendor_id');
 
 		if (empty($id))
@@ -219,13 +223,13 @@ class TjvendorsControllerVendor extends JControllerForm
 
 		if ($task == 'apply')
 		{
-			$redirect = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id=' . $id, false);
+			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id=' . $id, false);
 			$app->redirect($redirect, $msg);
 		}
 
 		if ($task == 'save2new')
 		{
-			$redirect = JRoute::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client, false);
+			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client, false);
 			$app->redirect($redirect, $msg);
 		}
 
@@ -239,7 +243,7 @@ class TjvendorsControllerVendor extends JControllerForm
 		}
 
 		// Redirect to the list screen.
-		$redirect = JRoute::_('index.php?option=com_tjvendors&view=vendors&client=' . $client, false);
+		$redirect = Route::_('index.php?option=com_tjvendors&view=vendors&client=' . $client, false);
 		$app->redirect($redirect, $msg);
 
 		// Flush the data from the session.

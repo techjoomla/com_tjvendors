@@ -9,16 +9,16 @@
  */
 
 defined('_JEXEC') or die;
-
-jimport('joomla.application.component.modellist');
-jimport('joomla.application.component.model');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\ListModel;
 
 /**
  * Methods supporting a list of Tjvendors records.
  *
  * @since  1.6
  */
-class TjvendorsModelVendorFees extends JModelList
+class TjvendorsModelVendorFees extends ListModel
 {
 /**
 	* Constructor.
@@ -58,7 +58,7 @@ class TjvendorsModelVendorFees extends JModelList
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication('administrator');
+		$app = Factory::getApplication('administrator');
 
 		// Set ordering.
 		$orderCol = $app->getUserStateFromRequest($this->context . '.filter_order', 'filter_order');
@@ -75,7 +75,7 @@ class TjvendorsModelVendorFees extends JModelList
 		$this->setState('filter.search', $search);
 
 		// Load the parameters.
-		$params = JComponentHelper::getParams('com_tjvendors');
+		$params = ComponentHelper::getParams('com_tjvendors');
 		$this->setState('params', $params);
 
 		// List state information.
@@ -91,7 +91,7 @@ class TjvendorsModelVendorFees extends JModelList
 	 */
 	protected function getListQuery()
 	{
-		$input           = JFactory::getApplication()->input;
+		$input           = Factory::getApplication()->input;
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$vendor_id       = $this->vendor_id ? $this->vendor_id : $this->getState('vendor_id');
 		$client          = $input->get('client', '', 'STRING');

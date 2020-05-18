@@ -10,15 +10,17 @@
 
 // No direct access
 defined('_JEXEC') or die;
-
-jimport('joomla.application.component.controllerform');
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\Router\Route;
+use Joomla\Registry\Registry;
 
 /**
  * Vendor controller class.
  *
  * @since  1.6
  */
-class TjvendorsControllerVendorFee extends JControllerForm
+class TjvendorsControllerVendorFee extends FormController
 {
 	/**
 	 * Constructor
@@ -28,7 +30,7 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	public function __construct()
 	{
 			$this->view_list = 'vendorfees';
-		$this->input = JFactory::getApplication()->input;
+		$this->input = Factory::getApplication()->input;
 
 		if (empty($this->client))
 		{
@@ -50,9 +52,9 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$cid = $input->post->get('cid', array(), 'array');
-		$formData = new JRegistry($input->get('jform', '', 'array'));
+		$formData = new Registry($input->get('jform', '', 'array'));
 		$client = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$append = parent::getRedirectToItemAppend($recordId);
@@ -70,9 +72,9 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	 */
 	protected function getRedirectToListAppend()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$cid = $input->post->get('cid', array(), 'array');
-		$formData = new JRegistry($input->get('jform', '', 'array'));
+		$formData = new Registry($input->get('jform', '', 'array'));
 		$client = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'STRING');
 
@@ -87,19 +89,19 @@ class TjvendorsControllerVendorFee extends JControllerForm
 	 * Function to edit field data
 	 *
 	 * @param   integer  $key     null.
-	 * 
+	 *
 	 * @param   integer  $urlVar  null.
-	 * 
+	 *
 	 * @return  void
 	 */
 	public function edit($key = null, $urlVar = null)
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$cid = $input->post->get('cid', array(), 'array');
 		$vendorId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
 		$client = $input->get('client', '', 'STRING');
 		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
-		$link = JRoute::_(
+		$link = Route::_(
 		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId . '&client=' . $client, false
 		);
 		$this->setRedirect($link);

@@ -11,14 +11,19 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-jimport('joomla.application.component.modeladmin');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
 
 /**
  * Tjvendors model.
  *
  * @since  1.6
  */
-class TjvendorsModelVendorFee extends JModelAdmin
+class TjvendorsModelVendorFee extends AdminModel
 {
 	/**
 	 * @var      string    The prefix to use with controller messages.
@@ -45,16 +50,16 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 * @param   string  $prefix  A prefix for the table class name. Optional.
 	 * @param   array   $config  Configuration array for model. Optional.
 	 *
-	 * @return    JTable    A database object
+	 * @return    Table    A database object
 	 *
 	 * @since    1.6
 	 */
 	public function getTable($type = 'Vendorfee', $prefix = 'TjvendorsTable', $config = array())
 	{
-		$db     = JFactory::getDbo();
+		$db     = Factory::getDbo();
 		$tables = $db->getTableList();
 
-		return JTable::getInstance($type, $prefix, $config);
+		return Table::getInstance($type, $prefix, $config);
 	}
 
 	/**
@@ -63,14 +68,14 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 * @param   array    $data      An optional array of data for the form to interogate.
 	 * @param   boolean  $loadData  True if the form is to load its own data (default case), false if not.
 	 *
-	 * @return  JForm  A JForm object on success, false on failure
+	 * @return  Form  A Form object on success, false on failure
 	 *
 	 * @since    1.6
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Get the form.
 		$form = $this->loadForm('com_tjvendors.vendorfee', 'vendorfee', array('control' => 'jform', 'load_data' => $loadData));
@@ -95,8 +100,8 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	public function getItem($pk = null)
 	{
 		$data = parent::getItem($pk);
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
-		$TjvendorsModelVendor = JModelLegacy::getInstance('Vendor', 'TjvendorsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
+		$TjvendorsModelVendor = BaseDatabaseModel::getInstance('Vendor', 'TjvendorsModel');
 		$vendorDetail         = $TjvendorsModelVendor->getItem();
 		$data->vendor_title   = $vendorDetail->vendor_title;
 
@@ -113,7 +118,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	protected function loadFormData()
 	{
 		// Check the session for previously entered form data.
-		$data = JFactory::getApplication()->getUserState('com_tjvendors.edit.vendorfee.data', array());
+		$data = Factory::getApplication()->getUserState('com_tjvendors.edit.vendorfee.data', array());
 
 		if (empty($data))
 		{
@@ -122,7 +127,6 @@ class TjvendorsModelVendorFee extends JModelAdmin
 				$this->item = $this->getItem();
 			}
 
-			$this->item->currency_unchange = $this->item->currency;
 			$data = $this->item;
 		}
 
@@ -134,20 +138,32 @@ class TjvendorsModelVendorFee extends JModelAdmin
 	 *
 	 * @param   Array  $data  Data
 	 *
-	 * @return id
+	 * @return boolean  true or false
 	 */
 	public function save($data)
 	{
-		$isNew             = (empty($data['id']))? true : false;
-		$app               = JFactory::getApplication();
-		$table             = $this->getTable();
-		$db                = JFactory::getDbo();
+		$app   = Factory::getApplication();
+		$isNew = (empty($data['id']))? true : false;
+
+		if ($isNew && empty($data['currency']))
+		{
+			$this->setError(Text::_('COM_TJVENDORS_VENDORFEE_INVALID_CURRENCY'));
+
+			return false;
+		}
+
 		$input             = $app->input;
 		$data['vendor_id'] = $input->get('vendor_id', '', 'INTEGER');
-		$uniqueCurrency    = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client']);
+		$uniqueCurrency    = TjvendorsHelper::checkUniqueCurrency($data['currency'], $data['vendor_id'], $data['client'], $data['id']);
 
-		if (!empty($uniqueCurrency))
+		if ($uniqueCurrency)
 		{
+			// While editing the fees don't allow to edit currency
+			if ($data['id'])
+			{
+				unset($data['currency']);
+			}
+
 			if (parent::save($data))
 			{
 				if (empty($data['id']))
@@ -156,7 +172,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 				}
 
 				$dispatcher = JDispatcher::getInstance();
-				JPluginHelper::importPlugin('tjvendors');
+				PluginHelper::importPlugin('tjvendors');
 				$dispatcher->trigger('tjVendorsOnAfterVendorFeeSave', array($data, $isNew));
 
 				return true;
@@ -164,7 +180,7 @@ class TjvendorsModelVendorFee extends JModelAdmin
 		}
 		else
 		{
-			$app->enqueueMessage(JText::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'), 'error');
+			$this->setError(Text::_('COM_TJVENDORS_VENDORFEE_DUPLICATE_CURRENCY'));
 		}
 
 		return false;

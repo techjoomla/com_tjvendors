@@ -309,6 +309,7 @@ class TjvendorsVendor extends CMSObject
 		$this->ordering            = (int) $table->get('ordering');
 		$this->checked_out         = (int) $table->get('checked_out');
 		$this->checked_out_time    = $table->get('checked_out_time');
+		$this->approved            = $table->get('approved');
 		$this->params              = $table->get('params');
 		$this->setClient($client);
 
@@ -558,6 +559,18 @@ class TjvendorsVendor extends CMSObject
 	public function getPhoneNumber()
 	{
 		return $this->phone_number;
+	}
+
+	/**
+	 * Get the vendor zip
+	 *
+	 * @return  String
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getApproved()
+	{
+		return $this->approved;
 	}
 
 	/**

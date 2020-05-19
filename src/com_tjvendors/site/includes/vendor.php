@@ -564,7 +564,7 @@ class TjvendorsVendor extends CMSObject
 	/**
 	 * Method return vendor approval status
 	 *
-	 * @return  String
+	 * @return  Integer  Either 1 or 0
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */

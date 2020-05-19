@@ -562,7 +562,7 @@ class TjvendorsVendor extends CMSObject
 	}
 
 	/**
-	 * Get the vendor zip
+	 * Method return vendor approval status
 	 *
 	 * @return  String
 	 *

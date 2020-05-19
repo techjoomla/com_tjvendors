@@ -568,7 +568,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getApproved()
+	public function isApproved()
 	{
 		return $this->approved;
 	}

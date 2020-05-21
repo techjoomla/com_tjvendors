@@ -623,8 +623,7 @@ class TjvendorsVendor extends CMSObject
 		$total += (!empty($data->website_address)) ? 5: 0;
 		$total += (!empty($data->vat_number)) ? 5: 0;
 		$total += (!empty($data->vendor_description)) ? 5: 0;
-		$total += (!empty($data->vendor_logo))? 5: 0;
-		$total += (!empty($data->payment_gateway)) ? 5: 0;
+		$total += (!empty($data->vendor_logo))? 10: 0;
 
 		return $total;
 	}

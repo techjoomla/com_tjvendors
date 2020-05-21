@@ -58,16 +58,10 @@ if (Factory::getUser()->id)
 	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
-			<?php
-				if (!$this->isClientExist)
-				{
-					?>
-					<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
-						<li class="active"><a data-toggle="tab" href="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
-						<li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
-					</ul>
-			<?php
-				} ?>
+				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
+					<li class="active"><a data-toggle="tab" href="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
+					<li><a data-toggle="tab" href="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
+				</ul>
 				<!----Tab Container Start----->
 				<div class="tab-content">
 					<!----Tab 1 Start----->

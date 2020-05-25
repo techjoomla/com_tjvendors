@@ -434,70 +434,67 @@ class TjvendorsModelVendor extends AdminModel
 		{
 			$data['modified_time'] = Factory::getDate('now')->toSQL();
 			$data['modified_by']   = Factory::getUser()->id;
+			$table->save($data);
+			$tjvendorFrontHelper = new TjvendorFrontHelper;
+			$vendorClients = $tjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
+			$count = 0;
 
-			if ($table->save($data) === true)
+			// Check if the vendor exists for another client
+			foreach ($vendorClients as $client)
 			{
-				$tjvendorFrontHelper = new TjvendorFrontHelper;
-				$vendorClients = $tjvendorFrontHelper->getClientsForVendor($data['vendor_id']);
-				$count = 0;
-
-				// Check if the vendor exists for another client
-				foreach ($vendorClients as $client)
+				if ($client == $data['vendor_client'])
 				{
-					if ($client == $data['vendor_client'])
-					{
-						$count++;
-					}
+					$count++;
 				}
+			}
 
 			// If no client present then vendor registers for first time  for a client
-				if ($count == 0)
+			if ($count == 0)
+			{
+				$client_entry = new stdClass;
+				$client_entry->client = $data['vendor_client'];
+				$client_entry->vendor_id = $data['vendor_id'];
+				$client_entry->params = $xrefData['params'];
+				$client_entry->approved = $data['approved'];
+
+				// Insert the object into the user profile table.
+				Factory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
+				$tjvendorsTriggerVendor->onAfterVendorSave($data, true);
+
+				return true;
+			}
+			else
+			{
+				$query = $db->getQuery(true);
+
+				// Fields to update.
+				if (isset($data['params']))
 				{
-					$client_entry = new stdClass;
-					$client_entry->client = $data['vendor_client'];
-					$client_entry->vendor_id = $data['vendor_id'];
-					$client_entry->params = $xrefData['params'];
-					$client_entry->approved = $data['approved'];
-
-					// Insert the object into the user profile table.
-					Factory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
-					$tjvendorsTriggerVendor->onAfterVendorSave($data, true);
-
-					return true;
+					$fields = array(
+						$db->quoteName('params') . ' = ' . $db->quote($xrefData['params']),
+					);
 				}
 				else
 				{
-					$query = $db->getQuery(true);
-
-					// Fields to update.
-					if (isset($data['params']))
-					{
-						$fields = array(
-							$db->quoteName('params') . ' = ' . $db->quote($xrefData['params']),
-						);
-					}
-					else
-					{
-						$fields = array(
-						$db->quoteName('approved') . ' = ' . $db->quote($data['approved']),
-						);
-					}
-
-					// The vendor information is updated for that client
-						$conditions = array(
-						$db->quoteName('vendor_id') . ' = ' . $db->quote($data['vendor_id']),
-						$db->quoteName('client') . ' = ' . $db->quote($data['vendor_client']),
+					$fields = array(
+					$db->quoteName('approved') . ' = ' . $db->quote($data['approved']),
 					);
-
-					$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);
-					$db->setQuery($query);
-					$result = $db->execute();
-
-					/* Trigger on Vendor Edit / update*/
-					$tjvendorsTriggerVendor->onAfterVendorSave($data, false);
-
-					return true;
 				}
+
+				// The vendor information is updated for that client
+					$conditions = array(
+					$db->quoteName('vendor_id') . ' = ' . $db->quote($data['vendor_id']),
+					$db->quoteName('client') . ' = ' . $db->quote($data['vendor_client']),
+				);
+
+				$query->update($db->quoteName('#__vendor_client_xref'))->set($fields)->where($conditions);
+				$db->setQuery($query);
+				$result = $db->execute();
+
+				/* Trigger on Vendor Edit / update*/
+				$tjvendorsTriggerVendor->onAfterVendorSave($data, false);
+
+				return true;
 			}
 		}
 		else

@@ -300,6 +300,11 @@ var tjCommon = {
 	},
 
 	initVendorFields: function() {
+		var opt_cnt = jQuery("#jform_payment_gateway__payment_gateway0__payment_gateways option").size();
+		
+		if(opt_cnt <= 2){
+			jQuery(".btn-toolbar").hide();
+		}
 		jQuery('.subform-repeatable-group .gateway_name').on('focus', function() {
 			previous = this.value;
 		});

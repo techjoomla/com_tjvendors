@@ -21,6 +21,7 @@ HTMLHelper::_('behavior.tooltip');
 HTMLHelper::_('behavior.formvalidation');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
+HTMLHelper::script(Uri::root() . 'libraries/techjoomla/assets/js/tjvalidator.js');
 
 $script   = array();
 $script[] = 'var layout = "edit"';

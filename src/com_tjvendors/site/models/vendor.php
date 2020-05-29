@@ -424,7 +424,7 @@ class TjvendorsModelVendor extends AdminModel
 			$xrefData['params'] = '';
 		}
 
-		if (is_numeric($data['city']))
+		if (empty($data['city']))
 		{
 			$data['other_city'] = '';
 		}

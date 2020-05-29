@@ -223,7 +223,7 @@ class TjvendorsControllerVendor extends FormController
 
 		if ($task == 'apply')
 		{
-			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=update&client=' . $client . '&vendor_id=' . $id, false);
+			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false);
 			$app->redirect($redirect, $msg);
 		}
 

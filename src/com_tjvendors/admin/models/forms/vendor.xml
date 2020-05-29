@@ -58,7 +58,7 @@
 			required="true"
 			type="text"
 			size="40"
-			class="inputbox"
+			class="inputbox validate-blankspace"
 			label="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE"
 			description="COM_TJVENDORS_FORM_DESC_VENDOR_TITLE"
 			hint="COM_TJVENDORS_FORM_LBL_VENDOR_TITLE"

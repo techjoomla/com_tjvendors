@@ -150,7 +150,7 @@ class TjvendorsViewVendor extends HtmlView
 				$app    = Factory::getApplication();
 				$client = $app->input->get('client', '', 'STRING');
 				$link   = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
-				$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'warning');
+				$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'notice');
 				$app->redirect($link);
 			}
 			elseif(!Factory::getUser()->id)

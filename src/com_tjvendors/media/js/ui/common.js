@@ -13,7 +13,7 @@ export class CommonUI{
 
 	generateStates(country, isAdmin, state, city)
 	{
-		var countryId = jQuery("#" + country).val();
+		countryId = jQuery("#" + country).val();
 
 		if (countryId == 0) {
 			jQuery("#jform_region").val('');

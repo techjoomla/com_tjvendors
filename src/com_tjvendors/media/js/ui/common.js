@@ -16,15 +16,14 @@ export class CommonUI{
 		var countryId = jQuery("#" + country).val();
 
 		if (countryId == 0) {
-			jQuery("#jform_region").val(0);
-			jQuery("#jform_city").val(0);
-			
-			let regionField = document.getElementById('jform_region');
+			jQuery("#jform_region").val('');
+			jQuery("#jform_city").val('');
+			regionField = document.getElementById('jform_region');
 			jQuery(regionField).trigger("liszt:updated");
 
-			let cityField = document.getElementById('jform_city');
+			cityField = document.getElementById('jform_city');
 			jQuery(cityField).trigger("liszt:updated");
-			
+
 			return;
 		}
 

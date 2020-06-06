@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="id" type="int" default="0"
+			label="COM_TJVENDORS_AFFILIATE_FORM_LBL_ID" readonly="true"
+			class="readonly " description="COM_TJVENDORS_AFFILIATE_FORM_LBL_ID" />
+		<field name="vendor_id" type="vendorslist" default="0"
+			required="true" label="COM_TJVENDORS_FORM_LBL_VENDOR_ID"
+			description="COM_TJVENDORS_FORM_LBL_VENDOR_ID" />
+		<field name="name" type="text"
+			label="COM_TJVENDORS_AFFILIATE_FORM_LBL_NAME" required="true"
+			description="COM_TJVENDORS_AFFILIATE_FORM_LBL_NAME_DESC" hint="name"
+			menu_published="0" filter="" directory_stripext="true"
+			directory_hidenode="true" directory_hidedefault="true" close="true"
+			option_on="Yes" option_off="Yes" toggle_default_value="0" />
+		<field name="code" type="text"
+			label="COM_TJVENDORS_AFFILIATE_FORM_LBL_CODE" required="true"
+			description="COM_TJVENDORS_AFFILIATE_FORM_LBL_CODE_DESC" hint="code"
+			class="inputbox" size="45" maxlength="4" labelclass="control-label"
+			pattern="[A-Za-z\s0-9]+" />
+		<field name="description" required="true" type="textarea"
+			size="40" class="inputbox"
+			label="COM_TJVENDORS_AFFILIATE_FORM_LBL_DESCRIPTION"
+			description="COM_TJVENDORS_AFFILIATE_FORM_LBL_DESCRIPTION_DESC"
+			hint="description" filter="" />
+		<field name="commission_type" type="radio" default="percent" 
+		label="COM_TJVENDORS_AFFILIATE_FORM_LBL_FLAT_PERCENT" 
+		description="COM_TJVENDORS_AFFILIATE_FORM_DESC_FLAT_PERCENT"
+		 class="btn-group btn-group-yesno">
+            <option value="flat">COM_TJVENDORS_AFFILIATE_FLAT</option>
+            <option value="percent">COM_TJVENDORS_AFFILIATE_PERCENT</option>
+        </field>
+		<field name="commission" type="number" class="inputbox"
+			required="true" label="COM_TJVENDORS_AFFILIATE_FORM_LBL_COMMISSION"
+			description="COM_TJVENDORS_AFFILIATE_FORM_LBL_COMMISSION_DESC"
+			hint="commision" rows="10" cols="5" filter="" />
+		<field name="user_commission" type="number" class="inputbox"
+			required="true"
+			label="COM_TJVENDORS_AFFILIATE_FORM_LBL_USER_COMMISSION"
+			description="COM_TJVENDORS_AFFILIATE_FORM_LBL_USER_COMMISSION_DESC"
+			hint="user commision" rows="10" cols="5" />
+		<field name="affiliates_limit" type="number" class="inputbox"
+			label="COM_TJVENDORS_AFFILIATE_FORM_LBL_LIMIT"
+			description="COM_TJVENDORS_AFFILIATE_FORM_LBL_LIMIT_DESC"
+			hint="affiliate limit" rows="10" cols="5" filter="" />
+		<field name="max_per_user" type="number" class="inputbox"
+			label="COM_TJVENDORS_AFFILIATE_FORM_LBL_MAX_PER_USER"
+			description="" hint="max per user" rows="10" cols="5" filter="" />
+		<field name="valid_from" type="calendar" class="inputbox-date"
+			required="true" format="%Y-%m-%d %H:%M:%S" showtime="true"
+			default="now" label="COM_TJVENDORS_AFFILIATE_FORM_LBL_VALID_FROM"
+			description="" filter="user_utc" />
+		<field name="valid_to" type="calendar" class="inputbox-date"
+			required="true" format="%Y-%m-%d %H:%M:%S" showtime="true"
+			default="now" label="COM_TJVENDORS_AFFILIATE_FORM_LBL_VALID_TO"
+			description="" filter="user_utc" />
+		<field name="params" type="textarea"
+			label="COM_TJVENDORS_AFFILIATE_FORM_LBL_PARAMS" description=""
+			hint="params" cols="100" rows="8" class="" />
+		<field name="checked_out_time" default="0000-00-00 00:00:00"
+			type="hidden" filter="" />
+		<field name="state" default="1" type="list" label="JSTATUS"
+			description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+		</field>
+	</fieldset>
+</form>

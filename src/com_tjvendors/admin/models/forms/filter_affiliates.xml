@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="filter">
+		<field
+			name="search"
+			type="text"
+			label="COM_TJVENDOR_AFFILIATES_SEARCH"
+			description="COM_TJVENDOR_AFFILIATES_SEARCH"
+			hint="JSEARCH_FILTER"
+		/>
+	</fields>
+	<fields name="list">
+		<field
+			name="limit"
+			type="limitbox"
+			label="COM_TJVENDORS_AFFILIATES_LIMIT"
+			description="COM_TJVENDORS_AFFILIATES_LIMIT_DESC"
+			class="input-mini"
+			default="25"
+			onchange="this.form.submit();"
+		/>
+	</fields>
+</form>

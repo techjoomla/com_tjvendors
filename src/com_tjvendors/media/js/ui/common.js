@@ -13,15 +13,16 @@ export class CommonUI{
 
 	generateStates(country, isAdmin, state, city)
 	{
-		countryId = jQuery("#" + country).val();
+		var countryId = jQuery("#" + country).val();
 
 		if (countryId == 0) {
 			jQuery("#jform_region").val('');
 			jQuery("#jform_city").val('');
-			regionField = document.getElementById('jform_region');
+
+			var regionField = document.getElementById('jform_region');
 			jQuery(regionField).trigger("liszt:updated");
 
-			cityField = document.getElementById('jform_city');
+			var cityField = document.getElementById('jform_city');
 			jQuery(cityField).trigger("liszt:updated");
 
 			return;

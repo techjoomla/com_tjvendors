@@ -76,7 +76,8 @@ class TjvendorsViewVendor extends HtmlView
 		$this->state  = $this->get('State');
 		$this->vendor = $this->get('Item');
 		$this->form   = $this->get('Form');
-		$this->input  = Factory::getApplication()->input;
+		$app          = Factory::getApplication();
+		$this->input  = $app->input;
 		$this->client = $this->input->get('client', '', 'STRING');
 
 		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
@@ -113,7 +114,6 @@ class TjvendorsViewVendor extends HtmlView
 		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
 		$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 
-		$app = Factory::getApplication();
 		$app->setUserState("vendor.client", $this->client);
 		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);
 		$this->layout = $this->input->get('layout', '', 'STRING');
@@ -135,11 +135,31 @@ class TjvendorsViewVendor extends HtmlView
 					if ($client == $this->client)
 					{
 						$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $this->vendor_id . '&client=' . $this->client);
-						$app = Factory::getApplication();
 						$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
 						$app->redirect($link);
 					}
 				}
+			}
+
+			$vendorId = $this->input->get('vendor_id', 0, 'INT');
+
+			if (empty($vendorId))
+			{
+				$link = Route::_('index.php?option=com_tjvendors&view=vendor&client=' . $this->client);
+
+				if (!$this->isClientExist)
+				{
+					$client = $tjvendorFrontHelper->getClientName($this->client);
+					$vendorMsg = Text::_('COM_TJVENDORS_DISPLAY_YOU_ARE_ALREADY_A_VENDOR_AS') . ' ' .
+					Text::_('COM_TJVENDORS_DISPLAY_DO_YOU_WANT_TO_ADD') . $client . Text::_('COM_TJVENDORS_DISPLAY_AS_A_CLIENT');
+					$app->enqueueMessage($vendorMsg);
+				}
+				else
+				{
+					$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
+				}
+
+				$app->redirect($link);
 			}
 		}
 
@@ -147,7 +167,6 @@ class TjvendorsViewVendor extends HtmlView
 		{
 			if (Factory::getUser()->id && !$this->vendor_id)
 			{
-				$app    = Factory::getApplication();
 				$client = $app->input->get('client', '', 'STRING');
 				$link   = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
 				$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'notice');
@@ -156,7 +175,6 @@ class TjvendorsViewVendor extends HtmlView
 			elseif(!Factory::getUser()->id)
 			{
 				$link = Route::_('index.php?option=com_users');
-				$app  = Factory::getApplication();
 				$app->redirect($link);
 			}
 		}

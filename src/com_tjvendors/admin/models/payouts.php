@@ -9,15 +9,16 @@
  */
 
 defined('_JEXEC') or die;
-
-jimport('joomla.application.component.modellist');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\ListModel;
 
 /**
  * Methods supporting a list of Tjvendors records.
  *
  * @since  1.6
  */
-class TjvendorsModelPayouts extends JModelList
+class TjvendorsModelPayouts extends ListModel
 {
 /**
 	* Constructor.
@@ -58,7 +59,7 @@ class TjvendorsModelPayouts extends JModelList
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
-		$app = JFactory::getApplication('administrator');
+		$app = Factory::getApplication('administrator');
 
 		// Set ordering.
 		$orderCol = $app->getUserStateFromRequest($this->context . '.filter_order', 'filter_order');
@@ -88,7 +89,7 @@ class TjvendorsModelPayouts extends JModelList
 		$this->setState('filter.search', $search);
 
 		// Load the parameters.
-		$params = JComponentHelper::getParams('com_tjvendors');
+		$params = ComponentHelper::getParams('com_tjvendors');
 		$this->setState('params', $params);
 
 		$this->setState('list.limit', '0');
@@ -107,24 +108,24 @@ class TjvendorsModelPayouts extends JModelList
 
 	public function getListQuery()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$urlClient = $input->get('client', '', 'STRING');
 		$filterClient = $this->getState('filter.vendor_client');
-		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$com_params = ComponentHelper::getParams('com_tjvendors');
 		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
-		$date = JFactory::getDate();
+		$date = Factory::getDate();
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
 		$vendor = $this->getState('filter.vendor_id');
 
 		if (!empty($urlClient))
 		{
-			$component_params = JComponentHelper::getParams($urlClient);
+			$component_params = ComponentHelper::getParams($urlClient);
 			$com_currency = $component_params->get('currency');
 		}
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		$query = $db->getQuery(true);
 		$query->select(array('vendors.vendor_id', 'vendors.vendor_title', 'pass.*'));

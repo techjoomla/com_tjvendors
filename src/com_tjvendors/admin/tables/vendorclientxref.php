@@ -10,13 +10,14 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Table\Table;
 
 /**
  * vendor Table class
  *
  * @since  1.6
  */
-class TjvendorsTablevendorclientxref extends JTable
+class TjvendorsTablevendorclientxref extends Table
 {
 	/**
 	 * Constructor

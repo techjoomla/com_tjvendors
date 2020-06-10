@@ -10,15 +10,17 @@
 
 // No direct access
 defined('_JEXEC') or die;
-
-jimport('joomla.application.component.view');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 /**
  * View to edit
  *
  * @since  1.6
  */
-class TjvendorsViewVendorFee extends JViewLegacy
+class TjvendorsViewVendorFee extends HtmlView
 {
 	protected $state;
 
@@ -37,15 +39,15 @@ class TjvendorsViewVendorFee extends JViewLegacy
 	 */
 	public function display($tpl = null)
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$this->id = $input->get('id', '', 'INT');
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
-		$this->input = JFactory::getApplication()->input;
-		JText::script('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR');
-		JText::script('COM_TJVENDORS_FEES_PERCENT_ERROR');
+		$this->input = Factory::getApplication()->input;
+		Text::script('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR');
+		Text::script('COM_TJVENDORS_FEES_PERCENT_ERROR');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
@@ -66,25 +68,25 @@ class TjvendorsViewVendorFee extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		JFactory::getApplication()->input->set('hidemainmenu', true);
+		Factory::getApplication()->input->set('hidemainmenu', true);
 
-		$user  = JFactory::getUser();
+		$user  = Factory::getUser();
 		$isNew = ($this->item->vendor_id == 0);
 
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
 
 		if ($isNew)
 		{
-			$viewTitle = JText::_('COM_TJVENDOR_NEW_USER_SPECIFIC_COMMISSION');
+			$viewTitle = Text::_('COM_TJVENDOR_NEW_USER_SPECIFIC_COMMISSION');
 		}
 		else
 		{
-			$viewTitle = JText::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMMISSION');
+			$viewTitle = Text::_('COM_TJVENDOR_EDIT_USER_SPECIFIC_COMMISSION');
 		}
 
 		$clientTitle = TjvendorFrontHelper::getClientName($client);
-		JToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
+		ToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 
 		JToolBarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');
 		JToolBarHelper::save('vendorfee.save', 'JTOOLBAR_SAVE');

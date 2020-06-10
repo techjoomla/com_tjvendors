@@ -1,25 +1,31 @@
 <?php
 /**
- * @version    SVN:
- * @package    Com_Tjvendors
- * @author     Techjoomla <contact@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
- * @license    GNU General Public License version 2 or later.
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
+ *
+ * @author      Techjoomla <extensions@techjoomla.com>
+ * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
-JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/');
-JHtml::_('bootstrap.tooltip');
-JHtml::_('behavior.multiselect');
-JHtml::_('formbehavior.chosen', 'select');
+HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/');
+HTMLHelper::_('bootstrap.tooltip');
+HTMLHelper::_('behavior.multiselect');
+HTMLHelper::_('formbehavior.chosen', 'select');
 
 // Import CSS
-$document = JFactory::getDocument();
-$document->addStyleSheet(JUri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
+$document = Factory::getDocument();
+$document->addStyleSheet(Uri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
 
-$user      = JFactory::getUser();
+$user      = Factory::getUser();
 $userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
@@ -29,7 +35,7 @@ $saveOrder = $listOrder == 'a.`ordering`';
 if ($saveOrder)
 {
 	$saveOrderingUrl = 'index.php?option=com_tjvendors&task=vendorfees.saveOrderAjax&tmpl=component';
-	JHtml::_('sortablelist.sortable', 'vendorList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+	HTMLHelper::_('sortablelist.sortable', 'vendorList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 
 $sortFields = $this->getSortFields();
@@ -112,7 +118,7 @@ if (!empty($this->extra_sidebar))
 <form
 action="
 <?php
-echo JRoute::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id . '&client=' . $this->input->get('client', '', 'STRING')); ?>" 
+echo Route::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $this->vendor_id . '&client=' . $this->input->get('client', '', 'STRING')); ?>"
 method="post" name="adminForm" id="adminForm">
 <?php
 if (!empty($this->sidebar))
@@ -133,47 +139,47 @@ else
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="filter-search btn-group pull-left">
 				<label for="filter_search" class="element-invisible">
-					<?php echo JText::_('JSEARCH_FILTER'); ?>
+					<?php echo Text::_('JSEARCH_FILTER'); ?>
 				</label>
 				<input type="text" name="filter_search" id="filter_search"
 
-					placeholder="<?php echo JText::_('COM_TJVENDOR_SEARCH_BY_VENDOR_FEE'); ?>"
+					placeholder="<?php echo Text::_('COM_TJVENDOR_SEARCH_BY_VENDOR_FEE'); ?>"
 					value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-					title="<?php echo JText::_('JSEARCH_FILTER'); ?>"/>
+					title="<?php echo Text::_('JSEARCH_FILTER'); ?>"/>
 			</div>
 			<div class="btn-group pull-left">
-				<button class="btn hasTooltip" type="submit" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>">
+				<button class="btn hasTooltip" type="submit" title="<?php echo Text::_('JSEARCH_FILTER_SUBMIT'); ?>">
 					<i class="icon-search"></i>
 				</button>
-				<button class="btn hasTooltip" id="clear-search-button" type="button" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>">
+				<button class="btn hasTooltip" id="clear-search-button" type="button" title="<?php echo Text::_('JSEARCH_FILTER_CLEAR'); ?>">
 					<i class="icon-remove"></i>
 				</button>
 			</div>
 			<div class="btn-group pull-right hidden-phone">
 				<label for="limit" class="element-invisible">
-					<?php echo JText::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+					<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
 				</label>
 				<?php echo $this->pagination->getLimitBox(); ?>
 			</div>
 			<div class="btn-group pull-right hidden-phone">
 				<label for="directionTable" class="element-invisible">
-					<?php echo JText::_('JFIELD_ORDERING_DESC'); ?>
+					<?php echo Text::_('JFIELD_ORDERING_DESC'); ?>
 				</label>
 				<select name="directionTable" id="directionTable" class="input-medium" onchange="Joomla.orderTable()">
-					<option value=""><?php echo JText::_('JFIELD_ORDERING_DESC'); ?></option>
+					<option value=""><?php echo Text::_('JFIELD_ORDERING_DESC'); ?></option>
 					<option value="asc" <?php echo $listDirn == 'asc' ? 'selected="selected"' : ''; ?>>
-						<?php echo JText::_('JGLOBAL_ORDER_ASCENDING'); ?>
+						<?php echo Text::_('JGLOBAL_ORDER_ASCENDING'); ?>
 					</option>
 					<option value="desc" <?php echo $listDirn == 'desc' ? 'selected="selected"' : ''; ?>>
-						<?php echo JText::_('JGLOBAL_ORDER_DESCENDING'); ?>
+						<?php echo Text::_('JGLOBAL_ORDER_DESCENDING'); ?>
 					</option>
 				</select>
 			</div>
 			<div class="btn-group pull-right">
-				<label for="sortTable" class="element-invisible"><?php echo JText::_('JGLOBAL_SORT_BY'); ?></label>
+				<label for="sortTable" class="element-invisible"><?php echo Text::_('JGLOBAL_SORT_BY'); ?></label>
 				<select name="sortTable" id="sortTable" class="input-medium" onchange="Joomla.orderTable()">
-					<option value=""><?php echo JText::_('JGLOBAL_SORT_BY'); ?></option>
-					<?php echo JHtml::_('select.options', $sortFields, 'value', 'text', $listOrder); ?>
+					<option value=""><?php echo Text::_('JGLOBAL_SORT_BY'); ?></option>
+					<?php echo HTMLHelper::_('select.options', $sortFields, 'value', 'text', $listOrder); ?>
 				</select>
 			</div>
 		</div>
@@ -184,7 +190,7 @@ else
 			?>
 			<div class="clearfix">&nbsp;</div>
 				<div class="alert alert-no-items">
-					<?php echo JText::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
+					<?php echo Text::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
 				</div>
 		<?php
 		}
@@ -200,28 +206,28 @@ else
 					{
 					?>
 					<th width="1%" class="nowrap center hidden-phone">
-					<?php echo JHtml::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+					<?php echo HTMLHelper::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 					</th>
 					<?php
 					}?>
 					<th width="1%" class="hidden-phone">
-						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo JText::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
+						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
 					</th>
 					<th class='left'>
-						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_FEE_TITLE'); ?>
+						<?php echo Text::_('COM_TJVENDORS_FORM_LBL_VENDOR_VENDOR_FEE_TITLE'); ?>
 					</th>
 
 					<th class='left'>
-						<?php echo JText::_('COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY'); ?>
+						<?php echo Text::_('COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY'); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'b.`percent_commission`', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_VENDORS_PERCENT_COMMISSION', 'b.`percent_commission`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_VENDORS_FLAT_COMMISSION', 'b.`flat_commission`', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_VENDORS_FLAT_COMMISSION', 'b.`flat_commission`', $listDirn, $listOrder); ?>
 					</th>
 					<th class='left'>
-						<?php echo JHtml::_('grid.sort', 'COM_TJVENDORS_VENDOR_FEE_ID', 'b.`id`', $listDirn, $listOrder); ?>
+						<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_VENDOR_FEE_ID', 'b.`id`', $listDirn, $listOrder); ?>
 					</th>
 				</tr>
 			</thead>
@@ -256,7 +262,7 @@ else
 
 									if (!$saveOrder)
 									{
-										$disabledLabel    = JText::_('JORDERINGDISABLED');
+										$disabledLabel    = Text::_('JORDERINGDISABLED');
 										$disableClassName = 'inactive tip-top';
 									}
 								?>
@@ -279,7 +285,7 @@ else
 						}?>
 
 							<td class="hidden-phone">
-								<?php echo JHtml::_('grid.id', $i, $item->id); ?>
+								<?php echo HTMLHelper::_('grid.id', $i, $item->id); ?>
 							</td>
 							<td>
 									<?php echo $item->vendor_title; ?>
@@ -287,7 +293,7 @@ else
 							<td>
 								<a href="
 								<?php
-								echo JRoute::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->client . '&fee_id=' . $item->id);?>">
+								echo Route::_('index.php?option=com_tjvendors&task=vendorfee.edit&vendor_id=' . (int) $item->vendor_id . '&client=' . $item->client . '&fee_id=' . $item->id);?>">
 								<?php echo $item->currency; ?>
 								</a>
 							</td>
@@ -315,6 +321,6 @@ else
 			<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>
 			<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 			<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>
-			<?php echo JHtml::_('form.token'); ?>
+			<?php echo HTMLHelper::_('form.token'); ?>
 	</div>
 </form>

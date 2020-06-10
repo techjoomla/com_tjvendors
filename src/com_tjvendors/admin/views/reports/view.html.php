@@ -10,8 +10,12 @@
 
 // No direct access
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
-jimport('joomla.application.component.view');
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
 /**
@@ -19,7 +23,7 @@ JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components')
  *
  * @since  1.6
  */
-class TjvendorsViewReports extends JViewLegacy
+class TjvendorsViewReports extends HtmlView
 {
 	protected $items;
 
@@ -47,12 +51,12 @@ class TjvendorsViewReports extends JViewLegacy
 		$this->items = $this->get('Items');
 		$this->model = $this->getModel('reports');
 		$this->pagination = $this->get('Pagination');
-		$this->input = JFactory::getApplication()->input;
+		$this->input = Factory::getApplication()->input;
 
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
-		$tjvendorsModelVendors = JModelLegacy::getInstance('Vendors', 'TjvendorsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
+		$tjvendorsModelVendors = BaseDatabaseModel::getInstance('Vendors', 'TjvendorsModel');
 		$vendorsDetail = $tjvendorsModelVendors->getItems();
 		$this->vendor_details = $vendorsDetail;
 		$this->uniqueClients = TjvendorsHelper::getUniqueClients();
@@ -86,7 +90,7 @@ class TjvendorsViewReports extends JViewLegacy
 	 */
 	protected function addToolbar()
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$this->client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
@@ -98,7 +102,7 @@ class TjvendorsViewReports extends JViewLegacy
 
 		$title = !empty($this->client) ? $clientTitle . ' : ' : '';
 
-		JToolbarHelper::title($title . JText::_('COM_TJVENDORS_TITLE_REPORTS'), 'list.png');
+		ToolbarHelper::title($title . Text::_('COM_TJVENDORS_TITLE_REPORTS'), 'list.png');
 
 		if ($canDo->get('core.admin'))
 		{

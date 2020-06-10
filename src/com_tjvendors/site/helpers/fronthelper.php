@@ -9,6 +9,12 @@
  */
 
 defined('_JEXEC') or die;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Table\Table;
+
 JLoader::import('payout', JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
 
@@ -34,7 +40,7 @@ class TjvendorFrontHelper
 		if (file_exists(JPATH_SITE . '/components/com_tjvendors/models/' . strtolower($name) . '.php'))
 		{
 			require_once JPATH_SITE . '/components/com_tjvendors/models/' . strtolower($name) . '.php';
-			$model = JModelLegacy::getInstance($name, 'TjvendorsModel');
+			$model = BaseDatabaseModel::getInstance($name, 'TjvendorsModel');
 		}
 
 		return $model;
@@ -50,7 +56,7 @@ class TjvendorFrontHelper
 	public static function getUniqueClients($user_id)
 	{
 		$vendor_id = self::getvendor();
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('DISTINCT' . $db->quoteName('client'));
 		$query->from($db->quoteName('#__tjvendors_passbook', 'vendors'));
@@ -62,7 +68,7 @@ class TjvendorFrontHelper
 
 		$db->setQuery($query);
 		$clients = array();
-		$clients['all'] = JText::_('JFILTER_PAYOUT_CHOOSE_CLIENTS');
+		$clients['all'] = Text::_('JFILTER_PAYOUT_CHOOSE_CLIENTS');
 
 		try
 		{
@@ -70,7 +76,7 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (empty($result))
@@ -82,7 +88,7 @@ class TjvendorFrontHelper
 		{
 			$tjvendorFrontHelper = new TjvendorFrontHelper;
 			$client = $tjvendorFrontHelper->getClientName($i['client']);
-			$client = JText::_(strtoupper($i['client']));
+			$client = Text::_(strtoupper($i['client']));
 			$clients[] = array("clientType" => $i['client'], "clientValue" => $client);
 		}
 
@@ -102,7 +108,7 @@ class TjvendorFrontHelper
 	 */
 	public static function getTotalDetails($vendor_id, $client, $currency)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
 		$query->select('sum(' . $db->quoteName('debit') . ') As debit');
@@ -138,7 +144,7 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 	}
 
@@ -151,7 +157,7 @@ class TjvendorFrontHelper
 	 */
 	public static function getClientsForVendor($vendor_id)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__vendor_client_xref'));
@@ -169,7 +175,7 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (empty($result))
@@ -195,8 +201,8 @@ class TjvendorFrontHelper
 	 */
 	public static function getvendor()
 	{
-		$user_id = JFactory::getuser()->id;
-		$vendorDetails = JTable::getInstance('vendor', 'TjvendorsTable', array());
+		$user_id = Factory::getuser()->id;
+		$vendorDetails = Table::getInstance('vendor', 'TjvendorsTable', array());
 		$vendorDetails->load(array('user_id' => $user_id));
 
 		return $vendorDetails->vendor_id;
@@ -210,7 +216,7 @@ class TjvendorFrontHelper
 	public static function getCurrencies()
 	{
 		$vendor_id = self::getvendor();
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('DISTINCT' . $db->quoteName('currency'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
@@ -221,7 +227,7 @@ class TjvendorFrontHelper
 		}
 
 		$db->setQuery($query);
-		$currencies[] = JText::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
+		$currencies[] = Text::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
 
 		try
 		{
@@ -229,7 +235,7 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (empty($result))
@@ -258,7 +264,7 @@ class TjvendorFrontHelper
 	 */
 	public static function getPaymentDetails($vendor_id, $client)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__vendor_client_xref'));
@@ -281,7 +287,7 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		return $res;
@@ -305,7 +311,7 @@ class TjvendorFrontHelper
 			$user_id = jFactory::getuser()->id;
 		}
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('v.vendor_id'));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'v'));
@@ -321,7 +327,7 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		if (!$vendor)
@@ -347,7 +353,7 @@ class TjvendorFrontHelper
 	 */
 	public function checkGatewayDetails($userId, $client)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		// Create a new query object.
 		$query = $db->getQuery(true);
@@ -366,7 +372,7 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
 		$params = json_decode($result['params']);
@@ -392,14 +398,14 @@ class TjvendorFrontHelper
 	 */
 	public function addEntry($order_data)
 	{
-		$com_params = JComponentHelper::getParams($order_data['client']);
-		$vendorParams = JComponentHelper::getParams('com_tjvendors');
+		$com_params = ComponentHelper::getParams($order_data['client']);
+		$vendorParams = ComponentHelper::getParams('com_tjvendors');
 		$payout_day_limit = $vendorParams->get('payout_limit_days', '0', 'INT');
-		$date = JFactory::getDate();
+		$date = Factory::getDate();
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
 		$currency = $com_params->get('currency');
 
-		$payoutTable = JTable::getInstance('payout', 'TjvendorsTable', array());
+		$payoutTable = Table::getInstance('payout', 'TjvendorsTable', array());
 		$payoutTable->load(array('reference_order_id' => $order_data['order_id']));
 
 		if ($payoutTable->debit > 0)
@@ -415,7 +421,7 @@ class TjvendorFrontHelper
 		$totalAmount = TjvendorsHelper::getTotalAmount($entry_data['vendor_id'], $currency, $order_data['client']);
 		$entry_data['reference_order_id'] = $order_data['order_id'];
 		$entry_data['transaction_id'] = $order_data['client_name'] . '-' . $currency . '-' . $entry_data['vendor_id'] . '-';
-		$entry_data['transaction_time'] = JFactory::getDate()->toSql();
+		$entry_data['transaction_time'] = Factory::getDate()->toSql();
 
 		if ($order_data['status'] != "C")
 		{
@@ -445,8 +451,8 @@ class TjvendorFrontHelper
 		$entry_data['params'] = json_encode($params);
 		$entry_data['currency'] = $currency;
 		$entry_data['client'] = $order_data['client'];
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
-		$tjvendorsModelPayout = JModelLegacy::getInstance('Payout', 'TjvendorsModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
+		$tjvendorsModelPayout = BaseDatabaseModel::getInstance('Payout', 'TjvendorsModel');
 			$vendorDetail = $tjvendorsModelPayout->addCreditEntry($entry_data);
 	}
 
@@ -463,11 +469,11 @@ class TjvendorFrontHelper
 	 */
 	public static function getPaidAmount($vendor_id, $currency, $filterClient)
 	{
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 		$urlClient = $input->get('client', '', 'STRING');
-		$com_params = JComponentHelper::getParams('com_tjvendors');
+		$com_params = ComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
@@ -518,7 +524,7 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 	}
 
@@ -534,10 +540,10 @@ class TjvendorFrontHelper
 		$clientName = strtoupper($client);
 
 		// Need to load the menu language file as mod_menu hasn't been loaded yet.
-		$lang = JFactory::getLanguage();
+		$lang = Factory::getLanguage();
 		$lang->load($client, JPATH_ADMINISTRATOR, null, false, true);
 
-		return JText::_($clientName);
+		return Text::_($clientName);
 	}
 
 	/**
@@ -551,7 +557,7 @@ class TjvendorFrontHelper
 	 */
 	public function getItemId($link)
 	{
-		$mainframe = JFactory::getApplication();
+		$mainframe = Factory::getApplication();
 
 		if ($mainframe->issite())
 		{
@@ -584,7 +590,7 @@ class TjvendorFrontHelper
 	 */
 	public function getPaymentGatewayConfig($vendorId, $client = "", $global = true)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$arrayColumns = array('vc.params');
 		$query->select($db->quoteName($arrayColumns));
@@ -624,7 +630,7 @@ class TjvendorFrontHelper
 		}
 		catch (Exception $e)
 		{
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 	}
 
@@ -640,7 +646,7 @@ class TjvendorFrontHelper
 	 */
 	public function isClientExist($client, $vendorId)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('client');
 		$query->from($db->quoteName('#__vendor_client_xref'));

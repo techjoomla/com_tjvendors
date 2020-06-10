@@ -15,7 +15,7 @@ defined('_JEXEC') or die();
 /**
  * Version information class for the TJVendors.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class TjvendorsVersion
 {
@@ -23,7 +23,7 @@ class TjvendorsVersion
 	 * Product name.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	const PRODUCT = 'TJVendors';
 
@@ -31,7 +31,7 @@ class TjvendorsVersion
 	 * Major release version.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	const MAJOR_VERSION = 1;
 
@@ -39,7 +39,7 @@ class TjvendorsVersion
 	 * Minor release version.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	const MINOR_VERSION = 4;
 
@@ -47,7 +47,7 @@ class TjvendorsVersion
 	 * Patch release version.
 	 *
 	 * @var    integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	const PATCH_VERSION = 0;
 
@@ -55,7 +55,7 @@ class TjvendorsVersion
 	 * Release date.
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	const RELDATE = '20-August-2019';
 
@@ -64,7 +64,7 @@ class TjvendorsVersion
 	 *
 	 * @return  string  Version string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getShortVersion()
 	{
@@ -76,7 +76,7 @@ class TjvendorsVersion
 	 *
 	 * @return  string  Complete version string.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getLongVersion()
 	{
@@ -89,7 +89,7 @@ class TjvendorsVersion
 	 *
 	 * @return  string
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function generateMediaVersion()
 	{
@@ -105,7 +105,7 @@ class TjvendorsVersion
 	 *
 	 * @return  string  The media version.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getMediaVersion()
 	{

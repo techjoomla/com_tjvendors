@@ -20,7 +20,7 @@ use Joomla\Registry\Registry;
  *
  * This class hold the property of the vendor entity and perform the appropriate operations
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class TjvendorsVendor extends CMSObject
 {
@@ -28,7 +28,7 @@ class TjvendorsVendor extends CMSObject
 	 * primary key of the vendor record.
 	 *
 	 * @var    int
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	public $vendor_id = 0;
 
@@ -36,7 +36,7 @@ class TjvendorsVendor extends CMSObject
 	 * primary key of the joomla user
 	 *
 	 * @var    int
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $user_id = 0;
 
@@ -44,7 +44,7 @@ class TjvendorsVendor extends CMSObject
 	 * The name of the vendor.
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $vendor_title = '';
 
@@ -52,7 +52,7 @@ class TjvendorsVendor extends CMSObject
 	 * The address of the vendor.
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $address = '';
 
@@ -60,7 +60,7 @@ class TjvendorsVendor extends CMSObject
 	 * The country of the vendor.
 	 *
 	 * @var    Integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $country = 0;
 
@@ -68,7 +68,7 @@ class TjvendorsVendor extends CMSObject
 	 * The region of the vendor.
 	 *
 	 * @var    Integer
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $region = 0;
 
@@ -76,7 +76,7 @@ class TjvendorsVendor extends CMSObject
 	 * The city of the vendor.
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $city = '';
 
@@ -84,7 +84,7 @@ class TjvendorsVendor extends CMSObject
 	 * The other_city of the vendor.
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $other_city = '';
 
@@ -92,7 +92,7 @@ class TjvendorsVendor extends CMSObject
 	 * The zip of the vendor.
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $zip = '';
 
@@ -100,7 +100,7 @@ class TjvendorsVendor extends CMSObject
 	 * The phone_number of the vendor.
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $phone_number = '';
 
@@ -108,7 +108,7 @@ class TjvendorsVendor extends CMSObject
 	 * The website_address of the vendor.
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $website_address = '';
 
@@ -116,7 +116,7 @@ class TjvendorsVendor extends CMSObject
 	 * The vat number of the vendor.
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $vat_number = '';
 
@@ -124,7 +124,7 @@ class TjvendorsVendor extends CMSObject
 	 * Unique string representation of the vendor
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $alias = '';
 
@@ -132,7 +132,7 @@ class TjvendorsVendor extends CMSObject
 	 * Vendor description
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $vendor_description = '';
 
@@ -140,7 +140,7 @@ class TjvendorsVendor extends CMSObject
 	 * The path of the vendo logo
 	 *
 	 * @var    String
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $vendor_logo = '';
 
@@ -148,7 +148,7 @@ class TjvendorsVendor extends CMSObject
 	 * State of the vendor
 	 *
 	 * @var    int
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $state = 0;
 
@@ -156,7 +156,7 @@ class TjvendorsVendor extends CMSObject
 	 * Orderign of the record.
 	 *
 	 * @var    int
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $ordering = 0;
 
@@ -164,7 +164,7 @@ class TjvendorsVendor extends CMSObject
 	 * Joomla user id who is currentaly checked out the item
 	 *
 	 * @var    int
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $checked_out = 0;
 
@@ -172,7 +172,7 @@ class TjvendorsVendor extends CMSObject
 	 * Timestamp when the user checked out the record
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $checked_out_time = '';
 
@@ -180,7 +180,7 @@ class TjvendorsVendor extends CMSObject
 	 * Hold the other required information in the JSON format
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $params = '';
 
@@ -188,7 +188,7 @@ class TjvendorsVendor extends CMSObject
 	 * Integrated component client name eg. com_tjlms, com_jticketing
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $client = '';
 
@@ -197,7 +197,7 @@ class TjvendorsVendor extends CMSObject
 	 * By default the vendor is approved
 	 *
 	 * @var    int
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $approved = 1;
 
@@ -205,7 +205,7 @@ class TjvendorsVendor extends CMSObject
 	 * Payment gateway details configured by the vendor
 	 *
 	 * @var    string
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private $payment_gateway = '';
 
@@ -213,7 +213,7 @@ class TjvendorsVendor extends CMSObject
 	 * holds the already loaded instances of the vendor
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	protected static $vendorObj = array();
 
@@ -223,7 +223,7 @@ class TjvendorsVendor extends CMSObject
 	 * @param   int     $id      The unique vendor id to load.
 	 * @param   string  $client  the client name whose properties need to load while creating object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function __construct($id = 0, $client = '')
 	{
@@ -245,7 +245,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  TjvendorsVendor  The vendor object.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public static function getInstance($id = 0, $client = '')
 	{
@@ -271,7 +271,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  boolean  True on success
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function load($id, $client = '')
 	{
@@ -324,7 +324,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  TjvendorsVendor  The vendor object.
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function loadByUserId($id = null, $client = '')
 	{
@@ -350,7 +350,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getAlias()
 	{
@@ -362,7 +362,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  Integer
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getUserId()
 	{
@@ -374,7 +374,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getTitle()
 	{
@@ -386,7 +386,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getDescription()
 	{
@@ -398,7 +398,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getLogo()
 	{
@@ -417,7 +417,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  bool True on success
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function isAssociatedToClient($client = '')
 	{
@@ -447,7 +447,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function setClient($client)
 	{
@@ -494,7 +494,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  array
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getProperties($public = true)
 	{
@@ -506,7 +506,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  Mixed  Payment config object or false otherwise
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getPaymentConfig()
 	{
@@ -518,7 +518,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getAddress()
 	{
@@ -530,7 +530,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getOtherCity()
 	{
@@ -542,7 +542,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getZip()
 	{
@@ -554,7 +554,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getPhoneNumber()
 	{
@@ -566,7 +566,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  Integer  Either 1 or 0
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function isApproved()
 	{
@@ -578,7 +578,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getWebsiteAddress()
 	{
@@ -590,7 +590,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  String
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getVatNumber()
 	{
@@ -605,7 +605,7 @@ class TjvendorsVendor extends CMSObject
 	 * 
 	 * @return  Interger  Percentage of vendor profile completion 
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getVendorProfileStatus($userId, $client)
 	{

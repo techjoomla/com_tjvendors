@@ -15,7 +15,7 @@ use Joomla\CMS\Language\Text;
 /**
  * TJVendors utilities class for common methods.
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class TjvendorsUtilities
 {
@@ -24,7 +24,7 @@ class TjvendorsUtilities
 	/**
 	 * Constructor activating the default information of the utilities
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function __construct()
 	{
@@ -44,7 +44,7 @@ class TjvendorsUtilities
 	 *
 	 * @return  Array  country
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getCountries()
 	{
@@ -60,7 +60,7 @@ class TjvendorsUtilities
 	 * 
 	 * @return  Array  regions
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getRegions($countryId)
 	{
@@ -81,7 +81,7 @@ class TjvendorsUtilities
 	 *
 	 * @return  array   city list
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getCities($countryId)
 	{
@@ -102,7 +102,7 @@ class TjvendorsUtilities
 	 *
 	 * @return object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getCountry($countryId)
 	{
@@ -128,7 +128,7 @@ class TjvendorsUtilities
 	 *
 	 * @return object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getRegion($regionId)
 	{
@@ -155,7 +155,7 @@ class TjvendorsUtilities
 	 *
 	 * @return object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function getCity($cityId)
 	{
@@ -180,7 +180,7 @@ class TjvendorsUtilities
 	 *
 	 * @return   void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public function defineLanguageConstant()
 	{

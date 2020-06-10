@@ -22,7 +22,7 @@ use Joomla\String\StringHelper;
  *
  * This class perform the helpful operation required to  TJVendors package
  *
- * @since  __DEPLOY_VERSION__
+ * @since  1.4.0
  */
 class TJVendors
 {
@@ -30,7 +30,7 @@ class TJVendors
 	 * Holds the record of the loaded TJVendors classes
 	 *
 	 * @var    array
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private static $loadedClass = array();
 
@@ -38,7 +38,7 @@ class TJVendors
 	 * Holds the record of the component config
 	 *
 	 * @var    Joomla\Registry\Registry
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.0
 	 */
 	private static $config = null;
 
@@ -50,7 +50,7 @@ class TJVendors
 	 *
 	 * @return  Table|boolean object or false on failure
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 **/
 	public static function table($name, $config = array())
 	{
@@ -68,7 +68,7 @@ class TJVendors
 	 *
 	 * @return  BaseDatabaseModel|boolean object or false on failure
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 **/
 	public static function model($name, $config = array())
 	{
@@ -86,7 +86,7 @@ class TJVendors
 	 *
 	 * @return  mixed   return the Object of the respective class if exist OW return false
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 **/
 	public static function __callStatic($name, $arguments)
 	{
@@ -114,7 +114,7 @@ class TJVendors
 	 *
 	 * @return  boolean True on success
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 **/
 	public static function loadClass($className)
 	{
@@ -154,7 +154,7 @@ class TJVendors
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.0
 	 */
 	public static function init($location = 'site')
 	{

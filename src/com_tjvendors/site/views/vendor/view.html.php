@@ -89,6 +89,8 @@ class TjvendorsViewVendor extends HtmlView
 		$this->vendorClientXrefTable = Table::getInstance('vendorclientxref', 'TjvendorsTable', array());
 		$this->vendorClientXrefTable->load(array('vendor_id' => $this->vendor_id, 'client' => $this->client));
 		$this->VendorDetail          = $tjvendorsModelVendor->getItem($this->vendor_id);
+		$this->gateways = (array) ComponentHelper::getParams($this->client)->get('gateways');
+		$this->gatewayCount = count($this->gateways);
 
 		$utilitiesObj = TJVendors::utilities();
 		$this->countries = $utilitiesObj->getCountries();
@@ -114,6 +116,7 @@ class TjvendorsViewVendor extends HtmlView
 		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
 		$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 
+		$app = Factory::getApplication();
 		$app->setUserState("vendor.client", $this->client);
 		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);
 		$this->layout = $this->input->get('layout', '', 'STRING');
@@ -135,6 +138,7 @@ class TjvendorsViewVendor extends HtmlView
 					if ($client == $this->client)
 					{
 						$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&vendor_id=' . $this->vendor_id . '&client=' . $this->client);
+						$app = Factory::getApplication();
 						$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_REDIRECT_MESSAGE'));
 						$app->redirect($link);
 					}

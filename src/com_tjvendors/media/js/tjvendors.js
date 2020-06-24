@@ -300,6 +300,14 @@ var tjCommon = {
 	},
 
 	initVendorFields: function() {
+		if (gatewayCount == 1)
+		{
+			let paymentObject = {
+			'payment_gateway': gatewayName
+			};
+
+			tjCommon.generateGatewayFields(paymentObject, 'jform_payment_gateway__payment_gateway0__payment_gateways');
+		}
 		jQuery('.subform-repeatable-group .gateway_name').on('focus', function() {
 			previous = this.value;
 		});
@@ -339,7 +347,6 @@ var tjCommon = {
 				success: function (response) {
 					let $thisId = jQuery('#' + eleId);
 					$thisId.closest('.subform-repeatable-group').find('.payment-gateway-parent').empty();
-					
 					if (response) {
 						response.forEach(function(data) {
 							$thisId.closest('.subform-repeatable-group').append("<div class='payment-gateway-parent'>" + data + "</div>");

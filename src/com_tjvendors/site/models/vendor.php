@@ -85,7 +85,9 @@ class TjvendorsModelVendor extends AdminModel
 	{
 		// Initialise variables.
 		$app = Factory::getApplication();
-
+		$client = $app->getUserStateFromRequest('vendor.client', 'vendor.client');
+		$com_params = ComponentHelper::getParams($client);
+		$gateways = (array) $com_params->get('gateways');
 		// Get the form.
 		$form = $this->loadForm(
 			'com_tjvendors.vendor', 'vendor',
@@ -97,6 +99,11 @@ class TjvendorsModelVendor extends AdminModel
 		if (empty($form))
 		{
 			return false;
+		}
+
+		if (!empty($form) && count($gateways) == 1)
+		{
+			$form->setFieldAttribute('payment_gateway', 'max', 1);
 		}
 
 		return $form;

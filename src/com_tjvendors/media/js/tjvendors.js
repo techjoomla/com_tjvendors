@@ -358,5 +358,43 @@ var tjCommon = {
 					}
 				}
 			});
+		},
+	autoVendorSave: function()
+	{
+		urlStr   = window.location.search;
+		urlParam = urlStr.split(';');
+		urlParam.forEach(myFunction);
+
+		function myFunction(item, index) {
+			if (item.includes("client"))
+			{
+				client = item;
+			}
 		}
+
+		clientValue = client.split('&');
+
+		jQuery.ajax({
+			type:'POST',
+			data:{data:JSON.stringify(jQuery('#adminForm').serializeArray())},
+			dataType:'json',
+			url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjvendors&task=vendor.autoVendorSave&format=json&"+clientValue[0],
+			success: function(response){
+				if (response.success == false)
+				{
+					Joomla.renderMessages({'alert alert-error':[response.message]});
+					jQuery('html, body').animate({scrollTop: 0}, 500);
+				}
+				else
+				{
+					jQuery('input[name="jform[vendor_id]"]').val(response.data.vendor_id);
+					window.location = window.location + "&vendor_id=" + response.data.vendor_id;
+				}
+			},
+			error: function(response){
+				console.log(' ERROR!!');
+				return;
+			}
+		});
+	}
 }

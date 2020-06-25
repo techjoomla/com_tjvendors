@@ -74,6 +74,7 @@ if (Factory::getUser()->id)
 							value="<?php echo (isset($this->vendor_id)) ? Factory::getUser()->id : '0';?>" />
 							<input type="hidden" name="jform[created_time]" value="<?php echo $this->vendor->created_time; ?>" />
 							<input type="hidden" name="jform[modified_time]" value="<?php echo $this->vendor->modified_time; ?>" />
+							<input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING');?>"/>
 							<?php
 							$input = Factory::getApplication()->input;
 

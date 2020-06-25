@@ -35,7 +35,7 @@ defined('_JEXEC') or die();
 			{
 			?>
 				<div class="controls col-sm-3 center">
-					<img  src="<?php echo JUri::root() . $this->VendorDetail->vendor_logo; ?>" width="100%">
+					<img  src="<?php echo JUri::root(true) . htmlspecialchars($this->VendorDetail->vendor_logo, ENT_COMPAT, 'UTF-8'); ?>" width="100%">
 				</div>
 		<?php
 			}

@@ -86,3 +86,7 @@ display: flex;
 .tjBs3 .vendorForm .btn-toolbar .input-group {
   float: unset;
 }
+.vendorForm .chzn-container, input[type=email], input[type=password], input[type=text],input[type=text], textarea, input[type=number] 
+{
+	width: 100%!important;
+}

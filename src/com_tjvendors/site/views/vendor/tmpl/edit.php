@@ -90,29 +90,43 @@ if (Factory::getUser()->id)
 								<?php echo $this->form->getInput('vendor_title'); ?>
 							</div>
 						</div>
+						<?php if (isset($this->alias_config) == 0)
+						{ ?>
 						<div class="col-xs-12 col-sm-6 pr-10">
 							<div class="form-group">
 								<?php echo $this->form->getLabel('alias'); ?>
 								<?php echo $this->form->getInput('alias'); ?>
 							</div>
 						</div>
+						<?php
+						} ?>
 					</div>
 										<div class="row">
+						<?php if (isset($this->phone_number_config) == 0)
+						{ ?>
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
 								<?php echo $this->form->getLabel('phone_number'); ?>
 								<?php echo $this->form->getInput('phone_number'); ?>
 											</div>
-								<?php //echo $this->form->renderField('vendor_description');?>
 										</div>
+						<?php
+						}
+						if (isset($this->address_config) == 0)
+						{ ?>
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
 								<?php echo $this->form->getLabel('address'); ?>
 								<?php echo $this->form->getInput('address'); ?>
 										</div>
 									</div>
+						<?php
+						} ?>
 									</div>
 					<div class="row">
+						<?php
+						if (isset($this->country_config) == 0)
+						{ ?>
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group" id="country_group">
 										<div class="control-label">
@@ -128,13 +142,22 @@ if (Factory::getUser()->id)
 										</div>
 									</div>	
 								</div>
+						<?php
+						}
+						if (isset($this->state_config) == 0)
+						{ ?>
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
 								<?php echo $this->form->getLabel('region'); ?>
 								<?php echo $this->form->getInput('region'); ?>
 							</div>
 					</div>
+						<?php
+						}?>
 					</div>
+					<?php
+					if (isset($this->city_config) == 0)
+					{ ?>
 						<div class="row">
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
@@ -149,20 +172,35 @@ if (Factory::getUser()->id)
 				</div>
 						</div>
 					</div>
+					<?php
+					}
+					?>
 					<div class="row">
+					<?php
+					if (isset($this->zip_config) == 0)
+					{ ?>
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
 								<?php echo $this->form->getLabel('zip'); ?>
 								<?php echo $this->form->getInput('zip'); ?>
 							</div>
 						</div>
+					<?php
+					}
+					if (isset($this->website_address_config) == 0)
+					{ ?>
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
 								<?php echo $this->form->getLabel('website_address'); ?>
 								<?php echo $this->form->getInput('website_address'); ?>
 							</div>
 						</div>
+					<?php
+					}?>
 					</div>
+					<?php
+					if (isset($this->website_address_config) == 0)
+					{ ?>
 					<div class="row">
 						<div class="col-xs-12">
 							<div class="form-group">
@@ -171,8 +209,14 @@ if (Factory::getUser()->id)
 							</div>
 						</div>
 					</div>
+					<?php
+					}
+					?>
 				</div>
 				<div class="col-xs-12 col-md-5 col-md-offset-2">
+					<?php
+					if (isset($this->vendor_logo_config) == 0)
+					{ ?>
 					<div class="row">
 						<div class="col-sm-4 col-md-6 col-xs-12">
 							<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendorLogoProfileImg ?>" />
@@ -191,6 +235,10 @@ if (Factory::getUser()->id)
 							</div>
 						</div>
 					</div>
+					<?php
+					}
+					if (isset($this->vendor_description_config) == 0)
+					{ ?>
 					<div class="row">
 						<!--Description-->
 						<div class="col-xs-12">
@@ -200,15 +248,22 @@ if (Factory::getUser()->id)
 							</div>
 						</div>
 					</div>
+					<?php
+					} ?>
 				</div>
 			</div>
 		</div>
+		<?php
+		if (isset($this->payment_gateway_config) == 0)
+		{ ?>
 		<div class="row">
 			<div class="col-xs-12">
 				<?php echo $this->form->getInput('payment_gateway');?>
 			</div>
 		</div>
-
+		<?php
+		}
+		?>
 		<div class="row">
 		<div class="mt-10">
 			<button type="button" class="btn btn-default btn-primary"  onclick="Joomla.submitbutton('vendor.save')">

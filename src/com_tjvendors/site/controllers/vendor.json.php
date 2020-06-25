@@ -14,6 +14,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
+use Joomla\CMS\Session\Session;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Response\JsonResponse;
 
@@ -101,7 +102,15 @@ class TjvendorsControllerVendor extends TjvendorsController
 	 */
 	public function autoVendorSave()
 	{
-		$app                 = Factory::getApplication();
+		$app = Factory::getApplication();
+
+		if (!Session::checkToken('get'))
+		{
+			$app->enqueueMessage(Text::_('JINVALID_TOKEN'), 'error');
+			echo new JResponseJson;
+			$app->close();
+		}
+
 		$plugin              = PluginHelper::getPlugin('payment', 'stripe');
 		$pluginParams        = new Registry($plugin->params);
 		$enableStripeConnect = $pluginParams->get('enableconnect');

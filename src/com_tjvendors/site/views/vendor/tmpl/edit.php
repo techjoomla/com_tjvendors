@@ -21,6 +21,7 @@ HTMLHelper::_('behavior.tooltip');
 HTMLHelper::_('behavior.formvalidation');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
+HTMLHelper::_('jquery.token');
 HTMLHelper::script(Uri::root() . 'libraries/techjoomla/assets/js/tjvalidator.js');
 
 $script   = array();

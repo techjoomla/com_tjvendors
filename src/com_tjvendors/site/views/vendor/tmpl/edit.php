@@ -62,6 +62,7 @@ if (Factory::getUser()->id)
 		</strong>
 	</h1>
 	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">
+		<div id="tjvnedor-payHtmlDiv"></div>
 		<div class="row">
 			<div class="col-xs-12 vendorForm" id="tj-edit-form">
 				<div class="col-xs-12 col-md-5">

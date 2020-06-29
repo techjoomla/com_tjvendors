@@ -380,6 +380,12 @@ var tjCommon = {
 			data:{data:JSON.stringify(jQuery('#adminForm').serializeArray())},
 			dataType:'json',
 			url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjvendors&task=vendor.autoVendorSave&format=json&"+clientValue[0],
+			beforeSend: function() {
+                    		jQuery('#tjvnedor-payHtmlDiv').addClass('isloading');
+                	},
+			complete: function() {
+				jQuery('#tjvnedor-payHtmlDiv').removeClass('isloading');
+			},
 			success: function(response){
 				if (response.success == false)
 				{

@@ -220,6 +220,7 @@ var tjVSite = {
 		/*Initialize event js*/
 		initVendorJs: function() {
 			jQuery(document).ready(function() {
+				jQuery("html, body").animate({ scrollTop: jQuery("#tjv-wrapper").offset().top + 500}, 1500);
 				jQuery(document).on("change", "#jform_payment_gateway", function() {});
 				/** global: tjvendor */
 				let CommonObj = new tjvendor.UI.CommonUI();

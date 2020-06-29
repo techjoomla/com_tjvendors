@@ -153,10 +153,6 @@ export class CommonUI{
 
 	showOtherCity(cityId, cityValue = ''){
 		var city = jQuery('#' + cityId).val();
-		if (city == undefined)
-		{
-			return;
-		}
 		if (cityValue){
 			city = cityValue;
 		}

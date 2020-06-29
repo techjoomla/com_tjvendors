@@ -100,8 +100,6 @@ if (Factory::getUser()->id)
 						</div>
 						<?php
 						} ?>
-					</div>
-										<div class="row">
 						<?php if (isset($this->phone_number_config) == 0)
 						{ ?>
 						<div class="col-xs-12 col-sm-6">
@@ -110,6 +108,26 @@ if (Factory::getUser()->id)
 								<?php echo $this->form->getInput('phone_number'); ?>
 											</div>
 										</div>
+						<?php
+						}
+						if (isset($this->website_address_config) == 0)
+						{ ?>
+							<div class="col-xs-12 col-sm-6">
+								<div class="form-group">
+									<?php echo $this->form->getLabel('website_address'); ?>
+									<?php echo $this->form->getInput('website_address'); ?>
+								</div>
+							</div>
+						<?php
+						}
+						if (isset($this->vat_number_config) == 0)
+						{ ?>
+							<div class="col-xs-12 col-sm-6">
+								<div class="form-group">
+									<?php echo $this->form->getLabel('vat_number'); ?>
+									<?php echo $this->form->getInput('vat_number'); ?>
+								</div>
+							</div>
 						<?php
 						}
 						if (isset($this->address_config) == 0)
@@ -122,8 +140,6 @@ if (Factory::getUser()->id)
 									</div>
 						<?php
 						} ?>
-									</div>
-					<div class="row">
 						<?php
 						if (isset($this->country_config) == 0)
 						{ ?>
@@ -154,11 +170,9 @@ if (Factory::getUser()->id)
 					</div>
 						<?php
 						}?>
-					</div>
 					<?php
 					if (isset($this->city_config) == 0)
 					{ ?>
-						<div class="row">
 						<div class="col-xs-12 col-sm-6">
 							<div class="form-group">
 								<?php echo $this->form->getLabel('city'); ?>
@@ -171,12 +185,8 @@ if (Factory::getUser()->id)
 								<?php echo $this->form->getInput('other_city'); ?>
 				</div>
 						</div>
-					</div>
 					<?php
 					}
-					?>
-					<div class="row">
-					<?php
 					if (isset($this->zip_config) == 0)
 					{ ?>
 						<div class="col-xs-12 col-sm-6">
@@ -186,38 +196,14 @@ if (Factory::getUser()->id)
 							</div>
 						</div>
 					<?php
-					}
-					if (isset($this->website_address_config) == 0)
-					{ ?>
-						<div class="col-xs-12 col-sm-6">
-							<div class="form-group">
-								<?php echo $this->form->getLabel('website_address'); ?>
-								<?php echo $this->form->getInput('website_address'); ?>
-							</div>
-						</div>
-					<?php
 					}?>
 					</div>
-					<?php
-					if (isset($this->website_address_config) == 0)
-					{ ?>
-					<div class="row">
-						<div class="col-xs-12">
-							<div class="form-group">
-								<?php echo $this->form->getLabel('vat_number'); ?>
-								<?php echo $this->form->getInput('vat_number'); ?>
-							</div>
-						</div>
-					</div>
-					<?php
-					}
-					?>
 				</div>
 				<div class="col-xs-12 col-md-5 col-md-offset-2">
+					<div class="row">
 					<?php
 					if (isset($this->vendor_logo_config) == 0)
 					{ ?>
-					<div class="row">
 						<div class="col-sm-4 col-md-6 col-xs-12">
 							<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" value="<?php echo $this->vendorLogoProfileImg ?>" />
 							<div class="form-group">
@@ -234,12 +220,10 @@ if (Factory::getUser()->id)
 								</p>
 							</div>
 						</div>
-					</div>
 					<?php
 					}
 					if (isset($this->vendor_description_config) == 0)
 					{ ?>
-					<div class="row">
 						<!--Description-->
 						<div class="col-xs-12">
 							<div class="form-group">
@@ -247,16 +231,21 @@ if (Factory::getUser()->id)
 								<?php echo $this->form->getInput('vendor_description'); ?>
 							</div>
 						</div>
-					</div>
 					<?php
 					} ?>
 				</div>
 			</div>
 		</div>
+		</div>
 		<?php
 		if (isset($this->payment_gateway_config) == 0)
 		{ ?>
 		<div class="row">
+				<div class="alert alert-info">
+					<p>
+						<?php echo Text::_("COM_TJVENDORS_VENDOR_PAYMENT_DETAILS_NOTE");?>
+					</p>
+				</div>
 			<div class="col-xs-12">
 				<?php echo $this->form->getInput('payment_gateway');?>
 			</div>

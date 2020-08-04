@@ -159,10 +159,11 @@ class TJVendors
 	public static function init($location = 'site')
 	{
 		static $loaded = null;
-		$docType = Factory::getDocument()->getType();
-		$versionClass = self::version();
+		$docType       = Factory::getDocument()->getType();
+		$versionClass  = self::version();
+		$loc           = isset($loaded[$location])?$loaded[$location]:'';
 
-		if ($loaded[$location] && ($docType != 'html'))
+		if ($loc && ($docType != 'html'))
 		{
 			return;
 		}

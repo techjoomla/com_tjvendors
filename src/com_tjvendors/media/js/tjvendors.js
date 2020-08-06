@@ -178,7 +178,7 @@ var tjVAdmin = {
 					var percent_commission = document.getElementById("jform_percent_commission").value;
 					var flat_commission = document.getElementById("jform_flat_commission").value;
 
-					if (percent_commission > 100) {
+					if (percent_commission >= 100) {
 						var jmsgs = [Joomla.JText._('COM_TJVENDORS_FEES_PERCENT_ERROR')];
 						Joomla.renderMessages({
 							'error': jmsgs

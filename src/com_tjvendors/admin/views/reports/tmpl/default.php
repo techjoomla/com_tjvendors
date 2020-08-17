@@ -303,9 +303,6 @@ else
 				{
 					?>
 					<tr>
-						<?php
-						if (isset($this->items[0]->state)){}?>
-
 						<td><?php echo $item->transaction_id;?></td>
 						<td><?php echo $this->escape($item->vendor_title);?></td>
 						<?php 

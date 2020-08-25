@@ -17,6 +17,24 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
+		<field name="show_selected_fields" class="btn-group" type="radio" default="0" label="COM_TJVENDOR_SHOW_ALL_FIELDS" description="COM_TJVENDOR_SHOW_ALL_FIELDS_DESC" >
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+		</field>
+		<field name="vendor_field" type="list" default="" showon="show_selected_fields:1" multiple="multiple" label="COM_TJVENDOR_SELECT_FIELD_TO_HIDE_VENDOR_CREATION" description="COM_TJVENDOR_SELECT_FIELD_TO_HIDE_VENDOR_CREATION_DESC">
+			<option value="alias">COM_TJVENDOR_VENDOR_ALIAS</option>
+			<option value="vendor_description">COM_TJVENDOR_VENDOR_DESCRIPTION</option>
+			<option value="vendor_logo">COM_TJVENDOR_VENDOR_VENDOR_LOGO</option>
+			<option value="phone_number">COM_TJVENDOR_VENDOR_PHONE_NUMBER</option>
+			<option value="website_address">COM_TJVENDOR_VENDOR_WEBSITE_ADDRESS</option>
+			<option value="payment_gateway">COM_TJVENDOR_VENDOR_PAYMENT_GATEWAY</option>
+			<option value="vat_number">COM_TJVENDOR_VENDOR_VAT_NUMBER</option>
+			<option value="address">COM_TJVENDOR_VENDOR_ADDRESS</option>
+			<option value="country">COM_TJVENDOR_VENDOR_COUNTRY</option>
+			<option value="state">COM_TJVENDOR_VENDOR_STATE</option>
+			<option value="city">COM_TJVENDOR_VENDOR_CITY</option>
+			<option value="zip">COM_TJVENDOR_VENDOR_ZIPCODE</option>
+		</field>
 	</fieldset>
 	<fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC" label="JCONFIG_PERMISSIONS_LABEL">
 		<field name="rules" type="rules" component="com_tjvendors" class="inputbox" filter="rules" validate="rules" label="JCONFIG_PERMISSIONS_LABEL" section="component" />

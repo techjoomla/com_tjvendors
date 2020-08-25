@@ -56,13 +56,16 @@ class JFormFieldPaymentGateway extends JFormFieldList
 		$input = Factory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
 		$options = array();
-		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJVENDOR_PAYMENT_DETAILS_DEFAULT'));
 
 		if (!empty($client))
 		{
 			$com_params = ComponentHelper::getParams($client);
 			$gateways = (array) $com_params->get('gateways');
 
+			if (count($gateways) > 1)
+			{
+				$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJVENDOR_PAYMENT_DETAILS_DEFAULT'));
+			}
 			if (!empty($gateways))
 			{
 				foreach ($gateways as $detail)

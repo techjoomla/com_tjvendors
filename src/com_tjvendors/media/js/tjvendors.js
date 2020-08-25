@@ -220,6 +220,7 @@ var tjVSite = {
 		/*Initialize event js*/
 		initVendorJs: function() {
 			jQuery(document).ready(function() {
+				jQuery("html, body").animate({ scrollTop: jQuery("#tjv-wrapper").offset().top + 500}, 1500);
 				jQuery(document).on("change", "#jform_payment_gateway", function() {});
 				/** global: tjvendor */
 				let CommonObj = new tjvendor.UI.CommonUI();
@@ -300,6 +301,14 @@ var tjCommon = {
 	},
 
 	initVendorFields: function() {
+		if (gatewayCount == 1)
+		{
+			let paymentObject = {
+			'payment_gateway': gatewayName
+			};
+
+			tjCommon.generateGatewayFields(paymentObject, 'jform_payment_gateway__payment_gateway0__payment_gateways');
+		}
 		jQuery('.subform-repeatable-group .gateway_name').on('focus', function() {
 			previous = this.value;
 		});
@@ -339,7 +348,6 @@ var tjCommon = {
 				success: function (response) {
 					let $thisId = jQuery('#' + eleId);
 					$thisId.closest('.subform-repeatable-group').find('.payment-gateway-parent').empty();
-					
 					if (response) {
 						response.forEach(function(data) {
 							$thisId.closest('.subform-repeatable-group').append("<div class='payment-gateway-parent'>" + data + "</div>");
@@ -351,5 +359,49 @@ var tjCommon = {
 					}
 				}
 			});
+		},
+	autoVendorSave: function()
+	{
+		urlStr   = window.location.search;
+		urlParam = urlStr.split(';');
+		urlParam.forEach(myFunction);
+
+		function myFunction(item, index) {
+			if (item.includes("client"))
+			{
+				client = item;
+			}
 		}
+
+		clientValue = client.split('&');
+
+		jQuery.ajax({
+			type:'POST',
+			data:{data:JSON.stringify(jQuery('#adminForm').serializeArray())},
+			dataType:'json',
+			url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjvendors&task=vendor.autoVendorSave&format=json&"+clientValue[0],
+			beforeSend: function() {
+                    		jQuery('#tjvnedor-payHtmlDiv').addClass('isloading');
+                	},
+			complete: function() {
+				jQuery('#tjvnedor-payHtmlDiv').removeClass('isloading');
+			},
+			success: function(response){
+				if (response.success == false)
+				{
+					Joomla.renderMessages({'alert alert-error':[response.message]});
+					jQuery('html, body').animate({scrollTop: 0}, 500);
+				}
+				else
+				{
+					jQuery('input[name="jform[vendor_id]"]').val(response.data.vendor_id);
+					window.location = window.location + "&vendor_id=" + response.data.vendor_id;
+				}
+			},
+			error: function(response){
+				console.log(' ERROR!!');
+				return;
+			}
+		});
+	}
 }

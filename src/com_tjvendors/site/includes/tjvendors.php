@@ -180,6 +180,7 @@ class TJVendors
 		HTMLHelper::_('script', 'media/com_tjvendor/dist/app.min.js', $options);
 		HTMLHelper::_('script', 'media/com_tjvendor/js/tjvendors.js', $options);
 		HTMLHelper::stylesheet('media/techjoomla_strapper/vendors/no-more-tables.css', $options);
+		HTMLHelper::stylesheet('media/com_tjvendor/dist/app.min.css', $options);
 
 		// Load Boostrap
 		if (self::config()->get('load_bootstrap') == '1')

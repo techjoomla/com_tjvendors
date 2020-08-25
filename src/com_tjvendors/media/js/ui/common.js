@@ -52,6 +52,10 @@ export class CommonUI{
 			let regionField = document.getElementById('jform_region');
 			jQuery(regionField).empty();
 
+			if (regionField == undefined)
+			{
+				return;
+			}
 			if (!err && resp){
 				let regions = JSON.parse(resp);
 
@@ -102,6 +106,11 @@ export class CommonUI{
 	generateCityOptions(err, resp, selectedCity){
 		try{
 			let cityField = document.getElementById('jform_city');
+
+			if (cityField == undefined)
+			{
+				return;
+			}
 			jQuery(cityField).empty();
 
 			if (!err && resp){
@@ -144,7 +153,6 @@ export class CommonUI{
 
 	showOtherCity(cityId, cityValue = ''){
 		var city = jQuery('#' + cityId).val();
-
 		if (cityValue){
 			city = cityValue;
 		}

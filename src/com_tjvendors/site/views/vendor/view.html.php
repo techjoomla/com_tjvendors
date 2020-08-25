@@ -89,6 +89,8 @@ class TjvendorsViewVendor extends HtmlView
 		$this->vendorClientXrefTable = Table::getInstance('vendorclientxref', 'TjvendorsTable', array());
 		$this->vendorClientXrefTable->load(array('vendor_id' => $this->vendor_id, 'client' => $this->client));
 		$this->VendorDetail          = $tjvendorsModelVendor->getItem($this->vendor_id);
+		$this->gateways = (array) ComponentHelper::getParams($this->client)->get('gateways');
+		$this->gatewayCount = count($this->gateways);
 
 		$utilitiesObj = TJVendors::utilities();
 		$this->countries = $utilitiesObj->getCountries();
@@ -111,9 +113,71 @@ class TjvendorsViewVendor extends HtmlView
 			$this->options[] = HTMLHelper::_('select.option', $id, $value);
 		}
 
+		// Show or hide vendor information field(s). do this is layout file
+		$showSelectedFields = $this->params->get('show_selected_fields', 0);
+
+		if ($showSelectedFields == 1)
+		{
+			$billingInfoFields = $this->params->get('vendor_field');
+
+			if (isset($billingInfoFields))
+			{
+				foreach ($billingInfoFields as $field)
+				{
+					switch ($field)
+					{
+						case 'alias':
+							$this->alias_config = 1;
+						break;
+
+						case 'vendor_description':
+							$this->vendor_description_config = 1;
+						break;
+
+						case 'website_address':
+							$this->website_address_config = 1;
+						break;
+
+						case 'vat_number':
+							$this->vat_number_config = 1;
+						break;
+
+						case 'vendor_logo':
+							$this->vendor_logo_config = 1;
+						break;
+						case 'phone_number':
+							$this->phone_number_config = 1;
+						break;
+						case 'address':
+							$this->address_config = 1;
+						break;
+
+						case 'country':
+							$this->country_config = 1;
+						break;
+
+						case 'state':
+							$this->state_config = 1;
+						break;
+
+						case 'city':
+							$this->city_config = 1;
+						break;
+
+						case 'zip':
+							$this->zip_config = 1;
+						break;
+
+						case 'payment_gateway':
+							$this->payment_gateway_config = 1;
+						break;
+					}
+				}
+			}
+		}
+
 		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
 		$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
-
 		$app->setUserState("vendor.client", $this->client);
 		$app->setUserState("vendor.vendor_id", $this->vendor->vendor_id);
 		$this->layout = $this->input->get('layout', '', 'STRING');

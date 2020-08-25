@@ -20,6 +20,7 @@ HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('behavior.formvalidation');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
+HTMLHelper::_('jquery.token');
 
 $lang = Factory::getLanguage();
 $lang->load('plg_payment_paypal', JPATH_ADMINISTRATOR);

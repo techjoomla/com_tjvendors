@@ -161,7 +161,7 @@ class TJVendors
 		static $loaded = null;
 		$docType       = Factory::getDocument()->getType();
 		$versionClass  = self::version();
-		$loc           = isset($loaded[$location])?$loaded[$location]:false;
+		$loc           = isset($loaded[$location]) ? $loaded[$location] : false;
 
 		if ($loc && ($docType != 'html'))
 		{

@@ -239,8 +239,8 @@ else
 			</tfoot>
 			<tbody>
 				<?php
-				$options[] = array("type" => Text::_('Approve'), "value" => "1");
-				$options[] = array("type" => Text::_('UnApproved'), "value" => "0");
+				$options[] = array("type" => Text::_('COM_TJVENDORS_VENDORS_VENDOR_APPROVE'), "value" => "1");
+				$options[] = array("type" => Text::_('COM_TJVENDORS_VENDORS_VENDOR_UNAPPROVED'), "value" => "0");
 
 				foreach ($this->items as $i => $item)
 				{

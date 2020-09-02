@@ -11,6 +11,7 @@
 // No direct access
 defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Router\Route;
 use Joomla\Registry\Registry;
@@ -105,5 +106,109 @@ class TjvendorsControllerVendorFee extends FormController
 		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId . '&client=' . $client, false
 		);
 		$this->setRedirect($link);
+	}
+
+	/**
+	 * Save vendor fee data
+	 *
+	 * @param   integer  $key     key.
+	 *
+	 * @param   integer  $urlVar  url
+	 *
+	 * @return  string  The arguments to append to the redirect URL.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function save($key = null, $urlVar = null)
+	{
+		// Initialise variables.
+		$app    = Factory::getApplication();
+		$model  = $this->getModel('Vendorfee', 'TjvendorsModel');
+		$input  = $app->input;
+		$client = $input->get('client', '', 'STRING');
+		$vendorId = $input->get('vendor_id');
+
+		// Get the user data.
+		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+
+		// Validate the posted data.
+		$form = $model->getForm();
+
+		if (!$form)
+		{
+			JError::raiseError(500, $model->getError());
+
+			return false;
+		}
+
+		// Validate the posted data.
+		$validate = $model->validate($form, $data);
+
+		// Check for errors.
+		if ($validate === false)
+		{
+			// Get the validation messages.
+			$errors = $model->getErrors();
+
+			// Push up to three validation messages out to the user.
+			for ($i = 0, $n = count($errors); $i < $n && $i < 3; $i++)
+			{
+				if ($errors[$i] instanceof Exception)
+				{
+					$app->enqueueMessage($errors[$i]->getMessage(), 'warning');
+				}
+				else
+				{
+					$app->enqueueMessage($errors[$i], 'warning');
+				}
+			}
+
+			// Redirect back to the edit screen.
+			$id = (int) $app->getUserState('com_tjvendors.edit.vendorfee.id');
+			$app->setUserState('com_tjvendors.edit.vendorfee.data', $data);
+
+			$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendorfee&layout=edit&id='. $id . '&vendor_id='. $vendorId . '&client=' . $client, false));
+
+			return false;
+		}
+
+		$return = $model->save($data);
+
+		// Check for errors.
+		if ($return === false)
+		{
+			$app->setUserState('com_tjvendors.edit.vendorfee.data', $data);
+
+			// Redirect back to the edit screen.
+			$id = (int) $app->getUserState('com_tjvendors.edit.vendorfee.id');
+			$this->setMessage(Text::sprintf('COM_TJVENDORS_VENDOR_ERROR_MSG_SAVE', $model->getError()), 'warning');
+			$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $id . '&vendor_id=' . $vendorId .'&client=' . $client, false));
+
+			return false;
+		}
+
+		$msg = Text::_('COM_TJVENDORS_VENDORFEE_SAVE_SUCCESS');
+		$id = $input->get('id');
+
+		if (empty($id))
+		{
+			$id = $return;
+		}
+
+		$task = $input->get('task');
+
+		if ($task == 'apply')
+		{
+			$redirect = Route::_('index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $id . '&vendor_id=' . $vendorId . '&client=' . $client, false);
+			$app->redirect($redirect, $msg);
+		}
+
+		// Clear the profile id from the session.
+		$app->setUserState('com_tjvendors.edit.vendorfee.id', null);
+		$redirect = Route::_('index.php?option=com_tjvendors&view=vendorfees&vendor_id=' . $vendorId . '&client=' . $client, false);
+		$app->redirect($redirect, $msg);
+
+		// Flush the data from the session.
+		$app->setUserState('com_tjvendors.edit.vendorfee.data', null);
 	}
 }

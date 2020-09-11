@@ -193,14 +193,21 @@ class TjvendorsUtilities
 	 * For e.g in JGive there is 3 vendor belongs from 3 different countries,
 	 * for filtering campaigns by country it returning the array of those 3 countries
 	 *
-	 * @param   string  $extension  extension name like com_jgive
+	 * @param   array  $params  this array contain filter name with values
 	 * 
 	 * @return   Array 
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getFilterCountries($extension)
+	public function getVendorCountries($params)
 	{
+		$result = array();
+
+		if (empty($params))
+		{
+			return $result;
+		}
+
 		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('con.id as country_id');
@@ -209,72 +216,84 @@ class TjvendorsUtilities
 		$query->join('INNER', $db->qn('#__tjvendors_vendors', 'vendors') . ' ON (' . $db->qn('vendors.country') . ' = ' . $db->qn('con.id') . ')');
 		$query->join('LEFT', $db->qn('#__vendor_client_xref', 'vedorxref') .
 		'ON (' . $db->qn('vendors.vendor_id') . ' = ' . $db->qn('vedorxref.vendor_id') . ')');
-		$query->where($db->qn('vendors.state') . ' = 1 AND ' . $db->qn('vedorxref.client') . ' = ' . $db->quote($extension));
+		$query->where($db->qn('vendors.state') . ' = 1 AND ' . $db->qn('vedorxref.client') . ' = ' . $db->quote($params['extension']));
 		$query->group($db->qn('vendors.country'));
 		$db->setQuery($query);
 
-		return $db->loadobjectlist();
+		$result = $db->loadobjectlist();
+
+		return $result;
 	}
 
 	/**
-	 * Function getFilterRegion fetch the region base on country id and extension
+	 * Function getVendorRegion fetch the region base on country id and extension
 	 *
-	 * @param   int     $country    country id
-	 * @param   string  $extension  extension name like com_jgive
+	 * @param   array  $params  this array contain filter name with values
 	 * 
 	 * @return  Array
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getFilterRegion($country, $extension)
+	public function getVendorRegion($params)
 	{
-		if (!empty($country))
-		{
-			$db    = Factory::getDbo();
-			$query = $db->getQuery(true);
-			$query->select($db->qn('r.id'));
-			$query->select($db->qn('r.region'));
-			$query->from($db->qn('#__tj_region', 'r'));
-			$query->join('LEFT', $db->qn('#__tjvendors_vendors', 'vendors') . ' ON (' . $db->qn('r.id') . ' = ' . $db->qn('vendors.region') . ')');
-			$query->join('LEFT', $db->qn('#__vendor_client_xref', 'vedorxref') .
-			'ON (' . $db->qn('vendors.vendor_id') . ' = ' . $db->qn('vedorxref.vendor_id') . ')');
-			$query->where($db->qn('vendors.state') . ' = 1 AND ' . $db->qn('vedorxref.client') . ' = ' . $db->quote($extension));
-			$query->where($db->qn('vendors.country') . ' = ' . (int) $country);
-			$query->group($db->qn('vendors.region'));
-			$db->setQuery($query);
+		$result = array();
 
-			return $db->loadobjectlist();
+		if (empty($params) || (!isset($params['country'])))
+		{
+			return $result;
 		}
+
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->qn('r.id'));
+		$query->select($db->qn('r.region'));
+		$query->from($db->qn('#__tj_region', 'r'));
+		$query->join('LEFT', $db->qn('#__tjvendors_vendors', 'vendors') . ' ON (' . $db->qn('r.id') . ' = ' . $db->qn('vendors.region') . ')');
+		$query->join('LEFT', $db->qn('#__vendor_client_xref', 'vedorxref') .
+		'ON (' . $db->qn('vendors.vendor_id') . ' = ' . $db->qn('vedorxref.vendor_id') . ')');
+		$query->where($db->qn('vendors.state') . ' = 1 AND ' . $db->qn('vedorxref.client') . ' = ' . $db->quote($params['extension']));
+		$query->where($db->qn('vendors.country') . ' = ' . (int) $params['country']);
+		$query->group($db->qn('vendors.region'));
+		$db->setQuery($query);
+
+		$result = $db->loadobjectlist();
+
+		return $result;
 	}
 
 	/**
-	 * Function getFilterCity fetch the city base on region id and extension
+	 * Function getVendorCity fetch the city base on region id and extension
 	 *
-	 * @param   int     $region     region id
-	 * @param   string  $extension  extension name like com_jgive
+	 * @param   array  $params  this array contain filter name with values
 	 * 
 	 * @return  Array
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function getFilterCity($region, $extension)
+	public function getVendorCity($params)
 	{
-		if (!empty($region))
-		{
-			$db    = Factory::getDbo();
-			$query = $db->getQuery(true);
-			$query->select($db->qn('city.id'));
-			$query->select($db->qn('city.city'));
-			$query->from($db->qn('#__tj_city', 'city'));
-			$query->join('RIGHT', $db->qn('#__tjvendors_vendors', 'vendors') . ' ON (' . $db->qn('city.id') . ' = ' . $db->qn('vendors.city') . ')');
-			$query->join('LEFT', $db->qn('#__vendor_client_xref', 'vedorxref') .
-			'ON (' . $db->qn('vendors.vendor_id') . ' = ' . $db->qn('vedorxref.vendor_id') . ')');
-			$query->where($db->qn('vendors.state') . ' = 1 AND ' . $db->qn('vedorxref.client') . ' = ' . $db->quote($extension));
-			$query->where($db->qn('vendors.region') . ' = ' . (int) $region);
-			$query->group($db->qn('vendors.city'));
-			$db->setQuery($query);
+		$result = array();
 
-			return $db->loadobjectlist();
+		if (empty($params) || (!isset($params['region'])))
+		{
+			return $result;
 		}
+
+		$db    = Factory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select($db->qn('city.id'));
+		$query->select($db->qn('city.city'));
+		$query->from($db->qn('#__tj_city', 'city'));
+		$query->join('RIGHT', $db->qn('#__tjvendors_vendors', 'vendors') . ' ON (' . $db->qn('city.id') . ' = ' . $db->qn('vendors.city') . ')');
+		$query->join('LEFT', $db->qn('#__vendor_client_xref', 'vedorxref') .
+		'ON (' . $db->qn('vendors.vendor_id') . ' = ' . $db->qn('vedorxref.vendor_id') . ')');
+		$query->where($db->qn('vendors.state') . ' = 1 AND ' . $db->qn('vedorxref.client') . ' = ' . $db->quote($params['extension']));
+		$query->where($db->qn('vendors.region') . ' = ' . (int) $params['region']);
+		$query->group($db->qn('vendors.city'));
+		$db->setQuery($query);
+
+		$result = $db->loadobjectlist();
+
+		return $result;
 	}
 }

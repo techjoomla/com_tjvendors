@@ -58,17 +58,29 @@ class TjvendorsMailsHelper
 	 */
 	public function onAfterVendorCreate($vendorDetails)
 	{
+		$adminEmailArray = array();
 		$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');
-		$adminRecipients = self::createRecipient($adminEmail);
+		$adminEmailArray = explode(',', $adminEmail);	
+		$adminRecipients = array(
+			'email' => array(
+				'to' => $adminEmailArray
+			)
+		);
 
 		$vendor_approval = $this->tjvendorsparams->get('vendor_approval');
 		$adminkey = ($vendor_approval) ? "createVendorMailToAdminWaitingForApproval" : "createVendorMailToAdmin";
 		$vendorerkey = ($vendor_approval) ? "createVendorMailToOwnerWaitingForApproval" : "createVendorMailToOwner";
 
-		$promoterEmailObj = new stdClass;
 		$vendorer = Factory::getUser($vendorDetails->user_id);
-		$promoterEmailObj->email = $vendorer->email;
-		$promoterRecipients[] = $promoterEmailObj;
+		$promoterEmailArray = array();
+		$promoterEmail = $vendorer->email;
+		$promoterEmailArray[] = $promoterEmail;
+		$promoterRecipients = array(
+			'email' => array(
+				'to' => $promoterEmailArray
+			),
+			'sms' => array($vendorDetails->phone_number)
+		);
 
 		$allVendors = 'index.php?option=com_tjvendors&view=vendors&client=' . $vendorDetails->vendor_client;
 		$allVendorsLink = Uri::root() . 'administrator/' . $allVendors;
@@ -139,9 +151,16 @@ class TjvendorsMailsHelper
 			$vendorUserDetails = Factory::getUser($vendorData->user_id);
 
 			$approvalkey = "approvalOnVendorMailToOwner";
-			$promoterEmailObj = new stdClass;
-			$promoterEmailObj->email = $vendorUserDetails->email;
-			$promoterRecipients[] = $promoterEmailObj;
+			$promoterEmailArray = array();
+			$promoterEmail = $vendorUserDetails->email;
+			$promoterEmailArray[] = $promoterEmail;
+			$promoterRecipients = array(
+				'email' => array(
+					'to' => $promoterEmailArray
+				),
+				'sms' => array($vendorDetails->phone_number)
+			);
+		
 			$replacements->vendor_user = $vendorUserDetails;
 			$replacements->vendor_data = $vendorData;
 			$options->set('vendor_data', $vendorData);
@@ -150,9 +169,16 @@ class TjvendorsMailsHelper
 		}
 		elseif ($vendorDetails->user_id === $loggedInUser)
 		{
-			$adminEmailObj = new stdClass;
+			$adminEmailArray = array();
 			$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');
-			$adminRecipients = self::createRecipient($adminEmail);
+			$adminEmailArray = explode(',', $adminEmail);
+			
+			$adminRecipients = array(
+				'email' => array(
+					'to' => $adminEmailArray
+				),
+				'sms' => array($vendorDetails->phone_number)
+			);
 
 			$adminkey = "editVendorMailToAdmin";
 

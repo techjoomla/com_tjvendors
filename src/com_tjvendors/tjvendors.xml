@@ -74,6 +74,7 @@
 			<folder>sql</folder>
 			<folder>tables</folder>
 			<folder>views</folder>
+			<folder>houseKeeping</folder>
 		</files>
 		<languages folder="admin_language">
 			<language tag="en-GB">en-GB/en-GB.com_tjvendors.ini</language>

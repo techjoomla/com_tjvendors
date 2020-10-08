@@ -84,7 +84,8 @@
 			"smsfields0": {
 				"id": "",
 				"language": "*",
-				"body": "Dear {{vendorer.name}},You have created a new vendor {{info.vendor_title}}. Your vendor profile is under going approval process. Once your administrator approves you can proceed further. Please wait for approval email."
+				"body": "Dear {{vendorer.name}}, Thank you for registering as a vendor, {{info.vendor_title}} is now published at {{info.sitename}}."
+				
 			}
 		}
 	},  
@@ -144,7 +145,7 @@
 			"smsfields0": {
 				"id": "",
 				"language": "*",
-				"body": "Dear Admin, A new vendor named {{info.vendor_title}} has registered on the site by {{vendorer.name}}. Click here to see all the vendors. Note that you need to approve this vendor before they go live on the site."
+				"body": "Dear Admin, A new vendor {{info.vendor_title}} has registered on the site by {{vendorer.name}}. Visit admin panel to approve this vendor on site."
 			}
 		}
 	},
@@ -200,7 +201,7 @@
 			"smsfields0": {
 				"id": "",
 				"language": "*",
-				"body": "Dear {{vendorer.name}},You have created a new vendor {{info.vendor_title}}. Your vendor profile is under going approval process. Once your administrator approves you can proceed further. Please wait for approval email."
+				"body": "Dear {{vendorer.name}}, Your newly created vendor profile {{info.vendor_title}} is pending for approval. Wait for approval email to proceed further."
 			}
 		}
 	},
@@ -260,7 +261,7 @@
 			"smsfields0": {
 				"id": "",
 				"language": "*",
-				"body": "Dear {{vendor_user.name}}, Your vendor profile {{vendor_data.vendor_title}} has been approved by admin. Now you can further continue."
+				"body": "Dear {{vendor_user.name}}, Your vendor profile {{vendor_data.vendor_title}} has been approved by admin. Now you can continue further."
 			}
 		}
 	},
@@ -312,7 +313,7 @@
 			"smsfields0": {
 				"id": "",
 				"language": "*",
-				"body": "Dear Admin, The user {{vendorer.name}} has made changes to vendor {{info.vendor_title}}. Vendor details are - Vendor title - {{info.vendor_title}} User - {{vendorer.name}} Client - {{info.vendorClient}}"
+				"body": "Dear Admin, The user {{vendorer.name}} has made changes to vendor titled {{info.vendor_title}} client {{info.vendorClient}}"
 			}
 		}
 	},

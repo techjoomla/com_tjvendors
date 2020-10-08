@@ -25,6 +25,7 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 $document = Factory::getDocument();
 HTMLHelper::stylesheet('administrator/components/com_tjvendors/assets/css/tjvendors.css');
 HTMLHelper::script('libraries/techjoomla/assets/js/houseKeeping.js');
+$document->addScriptDeclaration("var tjHouseKeepingView='vendors';");
 
 $user      = Factory::getUser();
 $userId    = $user->id;
@@ -38,9 +39,8 @@ if ($saveOrder)
 	$saveOrderingUrl = 'index.php?option=com_tjvendors&task=vendors.saveOrderAjax&tmpl=component';
 	HTMLHelper::_('sortablelist.sortable', 'vendorList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
-
-$document->addScriptDeclaration("var tjHouseKeepingView='vendors';");
 ?>
+
 <script type="text/javascript">
 	Joomla.orderTable = function ()
 	{

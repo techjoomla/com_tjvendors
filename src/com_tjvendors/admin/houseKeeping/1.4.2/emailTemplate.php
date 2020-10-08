@@ -64,14 +64,14 @@ class TjHouseKeepingEmailTemplate extends TjModelHouseKeeping
 						$obj     = new stdClass;
 						$obj->id = $value['confId'];
 
-						if (strpos($value['subject'], '{{') == false)
+						if (strpos($value['subject'], '{{') === false)
 						{
 							$subjectBracketReplace  = str_replace("{", "{{", $value['subject']);
 							$subjectBracketReplace  = str_replace("}", "}}", $subjectBracketReplace);
 							$obj->subject           = $subjectBracketReplace;
 						}
 
-						if (strpos($value['subject'], '{{') == false)
+						if (strpos($value['body'], '{{') === false)
 						{
 							$bodyBracketReplace  = str_replace("{", "{{", $value['body']);
 							$bodyBracketReplace  = str_replace("}", "}}", $bodyBracketReplace);

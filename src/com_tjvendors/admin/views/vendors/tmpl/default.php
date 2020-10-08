@@ -24,6 +24,7 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 // Import CSS
 $document = Factory::getDocument();
 HTMLHelper::stylesheet('administrator/components/com_tjvendors/assets/css/tjvendors.css');
+HTMLHelper::script('libraries/techjoomla/assets/js/houseKeeping.js');
 
 $user      = Factory::getUser();
 $userId    = $user->id;
@@ -38,7 +39,6 @@ if ($saveOrder)
 	HTMLHelper::_('sortablelist.sortable', 'vendorList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 
-HTMLHelper::script('libraries/techjoomla/assets/js/houseKeeping.js');
 $document->addScriptDeclaration("var tjHouseKeepingView='vendors';");
 ?>
 <script type="text/javascript">

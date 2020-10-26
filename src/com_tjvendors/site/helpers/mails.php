@@ -204,12 +204,11 @@ class TjvendorsMailsHelper
 			$adminEmailArray = array();
 			$adminEmail      = $this->tjvendorsparams->get('email');
 			$adminEmailArray = explode(',', $adminEmail);
-
 			$adminRecipients = array('email' => array('cc' => $adminEmailArray));
 
-			if (!empty($vendorDetails->phone_number))
+			foreach ($adminUsers as $user)
 			{
-				$adminRecipients['sms'] = array($vendorDetails->phone_number);
+				array_unshift($adminRecipients, Factory::getUser($user->id));
 			}
 
 			$adminkey = "editVendorMailToAdmin";

@@ -58,16 +58,20 @@ class TjvendorsMailsHelper
 	 */
 	public function onAfterVendorCreate($vendorDetails)
 	{
+		$adminUsers = TJVendors::utilities()->getAdminUsers();
+
+		foreach ($adminUsers as $user)
+		{
+			$adminRecipients['email']['to'][] = $user->email;
+		}
+
 		$adminEmailArray = array();
-		$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');
+		$adminEmail = $this->tjvendorsparams->get('email');
 
 		$adminEmailArray = explode(',', $adminEmail);
+		$adminRecipients = array('email' => array('cc' => $adminEmailArray));
+
 		$userIdArray = $this->getUserIdFromEmail($adminEmailArray);
-		$adminRecipients = array(
-			'email' => array(
-				'to' => $adminEmailArray
-			)
-		);
 
 		foreach ($userIdArray as $userId)
 		{
@@ -190,21 +194,22 @@ class TjvendorsMailsHelper
 		}
 		elseif ($vendorDetails->user_id === $loggedInUser)
 		{
+			$adminUsers = TJVendors::utilities()->getAdminUsers();
+
+			foreach ($adminUsers as $user)
+			{
+				$adminRecipients['email']['to'][] = $user->email;
+			}
+
 			$adminEmailArray = array();
-			$adminContactArray = array();
-			$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');
+			$adminEmail      = $this->tjvendorsparams->get('email');
 			$adminEmailArray = explode(',', $adminEmail);
+
+			$adminRecipients = array('email' => array('cc' => $adminEmailArray));
 
 			if (!empty($vendorDetails->phone_number))
 			{
-				$adminContactArray[] = $vendorDetails->phone_number;
-			}
-
-			$adminRecipients = array('email' => array('to' => $adminEmailArray));
-
-			if (!empty($adminContactArray))
-			{
-				$adminRecipients['sms'] = $adminContactArray;
+				$adminRecipients['sms'] = array($vendorDetails->phone_number);
 			}
 
 			$adminkey = "editVendorMailToAdmin";

@@ -296,4 +296,32 @@ class TjvendorsUtilities
 
 		return $result;
 	}
+
+	/**
+	 * This method returns the user of given group Id
+	 *
+	 * @return  array
+	 *
+	 * @since  __DEPLOY_VERSION__
+	 */
+	public function getAdminUsers()
+	{
+		$users = array();
+
+		// Get all admin users
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('id');
+		$query->from($db->quoteName('#__users'));
+		$query->where($db->quoteName('sendEmail') . '= 1');
+		$db->setQuery($query);
+		$adminUsers = $db->loadObjectList();
+
+		foreach ($adminUsers as $adminUser)
+		{
+			$users[] = Factory::getUser($adminUser->id);
+		}
+
+		return $users;
+	}
 }

@@ -211,7 +211,7 @@
         "description": "Vendor title"
       },
       {
-        "name": "{{vendorer.name}}",
+        "name": "vendorer.name",
         "description": "Vendorer name"
       },
       {

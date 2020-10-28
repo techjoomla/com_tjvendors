@@ -69,8 +69,7 @@ class TjvendorsMailsHelper
 		$adminEmail = $this->tjvendorsparams->get('email');
 
 		$adminEmailArray = explode(',', $adminEmail);
-		$adminRecipients = array('email' => array('cc' => $adminEmailArray));
-
+		$adminRecipients['email']['cc'] = $adminEmailArray;
 		$userIdArray = $this->getUserIdFromEmail($adminEmailArray);
 
 		foreach ($userIdArray as $userId)
@@ -204,7 +203,7 @@ class TjvendorsMailsHelper
 			$adminEmailArray = array();
 			$adminEmail      = $this->tjvendorsparams->get('email');
 			$adminEmailArray = explode(',', $adminEmail);
-			$adminRecipients = array('email' => array('cc' => $adminEmailArray));
+			$adminRecipients['email']['cc'] = $adminEmailArray;
 
 			foreach ($adminUsers as $user)
 			{

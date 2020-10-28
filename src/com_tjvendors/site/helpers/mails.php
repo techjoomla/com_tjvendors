@@ -58,6 +58,7 @@ class TjvendorsMailsHelper
 	 */
 	public function onAfterVendorCreate($vendorDetails)
 	{
+		$adminRecipients = array();
 		$adminUsers = TJVendors::utilities()->getAdminUsers();
 
 		foreach ($adminUsers as $user)
@@ -65,7 +66,6 @@ class TjvendorsMailsHelper
 			$adminRecipients['email']['to'][] = $user->email;
 		}
 
-		$adminEmailArray = array();
 		$adminEmail = $this->tjvendorsparams->get('email');
 
 		$adminEmailArray = explode(',', $adminEmail);
@@ -193,6 +193,7 @@ class TjvendorsMailsHelper
 		}
 		elseif ($vendorDetails->user_id === $loggedInUser)
 		{
+			$adminRecipients = array();
 			$adminUsers = TJVendors::utilities()->getAdminUsers();
 
 			foreach ($adminUsers as $user)
@@ -200,7 +201,6 @@ class TjvendorsMailsHelper
 				$adminRecipients['email']['to'][] = $user->email;
 			}
 
-			$adminEmailArray = array();
 			$adminEmail      = $this->tjvendorsparams->get('email');
 			$adminEmailArray = explode(',', $adminEmail);
 			$adminRecipients['email']['cc'] = $adminEmailArray;
@@ -223,7 +223,7 @@ class TjvendorsMailsHelper
 	 *
 	 * @param   ARRAY  $emailObject  Contains email object
 	 *
-	 * @return  array.
+	 * @return  array  User Id Array
 	 *
 	 * @since	__DEPLOY_VERSION__
 	 */

@@ -443,6 +443,12 @@ class Com_TjvendorsInstallerScript
 				{
 					$notificationsModel->createTemplates($array);
 				}
+
+				// If replacement tags are changed update those
+				if (in_array($array['key'], $existingKeys) && isset($array['replacement_tags']))
+				{
+					$notificationsModel->updateReplacementTags($array);
+				}
 			}
 		}
 	}

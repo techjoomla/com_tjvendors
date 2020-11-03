@@ -10,4 +10,12 @@
 
 ### Integration with TJNotifications
 #### + Features Added:
-- #165665 TJVendor integration with latest TJNotifications(Added SMS support)
+- #165665 TJVendors integration with latest TJNotifications (Added SMS support)
+
+##### - Bug fixes:
+- #164562 Frontend >> Location filter was not working on all Campaigns list view
+- #166174 Edit & Update Event > Error occurs on updating the event
+
+
+##### ^ Improvements:
+- #164184 Backend Vendor fees list view added action on checkboxes for edit vendor.

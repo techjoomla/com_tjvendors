@@ -18,6 +18,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
 jimport('techjoomla.tjnotifications.tjnotifications');
+include_once JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
 /**
  * Class TjvendorMailsHelper

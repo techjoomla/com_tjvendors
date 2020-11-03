@@ -89,4 +89,32 @@ class TjvendorsControllerPayout extends FormController
 		echo json_encode($results);
 		jexit();
 	}
+
+	/**
+	 * Method to save a record.
+	 *
+	 * @param   string  $key     The name of the primary key of the URL variable.
+	 * @param   string  $urlVar  The name of the URL variable if different from the primary key (sometimes required to avoid router collisions).
+	 *
+	 * @return  boolean  True if successful, false otherwise.
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function save($key = NULL, $urlVar = NULL)
+	{
+		$app = Factory::getApplication();
+		$vendor_id =$app->input->get('vendor_id', '', 'INTEGER');
+		$client = $app->input->get('client', '', 'STRING');
+		$data = $app->input->get('jform', array(), 'array');
+		$model  = $this->getModel('payout', 'TjvendorsModel');
+		$return = $model->save($data);
+		$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=payouts&vendor_id' . $vendor_id . '&client=' . $client, false));
+
+		if($return != 1)
+		{
+			return $app->enqueueMessage(Text::_('COM_TJVENDORS_PAYOUT_UNSUCCESSFULL_MESSAGE'));;
+		}
+
+		return $app->enqueueMessage(Text::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE'));;
+	}
 }

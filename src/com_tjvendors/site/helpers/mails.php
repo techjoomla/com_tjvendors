@@ -18,6 +18,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
 jimport('techjoomla.tjnotifications.tjnotifications');
+include_once JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
 /**
  * Class TjvendorMailsHelper
@@ -58,17 +59,46 @@ class TjvendorsMailsHelper
 	 */
 	public function onAfterVendorCreate($vendorDetails)
 	{
-		$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');
-		$adminRecipients = self::createRecipient($adminEmail);
+		$adminRecipients = array();
+		$adminUsers = TJVendors::utilities()->getAdminUsers();
+
+		foreach ($adminUsers as $user)
+		{
+			$adminRecipients['email']['to'][] = $user->email;
+		}
+
+		$adminEmail = $this->tjvendorsparams->get('email');
+
+		$adminEmailArray = explode(',', $adminEmail);
+		$adminRecipients['email']['cc'] = $adminEmailArray;
+		$userIdArray = $this->getUserIdFromEmail($adminEmailArray);
+
+		foreach ($userIdArray as $userId)
+		{
+			array_unshift($adminRecipients,Factory::getUser($userId));
+		}
 
 		$vendor_approval = $this->tjvendorsparams->get('vendor_approval');
 		$adminkey = ($vendor_approval) ? "createVendorMailToAdminWaitingForApproval" : "createVendorMailToAdmin";
 		$vendorerkey = ($vendor_approval) ? "createVendorMailToOwnerWaitingForApproval" : "createVendorMailToOwner";
 
-		$promoterEmailObj = new stdClass;
 		$vendorer = Factory::getUser($vendorDetails->user_id);
-		$promoterEmailObj->email = $vendorer->email;
-		$promoterRecipients[] = $promoterEmailObj;
+		$promoterEmailArray = array();
+		$promoterContactArray = array();
+		$promoterEmail = $vendorer->email;
+		$promoterEmailArray[] = $promoterEmail;
+
+		if (!empty($vendorDetails->phone_number))
+		{
+			$promoterContactArray[] = $vendorDetails->phone_number;
+		}
+
+		$promoterRecipients = array('email' => array('to' => $promoterEmailArray));
+
+		if (!empty($promoterContactArray))
+		{
+			$promoterRecipients['sms'] = $promoterContactArray;
+		}
 
 		$allVendors = 'index.php?option=com_tjvendors&view=vendors&client=' . $vendorDetails->vendor_client;
 		$allVendorsLink = Uri::root() . 'administrator/' . $allVendors;
@@ -139,9 +169,23 @@ class TjvendorsMailsHelper
 			$vendorUserDetails = Factory::getUser($vendorData->user_id);
 
 			$approvalkey = "approvalOnVendorMailToOwner";
-			$promoterEmailObj = new stdClass;
-			$promoterEmailObj->email = $vendorUserDetails->email;
-			$promoterRecipients[] = $promoterEmailObj;
+			$promoterEmailArray = array();
+			$promoterContactArray = array();
+			$promoterEmail = $vendorUserDetails->email;
+			$promoterEmailArray[] = $promoterEmail;
+
+			if (!empty($vendorDetails->phone_number))
+			{
+				$promoterContactArray[] = $vendorDetails->phone_number;
+			}
+
+			$promoterRecipients = array('email' => array('to' => $promoterEmailArray));
+
+			if (!empty($promoterContactArray))
+			{
+				$promoterRecipients['sms'] = $promoterContactArray;
+			}
+
 			$replacements->vendor_user = $vendorUserDetails;
 			$replacements->vendor_data = $vendorData;
 			$options->set('vendor_data', $vendorData);
@@ -150,9 +194,22 @@ class TjvendorsMailsHelper
 		}
 		elseif ($vendorDetails->user_id === $loggedInUser)
 		{
-			$adminEmailObj = new stdClass;
-			$adminEmail = (!empty($this->tjvendorsparams->get('email'))) ? $this->tjvendorsparams->get('email') : $this->siteConfig->get('mailfrom');
-			$adminRecipients = self::createRecipient($adminEmail);
+			$adminRecipients = array();
+			$adminUsers = TJVendors::utilities()->getAdminUsers();
+
+			foreach ($adminUsers as $user)
+			{
+				$adminRecipients['email']['to'][] = $user->email;
+			}
+
+			$adminEmail      = $this->tjvendorsparams->get('email');
+			$adminEmailArray = explode(',', $adminEmail);
+			$adminRecipients['email']['cc'] = $adminEmailArray;
+
+			foreach ($adminUsers as $user)
+			{
+				array_unshift($adminRecipients, Factory::getUser($user->id));
+			}
 
 			$adminkey = "editVendorMailToAdmin";
 
@@ -167,26 +224,31 @@ class TjvendorsMailsHelper
 	 *
 	 * @param   ARRAY  $emailObject  Contains email object
 	 *
-	 * @return  void.
+	 * @return  array  User Id Array
 	 *
-	 * @since	1.8
+	 * @since	1.4.2
 	 */
-	public function createRecipient($emailObject)
+	public function getUserIdFromEmail($adminRecipients)
 	{
-		$adminRecipients = explode(',', $emailObject);
-
-		$finalEmailRecipient = [];
+		$finalUserIdRecipient = [];
 
 		if (!empty($adminRecipients))
 		{
+			$db = JFactory::getDbo();
+
 			foreach ($adminRecipients as $adminRecipient)
 			{
-				$adminEmailObj = new stdClass;
-				$adminEmailObj->email = $adminRecipient;
-				$finalEmailRecipient[] = $adminEmailObj;
+				$query = $db->getQuery(true)
+					->select($db->quoteName('id'))
+					->from($db->quoteName('#__users'))
+					->where($db->quoteName('email') . ' = ' . $db->quote($adminRecipient));
+				$db->setQuery($query);
+				$userId = $db->loadResult();
+
+				$finalUserIdRecipient[] = $userId;
 			}
 		}
 
-		return $finalEmailRecipient;
+		return $finalUserIdRecipient;
 	}
 }

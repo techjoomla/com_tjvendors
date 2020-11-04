@@ -19,6 +19,7 @@ use Joomla\CMS\Table\Table;
 
 JLoader::import('fronthelper', JPATH_SITE . '/components/com_tjvendors/helpers');
 JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
+include_once JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
 /**
  * Tjvendors model.

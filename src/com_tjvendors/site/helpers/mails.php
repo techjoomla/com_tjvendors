@@ -68,10 +68,16 @@ class TjvendorsMailsHelper
 		}
 
 		$adminEmail = $this->tjvendorsparams->get('email');
+		$adminEmailArray = array();
 
-		$adminEmailArray = explode(',', $adminEmail);
+		if (!empty($adminEmail))
+		{
+			$adminEmailArray = explode(',', $adminEmail);
+		}
+
 		$adminRecipients['email']['cc'] = $adminEmailArray;
 		$userIdArray = $this->getUserIdFromEmail($adminEmailArray);
+		array_push($userIdArray, $user->id);
 
 		foreach ($userIdArray as $userId)
 		{

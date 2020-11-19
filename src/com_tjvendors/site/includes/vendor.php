@@ -598,6 +598,42 @@ class TjvendorsVendor extends CMSObject
 	}
 
 	/**
+	 * Get the country
+	 *
+	 * @return  Object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getCountry()
+	{
+		return $this->country;
+	}
+
+	/**
+	 * Get the Region
+	 *
+	 * @return  Object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getRegion()
+	{
+		return $this->region;
+	}
+
+	/**
+	 * Get the City
+	 *
+	 * @return  Object
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getCity()
+	{
+		return $this->city;
+	}
+
+	/**
 	 * This function return vendor profile complete/incomplete status
 	 *
 	 * @param   Integer  $userId  userId

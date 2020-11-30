@@ -638,8 +638,8 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @param   Integer  $userId  userId
 	 * @param   Integer  $client  client
-	 * 
-	 * @return  Interger  Percentage of vendor profile completion 
+	 *
+	 * @return  Interger  Percentage of vendor profile completion
 	 *
 	 * @since   1.4.0
 	 */
@@ -663,5 +663,17 @@ class TjvendorsVendor extends CMSObject
 		$total += (!empty($data->payment_gateway)) ? 5: 0;
 
 		return $total;
+	}
+
+	/**
+	 * Get the id of the vendor
+	 *
+	 * @return  int
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function getId()
+	{
+		return $this->vendor_id;
 	}
 }

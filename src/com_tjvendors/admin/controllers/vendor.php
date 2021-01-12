@@ -4,18 +4,19 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\Controller\FormController;
-use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\MVC\Controller\FormController;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
 
@@ -67,9 +68,9 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function checkDuplicateUser()
 	{
-		$input  = Factory::getApplication()->input->post;
-		$user = $input->get('user', '', 'STRING');
-		$model = $this->getModel('vendor');
+		$input   = Factory::getApplication()->input->post;
+		$user    = $input->get('user', '', 'STRING');
+		$model   = $this->getModel('vendor');
 		$results = $model->checkDuplicateUser($user);
 
 		echo json_encode($results);
@@ -85,15 +86,15 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function vendorApprove()
 	{
-		$input  = Factory::getApplication()->input;
-		$vendor_id = $input->post->get('vendor_id', '', 'INTEGER');
-		$vendorApprove = $input->post->get('vendorApprove', '', 'INTEGER');
-		$client = $input->get('client', '', 'STRING');
-		$model = $this->getModel('vendor');
-		$data['vendor_id'] = $vendor_id;
+		$input                 = Factory::getApplication()->input;
+		$vendor_id             = $input->post->get('vendor_id', '', 'INTEGER');
+		$vendorApprove         = $input->post->get('vendorApprove', '', 'INTEGER');
+		$client                = $input->get('client', '', 'STRING');
+		$model                 = $this->getModel('vendor');
+		$data['vendor_id']     = $vendor_id;
 		$data['vendor_client'] = $client;
-		$data['approved'] = $vendorApprove;
-		$result = $model->save($data);
+		$data['approved']      = $vendorApprove;
+		$result                = $model->save($data);
 
 		echo new JsonResponse($result, Text::_('COM_TJVENDORS_VENDOR_APPROVAL_ERROR'), true);
 	}
@@ -107,12 +108,11 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function generateGatewayFields()
 	{
-		$input  = Factory::getApplication()->input->post;
+		$input           = Factory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
-		$parentTag = $input->get('parent_tag', '', 'STRING');
-		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
-		$model = $this->getModel('vendor');
-		$results = $model->generateGatewayFields($payment_gateway, $parentTag);
+		$parentTag       = $input->get('parent_tag', '', 'STRING');
+		$model           = $this->getModel('vendor');
+		$results         = $model->generateGatewayFields($payment_gateway, $parentTag);
 		echo json_encode($results);
 		jexit();
 	}
@@ -154,14 +154,14 @@ class TjvendorsControllerVendor extends FormController
 		$client = $input->get('client', '', 'STRING');
 
 		// Get the user data.
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$data = $input->get('jform', array(), 'array');
 
 		// Validate the posted data.
 		$form = $model->getForm();
 
 		if (!$form)
 		{
-			JError::raiseError(500, $model->getError());
+			$app->enqueueMessage($model->getError(), 'error');
 
 			return false;
 		}
@@ -212,7 +212,7 @@ class TjvendorsControllerVendor extends FormController
 		}
 
 		$msg = Text::_('COM_TJVENDORS_MSG_SUCCESS_SAVE_VENDOR');
-		$id = $input->get('vendor_id');
+		$id  = $input->get('vendor_id');
 
 		if (empty($id))
 		{

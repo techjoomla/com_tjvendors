@@ -4,12 +4,13 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 
@@ -29,8 +30,7 @@ class TjvendorsTriggerVendor
 	 */
 	public function __construct()
 	{
-		$app = Factory::getApplication();
-		$this->user = Factory::getUser();
+		$this->user                 = Factory::getUser();
 		$this->tjvendorsMailsHelper = new TjvendorsMailsHelper;
 	}
 
@@ -59,9 +59,8 @@ class TjvendorsTriggerVendor
 				break;
 		}
 
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('tjvendors');
-		$dispatcher->trigger('tjVendorsOnAfterVendorSave', array($vendorDetails, $isNew));
+		Factory::getApplication()->triggerEvent('tjVendorsOnAfterVendorSave', array($vendorDetails, $isNew));
 
 		return;
 	}

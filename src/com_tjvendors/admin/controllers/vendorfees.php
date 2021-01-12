@@ -4,15 +4,16 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access.
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Controller\AdminController;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\MVC\Controller\AdminController;
 
 /**
  * Vendors list controller class.
@@ -48,7 +49,6 @@ class TjvendorsControllerVendorFees extends AdminController
 	{
 		// Get the input
 		$input = Factory::getApplication()->input;
-		$pks = $input->post->get('cid', array(), 'array');
 
 		// Redirect to the list screen.
 		$this->setRedirect(Route::_('index.php?option=com_tjvendors&view=vendors&client=' . $input->get('client', '', 'STRING'), false));

@@ -4,18 +4,19 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access.
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
+use Joomla\CMS\Table\Table;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
-use Joomla\CMS\Table\Table;
+use Joomla\CMS\Component\ComponentHelper;
 
 JLoader::import('fronthelper', JPATH_SITE . '/components/com_tjvendors/helpers');
 JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
@@ -112,11 +113,10 @@ class TjvendorsModelVendor extends AdminModel
 	 */
 	protected function loadFormData()
 	{
-		$app = Factory::getApplication();
-		$input = $app->input;
+		$app    = Factory::getApplication();
+		$input  = $app->input;
 		$client = $input->get('client', '', 'STRING');
-
-		$data = Factory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
+		$data   = $app->getUserState('com_tjvendors.edit.vendor.data', array());
 
 		if (empty($data))
 		{
@@ -130,7 +130,7 @@ class TjvendorsModelVendor extends AdminModel
 				if (!empty($client))
 				{
 					$tjvendorFrontHelper = new TjvendorFrontHelper;
-					$gatewayDetails = $tjvendorFrontHelper->getPaymentDetails($this->item->vendor_id, $client);
+					$gatewayDetails = $tjvendorFrontHelper->getPaymentGatewayConfig($this->item->vendor_id, $client);
 
 					if (!empty($gatewayDetails) && !empty($gatewayDetails->params))
 					{
@@ -165,13 +165,13 @@ class TjvendorsModelVendor extends AdminModel
 
 		if (isset($item->country))
 		{
-			$country = TJVendors::utilities()->getCountry((int) $item->country);
+			$country            = TJVendors::utilities()->getCountry((int) $item->country);
 			$item->country_name = $country->country;
 		}
 
 		if (isset($item->region))
 		{
-			$region = TJVendors::utilities()->getRegion((int) $item->region);
+			$region            = TJVendors::utilities()->getRegion((int) $item->region);
 			$item->region_name = $region->region;
 		}
 
@@ -181,7 +181,7 @@ class TjvendorsModelVendor extends AdminModel
 		}
 		else
 		{
-			$city = TJVendors::utilities()->getCity((int) $item->city);
+			$city            = TJVendors::utilities()->getCity((int) $item->city);
 			$item->city_name = (property_exists($city, 'city') ? $city->city : '');
 		}
 
@@ -289,7 +289,7 @@ class TjvendorsModelVendor extends AdminModel
 		$client = $app->getUserStateFromRequest('vendor.client', 'vendor.client');
 		$vendor_id = $app->getUserStateFromRequest('vendor.vendor_id', 'vendor.vendor_id');
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
-		$vendorDetails = $tjvendorFrontHelper->getPaymentDetails($vendor_id, $client);
+		$vendorDetails = $tjvendorFrontHelper->getPaymentGatewayConfig($vendor_id, $client);
 		$params = array();
 
 		if (!empty($vendorDetails->params))
@@ -330,7 +330,7 @@ class TjvendorsModelVendor extends AdminModel
 
 			foreach ($fieldSet as $field)
 			{
-				if ($app->isAdmin())
+				if ($app->isClient('administrator'))
 				{
 					$html[] = $field->renderField();
 				}
@@ -452,11 +452,11 @@ class TjvendorsModelVendor extends AdminModel
 			// If no client present then vendor registers for first time  for a client
 			if ($count == 0)
 			{
-				$client_entry = new stdClass;
-				$client_entry->client = $data['vendor_client'];
+				$client_entry            = new stdClass;
+				$client_entry->client    = $data['vendor_client'];
 				$client_entry->vendor_id = $data['vendor_id'];
-				$client_entry->params = $xrefData['params'];
-				$client_entry->approved = $data['approved'];
+				$client_entry->params    = $xrefData['params'];
+				$client_entry->approved  = $data['approved'];
 
 				// Insert the object into the user profile table.
 				Factory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
@@ -566,7 +566,7 @@ class TjvendorsModelVendor extends AdminModel
 	{
 		$client = $this->getClient();
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
-		$vendorDetails = $tjvendorFrontHelper->getPaymentDetails($data['vendor_id'], $client);
+		$vendorDetails = $tjvendorFrontHelper->getPaymentGatewayConfig($data['vendor_id'], $client);
 
 		// Object  of old payment gateway params
 		$oldParams = json_decode($vendorDetails->params);

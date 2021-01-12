@@ -4,16 +4,16 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2020 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
+use Joomla\CMS\Object\CMSObject;
 
 /**
  * Vendor class.
@@ -322,7 +322,7 @@ class TjvendorsVendor extends CMSObject
 	 * @param   int     $id      The joomla user id
 	 * @param   string  $client  The client name whose properties need to load while creating object
 	 *
-	 * @return  TjvendorsVendor  The vendor object.
+	 * @return  Object  TjvendorsVendor  The vendor object.
 	 *
 	 * @since   1.4.0
 	 */

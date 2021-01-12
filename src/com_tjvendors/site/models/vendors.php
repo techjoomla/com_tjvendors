@@ -4,15 +4,15 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access.
 defined('_JEXEC') or die();
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Tjvendors model.
@@ -115,24 +115,20 @@ class TjvendorsModelVendors extends ListModel
 
 	protected function getListQuery()
 	{
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
-
+		$db           = Factory::getDbo();
+		$query        = $db->getQuery(true);
 		$filterClient = $this->getState('filter.vendor_client', '');
+		$client       = '';
 
 		if ($filterClient)
 		{
 			$client = $filterClient;
 		}
-		else
-		{
-			$client = '';
-		}
 
-		$currency = $this->getState('filter.currency', '');
+		$currency            = $this->getState('filter.currency', '');
 		$TjvendorFrontHelper = new TjvendorFrontHelper;
-		$vendor_id = $TjvendorFrontHelper->getVendor();
-		$columns = array('vendors.vendor_id');
+		$vendor_id           = $TjvendorFrontHelper->getVendor();
+		$columns             = array('vendors.vendor_id');
 		$query->select($db->quoteName($columns));
 		$query->select('pass.*');
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
@@ -191,7 +187,7 @@ class TjvendorsModelVendors extends ListModel
 		}
 
 		$fromDate = $this->getState('filter.fromDate', '');
-		$toDate = $this->getState('filter.toDate', '');
+		$toDate   = $this->getState('filter.toDate', '');
 
 		if (empty($toDate) && !empty($fromDate))
 		{

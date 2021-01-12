@@ -4,18 +4,20 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
@@ -57,11 +59,11 @@ class TjvendorsViewPayouts extends HtmlView
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendors');
-		$tjvendorsModelVendors = BaseDatabaseModel::getInstance('Vendors', 'TjvendorsModel');
-		$vendorsDetail = $tjvendorsModelVendors->getItems();
-		$this->vendor_details = $vendorsDetail;
-		$this->uniqueClients = TjvendorsHelper::getUniqueClients();
-		$com_params = ComponentHelper::getParams('com_tjvendors');
+		$tjvendorsModelVendors  = BaseDatabaseModel::getInstance('Vendors', 'TjvendorsModel');
+		$vendorsDetail          = $tjvendorsModelVendors->getItems();
+		$this->vendor_details   = $vendorsDetail;
+		$this->uniqueClients    = TjvendorsHelper::getUniqueClients();
+		$com_params             = ComponentHelper::getParams('com_tjvendors');
 		$this->bulkPayoutStatus = $com_params->get('bulk_payout');
 
 		// Check for errors.
@@ -92,7 +94,7 @@ class TjvendorsViewPayouts extends HtmlView
 
 		$state = $this->get('State');
 		$canDo = TjvendorsHelper::getActions();
-		JToolBarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
+		ToolBarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($client);
@@ -103,7 +105,7 @@ class TjvendorsViewPayouts extends HtmlView
 
 		if ($canDo->get('core.admin'))
 		{
-			JToolBarHelper::preferences('com_tjvendors');
+			ToolBarHelper::preferences('com_tjvendors');
 		}
 
 		// Set sidebar action - New in 3.0

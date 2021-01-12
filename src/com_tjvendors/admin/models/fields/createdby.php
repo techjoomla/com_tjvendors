@@ -1,6 +1,3 @@
-use Joomla\CMS\Form\FormField;
-use Joomla\CMS\Form\Form;
-use Joomla\CMS\Factory;
 <?php
 /**
  * @package     TJVendors
@@ -13,14 +10,15 @@ use Joomla\CMS\Factory;
 
 defined('JPATH_BASE') or die;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
 
 /**
  * Supports an HTML select list of categories
  *
  * @since  1.6
  */
-class JFormFieldCreatedby extends JFormField
+class JFormFieldCreatedby extends FormField
 {
 	/**
 	 * The form field type.

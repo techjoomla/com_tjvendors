@@ -4,7 +4,7 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -12,11 +12,11 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\Table\Table;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 /**
  * Tjvendors model.
@@ -74,9 +74,6 @@ class TjvendorsModelVendorFee extends AdminModel
 	 */
 	public function getForm($data = array(), $loadData = true)
 	{
-		// Initialise variables.
-		$app = Factory::getApplication();
-
 		// Get the form.
 		$form = $this->loadForm('com_tjvendors.vendorfee', 'vendorfee', array('control' => 'jform', 'load_data' => $loadData));
 
@@ -171,9 +168,8 @@ class TjvendorsModelVendorFee extends AdminModel
 					$data['id'] = (int) $this->getState($this->getName() . '.id');
 				}
 
-				$dispatcher = JDispatcher::getInstance();
 				PluginHelper::importPlugin('tjvendors');
-				$dispatcher->trigger('tjVendorsOnAfterVendorFeeSave', array($data, $isNew));
+				Factory::getApplication()->triggerEvent('tjVendorsOnAfterVendorFeeSave', array($data, $isNew));
 
 				return true;
 			}

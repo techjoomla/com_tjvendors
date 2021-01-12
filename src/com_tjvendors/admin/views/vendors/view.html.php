@@ -10,11 +10,14 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Component\ComponentHelper;
 
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
@@ -86,11 +89,11 @@ class TjvendorsViewVendors extends HtmlView
 		$state = $this->get('State');
 		$canDo = TjvendorsHelper::getActions();
 
-		$toolbar = JToolbar::getInstance('toolbar');
+		$toolbar = Toolbar::getInstance('toolbar');
 		$toolbar->appendButton(
 		'Custom', '<a id="tjHouseKeepingFixDatabasebutton" class="btn btn-default hidden"><span class="icon-refresh"></span>'
-		. JText::_('COM_TJVENDORS_FIX_DATABASE') . '</a>');
-		JToolBarHelper::addNew('vendor.add');
+		. Text::_('COM_TJVENDORS_FIX_DATABASE') . '</a>');
+		ToolBarHelper::addNew('vendor.add');
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
@@ -101,28 +104,28 @@ class TjvendorsViewVendors extends HtmlView
 
 		if ($canDo->get('core.edit') && isset($this->items[0]))
 		{
-			JToolBarHelper::editList('vendor.edit', 'JTOOLBAR_EDIT');
+			ToolBarHelper::editList('vendor.edit', 'JTOOLBAR_EDIT');
 		}
 
 		if ($canDo->get('core.edit.state'))
 		{
 			if (isset($this->items[0]->state))
 			{
-				JToolBarHelper::divider();
-				JToolBarHelper::custom('vendors.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
-				JToolBarHelper::custom('vendors.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
+				ToolBarHelper::divider();
+				ToolBarHelper::custom('vendors.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
+				ToolBarHelper::custom('vendors.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
 			}
 
 			if (isset($this->items[0]))
 			{
 				// If this component does not use state then show a direct delete button as we can not trash
-				JToolBarHelper::deleteList('', 'vendors.delete', 'JTOOLBAR_DELETE');
+				ToolBarHelper::deleteList('', 'vendors.delete', 'JTOOLBAR_DELETE');
 			}
 		}
 
 		if ($canDo->get('core.admin'))
 		{
-			JToolBarHelper::preferences('com_tjvendors');
+			ToolBarHelper::preferences('com_tjvendors');
 		}
 
 		// Set sidebar action - New in 3.0

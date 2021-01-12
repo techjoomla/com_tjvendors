@@ -4,16 +4,17 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Router\Route;
 use Joomla\Registry\Registry;
+use Joomla\CMS\MVC\Controller\FormController;
 
 /**
  * Vendor controller class.
@@ -29,8 +30,8 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	public function __construct()
 	{
-			$this->view_list = 'vendorfees';
-		$this->input = Factory::getApplication()->input;
+		$this->view_list = 'vendorfees';
+		$this->input     = Factory::getApplication()->input;
 
 		if (empty($this->client))
 		{
@@ -52,12 +53,10 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
 	{
-		$input = Factory::getApplication()->input;
-		$cid = $input->post->get('cid', array(), 'array');
-		$formData = new Registry($input->get('jform', '', 'array'));
-		$client = $input->get('client', '', 'STRING');
+		$input     = Factory::getApplication()->input;
+		$client    = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
-		$append = parent::getRedirectToItemAppend($recordId);
+		$append    = parent::getRedirectToItemAppend($recordId);
 		$append .= '&vendor_id=' . $vendor_id . '&client=' . $client;
 
 		return $append;
@@ -72,14 +71,10 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	protected function getRedirectToListAppend()
 	{
-		$input = Factory::getApplication()->input;
-		$cid = $input->post->get('cid', array(), 'array');
-		$formData = new Registry($input->get('jform', '', 'array'));
-		$client = $input->get('client', '', 'STRING');
-		$vendor_id = $input->get('vendor_id', '', 'STRING');
-
-		// $vendor_id = (int) $this->getState($this->getName() . '.id');
-		$append = parent::getRedirectToItemAppend($recordId);
+		$input        = Factory::getApplication()->input;
+		$client       = $input->get('client', '', 'STRING');
+		$vendor_id    = $input->get('vendor_id', '', 'STRING');
+		$append       = parent::getRedirectToItemAppend($recordId);
 		$append .= '&vendor_id=' . $vendor_id . '&client=' . $client;
 
 		return $append;
@@ -96,13 +91,13 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	public function edit($key = null, $urlVar = null)
 	{
-		$input = Factory::getApplication()->input;
-		$cid = $input->post->get('cid', array(), 'array');
-		$vendorId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
-		$client = $input->get('client', '', 'STRING');
-		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
-		$link = Route::_(
-		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId . '&client=' . $client, false
+		$input            = Factory::getApplication()->input;
+		$cid              = $input->post->get('cid', array(), 'array');
+		$vendorId         = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
+		$client           = $input->get('client', '', 'STRING');
+		$feeId            = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
+		$link             = Route::_(
+		'index.php?option = com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId . '&client=' . $client, false
 		);
 		$this->setRedirect($link);
 	}

@@ -4,18 +4,20 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
+use Joomla\CMS\Table\Table;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Table\Observer\ContentHistory;
 
 /**
  * vendor Table class
@@ -31,7 +33,7 @@ class TjvendorsTablePayout extends Table
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjpayoutsTablepayout', array('typeAlias' => 'com_tjvendors.payout'));
+		JObserverMapper::addObserverClassToClass('ContentHistory', 'TjpayoutsTablepayout', array('typeAlias' => 'com_tjvendors.payout'));
 		parent::__construct('#__tjvendors_passbook', 'id', $db);
 	}
 

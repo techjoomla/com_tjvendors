@@ -4,15 +4,16 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access to this file
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 /**
  * List view : Pending Payouts
@@ -57,25 +58,25 @@ class TjvendorsViewVendors extends HtmlView
 		$this->input = $app->input;
 
 		// Get data from the model
-		$items_model = BaseDatabaseModel::getInstance('vendors', 'TjvendorsModel');
-		$this->items = $items_model->getItems();
-		$this->pagination	= $items_model->getPagination();
-		$this->state		= $items_model->getState();
-		$this->filterForm		= $items_model->getFilterForm();
-		$this->activeFilters	= $items_model->getActiveFilters();
+		$items_model         = BaseDatabaseModel::getInstance('vendors', 'TjvendorsModel');
+		$this->items         = $items_model->getItems();
+		$this->pagination    = $items_model->getPagination();
+		$this->state	     = $items_model->getState();
+		$this->filterForm    = $items_model->getFilterForm();
+		$this->activeFilters = $items_model->getActiveFilters();
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
-		$this->currencies = $tjvendorFrontHelper->getCurrencies();
-		$this->vendor_id = $tjvendorFrontHelper->getvendor();
+		$this->currencies    = $tjvendorFrontHelper->getCurrencies();
+		$this->vendor_id     = $tjvendorFrontHelper->getvendor();
 		$this->uniqueClients = $tjvendorFrontHelper->getUniqueClients($this->user_id);
-		$client = $this->state->get('filter.vendor_client', '');
-		$currency = $this->state->get('filter.currency', '');
-		$this->totalDetails = $tjvendorFrontHelper->getTotalDetails($this->vendor_id, $client, $currency);
-		$this->vendorClient = $app->getUserStateFromRequest('client', 'client', '');
+		$client              = $this->state->get('filter.vendor_client', '');
+		$currency            = $this->state->get('filter.currency', '');
+		$this->totalDetails  = $tjvendorFrontHelper->getTotalDetails($this->vendor_id, $client, $currency);
+		$this->vendorClient  = $app->getUserStateFromRequest('client', 'client', '');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseError(500, implode('<br />', $errors));
+			$app->enqueueMessage($errors, 'error');
 
 			return false;
 		}

@@ -4,7 +4,7 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2020 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -38,7 +38,7 @@ class TjvendorsControllerVendor extends TjvendorsController
 			"region"       => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION'),
 			"region_jtext" => Text::_('COM_TJVENDORS_FORM_LIST_SELECT_OPTION')
 		);
-		
+
 		$utilitiesObj  = TJVendors::utilities();
 		$regions       = $utilitiesObj->getRegions($country);
 
@@ -51,7 +51,7 @@ class TjvendorsControllerVendor extends TjvendorsController
 			$regions[] = $defaultRegion;
 		}
 
-		echo new JResponseJson($regions);
+		echo new JsonResponse($regions);
 		$app->close();
 	}
 
@@ -87,7 +87,7 @@ class TjvendorsControllerVendor extends TjvendorsController
 			$city[] = $defaultCity;
 		}
 
-		echo new JResponseJson($city);
+		echo new JsonResponse($city);
 		$app->close();
 	}
 }

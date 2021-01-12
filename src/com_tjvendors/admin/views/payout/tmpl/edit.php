@@ -3,15 +3,15 @@
  * @version    SVN:
  * @package    Com_Tjvendors
  * @author     Techjoomla  <contact@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright (c) 2009-2021 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
 	// No direct access
 defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('behavior.tooltip');
@@ -20,11 +20,9 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
 
 // Import CSS
-$document = Factory::getDocument();
-$document->addStyleSheet(Uri::root() . 'media/com_tjvendors/css/form.css');
+HTMLHelper::_('stylesheet', 'media/com_tjvendors/css/form.css');
 ?>
 <script type="text/javascript">
-
 	Joomla.submitbutton = function (task)
 	{
 		if (task == 'payout.cancel')
@@ -50,7 +48,6 @@ $document->addStyleSheet(Uri::root() . 'media/com_tjvendors/css/form.css');
 			return false;
 		}
 	}
-
 </script>
 <form method="post" enctype="multipart/form-data" name="adminForm" id="payout-form" class="form-validate">
 	<div class="form-horizontal">

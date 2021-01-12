@@ -4,18 +4,18 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 use Joomla\String\StringHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 /**
  * TJVendors factory class.
@@ -121,7 +121,6 @@ class TJVendors
 		if (! isset(self::$loadedClass[$className]))
 		{
 			$className = (string) StringHelper::strtolower($className);
-
 			$path = JPATH_SITE . '/components/com_tjvendors/includes/' . $className . '.php';
 
 			include_once $path;
@@ -135,7 +134,9 @@ class TJVendors
 	/**
 	 * Load the component configuration
 	 *
-	 * @return  Joomla\Registry\Registry  A Registry object.
+	 * @return  Object  Configuration Params
+	 *
+	 * @since   1.4.0
 	 */
 	public static function config()
 	{
@@ -159,8 +160,8 @@ class TJVendors
 	public static function init($location = 'site')
 	{
 		static $loaded = null;
-		$docType = Factory::getDocument()->getType();
-		$versionClass = self::version();
+		$docType       = Factory::getDocument()->getType();
+		$versionClass  = self::version();
 
 		if ($loaded[$location] && ($docType != 'html'))
 		{
@@ -179,7 +180,7 @@ class TJVendors
 		HTMLHelper::_('jquery.framework');
 		HTMLHelper::_('script', 'media/com_tjvendor/dist/app.min.js', $options);
 		HTMLHelper::_('script', 'media/com_tjvendor/js/tjvendors.js', $options);
-		HTMLHelper::stylesheet('media/techjoomla_strapper/vendors/no-more-tables.css', $options);
+		HTMLHelper::_('stylesheet', 'media/techjoomla_strapper/vendors/no-more-tables.css', $options);
 
 		// Load Boostrap
 		if (self::config()->get('load_bootstrap') == '1')

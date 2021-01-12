@@ -4,23 +4,22 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
-use Joomla\CMS\Form\Form;
-use Joomla\CMS\Language\Text;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormField;
 
 /**
  * Class JFormFieldSubmit
  *
  * @since  1.6
  */
-class JFormFieldSubmit extends JFormField
+class FormFieldSubmit extends FormField
 {
 	protected $type = 'submit';
 

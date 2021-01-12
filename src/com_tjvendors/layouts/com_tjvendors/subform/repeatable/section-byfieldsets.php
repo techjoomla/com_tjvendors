@@ -4,7 +4,7 @@
  * @subpackage  Layout
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
@@ -25,7 +25,6 @@ use Joomla\CMS\Language\Text;
  */
 extract($displayData);
 ?>
-
 <div class="subform-repeatable-group" data-base-name="<?php echo $basegroup; ?>" data-group="<?php echo $group; ?>">
 	<?php if (!empty($buttons)) : ?>
 	<div class="btn-toolbar text-right">

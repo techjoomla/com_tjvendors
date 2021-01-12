@@ -1,8 +1,3 @@
-use Joomla\CMS\Form\FormField;
-use Joomla\CMS\Form\Form;
-use Joomla\CMS\Factory;
-use Joomla\CMS\Date\Date;
-use Joomla\CMS\Language\Text;
 <?php
 /**
  * @package     TJVendors
@@ -15,14 +10,17 @@ use Joomla\CMS\Language\Text;
 
 defined('JPATH_BASE') or die;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormField;
 
 /**
  * Supports an HTML select list of categories
  *
  * @since  1.6
  */
-class JFormFieldTimecreated extends JFormField
+class JFormFieldTimecreated extends FormField
 {
 	/**
 	 * The form field type.

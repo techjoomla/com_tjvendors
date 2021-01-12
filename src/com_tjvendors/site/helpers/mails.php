@@ -4,18 +4,19 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Router\Route;
-use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
+use Joomla\CMS\Component\ComponentHelper;
 
 jimport('techjoomla.tjnotifications.tjnotifications');
 include_once JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
@@ -34,16 +35,15 @@ class TjvendorsMailsHelper
 	 */
 	public function __construct()
 	{
-		$app = Factory::getApplication();
-		$this->tjvendorsparams = ComponentHelper::getParams('com_tjvendors');
-		$this->siteConfig = Factory::getConfig();
-		$this->sitename = $this->siteConfig->get('sitename');
-		$this->siteadminname = $this->siteConfig->get('fromname');
-		$this->user = Factory::getUser();
-		$this->client = "com_tjvendors";
-		$this->tjnotifications = new Tjnotifications;
-		$this->siteinfo = new stdClass;
-		$this->siteinfo->sitename	= $this->sitename;
+		$this->tjvendorsparams     = ComponentHelper::getParams('com_tjvendors');
+		$this->siteConfig          = Factory::getConfig();
+		$this->sitename            = $this->siteConfig->get('sitename');
+		$this->siteadminname       = $this->siteConfig->get('fromname');
+		$this->user                = Factory::getUser();
+		$this->client              = "com_tjvendors";
+		$this->tjnotifications     = new Tjnotifications;
+		$this->siteinfo            = new stdClass;
+		$this->siteinfo->sitename  = $this->sitename;
 		$this->siteinfo->adminname = Text::_('COM_TJVENDORS_SITEADMIN');
 
 		JLoader::import('components.com_tjvendors.helpers.fronthelper', JPATH_SITE);
@@ -67,7 +67,7 @@ class TjvendorsMailsHelper
 			$adminRecipients['email']['to'][] = $user->email;
 		}
 
-		$adminEmail = $this->tjvendorsparams->get('email');
+		$adminEmail      = $this->tjvendorsparams->get('email');
 		$adminEmailArray = array();
 
 		if (!empty($adminEmail))
@@ -76,22 +76,22 @@ class TjvendorsMailsHelper
 		}
 
 		$adminRecipients['email']['cc'] = $adminEmailArray;
-		$userIdArray = $this->getUserIdFromEmail($adminEmailArray);
+		$userIdArray                    = $this->getUserIdFromEmail($adminEmailArray);
 		array_push($userIdArray, $user->id);
 
 		foreach ($userIdArray as $userId)
 		{
-			array_unshift($adminRecipients,Factory::getUser($userId));
+			array_unshift($adminRecipients, Factory::getUser($userId));
 		}
 
 		$vendor_approval = $this->tjvendorsparams->get('vendor_approval');
-		$adminkey = ($vendor_approval) ? "createVendorMailToAdminWaitingForApproval" : "createVendorMailToAdmin";
+		$adminkey        = ($vendor_approval) ? "createVendorMailToAdminWaitingForApproval" : "createVendorMailToAdmin";
 		$vendorerkey = ($vendor_approval) ? "createVendorMailToOwnerWaitingForApproval" : "createVendorMailToOwner";
 
-		$vendorer = Factory::getUser($vendorDetails->user_id);
-		$promoterEmailArray = array();
+		$vendorer             = Factory::getUser($vendorDetails->user_id);
+		$promoterEmailArray   = array();
 		$promoterContactArray = array();
-		$promoterEmail = $vendorer->email;
+		$promoterEmail        = $vendorer->email;
 		$promoterEmailArray[] = $promoterEmail;
 
 		if (!empty($vendorDetails->phone_number))
@@ -106,25 +106,25 @@ class TjvendorsMailsHelper
 			$promoterRecipients['sms'] = $promoterContactArray;
 		}
 
-		$allVendors = 'index.php?option=com_tjvendors&view=vendors&client=' . $vendorDetails->vendor_client;
+		$allVendors     = 'index.php?option=com_tjvendors&view=vendors&client=' . $vendorDetails->vendor_client;
 		$allVendorsLink = Uri::root() . 'administrator/' . $allVendors;
 		$vendorDetails->allVendors = $allVendorsLink;
 
-		$vendorItemID = $this->tjvendorFrontHelper->getItemId(
-		'index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $vendorDetails->vendor_client
+		$vendorItemID                                 = $this->tjvendorFrontHelper->getItemId(
+		'index.php?option                             = com_tjvendors&view=vendor&layout=edit&client=' . $vendorDetails->vendor_client
 		);
-		$myVendor = 'index.php?option=com_tjvendors&view=vendor&layout=edit&client='
-		. $vendorDetails->vendor_client . '&vendor_id=' . $vendorDetails->vendor_id . '&Itemid=' . $vendorItemID;
-		$myVendorLink = Uri::root() . substr(Route::_($myVendor), strlen(Uri::base(true)) + 1);
-		$vendorDetails->myVendor = $myVendorLink;
+		$myVendor                                     = 'index.php?option=com_tjvendors&view=vendor&layout=edit&client='
+		. $vendorDetails->vendor_client . '&vendor_id = ' . $vendorDetails->vendor_id . '&Itemid=' . $vendorItemID;
+		$myVendorLink                                 = Uri::root() . substr(Route::_($myVendor), strlen(Uri::base(true)) + 1);
+		$vendorDetails->myVendor                      = $myVendorLink;
 
-		$replacements = new stdClass;
-		$vendorDetails->sitename = $this->sitename;
+		$replacements             = new stdClass;
+		$vendorDetails->sitename  = $this->sitename;
 		$vendorDetails->adminname = Text::_('COM_TJVENDORS_SITEADMIN');
-		$replacements->info = $vendorDetails;
-		$replacements->vendorer = $vendorer;
+		$replacements->info       = $vendorDetails;
+		$replacements->vendorer   = $vendorer;
 
-		$ccMail = $this->siteConfig->get('mailfrom');
+		$ccMail  = $this->siteConfig->get('mailfrom');
 		$options = new Registry;
 		$options->set('info', $vendorDetails);
 
@@ -146,8 +146,8 @@ class TjvendorsMailsHelper
 	 */
 	public function onAfterVendorEdit($vendorDetails)
 	{
-		$replacements = new stdClass;
-		$vendorDetails->sitename = $this->sitename;
+		$replacements             = new stdClass;
+		$vendorDetails->sitename  = $this->sitename;
 		$vendorDetails->adminname = Text::_('COM_TJVENDORS_SITEADMIN');
 		$loggedInUser = Factory::getUser()->id;
 
@@ -157,10 +157,10 @@ class TjvendorsMailsHelper
 		$vendor_client = $vendorData->client;
 
 		$vendorDetails->vendorClient = $this->tjvendorFrontHelper->getClientName($vendor_client);
-		$replacements->info = $vendorDetails;
+		$replacements->info          = $vendorDetails;
 		$replacements->vendorer = Factory::getUser($vendorDetails->user_id);
 
-		$ccMail = $this->siteConfig->get('mailfrom');
+		$ccMail  = $this->siteConfig->get('mailfrom');
 		$options = new Registry;
 		$options->set('info', $vendorDetails);
 
@@ -174,10 +174,10 @@ class TjvendorsMailsHelper
 			$vendorData->load(array('vendor_id' => $vendorDetails->vendor_id));
 			$vendorUserDetails = Factory::getUser($vendorData->user_id);
 
-			$approvalkey = "approvalOnVendorMailToOwner";
-			$promoterEmailArray = array();
+			$approvalkey          = "approvalOnVendorMailToOwner";
+			$promoterEmailArray   = array();
 			$promoterContactArray = array();
-			$promoterEmail = $vendorUserDetails->email;
+			$promoterEmail        = $vendorUserDetails->email;
 			$promoterEmailArray[] = $promoterEmail;
 
 			if (!empty($vendorDetails->phone_number))
@@ -228,7 +228,7 @@ class TjvendorsMailsHelper
 	/**
 	 * Method to create recipient array
 	 *
-	 * @param   ARRAY  $emailObject  Contains email object
+	 * @param   ARRAY  $adminRecipients  Contains email object
 	 *
 	 * @return  array  User Id Array
 	 *
@@ -240,7 +240,7 @@ class TjvendorsMailsHelper
 
 		if (!empty($adminRecipients))
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 
 			foreach ($adminRecipients as $adminRecipient)
 			{

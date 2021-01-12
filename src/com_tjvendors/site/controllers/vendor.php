@@ -4,19 +4,20 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die();
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Controller\FormController;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/tjvendors.php');
 
@@ -35,8 +36,7 @@ class TjvendorsControllerVendor extends FormController
 	public function __construct()
 	{
 		$this->view_list = 'vendors';
-		$this->input = Factory::getApplication()->input;
-
+		$this->input     = Factory::getApplication()->input;
 		$this->vendor_client = $this->input->get('client', '', 'STRING');
 
 		parent::__construct();
@@ -89,41 +89,38 @@ class TjvendorsControllerVendor extends FormController
 	{
 		// Check for request forgeries.
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
-		$params = ComponentHelper::getParams('com_tjvendors');
+
+		$params         = ComponentHelper::getParams('com_tjvendors');
 		$vendorApproval = $params->get('vendor_approval');
 
 		// Initialise variables.
-		$app = Factory::getApplication();
+		$app   = Factory::getApplication();
 		$model = $this->getModel('Vendor', 'TjvendorsModel');
 
 		// Get the user data.
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$data                  = Factory::getApplication()->input->get('jform', array(), 'array');
 		$data['vendor_client'] = $app->input->get('client', '', 'STRING');
-
-		$data['user_id'] = Factory::getUser()->id;
+		$data['user_id']       = Factory::getUser()->id;
 
 		// Validate the posted data.
 		$form = $model->getForm();
 
 		if (! $form)
 		{
-			JError::raiseError(500, $model->getError());
+			$app->enqueueMessage($model->getError(), 'error');
 
 			return false;
 		}
 
 		// Validate the posted data.
-		$validate  = $model->validate($form, $data);
+		$validate         = $model->validate($form, $data);
+		$data['approved'] = 1;
+		$data['state']    = 1;
 
 		if ($vendorApproval && empty($data['vendor_id']))
 		{
 			$data['approved'] = 0;
-			$data['state'] = 0;
-		}
-		else
-		{
-			$data['approved'] = 1;
-			$data['state'] = 1;
+			$data['state']    = 0;
 		}
 
 		// Check for errors
@@ -163,7 +160,7 @@ class TjvendorsControllerVendor extends FormController
 		if ($return === false)
 		{
 			// Save the data in the session.
-			$app->setUserState('com_tjvendors.edit.vendor.data', $all_jform_data);
+			$app->setUserState('com_tjvendors.edit.vendor.data', $data);
 
 			// Redirect back to the edit screen.
 			$client = $app->input->get('client', '', 'STRING');
@@ -181,7 +178,7 @@ class TjvendorsControllerVendor extends FormController
 			return false;
 		}
 
-		$user_id = Jfactory::getUser()->id;
+		$user_id = Factory::getUser()->id;
 
 		// Get a db connection.
 		$db = Factory::getDbo();
@@ -217,14 +214,17 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function cancel($key=null)
 	{
-		$app = Factory::getApplication();
+		$app   = Factory::getApplication();
 		$input = $app->input;
-		$data = $input->get('jform', array(), 'array');
+		$data  = $input->get('jform', array(), 'array');
 
 		if (!empty($data['vendor_id']))
 		{
 			$this->setRedirect(
-			Route::_('index.php?option=com_tjvendors&view=vendor&layout=default&vendor_id=' . $data['vendor_id'] . '&client=' . $input->get('client', '', 'STRING'), false)
+			Route::_(
+			'index.php?option=com_tjvendors&view=vendor&layout=default&vendor_id=' . $data['vendor_id'] .
+			'&client=' . $input->get('client', '', 'STRING'), false
+			)
 			);
 		}
 		else
@@ -242,11 +242,10 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function generateGatewayFields()
 	{
-		$input  = Factory::getApplication()->input->post;
+		$input           = Factory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
-		$parentTag = $input->get('parent_tag', '', 'STRING');
-		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
-		$model = $this->getModel('vendor');
+		$parentTag       = $input->get('parent_tag', '', 'STRING');
+		$model           = $this->getModel('vendor');
 		$results = $model->generateGatewayFields($payment_gateway, $parentTag);
 		echo json_encode($results);
 		jexit();

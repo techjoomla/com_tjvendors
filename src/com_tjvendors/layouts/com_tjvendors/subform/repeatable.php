@@ -9,8 +9,9 @@
  */
 
 defined('_JEXEC') or die;
-use Joomla\CMS\HTML\HTMLHelper;
+
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 /*
  * As Joomla doesn't provide bootstrap 3 layout and TJVendor run on bootstrap 3 templates added the overrides for the Joomla subform layout

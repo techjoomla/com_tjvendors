@@ -4,16 +4,16 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die();
-use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Router\Route;
+
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
 ?>
 <h1><?php echo Text::_('COM_TJVENDOR_VENDOR_PROFILE');?></h1>
 <input type="hidden" name="client" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
@@ -25,7 +25,7 @@ use Joomla\CMS\Uri\Uri;
 				<small>
 					<a  
 					href="<?php echo Route::_(
-					'index.php?option=com_tjvendors&view=vendor&&layout=edit&vendor_id='. $this->vendor_id .'&client=' . $this->input->get('client', '', 'STRING')
+					'index.php?option=com_tjvendors&view=vendor&&layout=edit&vendor_id=' . $this->vendor_id . '&client=' . $this->input->get('client', '', 'STRING')
 					);?>">
 					<i class="fa fa-wrench" aria-hidden="true"></i>  <?php echo Text::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a>
 				</small>
@@ -83,6 +83,7 @@ use Joomla\CMS\Uri\Uri;
 		</div>
 		<?php
 		}
+
 		if (!empty($this->VendorDetail->zip))
 		{
 		?>
@@ -92,6 +93,7 @@ use Joomla\CMS\Uri\Uri;
 			</div>
 		<?php 
 		}
+
 		if (!empty($this->VendorDetail->phone_number))
 		{
 		?>

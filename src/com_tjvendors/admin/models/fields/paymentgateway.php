@@ -10,14 +10,15 @@
 
 // No direct access.
 defined('_JEXEC') or die();
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Component\ComponentHelper;
 
-jimport('joomla.form.helper');
 FormHelper::loadFieldClass('list');
 
 /**
@@ -25,7 +26,7 @@ FormHelper::loadFieldClass('list');
  *
  * @since  1.0.0
  */
-class JFormFieldPaymentGateway extends JFormFieldList
+class FormFieldPaymentGateway extends JFormFieldList
 {
 	/**
 	 * The form field type.

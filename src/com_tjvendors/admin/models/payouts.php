@@ -4,14 +4,15 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Methods supporting a list of Tjvendors records.
@@ -108,16 +109,16 @@ class TjvendorsModelPayouts extends ListModel
 
 	public function getListQuery()
 	{
-		$input = Factory::getApplication()->input;
-		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
-		$urlClient = $input->get('client', '', 'STRING');
-		$filterClient = $this->getState('filter.vendor_client');
-		$com_params = ComponentHelper::getParams('com_tjvendors');
-		$payout_day_limit = $com_params->get('payout_limit_days', '0', 'INT');
-		$date = Factory::getDate();
+		$input             = Factory::getApplication()->input;
+		$vendor_id         = $input->get('vendor_id', '', 'INTEGER');
+		$urlClient         = $input->get('client', '', 'STRING');
+		$filterClient      = $this->getState('filter.vendor_client');
+		$com_params        = ComponentHelper::getParams('com_tjvendors');
+		$payout_day_limit  = $com_params->get('payout_limit_days', '0', 'INT');
+		$date              = Factory::getDate();
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
-		$bulkPayoutStatus = $com_params->get('bulk_payout');
-		$vendor = $this->getState('filter.vendor_id');
+		$bulkPayoutStatus  = $com_params->get('bulk_payout');
+		$vendor            = $this->getState('filter.vendor_id');
 
 		if (!empty($urlClient))
 		{
@@ -126,7 +127,6 @@ class TjvendorsModelPayouts extends ListModel
 		}
 
 		$db = Factory::getDbo();
-
 		$query = $db->getQuery(true);
 		$query->select(array('vendors.vendor_id', 'vendors.vendor_title', 'pass.*'));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));

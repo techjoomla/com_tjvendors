@@ -4,16 +4,18 @@
  * @subpackage  Actionlog.tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
- * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
+ * @license     GNU General Public License version 2 or later
  */
 
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
-use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 JLoader::register('ActionlogsHelper', JPATH_ADMINISTRATOR . '/components/com_actionlogs/helpers/actionlogs.php');
 Table::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
@@ -65,7 +67,7 @@ class PlgActionlogTjvendors extends CMSPlugin
 		}
 
 		// If admin create user as vendor from backend
-		if ($app->isAdmin())
+		if ($app->isClient('administrator'))
 		{
 			$vendorInfor    = Factory::getUser($vendorData['user_id']);
 			$vendorID       = $vendorInfor->id;
@@ -182,7 +184,7 @@ class PlgActionlogTjvendors extends CMSPlugin
 		$userName             = $jUser->username;
 		$context              = Factory::getApplication()->input->get('option');
 		$tjvendorsTableVendor = Table::getInstance('vendor', 'TjvendorsTable', array());
-		$language = Factory::getLanguage();
+		$language             = Factory::getLanguage();
 		$language->load($client);
 
 		switch ($state)
@@ -307,7 +309,8 @@ class PlgActionlogTjvendors extends CMSPlugin
 			'type'        => 'PLG_ACTIONLOG_TJVENDORS_TYPE_VENDOR',
 			'vendorname'  => $vendorFeeData['vendor_title'],
 			'vendorlink'  => 'index.php?option=com_users&task=user.edit&id=' . $tjvendorsTableVendor->user_id,
-			'feelink'     => 'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $vendorFeeData['id'] . '&vendor_id=' . $vendorFeeData['vendor_id'] . '&client=' . $vendorFeeData['client'],
+			'feelink'     => 'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $vendorFeeData['id'] .
+			'&vendor_id=' . $vendorFeeData['vendor_id'] . '&client=' . $vendorFeeData['client'],
 			'clientlink'  => 'index.php?option=' . $vendorFeeData['client'],
 			'clientname'  => Text::_(strtoupper($vendorFeeData['client'])),
 			'userid'      => $userId,

@@ -10,10 +10,12 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Access\Access;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Access\Access;
 use Joomla\Registry\Registry;
+use Joomla\CMS\Table\Observer\ContentHistory;
 
 /**
  * vendor Table class
@@ -29,7 +31,7 @@ class TjvendorsTablevendorfee extends Table
 	 */
 	public function __construct(&$db)
 	{
-	JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendorfee', array('typeAlias' => 'com_tjvendors.vendorfee'));
+	JObserverMapper::addObserverClassToClass('ContentHistory', 'TjvendorsTablevendorfee', array('typeAlias' => 'com_tjvendors.vendorfee'));
 	parent::__construct('#__tjvendors_fee', 'id', $db);
 	}
 

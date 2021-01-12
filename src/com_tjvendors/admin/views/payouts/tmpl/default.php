@@ -3,17 +3,17 @@
  * @version    SVN:
  * @package    Com_Tjvendors
  * @author     Techjoomla  <contact@techjoomla.com>
- * @copyright  Copyright (c) 2009-2017 TechJoomla. All rights reserved.
+ * @copyright  Copyright (c) 2009-2021 TechJoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later.
  */
 
 // No direct access
 defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
@@ -23,8 +23,7 @@ JLoader::import('vendor', JPATH_SITE . '/components/com_tjvendors/models');
 $tjvendorsModelVendor = new TjvendorsModelVendor;
 
 // Import CSS
-$document = Factory::getDocument();
-$document->addStyleSheet(Uri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
+HTMLHelper::_('stylesheet', '/administrator/components/com_tjvendors/assets/css/tjvendors.css');
 
 $user      = Factory::getUser();
 $userId    = $user->get('id');
@@ -32,7 +31,7 @@ $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
 $saveOrder = $listOrder == 'a.`ordering`';
-$input = Factory::getApplication()->input;
+$input  = Factory::getApplication()->input;
 $client = $input->get('client', '', 'STRING');
 
 if ($saveOrder)
@@ -191,17 +190,12 @@ else
 				?>
 					<tr class="row<?php echo $i % 2; ?>">
 						<?php if (isset($this->items[0]->state)){}?>
-
-
-
 						<td>
 								<?php echo $this->escape($item->vendor_title); ?>
 						</td>
-
 						<td>
 							<?php echo $item->currency; ?>
 						</td>
-
 						<td>
 						<?php
 						$tjvendorFrontHelper = new TjvendorFrontHelper;
@@ -264,8 +258,9 @@ else
 						</td>
 
 						<td>
-							<a href= "<?php echo Route::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' . $item->vendor_id . '&id=' . $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>"
-							<button class="validate btn btn-primary">PAY</button>
+							<a href= "<?php echo Route::_('index.php?option=com_tjvendors&view=payout&layout=edit&vendor_id=' . $item->vendor_id . '&id=' . $item->id . '&client=' . $this->input->get('client', '', 'STRING'));?>">
+								<button class="validate btn btn-primary">PAY</button>
+							</a>
 						</td>
 					</tr>
 				<?php

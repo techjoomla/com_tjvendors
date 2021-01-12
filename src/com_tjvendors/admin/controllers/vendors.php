@@ -4,17 +4,18 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access.
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Session\Session;
+use Joomla\CMS\Log\Log;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Log\Log;
+use Joomla\CMS\Session\Session;
+use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\MVC\Controller\AdminController;
 
 jimport('joomla.application.component.controllerform');
@@ -55,7 +56,7 @@ class TjvendorsControllerVendors extends AdminController
 	public function delete()
 	{
 		// Check for request forgeries
-		Session::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$input  = Factory::getApplication()->input;
 		$client = $input->get('client', '', 'STRING');
@@ -78,13 +79,13 @@ class TjvendorsControllerVendors extends AdminController
 	 */
 	public function publish()
 	{
-		$input = Factory::getApplication()->input;
-		$post = $input->post;
+		$input  = Factory::getApplication()->input;
+		$post   = $input->post;
 		$client = $input->get('client', '', 'STRING');
-		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
-		$data = array('publish' => 1, 'unpublish' => 0, 'archive' => 2, 'trash' => -2, 'report' => -3);
-		$task = $this->getTask();
-		$value = JArrayHelper::getValue($data, $task, 0, 'int');
+		$cid    = Factory::getApplication()->input->get('cid', array(), 'array');
+		$data   = array('publish' => 1, 'unpublish' => 0, 'archive' => 2, 'trash' => -2, 'report' => -3);
+		$task   = $this->getTask();
+		$value  = ArrayHelper::getValue($data, $task, 0, 'int');
 
 		// Get some variables from the request
 
@@ -98,7 +99,7 @@ class TjvendorsControllerVendors extends AdminController
 			$model = $this->getModel('vendors');
 
 			// Make sure the item ids are integers
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 
 			// Publish the items.
 			try

@@ -1,7 +1,3 @@
-use Joomla\CMS\Form\FormField;
-use Joomla\CMS\Form\Form;
-use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
 <?php
 /**
  * @package     TJVendors
@@ -14,14 +10,16 @@ use Joomla\CMS\HTML\HTMLHelper;
 
 defined('JPATH_BASE') or die;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
 
 /**
  * Supports a value from an external table
  *
  * @since  1.6
  */
-class JFormFieldForeignKey extends JFormField
+class JFormFieldForeignKey extends FormField
 {
 	/**
 	 * The form field type.

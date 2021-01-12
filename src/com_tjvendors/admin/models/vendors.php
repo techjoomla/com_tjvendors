@@ -4,19 +4,21 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Table\Table;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\Table\Table;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+
 
 /**
  * Methods supporting a list of Tjvendors records.
@@ -270,9 +272,8 @@ class TjvendorsModelVendors extends ListModel
 			$this->deleteVendor($vendor_id);
 		}
 
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('tjvendors');
-		$dispatcher->trigger('tjvendorOnAfterVendorDelete', array($vendorData, $client));
+		Factory::getApplication()->triggerEvent('tjvendorOnAfterVendorDelete', array($vendorData, $client));
 	}
 
 	/**
@@ -311,17 +312,21 @@ class TjvendorsModelVendors extends ListModel
 
 			$tjvendorsTriggerVendor->onAfterVendorSave($vendorObject, false);
 			*/
-			if (!$db->execute())
+
+			try
 			{
-				$this->setError($this->_db->getErrorMsg());
+				$db->execute();
+			}
+			catch (\RuntimeException $e)
+			{
+				$this->setError($e->getMessage());
 
 				return false;
 			}
 		}
 
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('tjvendors');
-		$dispatcher->trigger('tjVendorsOnAfterVendorStateChange', array($items, $state, $client));
+		Factory::getApplication()->triggerEvent('tjVendorsOnAfterVendorStateChange', array($items, $state, $client));
 
 		return true;
 	}

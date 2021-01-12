@@ -4,14 +4,16 @@
  * @subpackage  Privacy.tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
- * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
+ * @license     GNU General Public License version 2 or later
  */
 
 // No direct access.
 defined('_JEXEC') or die();
-use Joomla\CMS\Language\Text;
+
 use Joomla\CMS\User\User;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\User as JTableUser;
 
 JLoader::register('PrivacyPlugin', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/plugin.php');
 JLoader::register('PrivacyRemovalStatus', JPATH_ADMINISTRATOR . '/components/com_privacy/helpers/removal/status.php');
@@ -53,8 +55,8 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 
 		return array(
 			Text::_('PLG_PRIVACY_TJVENDORS') => array(
-				Text::_('PLG_PRIVACY_TJVENDORS_PRIVACY_CAPABILITY_USER_DETAIL'),
-			),
+				Text::_('PLG_PRIVACY_TJVENDORS_PRIVACY_CAPABILITY_USER_DETAIL')
+			)
 		);
 	}
 
@@ -69,7 +71,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	 * - #__tjvendors_passbook
 	 *
 	 * @param   PrivacyTableRequest  $request  The request record being processed
-	 * @param   User                $user     The user account associated with this request if available
+	 * @param   JUser                $user     The user account associated with this request if available
 	 *
 	 * @return  PrivacyExportDomain[]
 	 *
@@ -82,7 +84,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 			return array();
 		}
 
-		/** @var User $userTable */
+		/** @var JTableUser $userTable */
 		$userTable = User::getTable();
 		$userTable->load($user->id);
 
@@ -108,7 +110,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	/**
 	 * Create the domain for the TJvendor user data
 	 *
-	 * @param   User  $user  The User object to process
+	 * @param   JTableUser  $user  The JTableUser object to process
 	 *
 	 * @return  PrivacyExportDomain
 	 *
@@ -136,7 +138,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	/**
 	 * Create the domain for the TJvendor to get vendor client data
 	 *
-	 * @param   User  $user  The User object to process
+	 * @param   JTableUser  $user  The JTableUser object to process
 	 *
 	 * @return  PrivacyExportDomain
 	 *
@@ -176,7 +178,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	/**
 	 * Create the domain for the TJvendor to get vendor Fee data
 	 *
-	 * @param   User  $user  The User object to process
+	 * @param   JTableUser  $user  The JTableUser object to process
 	 *
 	 * @return  PrivacyExportDomain
 	 *
@@ -216,7 +218,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	/**
 	 * Create the domain for the TJvendor to get vendor passbook data
 	 *
-	 * @param   User  $user  The User object to process
+	 * @param   JTableUser  $user  The JTableUser object to process
 	 *
 	 * @return  PrivacyExportDomain
 	 *
@@ -259,7 +261,7 @@ class PlgPrivacyTjvendors extends PrivacyPlugin
 	 * This event will not allow a super user account to be removed
 	 *
 	 * @param   PrivacyTableRequest  $request  The request record being processed
-	 * @param   User                $user     The user account associated with this request if available
+	 * @param   JUser                $user     The user account associated with this request if available
 	 *
 	 * @return  PrivacyRemovalStatus
 	 *

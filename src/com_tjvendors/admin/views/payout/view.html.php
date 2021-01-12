@@ -4,17 +4,18 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * View to edit
@@ -44,7 +45,7 @@ class TjvendorsViewPayout extends HtmlView
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->input = Factory::getApplication()->input;
-		$com_params = ComponentHelper::getParams('com_tjvendors');
+		$com_params  = ComponentHelper::getParams('com_tjvendors');
 		$this->bulkPayoutStatus = $com_params->get('bulk_payout');
 
 		// Check for errors.
@@ -69,12 +70,10 @@ class TjvendorsViewPayout extends HtmlView
 		Factory::getApplication()->input->set('hidemainmenu', true);
 
 		$user  = Factory::getUser();
-
 		$input = Factory::getApplication()->input;
 
 		// Let's get the extension name
-		$client = $input->get('client', '', 'STRING');
-
+		$client    = $input->get('client', '', 'STRING');
 		$viewTitle = Text::_('COM_TJVENDOR_EDIT_PAYOUT');
 
 		if (isset($this->item->checked_out))
@@ -91,11 +90,11 @@ class TjvendorsViewPayout extends HtmlView
 
 		if (empty($this->item->id))
 		{
-			JToolBarHelper::cancel('payout.cancel', 'JTOOLBAR_CANCEL');
+			ToolBarHelper::cancel('payout.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{
-			JToolBarHelper::cancel('payout.cancel', 'JTOOLBAR_CLOSE');
+			ToolBarHelper::cancel('payout.cancel', 'JTOOLBAR_CLOSE');
 		}
 	}
 }

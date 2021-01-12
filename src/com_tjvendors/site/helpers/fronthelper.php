@@ -4,16 +4,16 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 JLoader::import('payout', JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
 JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
@@ -56,8 +56,8 @@ class TjvendorFrontHelper
 	public static function getUniqueClients($user_id)
 	{
 		$vendor_id = self::getvendor();
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
+		$db        = Factory::getDbo();
+		$query     = $db->getQuery(true);
 		$query->select('DISTINCT' . $db->quoteName('client'));
 		$query->from($db->quoteName('#__tjvendors_passbook', 'vendors'));
 
@@ -87,9 +87,9 @@ class TjvendorFrontHelper
 		foreach ($result as $i)
 		{
 			$tjvendorFrontHelper = new TjvendorFrontHelper;
-			$client = $tjvendorFrontHelper->getClientName($i['client']);
-			$client = Text::_(strtoupper($i['client']));
-			$clients[] = array("clientType" => $i['client'], "clientValue" => $client);
+			$client              = $tjvendorFrontHelper->getClientName($i['client']);
+			$client              = Text::_(strtoupper($i['client']));
+			$clients[]           = array("clientType" => $i['client'], "clientValue" => $client);
 		}
 
 		return $clients;
@@ -108,7 +108,7 @@ class TjvendorFrontHelper
 	 */
 	public static function getTotalDetails($vendor_id, $client, $currency)
 	{
-		$db = Factory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('sum(' . $db->quoteName('credit') . ') As credit');
 		$query->select('sum(' . $db->quoteName('debit') . ') As debit');
@@ -122,12 +122,12 @@ class TjvendorFrontHelper
 
 		if (!empty($client))
 		{
-		$query->where($db->quoteName('client') . " = " . $db->quote($client));
+			$query->where($db->quoteName('client') . " = " . $db->quote($client));
 		}
 
 		if (!empty($currency))
 		{
-		$query->where($db->quoteName('currency') . " = " . $db->quote($currency));
+			$query->where($db->quoteName('currency') . " = " . $db->quote($currency));
 		}
 
 		$db->setQuery($query);
@@ -157,7 +157,7 @@ class TjvendorFrontHelper
 	 */
 	public static function getClientsForVendor($vendor_id)
 	{
-		$db = Factory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__vendor_client_xref'));
@@ -201,8 +201,8 @@ class TjvendorFrontHelper
 	 */
 	public static function getvendor()
 	{
-		$user_id = Factory::getuser()->id;
-		$vendorDetails = Table::getInstance('vendor', 'TjvendorsTable', array());
+		$user_id                             = Factory::getuser()->id;
+		$vendorDetails                       = Table::getInstance('vendor', 'TjvendorsTable', array());
 		$vendorDetails->load(array('user_id' => $user_id));
 
 		return $vendorDetails->vendor_id;
@@ -216,8 +216,8 @@ class TjvendorFrontHelper
 	public static function getCurrencies()
 	{
 		$vendor_id = self::getvendor();
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
+		$db        = Factory::getDbo();
+		$query     = $db->getQuery(true);
 		$query->select('DISTINCT' . $db->quoteName('currency'));
 		$query->from($db->quoteName('#__tjvendors_passbook'));
 
@@ -264,7 +264,7 @@ class TjvendorFrontHelper
 	 */
 	public static function getPaymentDetails($vendor_id, $client)
 	{
-		$db = Factory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__vendor_client_xref'));
@@ -308,10 +308,10 @@ class TjvendorFrontHelper
 	{
 		if (empty($user_id))
 		{
-			$user_id = jFactory::getuser()->id;
+			$user_id = Factory::getuser()->id;
 		}
 
-		$db = Factory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->quoteName('v.vendor_id'));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'v'));
@@ -353,10 +353,8 @@ class TjvendorFrontHelper
 	 */
 	public function checkGatewayDetails($userId, $client)
 	{
-		$db = Factory::getDbo();
-
-		// Create a new query object.
-		$query = $db->getQuery(true);
+		$db           = Factory::getDbo();
+		$query        = $db->getQuery(true);
 		$arrayColumns = array('vc.params');
 		$query->select($db->quoteName($arrayColumns));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'v'));
@@ -398,30 +396,26 @@ class TjvendorFrontHelper
 	 */
 	public function addEntry($order_data)
 	{
-		$com_params = ComponentHelper::getParams($order_data['client']);
-		$vendorParams = ComponentHelper::getParams('com_tjvendors');
-		$payout_day_limit = $vendorParams->get('payout_limit_days', '0', 'INT');
-		$date = Factory::getDate();
+		$com_params        = ComponentHelper::getParams($order_data['client']);
+		$vendorParams      = ComponentHelper::getParams('com_tjvendors');
+		$payout_day_limit  = $vendorParams->get('payout_limit_days', '0', 'INT');
+		$date              = Factory::getDate();
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
-		$currency = $com_params->get('currency');
-
-		$payoutTable = Table::getInstance('payout', 'TjvendorsTable', array());
+		$currency          = $com_params->get('currency');
+		$payoutTable       = Table::getInstance('payout', 'TjvendorsTable', array());
 		$payoutTable->load(array('reference_order_id' => $order_data['order_id']));
+		$checkOrderPayout = false;
 
 		if ($payoutTable->debit > 0)
 		{
 			$checkOrderPayout = $payoutTable->order_id;
 		}
-		else
-		{
-			$checkOrderPayout = false;
-		}
 
-		$entry_data['vendor_id'] = $order_data['vendor_id'];
-		$totalAmount = TjvendorsHelper::getTotalAmount($entry_data['vendor_id'], $currency, $order_data['client']);
+		$entry_data['vendor_id']          = $order_data['vendor_id'];
+		$totalAmount                      = TjvendorsHelper::getTotalAmount($entry_data['vendor_id'], $currency, $order_data['client']);
 		$entry_data['reference_order_id'] = $order_data['order_id'];
-		$entry_data['transaction_id'] = $order_data['client_name'] . '-' . $currency . '-' . $entry_data['vendor_id'] . '-';
-		$entry_data['transaction_time'] = Factory::getDate()->toSql();
+		$entry_data['transaction_id']     = $order_data['client_name'] . '-' . $currency . '-' . $entry_data['vendor_id'] . '-';
+		$entry_data['transaction_time']   = Factory::getDate()->toSql();
 
 		if ($order_data['status'] != "C")
 		{
@@ -434,26 +428,25 @@ class TjvendorFrontHelper
 				$entry_status = "debit_pending";
 			}
 
-			$entry_data['debit'] = $order_data['amount'] - $order_data['fee_amount'];
+			$entry_data['debit']  = $order_data['amount'] - $order_data['fee_amount'];
 			$entry_data['credit'] = '0.00';
-			$entry_data['total'] = $totalAmount['total'] - $entry_data['debit'];
+			$entry_data['total']  = $totalAmount['total'] - $entry_data['debit'];
 		}
-
 		elseif ($order_data['status'] == "C")
 		{
 			$entry_data['credit'] = $order_data['amount'] - $order_data['fee_amount'];
-			$entry_data['debit'] = 0;
-			$entry_data['total'] = $totalAmount['total'] + $entry_data['credit'];
-			$entry_status = "credit_for_ticket_buy";
+			$entry_data['debit']  = 0;
+			$entry_data['total']  = $totalAmount['total'] + $entry_data['credit'];
+			$entry_status         = "credit_for_ticket_buy";
 		}
 
 		$params = array("customer_note" => $order_data['customer_note'], "entry_status" => $entry_status);
-		$entry_data['params'] = json_encode($params);
+		$entry_data['params']   = json_encode($params);
 		$entry_data['currency'] = $currency;
-		$entry_data['client'] = $order_data['client'];
+		$entry_data['client']   = $order_data['client'];
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
 		$tjvendorsModelPayout = BaseDatabaseModel::getInstance('Payout', 'TjvendorsModel');
-			$vendorDetail = $tjvendorsModelPayout->addCreditEntry($entry_data);
+		$tjvendorsModelPayout->addCreditEntry($entry_data);
 	}
 
 	/**
@@ -469,22 +462,20 @@ class TjvendorFrontHelper
 	 */
 	public static function getPaidAmount($vendor_id, $currency, $filterClient)
 	{
-		$input = Factory::getApplication()->input;
-		$urlClient = $input->get('client', '', 'STRING');
-		$com_params = ComponentHelper::getParams('com_tjvendors');
+		$input            = Factory::getApplication()->input;
+		$urlClient        = $input->get('client', '', 'STRING');
+		$com_params       = ComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
+		$db               = Factory::getDbo();
+		$query            = $db->getQuery(true);
 		$query->select('*');
 		$query->from($db->quoteName('#__tjvendors_passbook'));
+
+		$client = $urlClient;
 
 		if (!empty($filterClient))
 		{
 			$client = $filterClient;
-		}
-		else
-		{
-			$client = $urlClient;
 		}
 
 		if (!empty($vendor_id))
@@ -507,7 +498,7 @@ class TjvendorFrontHelper
 		try
 		{
 			$paidDetails = $db->loadAssocList();
-			$amount = 0;
+			$amount      = 0;
 
 			foreach ($paidDetails as $detail)
 			{
@@ -557,12 +548,12 @@ class TjvendorFrontHelper
 	 */
 	public function getItemId($link)
 	{
-		$mainframe = Factory::getApplication();
+		$app = Factory::getApplication();
 
-		if ($mainframe->issite())
+		if ($app->isClient('site'))
 		{
-			$JSite = new JSite;
-			$menu  = $JSite->getMenu();
+			$JSite    = new JSite;
+			$menu     = $JSite->getMenu();
 			$menuItem = $menu->getItems('link', $link, true);
 
 			if ($menuItem)

@@ -4,20 +4,20 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2021 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access.
 defined('_JEXEC') or die();
+
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Component\ComponentHelper;
 
-jimport('joomla.form.helper');
 FormHelper::loadFieldClass('list');
 
 /**
@@ -52,9 +52,9 @@ class JFormFieldPaymentGateway extends JFormFieldList
 	 */
 	protected function getOptions()
 	{
-		$type = "payment";
-		$input = Factory::getApplication()->input;
-		$client = $input->get('client', '', 'STRING');
+		$type    = "payment";
+		$input   = Factory::getApplication()->input;
+		$client  = $input->get('client', '', 'STRING');
 		$options = array();
 		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJVENDOR_PAYMENT_DETAILS_DEFAULT'));
 

@@ -10,8 +10,8 @@
 
 defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Component\ComponentHelper;
 
 /**
  * Methods supporting a list of Tjvendors records.
@@ -122,13 +122,11 @@ class TjvendorsModelReports extends ListModel
 	public function getListQuery()
 	{
 		$transactionType = $this->getState('filter.transactionType', '');
-		$client = $this->getState('filter.vendor_client', '');
-		$currency = $this->getState('filter.currency', '');
-		$vendor_id = $this->getState('filter.vendor_id', '');
-
-		$db = Factory::getDbo();
-
-		$query = $db->getQuery(true);
+		$client          = $this->getState('filter.vendor_client', '');
+		$currency        = $this->getState('filter.currency', '');
+		$vendor_id       = $this->getState('filter.vendor_id', '');
+		$db              = Factory::getDbo();
+		$query           = $db->getQuery(true);
 		$query->select(array('vendors.vendor_id', 'vendors.vendor_title', 'pass.*'));
 		$query->from($db->quoteName('#__tjvendors_vendors', 'vendors'));
 		$query->join('LEFT', $db->quoteName('#__tjvendors_passbook', 'pass') .

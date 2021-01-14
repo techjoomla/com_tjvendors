@@ -20,7 +20,7 @@ use Joomla\CMS\Form\FormField;
  *
  * @since  1.6
  */
-class FormFieldTimecreated extends FormField
+class JFormFieldTimecreated extends FormField
 {
 	/**
 	 * The form field type.

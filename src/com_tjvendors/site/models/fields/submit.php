@@ -19,7 +19,7 @@ use Joomla\CMS\Form\FormField;
  *
  * @since  1.6
  */
-class FormFieldSubmit extends FormField
+class JFormFieldSubmit extends FormField
 {
 	protected $type = 'submit';
 

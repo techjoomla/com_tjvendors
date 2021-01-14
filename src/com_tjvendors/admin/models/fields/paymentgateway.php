@@ -26,7 +26,7 @@ FormHelper::loadFieldClass('list');
  *
  * @since  1.0.0
  */
-class FormFieldPaymentGateway extends JFormFieldList
+class JFormFieldPaymentGateway extends JFormFieldList
 {
 	/**
 	 * The form field type.

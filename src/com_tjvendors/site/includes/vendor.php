@@ -636,14 +636,15 @@ class TjvendorsVendor extends CMSObject
 	/**
 	 * This function return vendor profile complete/incomplete status
 	 *
-	 * @param   Integer  $userId  userId
-	 * @param   Integer  $client  client
+	 * @param   Integer  $userId               userId
+	 * @param   Integer  $client               client
+	 * @param   String   $sendPaymentsToOwner  send payment directly to owner configuration field value
 	 *
 	 * @return  Interger  Percentage of vendor profile completion
 	 *
 	 * @since   1.4.0
 	 */
-	public function getVendorProfileStatus($userId, $client)
+	public function getVendorProfileStatus($userId, $client, $sendPaymentsToOwner = '0')
 	{
 		$data = $this->loadByUserId($userId, $client);
 
@@ -660,7 +661,15 @@ class TjvendorsVendor extends CMSObject
 		$total += (!empty($data->vat_number)) ? 5: 0;
 		$total += (!empty($data->vendor_description)) ? 5: 0;
 		$total += (!empty($data->vendor_logo))? 5: 0;
-		$total += (!empty($data->payment_gateway)) ? 5: 0;
+
+		if ($sendPaymentsToOwner == '0')
+		{
+			$total += (!empty($data->payment_gateway)) ? 5: 0;
+		}
+		elseif ($sendPaymentsToOwner == '1')
+		{
+			$total += 5;
+		}
 
 		return $total;
 	}

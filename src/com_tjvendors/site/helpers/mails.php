@@ -128,6 +128,7 @@ class TjvendorsMailsHelper
 		$options = new Registry;
 		$options->set('info', $vendorDetails);
 
+		// Added this for Import case
 		if ((isset($vendorDetails->notify_user) && $vendorDetails->notify_user == '1') || (!isset($vendorDetails->notify_user)))
 		{
 			// Mail to site admin

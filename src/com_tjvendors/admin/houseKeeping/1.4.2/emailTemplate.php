@@ -39,7 +39,7 @@ class TjHouseKeepingEmailTemplate extends TjModelHouseKeeping
 
 		try
 		{
-			// Get com_subusers component status
+			// Get if tj-notifications is installed or not
 			$tjNotificationsInstalled = ComponentHelper::getComponent('com_tjnotifications', true)->enabled;
 
 			if ($tjNotificationsInstalled)

@@ -94,6 +94,13 @@ class TjHouseKeepingEmailTemplate extends TjModelHouseKeeping
 					return $result;
 				}
 			}
+			else
+			{
+				$result['status']  = true;
+				$result['message'] = "Migration is done successfully";
+
+				return $result;
+			}
 		}
 		catch (Exception $e)
 		{

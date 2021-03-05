@@ -112,4 +112,3 @@ class TjHouseKeepingEmailTemplate extends TjModelHouseKeeping
 		return $result;
 	}
 }
-

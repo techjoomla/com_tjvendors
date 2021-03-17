@@ -300,7 +300,7 @@ class Com_TjvendorsInstallerScript
 				{
 					$query = trim($query);
 
-					if ($query != '' && $query{0} != '#')
+					if ($query != '' && $query[0] != '#')
 					{
 						$db->setQuery($query);
 

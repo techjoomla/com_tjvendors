@@ -162,7 +162,7 @@ class TJVendors
 		$docType = Factory::getDocument()->getType();
 		$versionClass = self::version();
 
-		if ($loaded[$location] && ($docType != 'html'))
+		if (isset($loaded[$location]) && ($docType != 'html'))
 		{
 			return;
 		}

@@ -21,4 +21,4 @@
 
 ##### ^ Improvements:
 - #164184 Backend Vendor fees list view added action on checkboxes for edit vendor
-- #170205 Function addEntry should take 'currency' from the function params and if its not sent then it should try tp get the 'currecny' from the client extension configuration
+- #170205 Function addEntry should take 'currency' from the function params and if it's not sent then it should try to get the 'currency from the client extension configuration

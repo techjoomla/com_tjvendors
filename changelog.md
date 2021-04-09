@@ -11,6 +11,7 @@
 #### - Bug Fixes:
 - #169366 Housekeeping script of version 1.4.2 gives error for site where TJ-Notifications is not installed
 - #170204 Function "checkGatewayDetails" always returns false as the code is not updated to adapt to the new structure to save payment details in the vendor profile
+- #170524 If TJ-Notifications is disabled then user is unable to create vendor
 
 ##### ^ Improvements:
 - #170205 Function addEntry should take 'currency' from the function params and if it's not sent then it should try to get the 'currency from the client extension configuration

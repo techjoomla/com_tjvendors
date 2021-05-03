@@ -39,7 +39,7 @@ class PlgTjvendorsTjvendors extends JPlugin
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function TjVendorOnAfterVendorSave($data, $isNew)
+	public function tjVendorOnAfterVendorSave($data, $isNew)
 	{
 	}
 
@@ -55,7 +55,7 @@ class PlgTjvendorsTjvendors extends JPlugin
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function TjVendorOnAfterPayoutAdd($data, $isNew)
+	public function tjVendorOnAfterPayoutAdd($data, $isNew)
 	{
 	}
 }

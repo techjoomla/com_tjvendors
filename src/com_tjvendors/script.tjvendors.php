@@ -38,6 +38,7 @@ class Com_TjvendorsInstallerScript
 	'plugins' => array(
 						'actionlog' => array('tjvendors' => 1),
 						'privacy'   => array('tjvendors' => 1),
+						'tjvendors'   => array('tjvendors' => 1),
 					),
 				);
 

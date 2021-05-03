@@ -462,6 +462,12 @@ class TjvendorsModelVendor extends AdminModel
 				Factory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
 				$tjvendorsTriggerVendor->onAfterVendorSave($data, true);
 
+				// Plugin trigger
+				PluginHelper::importPlugin('tjvendors');
+				$dispatcher = JDispatcher::getInstance();
+				$dispatcher->trigger('TjVendorOnAfterVendorSave', array($data, true));
+				$dispatcher->trigger('TjVendorOnAfterPayoutAdd', array($data, true));
+
 				return true;
 			}
 			else
@@ -495,6 +501,12 @@ class TjvendorsModelVendor extends AdminModel
 				/* Trigger on Vendor Edit / update*/
 				$tjvendorsTriggerVendor->onAfterVendorSave($data, false);
 
+				// Plugin trigger
+				PluginHelper::importPlugin('tjvendors');
+				$dispatcher = JDispatcher::getInstance();
+				$dispatcher->trigger('TjVendorOnAfterVendorSave', array($data, true));
+				$dispatcher->trigger('TjVendorOnAfterPayoutAdd', array($data, true));
+
 				return true;
 			}
 		}
@@ -522,6 +534,12 @@ class TjvendorsModelVendor extends AdminModel
 
 				/* Send mail on vendor creation */
 				$tjvendorsTriggerVendor->onAfterVendorSave($data, true);
+
+				// Plugin trigger
+				PluginHelper::importPlugin('tjvendors');
+				$dispatcher = JDispatcher::getInstance();
+				$dispatcher->trigger('TjVendorOnAfterVendorSave', array($data, true));
+				$dispatcher->trigger('TjVendorOnAfterPayoutAdd', array($data, true));
 
 				return $data['vendor_id'];
 			}

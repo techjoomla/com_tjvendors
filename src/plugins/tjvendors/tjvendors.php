@@ -17,7 +17,7 @@ use Joomla\CMS\Plugin\CMSPlugin;
  *
  * @since  2.3.4
  */
-class PlgTjvendorsTjvendors extends JPlugin
+class PlgTjvendorsTjvendors extends CMSPlugin
 {
 	/**
 	 * Load plugin language file automatically so that it can be used inside component
@@ -39,7 +39,7 @@ class PlgTjvendorsTjvendors extends JPlugin
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function tjVendorOnAfterVendorSave($data, $isNew)
+	public function tjVendorOnAfterVendorSave()
 	{
 	}
 
@@ -55,7 +55,7 @@ class PlgTjvendorsTjvendors extends JPlugin
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function tjVendorOnAfterPayoutAdd($data, $isNew)
+	public function tjVendorOnAfterPayoutAdd()
 	{
 	}
 }

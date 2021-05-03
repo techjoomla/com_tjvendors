@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Plugin\PluginHelper;
 
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
@@ -315,6 +316,11 @@ class TjvendorsModelPayout extends AdminModel
 		if ($result)
 		{
 			$this->updatingCreditData($data);
+
+			// Plugin trigger
+			PluginHelper::importPlugin('tjvendors');
+			$dispatcher = JDispatcher::getInstance();
+			$dispatcher->trigger('TjVendorOnAfterVendorSave', array($data, true));
 		}
 	}
 

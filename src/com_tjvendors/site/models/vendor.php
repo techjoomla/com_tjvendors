@@ -466,7 +466,7 @@ class TjvendorsModelVendor extends AdminModel
 				// Plugin trigger
 				PluginHelper::importPlugin('tjvendors');
 				$dispatcher = JDispatcher::getInstance();
-				$dispatcher->trigger('tjVendorOnAfterVendorSave', array());
+				$dispatcher->trigger('tjVendorOnAfterVendorSave', array($data));
 
 				return true;
 			}
@@ -504,7 +504,7 @@ class TjvendorsModelVendor extends AdminModel
 				// Plugin trigger
 				PluginHelper::importPlugin('tjvendors');
 				$dispatcher = JDispatcher::getInstance();
-				$dispatcher->trigger('tjVendorOnAfterVendorSave', array());
+				$dispatcher->trigger('tjVendorOnAfterVendorSave', array($data));
 
 				return true;
 			}

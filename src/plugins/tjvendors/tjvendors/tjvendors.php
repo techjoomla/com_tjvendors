@@ -32,14 +32,13 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	 *
 	 * Method is called after vendor data is stored in the database.
 	 *
-	 * @param   array    $data   Holds the new vendor data.
-	 * @param   boolean  $isNew  True if a new vendor is stored.
+	 * @param   array  $data  Holds the new vendor data.
 	 *
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function tjVendorOnAfterVendorSave()
+	public function tjVendorOnAfterVendorSave($data)
 	{
 	}
 
@@ -48,14 +47,27 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	 *
 	 * Method is called after payout is added.
 	 *
-	 * @param   array  $data  Holds the event data.
-	 * @param   boolean  $isNew  True if payout is stored.
-	 *
 	 * @return  void
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
 	public function tjVendorOnAfterPayoutAdd()
+	{
+	}
+
+	/**
+	 * On after payout paid
+	 *
+	 * Method is called after payout is added.
+	 *
+	 * @param   int    $id    Payout payment ID
+	 * @param   array  $data  Payout data
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function tjVendorOnAfterPayoutPaid($id, $data)
 	{
 	}
 }

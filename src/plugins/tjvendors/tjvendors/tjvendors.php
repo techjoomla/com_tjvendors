@@ -23,7 +23,7 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	 * Load plugin language file automatically so that it can be used inside component
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.3
 	 */
 	protected $autoloadLanguage = true;
 
@@ -36,7 +36,7 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.3
 	 */
 	public function tjVendorOnAfterVendorSave($data)
 	{
@@ -49,7 +49,7 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.3
 	 */
 	public function tjVendorOnAfterPayoutAdd()
 	{
@@ -65,7 +65,7 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.3
 	 */
 	public function tjVendorOnAfterPayoutPaid($id, $data)
 	{

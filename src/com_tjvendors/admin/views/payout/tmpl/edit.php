@@ -14,14 +14,9 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-HTMLHelper::_('behavior.tooltip');
 HTMLHelper::_('behavior.formvalidation');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
-
-// Import CSS
-$document = Factory::getDocument();
-$document->addStyleSheet(Uri::root() . 'media/com_tjvendors/css/form.css');
 ?>
 <script type="text/javascript">
 

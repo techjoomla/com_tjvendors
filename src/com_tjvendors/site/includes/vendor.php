@@ -602,7 +602,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  Object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.3
 	 */
 	public function getCountry()
 	{
@@ -614,7 +614,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  Object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.3
 	 */
 	public function getRegion()
 	{
@@ -626,7 +626,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  Object
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.3
 	 */
 	public function getCity()
 	{
@@ -670,7 +670,7 @@ class TjvendorsVendor extends CMSObject
 	 *
 	 * @return  int
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.3
 	 */
 	public function getId()
 	{

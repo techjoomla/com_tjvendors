@@ -23,7 +23,7 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	 * Load plugin language file automatically so that it can be used inside component
 	 *
 	 * @var    boolean
-	 * @since  __DEPLOY_VERSION__
+	 * @since  1.4.3
 	 */
 	protected $autoloadLanguage = true;
 
@@ -32,30 +32,29 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	 *
 	 * Method is called after vendor data is stored in the database.
 	 *
-	 * @param   array    $data   Holds the new vendor data.
-	 * @param   boolean  $isNew  True if a new vendor is stored.
+	 * @param   array  $data  Holds the new vendor data.
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.3
 	 */
-	public function tjVendorOnAfterVendorSave()
+	public function tjVendorOnAfterVendorSave($data)
 	{
 	}
 
 	/**
-	 * On after payout is added
+	 * On after payout paid
 	 *
 	 * Method is called after payout is added.
 	 *
-	 * @param   array  $data  Holds the event data.
-	 * @param   boolean  $isNew  True if payout is stored.
+	 * @param   int    $id    Payout payment ID
+	 * @param   array  $data  Payout data
 	 *
 	 * @return  void
 	 *
-	 * @since   __DEPLOY_VERSION__
+	 * @since   1.4.3
 	 */
-	public function tjVendorOnAfterPayoutAdd()
+	public function tjVendorOnAfterPayoutPaid($id, $data)
 	{
 	}
 

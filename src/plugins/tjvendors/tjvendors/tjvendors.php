@@ -69,7 +69,7 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	 *
 	 * @since   __DEPLOY_VERSION__
 	 */
-	public function tjOnChangePayoutStatus($object = null)
+	public function tjVendorOnPayoutStatusChange($object = null)
 	{
 	}
 }

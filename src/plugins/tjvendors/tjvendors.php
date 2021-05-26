@@ -58,4 +58,19 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	public function tjVendorOnAfterPayoutAdd()
 	{
 	}
+
+	/**
+	 * On after payout status is changed
+	 *
+	 * Method is called after payout status is changed.
+	 *
+	 * @param   object  $object  Holds the payout data.
+	 *
+	 * @return  void
+	 *
+	 * @since   __DEPLOY_VERSION__
+	 */
+	public function tjOnChangePayoutStatus($object = null)
+	{
+	}
 }

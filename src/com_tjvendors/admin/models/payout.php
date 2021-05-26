@@ -321,11 +321,6 @@ class TjvendorsModelPayout extends AdminModel
 		if ($result)
 		{
 			$this->updatingCreditData($data);
-
-			// Plugin trigger
-			PluginHelper::importPlugin('tjvendors');
-			$dispatcher = JDispatcher::getInstance();
-			$dispatcher->trigger('tjVendorOnAfterPayoutAdd', array());
 		}
 	}
 

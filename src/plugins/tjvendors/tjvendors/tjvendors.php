@@ -43,19 +43,6 @@ class PlgTjvendorsTjvendors extends CMSPlugin
 	}
 
 	/**
-	 * On after payout is added
-	 *
-	 * Method is called after payout is added.
-	 *
-	 * @return  void
-	 *
-	 * @since   1.4.3
-	 */
-	public function tjVendorOnAfterPayoutAdd()
-	{
-	}
-
-	/**
 	 * On after payout paid
 	 *
 	 * Method is called after payout is added.

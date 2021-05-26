@@ -350,7 +350,7 @@ class TjvendorsModelPayout extends AdminModel
 			// Plugin trigger
 			PluginHelper::importPlugin('tjvendors');
 			$dispatcher = JDispatcher::getInstance();
-			$dispatcher->trigger('tjOnChangePayoutStatus', $object);
+			$dispatcher->trigger('tjVendorOnPayoutStatusChange', $object);
 
 			return true;
 		}

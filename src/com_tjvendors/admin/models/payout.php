@@ -236,9 +236,6 @@ class TjvendorsModelPayout extends AdminModel
 			// Update their details in the users table using id as the primary key.
 			$result = Factory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
 
-			$message = Text::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
-			Factory::getApplication()->enqueueMessage($message);
-
 			return true;
 		}
 

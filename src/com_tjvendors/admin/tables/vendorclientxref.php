@@ -26,8 +26,6 @@ class TjvendorsTablevendorclientxref extends Table
 	 */
 	public function __construct(&$db)
 	{
-		$tableName = 'TjvendorsTablevendorclientxref';
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', $tableName, array('typeAlias' => 'com_tjvendors.vendorclientxref'));
 		parent::__construct('#__vendor_client_xref', 'vendor_id', $db);
 	}
 }

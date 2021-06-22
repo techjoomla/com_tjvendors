@@ -29,8 +29,7 @@ class TjvendorsTablevendorfee extends Table
 	 */
 	public function __construct(&$db)
 	{
-	JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendorfee', array('typeAlias' => 'com_tjvendors.vendorfee'));
-	parent::__construct('#__tjvendors_fee', 'id', $db);
+		parent::__construct('#__tjvendors_fee', 'id', $db);
 	}
 
 	/**

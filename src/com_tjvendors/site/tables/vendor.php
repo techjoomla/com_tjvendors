@@ -33,7 +33,6 @@ class TjvendorsTablevendor extends Table
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('ContentHistory', 'TjvendorsTablevendor',
 				array('typeAlias' => 'com_tjvendors.vendor')
 				);
 

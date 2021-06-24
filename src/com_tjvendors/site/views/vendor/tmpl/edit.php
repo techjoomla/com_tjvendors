@@ -10,15 +10,16 @@
 
 // No direct access
 defined('_JEXEC') or die;
-use Joomla\CMS\Factory;
+
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-HTMLHelper::_('behavior.tooltip');
-HTMLHelper::_('behavior.formvalidation');
+HTMLHelper::_('bootstrap.tooltip');
+HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::script(Uri::root() . 'libraries/techjoomla/assets/js/tjvalidator.js');
@@ -122,7 +123,7 @@ if (Factory::getUser()->id)
 											</label>
 										</div>
 										<div class="controls">
-											<?php echo $this->dropdown = JHtml::_('select.genericlist', $this->options, 'jform[country]',
+											<?php echo $this->dropdown = HTMLHelper::_('select.genericlist', $this->options, 'jform[country]',
 												'aria-invalid="false" size="1" onchange="CommonObj.generateStates(id,\'' .
 												0 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $this->default, 'jform_country');
 											?>

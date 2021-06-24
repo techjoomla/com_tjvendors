@@ -10,11 +10,13 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
-use Joomla\CMS\Toolbar\ToolbarHelper;
 
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
@@ -86,10 +88,10 @@ class TjvendorsViewVendors extends HtmlView
 		$state = $this->get('State');
 		$canDo = TjvendorsHelper::getActions();
 
-		$toolbar = JToolbar::getInstance('toolbar');
+		$toolbar = Toolbar::getInstance('toolbar');
 		$toolbar->appendButton(
 		'Custom', '<a id="tjHouseKeepingFixDatabasebutton" class="btn btn-default hidden"><span class="icon-refresh"></span>'
-		. JText::_('COM_TJVENDORS_FIX_DATABASE') . '</a>');
+		. Text::_('COM_TJVENDORS_FIX_DATABASE') . '</a>');
 		JToolBarHelper::addNew('vendor.add');
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;

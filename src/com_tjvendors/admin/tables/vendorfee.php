@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Table\Table;
@@ -73,7 +74,7 @@ class TjvendorsTablevendorfee extends Table
 				$array_jaccess[$action->name] = $default_actions[$action->name];
 			}
 
-			$array['rules'] = $this->JAccessRulestoArray($array_jaccess);
+			$array['rules'] = $this->RulestoArray($array_jaccess);
 		}
 
 		// Bind the rules for ACL where supported.
@@ -92,7 +93,7 @@ class TjvendorsTablevendorfee extends Table
 	 *
 	 * @return  array
 	 */
-	private function JAccessRulestoArray($jaccessrules)
+	private function RulestoArray($jaccessrules)
 	{
 		$rules = array();
 

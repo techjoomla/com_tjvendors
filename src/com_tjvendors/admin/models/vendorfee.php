@@ -171,9 +171,8 @@ class TjvendorsModelVendorFee extends AdminModel
 					$data['id'] = (int) $this->getState($this->getName() . '.id');
 				}
 
-				$dispatcher = JDispatcher::getInstance();
 				PluginHelper::importPlugin('tjvendors');
-				$dispatcher->trigger('tjVendorsOnAfterVendorFeeSave', array($data, $isNew));
+				Factory::getApplication()->triggerEvent('tjVendorsOnAfterVendorFeeSave', array($data, $isNew));
 
 				return true;
 			}

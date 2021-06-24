@@ -9,6 +9,7 @@
  */
 
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
@@ -257,7 +258,7 @@ class TjvendorsMailsHelper
 
 		if (!empty($adminRecipients))
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 
 			foreach ($adminRecipients as $adminRecipient)
 			{

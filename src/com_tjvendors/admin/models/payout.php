@@ -10,6 +10,7 @@
 
 // No direct access.
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
@@ -230,8 +231,7 @@ class TjvendorsModelPayout extends AdminModel
 
 			// Plugin trigger
 			PluginHelper::importPlugin('tjvendors');
-			$dispatcher = JDispatcher::getInstance();
-			$dispatcher->trigger('tjVendorOnAfterPayoutPaid', array($id, $data, true));
+			Factory::getApplication()->triggerEvent('tjVendorOnAfterPayoutPaid', array($id, $data, true));
 
 			// Update their details in the users table using id as the primary key.
 			$result = Factory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');

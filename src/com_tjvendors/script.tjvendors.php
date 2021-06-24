@@ -9,11 +9,12 @@
  */
 
 defined('_JEXEC') or die();
+
+use Joomla\Data\DataObject;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Installer\Installer;
-use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Object\CMSObject;

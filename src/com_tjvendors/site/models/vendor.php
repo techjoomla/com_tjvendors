@@ -10,6 +10,7 @@
 
 // No direct access.
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
@@ -465,8 +466,7 @@ class TjvendorsModelVendor extends AdminModel
 
 				// Plugin trigger
 				PluginHelper::importPlugin('tjvendors');
-				$dispatcher = JDispatcher::getInstance();
-				$dispatcher->trigger('tjVendorOnAfterVendorSave', array($data));
+				Factory::getApplication()->triggerEvent('tjVendorOnAfterVendorSave', array($data));
 
 				return true;
 			}
@@ -503,8 +503,7 @@ class TjvendorsModelVendor extends AdminModel
 
 				// Plugin trigger
 				PluginHelper::importPlugin('tjvendors');
-				$dispatcher = JDispatcher::getInstance();
-				$dispatcher->trigger('tjVendorOnAfterVendorSave', array($data));
+				Factory::getApplication()->triggerEvent('tjVendorOnAfterVendorSave', array($data));
 
 				return true;
 			}
@@ -536,8 +535,7 @@ class TjvendorsModelVendor extends AdminModel
 
 				// Plugin trigger
 				PluginHelper::importPlugin('tjvendors');
-				$dispatcher = JDispatcher::getInstance();
-				$dispatcher->trigger('tjVendorOnAfterVendorSave', array());
+				Factory::getApplication()->triggerEvent('tjVendorOnAfterVendorSave', array());
 
 				return $data['vendor_id'];
 			}

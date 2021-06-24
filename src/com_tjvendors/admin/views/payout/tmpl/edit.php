@@ -8,13 +8,14 @@
  */
 	// No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-HTMLHelper::_('behavior.formvalidation');
+HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
 ?>

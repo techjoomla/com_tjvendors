@@ -2,7 +2,7 @@
 <extension version="3.9" type="plugin" group="actionlog" method="upgrade">
 	<name>plg_actionlog_tjvendors</name>
 	<author>Techjoomla</author>
-	<creationDate>18th May 2021</creationDate>
+	<creationDate>13th Jul 2021</creationDate>
 	<copyright>Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<authorEmail>extensions@techjoomla.com</authorEmail>

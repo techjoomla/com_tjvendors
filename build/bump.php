@@ -19,7 +19,7 @@
  * @package    Techjoomla.Build
  *
  * @author     Techjoomla <extensions@techjoomla.com>
- * @copyright  Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.
+ * @copyright  Copyright (C) 2016 - 2018 Techjoomla. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -228,7 +228,7 @@ $author      = 'Techjoomla';
 $authorEmail = 'extensions@techjoomla.com';
 $authorUrl   = 'https://techjoomla.com';
 $license     = 'http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL';
-$copyright   = 'Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.';
+$copyright   = 'Copyright (C) 2016 - 2018 Techjoomla. All rights reserved.';
 
 echo PHP_EOL;
 
@@ -367,10 +367,10 @@ foreach ($iterator as $file)
 			}
 
 			// Check if need to change the since version.
-			if ($relativePath !== '/build/bump.php' && preg_match('#1.4.3#', $fileContents))
+			if ($relativePath !== '/build/bump.php' && preg_match('#__DEPLOY_VERSION__#', $fileContents))
 			{
 				$changeSinceVersion = true;
-				$fileContents = preg_replace('#1.4.3#', $version['release'], $fileContents);
+				$fileContents = preg_replace('#__DEPLOY_VERSION__#', $version['release'], $fileContents);
 				$changedFilesSinceVersion++;
 			}
 

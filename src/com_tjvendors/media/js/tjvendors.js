@@ -347,7 +347,7 @@ var tjCommon = {
 					} 
 					else if (!response && userObject.payment_gateway != "") {
 						var error_html = Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
-						$thisId.closest('.subform-repeatable-group').append("<div class='alert alert-warning payment-gateway-parent'>" + error_html + "</div>");
+						jQuery("#system-message-container").html("<div class='alert alert-warning payment-gateway-parent'>" + error_html +"<button data-dismiss='alert' class='close' type='button'>×</button></div>");
 					}
 				}
 			});

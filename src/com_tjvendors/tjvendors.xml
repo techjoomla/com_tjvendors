@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
 	<name>COM_TJVENDORS</name>
-	<creationDate>23rd Jul 2021</creationDate>
+	<creationDate>26th Jul 2021</creationDate>
 	<copyright>Copyright (C) 2016 - 2021 Techjoomla. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
 	<author>Techjoomla</author>

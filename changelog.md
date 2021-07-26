@@ -16,7 +16,6 @@
 - #169366 Housekeeping script of version 1.4.2 gives error for site where TJ-Notifications is not installed
 
 ##### ^ Improvements:
-- #171108 Added various plugin triggers in tjvendors
 - #170205 Function addEntry should take 'currency' from the function params and if it's not sent then it should try to get the 'currency from the client extension configuration
 - #169696 Make com_tjvendors php8 compatible
 - #165603 Added getcountry, city, region methods in vendor class

@@ -344,6 +344,10 @@ class TjvendorsModelPayout extends AdminModel
 		{
 			// Update their details in the users table using id as the primary key.
 			$result = Factory::getDbo()->updateObject('#__tjvendors_passbook', $object, 'id');
+			// Plugin trigger
+			PluginHelper::importPlugin('tjvendors');
+			$dispatcher = JDispatcher::getInstance();
+			$dispatcher->trigger('tjVendorOnPayoutStatusChange', $object);
 
 			return true;
 		}

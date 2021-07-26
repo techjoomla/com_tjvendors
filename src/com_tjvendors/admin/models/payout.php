@@ -16,6 +16,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Plugin\PluginHelper;
 
 JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
 
@@ -227,11 +228,13 @@ class TjvendorsModelPayout extends AdminModel
 			$payout_update->id = $id;
 			$payout_update->transaction_id = $data['transaction_id'] . $payout_update->id;
 
+			// Plugin trigger
+			PluginHelper::importPlugin('tjvendors');
+			$dispatcher = JDispatcher::getInstance();
+			$dispatcher->trigger('tjVendorOnAfterPayoutPaid', array($id, $data, true));
+
 			// Update their details in the users table using id as the primary key.
 			$result = Factory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');
-
-			$message = Text::_('COM_TJVENDORS_PAYOUT_SUCCESSFULL_MESSAGE');
-			Factory::getApplication()->enqueueMessage($message);
 
 			return true;
 		}

@@ -41,13 +41,21 @@ class TjvendorsMailsHelper
 		$this->siteadminname = $this->siteConfig->get('fromname');
 		$this->user = Factory::getUser();
 		$this->client = "com_tjvendors";
-		$this->tjnotifications = new Tjnotifications;
 		$this->siteinfo = new stdClass;
 		$this->siteinfo->sitename	= $this->sitename;
 		$this->siteinfo->adminname = Text::_('COM_TJVENDORS_SITEADMIN');
 
 		JLoader::import('components.com_tjvendors.helpers.fronthelper', JPATH_SITE);
 		$this->tjvendorFrontHelper = new TjvendorFrontHelper;
+
+		if (ComponentHelper::getComponent('com_tjnotifications', true)->enabled)
+		{
+			$this->tjnotifications = new Tjnotifications;
+		}
+		else
+		{
+			$this->tjnotifications = false;
+		}
 	}
 
 	/**
@@ -128,11 +136,14 @@ class TjvendorsMailsHelper
 		$options = new Registry;
 		$options->set('info', $vendorDetails);
 
-		// Mail to site admin
-		$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
+		if ($this->tjnotifications)
+		{
+			// Mail to site admin
+			$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
 
-		// Mail to Promoter
-		$this->tjnotifications->send($this->client, $vendorerkey, $promoterRecipients, $replacements, $options);
+			// Mail to Promoter
+			$this->tjnotifications->send($this->client, $vendorerkey, $promoterRecipients, $replacements, $options);
+		}
 
 		return;
 	}
@@ -196,7 +207,10 @@ class TjvendorsMailsHelper
 			$replacements->vendor_data = $vendorData;
 			$options->set('vendor_data', $vendorData);
 
-			$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
+			if ($this->tjnotifications)
+			{
+				$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
+			}
 		}
 		elseif ($vendorDetails->user_id === $loggedInUser)
 		{
@@ -219,7 +233,10 @@ class TjvendorsMailsHelper
 
 			$adminkey = "editVendorMailToAdmin";
 
-			$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
+			if ($this->tjnotifications)
+			{
+				$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
+			}
 		}
 
 		return;

@@ -38,6 +38,7 @@ class Com_TjvendorsInstallerScript
 	'plugins' => array(
 						'actionlog' => array('tjvendors' => 1),
 						'privacy'   => array('tjvendors' => 1),
+						'tjvendors'   => array('tjvendors' => 1)
 					),
 				);
 
@@ -300,7 +301,7 @@ class Com_TjvendorsInstallerScript
 				{
 					$query = trim($query);
 
-					if ($query != '' && $query{0} != '#')
+					if ($query != '' && $query[0] != '#')
 					{
 						$db->setQuery($query);
 

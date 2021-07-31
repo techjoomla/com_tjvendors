@@ -431,6 +431,12 @@ class TjvendorsModelVendor extends AdminModel
 			$data['other_city'] = '';
 		}
 
+		// Flag to notify the vendor on profile update/create
+		if (isset($data['notify_vendor']) === false)
+		{
+			$data['notify_vendor'] = 1;
+		}
+
 		// To check if editing in registration form
 		if (!empty($data['vendor_id']))
 		{

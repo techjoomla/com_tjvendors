@@ -18,6 +18,7 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Form\FormHelper;
 
 jimport('joomla.form.helper');
 FormHelper::loadFieldClass('list');

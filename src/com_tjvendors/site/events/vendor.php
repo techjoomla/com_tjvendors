@@ -49,13 +49,19 @@ class TjvendorsTriggerVendor
 			/* New Vendor is created */
 			case true:
 					/* Send mail on Vendor create */
-					$this->tjvendorsMailsHelper->onAfterVendorCreate((object) $vendorDetails);
+					if ($vendorDetails['notify_vendor'])
+					{
+						$this->tjvendorsMailsHelper->onAfterVendorCreate((object) $vendorDetails);
+					}
 				break;
 
 			/* Vendor is editted */
 			case false:
 					/* Send mail on Vendor edit */
-					$this->tjvendorsMailsHelper->onAfterVendorEdit((object) $vendorDetails);
+					if ($vendorDetails['notify_vendor'])
+					{
+					    $this->tjvendorsMailsHelper->onAfterVendorEdit((object) $vendorDetails);
+					}
 				break;
 		}
 

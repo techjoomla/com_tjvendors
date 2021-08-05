@@ -64,7 +64,7 @@ class TjvendorsTablevendor extends Table
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (!Factory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
+		if (!empty($array['vendor_id']) && !Factory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
 		{
 			$actions = Access::getActionsFromFile(
 				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',

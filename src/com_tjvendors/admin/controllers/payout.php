@@ -36,6 +36,8 @@ class TjvendorsControllerPayout extends FormController
 			$this->client = $this->input->get('client', '');
 		}
 
+		$this->text_prefix = 'COM_TJVENDORS_PAYOUTS';
+
 		parent::__construct();
 	}
 

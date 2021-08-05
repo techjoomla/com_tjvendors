@@ -433,7 +433,7 @@ class TjvendorsModelVendor extends AdminModel
 		}
 
 		// To check if editing in registration form
-		if ($data['vendor_id'])
+		if (!empty($data['vendor_id']))
 		{
 			$data['modified_time'] = Factory::getDate('now')->toSQL();
 			$data['modified_by']   = Factory::getUser()->id;
@@ -524,7 +524,7 @@ class TjvendorsModelVendor extends AdminModel
 					$client_entry->client = $data['vendor_client'];
 					$client_entry->vendor_id = $data['vendor_id'];
 					$client_entry->params = $xrefData['params'];
-					$client_entry->approved = $data['approved'];
+					$client_entry->approved = !empty( $data['approved']) ? $data['approved'] : '';
 
 					// Insert the object into the vendor_client_xref table.
 					$result = Factory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);

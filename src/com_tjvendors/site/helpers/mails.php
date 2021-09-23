@@ -9,6 +9,7 @@
  */
 
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
@@ -41,13 +42,23 @@ class TjvendorsMailsHelper
 		$this->siteadminname = $this->siteConfig->get('fromname');
 		$this->user = Factory::getUser();
 		$this->client = "com_tjvendors";
-		$this->tjnotifications = new Tjnotifications;
 		$this->siteinfo = new stdClass;
 		$this->siteinfo->sitename	= $this->sitename;
 		$this->siteinfo->adminname = Text::_('COM_TJVENDORS_SITEADMIN');
 
 		JLoader::import('components.com_tjvendors.helpers.fronthelper', JPATH_SITE);
 		$this->tjvendorFrontHelper = new TjvendorFrontHelper;
+
+		$tjnotifications = JPATH_SITE . '/libraries/techjoomla/tjnotifications/tjnotifications.php';
+
+		if (ComponentHelper::getComponent('com_tjnotifications', true)->enabled && class_exists('Tjnotifications'))
+		{
+			$this->tjnotifications = new Tjnotifications;
+		}
+		else
+		{
+			$this->tjnotifications = false;
+		}
 	}
 
 	/**

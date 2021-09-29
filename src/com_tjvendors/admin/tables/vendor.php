@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Filesystem\File;
@@ -33,8 +34,6 @@ class TjvendorsTablevendor extends Table
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjvendorsTablevendor', array('typeAlias' => 'com_tjvendors.vendor'));
-
 		parent::__construct('#__tjvendors_vendors', 'vendor_id', $db);
 	}
 
@@ -65,7 +64,7 @@ class TjvendorsTablevendor extends Table
 			$array['metadata'] = (string) $registry;
 		}
 
-		if (!Factory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
+		if (!empty($array['vendor_id']) && !Factory::getUser()->authorise('core.admin', 'com_tjvendors.vendor.' . $array['vendor_id']))
 		{
 			$actions = Access::getActionsFromFile(
 				JPATH_ADMINISTRATOR . '/components/com_tjvendors/access.xml',
@@ -79,7 +78,7 @@ class TjvendorsTablevendor extends Table
 				$array_jaccess[$action->name] = $default_actions[$action->name];
 			}
 
-			$array['rules'] = $this->JAccessRulestoArray($array_jaccess);
+			$array['rules'] = $this->RulestoArray($array_jaccess);
 		}
 
 		// Bind the rules for ACL where supported.
@@ -98,7 +97,7 @@ class TjvendorsTablevendor extends Table
 	 *
 	 * @return  array
 	 */
-	private function JAccessRulestoArray($jaccessrules)
+	private function RulestoArray($jaccessrules)
 	{
 		$rules = array();
 

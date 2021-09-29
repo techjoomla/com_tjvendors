@@ -1,8 +1,3 @@
-use Joomla\CMS\Form\FormField;
-use Joomla\CMS\Form\Form;
-use Joomla\CMS\Date\Date;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Factory;
 <?php
 /**
  * @package     TJVendors
@@ -14,6 +9,11 @@ use Joomla\CMS\Factory;
  */
 
 defined('JPATH_BASE') or die;
+
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 
 jimport('joomla.form.formfield');
 

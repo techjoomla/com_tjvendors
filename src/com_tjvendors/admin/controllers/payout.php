@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\FormController;
 
@@ -34,6 +35,8 @@ class TjvendorsControllerPayout extends FormController
 		{
 			$this->client = $this->input->get('client', '');
 		}
+
+		$this->text_prefix = 'COM_TJVENDORS_PAYOUTS';
 
 		parent::__construct();
 	}

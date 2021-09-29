@@ -9,11 +9,12 @@
  */
 
 defined('_JEXEC') or die();
+
+use Joomla\Data\DataObject;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Installer\Installer;
-use Joomla\CMS\Installer\InstallerHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Object\CMSObject;
@@ -38,6 +39,7 @@ class Com_TjvendorsInstallerScript
 	'plugins' => array(
 						'actionlog' => array('tjvendors' => 1),
 						'privacy'   => array('tjvendors' => 1),
+						'tjvendors'   => array('tjvendors' => 1)
 					),
 				);
 
@@ -291,8 +293,7 @@ class Com_TjvendorsInstallerScript
 
 		if ($buffer !== false)
 		{
-			jimport('joomla.installer.helper');
-			$queries = InstallerHelper::splitSql($buffer);
+			$queries = \JDatabaseDriver::splitSql($buffer);
 
 			if (count($queries) != 0)
 			{
@@ -300,11 +301,11 @@ class Com_TjvendorsInstallerScript
 				{
 					$query = trim($query);
 
-					if ($query != '' && $query{0} != '#')
+					if ($query != '' && $query[0] != '#')
 					{
 						$db->setQuery($query);
 
-						if (!$db->query())
+						if (!$db->execute())
 						{
 							JError::raiseWarning(1, Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
 

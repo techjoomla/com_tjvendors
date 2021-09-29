@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Text;
@@ -270,9 +271,8 @@ class TjvendorsModelVendors extends ListModel
 			$this->deleteVendor($vendor_id);
 		}
 
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('tjvendors');
-		$dispatcher->trigger('tjvendorOnAfterVendorDelete', array($vendorData, $client));
+		Factory::getApplication()->triggerEvent('tjvendorOnAfterVendorDelete', array($vendorData, $client));
 	}
 
 	/**
@@ -319,9 +319,8 @@ class TjvendorsModelVendors extends ListModel
 			}
 		}
 
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('tjvendors');
-		$dispatcher->trigger('tjVendorsOnAfterVendorStateChange', array($items, $state, $client));
+		Factory::getApplication()->triggerEvent('tjVendorsOnAfterVendorStateChange', array($items, $state, $client));
 
 		return true;
 	}

@@ -10,20 +10,22 @@
 
 // No direct access.
 defined('_JEXEC') or die();
+
+use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\FormHelper;
 
-jimport('joomla.form.helper');
 FormHelper::loadFieldClass('list');
+HTMLHelper::_('formbehavior.chosen', 'select');
 
 /**
  * Supports an HTML select list of vendors
  *
  * @since  1.3.2
  */
-class JFormFieldVendorsList extends \JFormFieldList
+class JFormFieldVendorsList extends JFormFieldList
 {
 	/**
 	 * The form field type.

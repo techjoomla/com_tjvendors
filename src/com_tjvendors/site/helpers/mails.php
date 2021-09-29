@@ -139,11 +139,14 @@ class TjvendorsMailsHelper
 		$options = new Registry;
 		$options->set('info', $vendorDetails);
 
-		// Mail to site admin
-		$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
+		if ($this->tjnotifications)
+		{
+			// Mail to site admin
+			$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
 
-		// Mail to Promoter
-		$this->tjnotifications->send($this->client, $vendorerkey, $promoterRecipients, $replacements, $options);
+			// Mail to Promoter
+			$this->tjnotifications->send($this->client, $vendorerkey, $promoterRecipients, $replacements, $options);
+		}
 
 		return;
 	}
@@ -207,7 +210,10 @@ class TjvendorsMailsHelper
 			$replacements->vendor_data = $vendorData;
 			$options->set('vendor_data', $vendorData);
 
-			$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
+			if ($this->tjnotifications)
+			{
+				$this->tjnotifications->send($this->client, $approvalkey, $promoterRecipients, $replacements, $options);
+			}
 		}
 		elseif ($vendorDetails->user_id === $loggedInUser)
 		{
@@ -230,7 +236,10 @@ class TjvendorsMailsHelper
 
 			$adminkey = "editVendorMailToAdmin";
 
-			$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
+			if ($this->tjnotifications)
+			{
+				$this->tjnotifications->send($this->client, $adminkey, $adminRecipients, $replacements, $options);
+			}
 		}
 
 		return;
@@ -251,7 +260,7 @@ class TjvendorsMailsHelper
 
 		if (!empty($adminRecipients))
 		{
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 
 			foreach ($adminRecipients as $adminRecipient)
 			{

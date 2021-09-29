@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Language\Text;
@@ -31,7 +32,6 @@ class TjvendorsTablePayout extends Table
 	 */
 	public function __construct(&$db)
 	{
-		JObserverMapper::addObserverClassToClass('JTableObserverContenthistory', 'TjpayoutsTablepayout', array('typeAlias' => 'com_tjvendors.payout'));
 		parent::__construct('#__tjvendors_passbook', 'id', $db);
 	}
 
@@ -76,7 +76,7 @@ class TjvendorsTablePayout extends Table
 				$array_jaccess[$action->name] = $default_actions[$action->name];
 			}
 
-			$array['rules'] = $this->JAccessRulestoArray($array_jaccess);
+			$array['rules'] = $this->RulestoArray($array_jaccess);
 		}
 
 		// Bind the rules for ACL where supported.
@@ -95,7 +95,7 @@ class TjvendorsTablePayout extends Table
 	 *
 	 * @return  array
 	 */
-	private function JAccessRulestoArray($jaccessrules)
+	private function RulestoArray($jaccessrules)
 	{
 		$rules = array();
 

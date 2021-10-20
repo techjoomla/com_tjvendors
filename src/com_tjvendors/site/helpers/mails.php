@@ -49,7 +49,7 @@ class TjvendorsMailsHelper
 		JLoader::import('components.com_tjvendors.helpers.fronthelper', JPATH_SITE);
 		$this->tjvendorFrontHelper = new TjvendorFrontHelper;
 
-		if (ComponentHelper::getComponent('com_tjnotifications', true)->enabled)
+		if (ComponentHelper::getComponent('com_tjnotifications', true)->enabled && class_exists('Tjnotifications'))
 		{
 			$this->tjnotifications = new Tjnotifications;
 		}

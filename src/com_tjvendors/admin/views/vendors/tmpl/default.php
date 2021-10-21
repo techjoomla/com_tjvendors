@@ -24,7 +24,7 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 // Import CSS
 $document = Factory::getDocument();
 HTMLHelper::stylesheet('administrator/components/com_tjvendors/assets/css/tjvendors.css');
-HTMLHelper::script('libraries/techjoomla/assets/js/houseKeeping.js');
+HTMLHelper::_('script', Uri::root(true) . '/libraries/techjoomla/assets/js/houseKeeping.js');
 $document->addScriptDeclaration("var tjHouseKeepingView='vendors';");
 
 $user      = Factory::getUser();
@@ -190,14 +190,14 @@ else
 		<table class="table table-striped" id="vendorList">
 			<thead>
 				<tr>
-					<?php 
+					<?php
 					if (isset($this->items[0]->ordering))
 					{
 						?>
 						<th width="1%" class="nowrap center hidden-phone">
 							<?php echo HTMLHelper::_('grid.sort', '<i class="icon-menu-2"></i>', 'v.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 						</th>
-					<?php 
+					<?php
 					}
 					?>
 					<th width="1%" class="hidden-phone">
@@ -210,7 +210,7 @@ else
 						<th width="1%" >
 							<?php echo Text::_('JSTATUS');?>
 						</th>
-					<?php 
+					<?php
 					}
 					?>
 					<th width="5%">
@@ -223,7 +223,7 @@ else
 						<th width="2%">
 							<?php echo Text::_('COM_TJVENDORS_VENDORS_VENDOR_APPROVE'); ?>
 						</th>
-					<?php 
+					<?php
 					}?>
 					<th width="5%">
 						<?php echo Text::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
@@ -292,7 +292,7 @@ else
 							<td class="hidden-phone">
 								<?php echo HTMLHelper::_('grid.id', $i, $item->vendor_id); ?>
 							</td>
-							<?php 
+							<?php
 							if (isset($this->items[0]->state))
 							{
 							?>
@@ -300,7 +300,7 @@ else
 								<td >
 									<?php echo HTMLHelper::_('jgrid.published', $item->state, $i, 'vendors.', $canChange, 'cb'); ?>
 								</td>
-							<?php 
+							<?php
 							} ?>
 							<td>
 								<a href="<?php echo Route::_(
@@ -322,7 +322,7 @@ else
 									);
 									?>
 								</td>
-							<?php 
+							<?php
 							}?>
 							<td>
 

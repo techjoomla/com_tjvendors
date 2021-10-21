@@ -558,9 +558,9 @@ class TjvendorFrontHelper
 	 */
 	public function getItemId($link)
 	{
-		$mainframe = Factory::getApplication();
+		$app = Factory::getApplication();
 
-		if ($mainframe->issite())
+		if ($app->issite())
 		{
 			$JSite = new JSite;
 			$menu  = $JSite->getMenu();

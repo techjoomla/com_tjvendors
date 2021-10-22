@@ -22,7 +22,7 @@ HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('formbehavior.chosen', 'select');
 HTMLHelper::_('behavior.keepalive');
-HTMLHelper::script(Uri::root() . 'libraries/techjoomla/assets/js/tjvalidator.js');
+HTMLHelper::script(Uri::root(true) . '/libraries/techjoomla/assets/js/tjvalidator.js');
 
 $script   = array();
 $script[] = 'var layout = "edit"';
@@ -45,7 +45,7 @@ if (Factory::getUser()->id)
 {
 	?>
 	<h1>
-		<?php 
+		<?php
 			if ($this->vendor_id)
 			{
 				echo Text::_('COM_TJVENDOR_UPDATE_VENDOR');
@@ -73,9 +73,9 @@ if (Factory::getUser()->id)
 							<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->vendor->checked_out_time; ?>" />
 							<input type="hidden" name="jform[checked_out]" value="<?php echo $this->vendor->checked_out; ?>" />
 							<input type="hidden" name="jform[ordering]" value="<?php echo $this->vendor->ordering; ?>" />
-							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />					
+							<input type="hidden" name="jform[state]" value="<?php echo $this->vendor->state; ?>" />
 							<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
-							<input type="hidden" name="jform[modified_by]" 
+							<input type="hidden" name="jform[modified_by]"
 							value="<?php echo (isset($this->vendor_id)) ? Factory::getUser()->id : '0';?>" />
 							<input type="hidden" name="jform[created_time]" value="<?php echo $this->vendor->created_time; ?>" />
 							<input type="hidden" name="jform[modified_time]" value="<?php echo $this->vendor->modified_time; ?>" />
@@ -91,7 +91,7 @@ if (Factory::getUser()->id)
 
 							<div class="row">
 								<div class="col-sm-6">
-									<?php 
+									<?php
 										echo $this->form->renderField('vendor_title');
 										echo $this->form->renderField('alias');
 										echo $this->form->renderField('vendor_description');
@@ -111,7 +111,7 @@ if (Factory::getUser()->id)
 										<?php echo sprintf(Text::_("COM_TJVENDORS_MAXIMUM_LOGO_UPLOAD_SIZE_NOTE"), $this->params->get('image_size', '', 'STRING'));?>
 									</div>
 								</div>
-								<div class="col-sm-6">							
+								<div class="col-sm-6">
 									<?php
 										echo $this->form->renderField('phone_number');
 										echo $this->form->renderField('address');
@@ -128,7 +128,7 @@ if (Factory::getUser()->id)
 												0 . '\',\'' . $this->vendor->region . '\',\'' . $this->vendor->city . '\')"', 'value', 'text', $this->default, 'jform_country');
 											?>
 										</div>
-									</div>	
+									</div>
 									<?php
 										echo $this->form->renderField('region');
 										echo $this->form->renderField('city');
@@ -136,7 +136,7 @@ if (Factory::getUser()->id)
 										echo $this->form->renderField('zip');
 										echo $this->form->renderField('website_address');
 										echo $this->form->renderField('vat_number');
-									?>								
+									?>
 								</div>
 							</div>
 						</fieldset>

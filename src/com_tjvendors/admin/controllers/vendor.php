@@ -68,11 +68,10 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function checkDuplicateUser()
 	{
-		$input  = Factory::getApplication()->input->post;
-		$user = $input->get('user', '', 'STRING');
-		$model = $this->getModel('vendor');
+		$input   = Factory::getApplication()->input->post;
+		$user    = $input->get('user', '', 'STRING');
+		$model   = $this->getModel('vendor', '', array());
 		$results = $model->checkDuplicateUser($user);
-
 		echo json_encode($results);
 		jexit();
 	}
@@ -86,16 +85,15 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function vendorApprove()
 	{
-		$input  = Factory::getApplication()->input;
-		$vendor_id = $input->post->get('vendor_id', '', 'INTEGER');
-		$vendorApprove = $input->post->get('vendorApprove', '', 'INTEGER');
-		$client = $input->get('client', '', 'STRING');
-		$model = $this->getModel('vendor');
-		$data['vendor_id'] = $vendor_id;
+		$input                 = Factory::getApplication()->input;
+		$vendor_id             = $input->post->get('vendor_id', '', 'INTEGER');
+		$vendorApprove         = $input->post->get('vendorApprove', '', 'INTEGER');
+		$client                = $input->get('client', '', 'STRING');
+		$model                 = $this->getModel('vendor', '', array());
+		$data['vendor_id']     = $vendor_id;
 		$data['vendor_client'] = $client;
-		$data['approved'] = $vendorApprove;
-		$result = $model->save($data);
-
+		$data['approved']      = $vendorApprove;
+		$result                = $model->save($data);
 		echo new JsonResponse($result, Text::_('COM_TJVENDORS_VENDOR_APPROVAL_ERROR'), true);
 	}
 
@@ -108,12 +106,12 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function generateGatewayFields()
 	{
-		$input  = Factory::getApplication()->input->post;
+		$input           = Factory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
-		$parentTag = $input->get('parent_tag', '', 'STRING');
-		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
-		$model = $this->getModel('vendor');
-		$results = $model->generateGatewayFields($payment_gateway, $parentTag);
+		$parentTag       = $input->get('parent_tag', '', 'STRING');
+		$vendor_id       = $input->get('vendor_id', '', 'INTEGER');
+		$model           = $this->getModel('vendor', '', array());
+		$results         = $model->generateGatewayFields($payment_gateway, $parentTag);
 		echo json_encode($results);
 		jexit();
 	}
@@ -150,7 +148,7 @@ class TjvendorsControllerVendor extends FormController
 	{
 		// Initialise variables.
 		$app    = Factory::getApplication();
-		$model  = $this->getModel('Vendor', 'TjvendorsModel');
+		$model  = $this->getModel('Vendor', 'TjvendorsModel', array());
 		$input  = $app->input;
 		$client = $input->get('client', '', 'STRING');
 
@@ -162,7 +160,7 @@ class TjvendorsControllerVendor extends FormController
 
 		if (!$form)
 		{
-			JError::raiseError(500, $model->getError());
+			$app->enqueueMessage($model->getError(), 'error');
 
 			return false;
 		}

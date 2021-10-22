@@ -11,9 +11,9 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Response\JsonResponse;
 
 /**
  * Vendor Json controller class

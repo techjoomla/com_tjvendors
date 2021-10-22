@@ -24,7 +24,7 @@ HTMLHelper::_('behavior.keepalive');
 
 $lang = Factory::getLanguage();
 $lang->load('plg_payment_paypal', JPATH_ADMINISTRATOR);
-HTMLHelper::script(Uri::root() . 'libraries/techjoomla/assets/js/tjvalidator.js');
+HTMLHelper::script(Uri::root(true) . '/libraries/techjoomla/assets/js/tjvalidator.js');
 
 $script   = array();
 $script[] = 'var _URL = window.URL || window.webkitURL;';
@@ -57,7 +57,7 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 								<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 								<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 								<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
-								<input type="hidden" name="jform[modified_by]" 
+								<input type="hidden" name="jform[modified_by]"
 								value="<?php echo (isset($this->item->vendor_id)) ? Factory::getUser()->id : '0';?>" />
 								<input type="hidden" name="jform[created_time]" value="<?php echo $this->item->created_time; ?>" />
 								<input type="hidden" name="jform[modified_time]" value="<?php echo $this->item->modified_time; ?>" />
@@ -76,14 +76,14 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 										$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 									}
 								?>
-									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden" 
+									<input type="hidden" name="jform[vendor_logo]" id="jform_vendor_logo_hidden"
 									value="<?php echo $this->vendorLogoProfileImg?>" />
 									<div class="control-group">
 										<div class="controls ">
 											<img src="<?php echo $this->vendorLogoProfileImgPath; ?>"
 											class="span3 col-md-3 img-thumbnail marginb10 img-polaroid">
 										</div>
-									</div>							
+									</div>
 									<div class="controls">
 										<div class="alert alert-warning">
 											<?php echo sprintf(Text::_("COM_TJVENDORS_FILE_UPLOAD_ALLOWED_EXTENSIONS"), 'jpg, jpeg, png');?>

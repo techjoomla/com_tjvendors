@@ -408,7 +408,7 @@ class TjvendorsHelper
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'vendor');
 		$tjvendorsModelVendors = BaseDatabaseModel::getInstance('Vendor', 'TjvendorsModel');
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables', 'vendor');
-		$vendorsDetail = $tjvendorsModelVendors->save($data);
+		$tjvendorsModelVendors->save($data);
 		Table::addIncludePath(JPATH_ROOT . '/administrator/components/com_tjvendors/tables');
 		$table = Table::getInstance('vendor', 'TJVendorsTable', array());
 		$table->load(array('user_id' => $data['user_id']));

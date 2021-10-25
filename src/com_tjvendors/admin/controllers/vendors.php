@@ -11,13 +11,13 @@
 // No direct access.
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Session\Session;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Session\Session;
+use Joomla\Utilities\ArrayHelper;
 
-jimport('joomla.application.component.controllerform');
 JLoader::register('TjControllerHouseKeeping', JPATH_SITE . "/libraries/techjoomla/controller/houseKeeping.php");
 
 /**
@@ -57,10 +57,11 @@ class TjvendorsControllerVendors extends AdminController
 		// Check for request forgeries
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		$input  = Factory::getApplication()->input;
+		$app    = Factory::getApplication();
+		$input  = $app->input;
 		$client = $input->get('client', '', 'STRING');
-		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
-		$model = $this->getModel("vendors");
+		$cid    = $app->input->get('cid', array(), 'array');
+		$model  = $this->getModel("vendors");
 
 		foreach ($cid as $vendor_id)
 		{
@@ -78,13 +79,14 @@ class TjvendorsControllerVendors extends AdminController
 	 */
 	public function publish()
 	{
-		$input = Factory::getApplication()->input;
-		$post = $input->post;
+		$app    = Factory::getApplication();
+		$input  = $app->input;
+		$post   = $input->post;
 		$client = $input->get('client', '', 'STRING');
-		$cid = Factory::getApplication()->input->get('cid', array(), 'array');
-		$data = array('publish' => 1, 'unpublish' => 0, 'archive' => 2, 'trash' => -2, 'report' => -3);
-		$task = $this->getTask();
-		$value = JArrayHelper::getValue($data, $task, 0, 'int');
+		$cid    = $app->input->get('cid', array(), 'array');
+		$data   = array('publish' => 1, 'unpublish' => 0, 'archive' => 2, 'trash' => -2, 'report' => -3);
+		$task   = $this->getTask();
+		$value  = ArrayHelper::getValue($data, $task, 0, 'int');
 
 		// Get some variables from the request
 
@@ -98,7 +100,7 @@ class TjvendorsControllerVendors extends AdminController
 			$model = $this->getModel('vendors');
 
 			// Make sure the item ids are integers
-			JArrayHelper::toInteger($cid);
+			ArrayHelper::toInteger($cid);
 
 			// Publish the items.
 			try

@@ -153,7 +153,7 @@ class TjvendorsControllerVendor extends FormController
 		$client = $input->get('client', '', 'STRING');
 
 		// Get the user data.
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$data = $app->input->get('jform', array(), 'array');
 
 		// Validate the posted data.
 		$form = $model->getForm();

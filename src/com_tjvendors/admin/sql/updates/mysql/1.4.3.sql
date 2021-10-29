@@ -13,7 +13,6 @@ ALTER TABLE `#__tjvendors_fee` CHANGE `client` `client` VARCHAR(255)  NOT NULL D
 ALTER TABLE `#__vendor_client_xref` CHANGE `vendor_id` `vendor_id` INT(11)  NOT NULL DEFAULT 0;
 ALTER TABLE `#__vendor_client_xref` CHANGE `client` `client` VARCHAR(255)  NOT NULL DEFAULT '';
 
-ALTER TABLE `#__tjvendors_vendors` CHANGE `client` `client` VARCHAR(255)  NOT NULL DEFAULT '';
 ALTER TABLE `#__tjvendors_vendors` CHANGE `user_id` `user_id` int(11) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `vendor_title` `vendor_title` varchar(255) NOT NULL DEFAULT '';
 ALTER TABLE `#__tjvendors_vendors` CHANGE `country` `country` int(3) NOT NULL DEFAULT 0;

@@ -53,12 +53,10 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
 	{
-		$input = Factory::getApplication()->input;
-		$cid = $input->post->get('cid', array(), 'array');
-		$formData = new Registry($input->get('jform', '', 'array'));
-		$client = $input->get('client', '', 'STRING');
+		$input     = Factory::getApplication()->input;
+		$client    = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
-		$append = parent::getRedirectToItemAppend($recordId);
+		$append    = parent::getRedirectToItemAppend($recordId);
 		$append .= '&vendor_id=' . $vendor_id . '&client=' . $client;
 
 		return $append;
@@ -73,14 +71,10 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	protected function getRedirectToListAppend()
 	{
-		$input = Factory::getApplication()->input;
-		$cid = $input->post->get('cid', array(), 'array');
-		$formData = new Registry($input->get('jform', '', 'array'));
-		$client = $input->get('client', '', 'STRING');
+		$input     = Factory::getApplication()->input;
+		$client    = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'STRING');
-
-		// $vendor_id = (int) $this->getState($this->getName() . '.id');
-		$append = parent::getRedirectToItemAppend($recordId);
+		$append    = parent::getRedirectToItemAppend();
 		$append .= '&vendor_id=' . $vendor_id . '&client=' . $client;
 
 		return $append;
@@ -97,12 +91,12 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	public function edit($key = null, $urlVar = null)
 	{
-		$input = Factory::getApplication()->input;
-		$cid = $input->post->get('cid', array(), 'array');
+		$input    = Factory::getApplication()->input;
+		$cid      = $input->post->get('cid', array(), 'array');
 		$vendorId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
-		$client = $input->get('client', '', 'STRING');
-		$feeId = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
-		$link = Route::_(
+		$client   = $input->get('client', '', 'STRING');
+		$feeId    = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
+		$link     = Route::_(
 		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId . '&client=' . $client, false
 		);
 		$this->setRedirect($link);

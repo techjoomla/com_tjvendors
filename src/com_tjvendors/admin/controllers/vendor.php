@@ -223,13 +223,15 @@ class TjvendorsControllerVendor extends FormController
 		if ($task == 'apply')
 		{
 			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false);
-			$app->redirect($redirect, $msg);
+			$app->enqueueMessage($msg, 'success');
+			$app->redirect($redirect);
 		}
 
 		if ($task == 'save2new')
 		{
 			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client, false);
-			$app->redirect($redirect, $msg);
+			$app->enqueueMessage($msg, 'success');
+			$app->redirect($redirect);
 		}
 
 		// Clear the profile id from the session.
@@ -243,7 +245,8 @@ class TjvendorsControllerVendor extends FormController
 
 		// Redirect to the list screen.
 		$redirect = Route::_('index.php?option=com_tjvendors&view=vendors&client=' . $client, false);
-		$app->redirect($redirect, $msg);
+		$app->enqueueMessage($msg, 'success');
+		$app->redirect($redirect);
 
 		// Flush the data from the session.
 		$app->setUserState('com_tjvendors.edit.vendor.data', null);

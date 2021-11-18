@@ -21,9 +21,11 @@ export class CommonUI{
 
 			var regionField = document.getElementById('jform_region');
 			jQuery(regionField).trigger("liszt:updated");
+			jQuery(regionField).trigger("chosen:updated");
 
 			var cityField = document.getElementById('jform_city');
 			jQuery(cityField).trigger("liszt:updated");
+			jQuery(cityField).trigger("chosen:updated");
 
 			return;
 		}
@@ -58,17 +60,18 @@ export class CommonUI{
 				if(regions.success === true){
 					regions.data.forEach(region => {
 						let option = document.createElement("option");
-						option.set('value', region.id);
-						option.set('text', region.region);
+						option.value = region.id;
+						option.text = region.region;
 						regionField.add(option);
 					});
 
 					// Set selected region
 					if(selectedRegion) {
-						regionField.set('value', selectedRegion);
+						regionField.value = selectedRegion;
 					}
 
 					jQuery(regionField).trigger("liszt:updated");
+					jQuery(regionField).trigger("chosen:updated");
 				}else{
 					Joomla.renderMessages({
 						'error': [Joomla.JText._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
@@ -86,8 +89,6 @@ export class CommonUI{
 			jQuery("html, body").animate({
 				scrollTop: 0
 			}, "slow");
-
-			console.error(err.message)
 		}
 	}
 
@@ -110,17 +111,18 @@ export class CommonUI{
 				if(cities.success === true){
 					cities.data.forEach(city => {
 						let option = document.createElement("option");
-						option.set('value', city.id);
-						option.set('text', city.city);
+						option.value = city.id;
+						option.text = city.city;
 						cityField.add(option);
 					});
 
 					// Set selected region
 					if(selectedCity) {
-						cityField.set('value', selectedCity);
+						cityField.value = selectedCity;
 					}
 
 					jQuery(cityField).trigger("liszt:updated");
+					jQuery(cityField).trigger("chosen:updated");
 				}else{
 					Joomla.renderMessages({
 						'error': [Joomla.JText._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
@@ -138,7 +140,6 @@ export class CommonUI{
 			jQuery("html, body").animate({
 				scrollTop: 0
 			}, "slow");
-			console.error(err.message)
 		}
 	}
 

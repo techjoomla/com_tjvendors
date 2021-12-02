@@ -52,6 +52,7 @@ HTMLHelper::_('behavior.keepalive');
 	<div class="form-horizontal">
 		<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', array('active' => 'general')); ?>
 		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_TJVENDORS_TITLE_PAYOUT', true)); ?>
+		<div>&nbsp;</div>
 		<div class="row-fluid">
 			<div class="span10 form-horizontal">
 				<fieldset class="adminform">

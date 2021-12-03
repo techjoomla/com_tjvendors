@@ -61,7 +61,7 @@ class TjvendorsTriggerVendor
 		}
 
 		PluginHelper::importPlugin('tjvendors');
-		Factory::getApplication()->triggerEvent('tjVendorsOnAfterVendorSave', array($vendorDetails, $isNew));
+		Factory::getApplication()->triggerEvent('onAfterTjVendorsVendorSave', array($vendorDetails, $isNew));
 
 		return;
 	}

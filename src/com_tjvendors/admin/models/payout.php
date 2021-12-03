@@ -231,7 +231,7 @@ class TjvendorsModelPayout extends AdminModel
 
 			// Plugin trigger
 			PluginHelper::importPlugin('tjvendors');
-			Factory::getApplication()->triggerEvent('tjVendorOnAfterPayoutPaid', array($id, $data, true));
+			Factory::getApplication()->triggerEvent('onAfterTjVendorPayoutPaid', array($id, $data, true));
 
 			// Update their details in the users table using id as the primary key.
 			$result = Factory::getDbo()->updateObject('#__tjvendors_passbook', $payout_update, 'id');

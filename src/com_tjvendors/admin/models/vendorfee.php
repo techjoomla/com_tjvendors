@@ -172,7 +172,7 @@ class TjvendorsModelVendorFee extends AdminModel
 				}
 
 				PluginHelper::importPlugin('tjvendors');
-				Factory::getApplication()->triggerEvent('tjVendorsOnAfterVendorFeeSave', array($data, $isNew));
+				Factory::getApplication()->triggerEvent('onAfterTjVendorsVendorFeeSave', array($data, $isNew));
 
 				return true;
 			}

@@ -466,7 +466,7 @@ class TjvendorsModelVendor extends AdminModel
 
 				// Plugin trigger
 				PluginHelper::importPlugin('tjvendors');
-				Factory::getApplication()->triggerEvent('tjVendorOnAfterVendorSave', array($data));
+				Factory::getApplication()->triggerEvent('onAfterTjVendorVendorSave', array($data));
 
 				return true;
 			}
@@ -503,7 +503,7 @@ class TjvendorsModelVendor extends AdminModel
 
 				// Plugin trigger
 				PluginHelper::importPlugin('tjvendors');
-				Factory::getApplication()->triggerEvent('tjVendorOnAfterVendorSave', array($data));
+				Factory::getApplication()->triggerEvent('onAfterTjVendorVendorSave', array($data));
 
 				return true;
 			}
@@ -535,7 +535,7 @@ class TjvendorsModelVendor extends AdminModel
 
 				// Plugin trigger
 				PluginHelper::importPlugin('tjvendors');
-				Factory::getApplication()->triggerEvent('tjVendorOnAfterVendorSave', array());
+				Factory::getApplication()->triggerEvent('onAfterTjVendorVendorSave', array());
 
 				return $data['vendor_id'];
 			}

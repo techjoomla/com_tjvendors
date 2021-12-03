@@ -272,7 +272,7 @@ class TjvendorsModelVendors extends ListModel
 		}
 
 		PluginHelper::importPlugin('tjvendors');
-		Factory::getApplication()->triggerEvent('tjvendorOnAfterVendorDelete', array($vendorData, $client));
+		Factory::getApplication()->triggerEvent('onAfterTjvendorVendorDelete', array($vendorData, $client));
 	}
 
 	/**
@@ -320,7 +320,7 @@ class TjvendorsModelVendors extends ListModel
 		}
 
 		PluginHelper::importPlugin('tjvendors');
-		Factory::getApplication()->triggerEvent('tjVendorsOnAfterVendorStateChange', array($items, $state, $client));
+		Factory::getApplication()->triggerEvent('onAfterTjVendorsVendorStateChange', array($items, $state, $client));
 
 		return true;
 	}

@@ -70,7 +70,7 @@ class TjvendorsControllerVendor extends FormController
 	{
 		$input   = Factory::getApplication()->input->post;
 		$user    = $input->get('user', '', 'STRING');
-		$model   = $this->getModel('vendor', '', array());
+		$model   = $this->getModel('vendor');
 		$results = $model->checkDuplicateUser($user);
 		echo json_encode($results);
 		jexit();

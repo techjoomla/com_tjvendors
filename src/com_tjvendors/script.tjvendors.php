@@ -103,8 +103,6 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function uninstall($parent)
 	{
-		jimport('joomla.installer.installer');
-
 		$db = Factory::getDBO();
 
 		$status          = new CMSObject;
@@ -157,7 +155,6 @@ class Com_TjvendorsInstallerScript
 	 */
 	public function _installPlugins($parent)
 	{
-		jimport('joomla.installer.installer');
 		$src = $parent->getParent()->getPath('source');
 
 		$db = Factory::getDbo();
@@ -417,7 +414,6 @@ class Com_TjvendorsInstallerScript
 	public function _insertTjNotificationTemplates()
 	{
 		$client = 'com_tjvendors';
-		jimport('joomla.application.component.model');
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
 
 		$db = Factory::getDbo();
@@ -557,9 +553,6 @@ class Com_TjvendorsInstallerScript
 	 */
 	private function _addLayout($parent)
 	{
-		jimport('joomla.filesystem.file');
-		jimport('joomla.filesystem.folder');
-
 		$src = $parent->getParent()->getPath('source');
 		$VendorSubformLayouts = $src . "/layouts/com_tjvendors";
 

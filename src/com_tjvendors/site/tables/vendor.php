@@ -123,8 +123,6 @@ class TjvendorsTablevendor extends Table
 	 */
 	public function check()
 	{
-		jimport('joomla.filesystem.file');
-
 		$db = Factory::getDbo();
 		$this->alias = trim($this->alias);
 

@@ -4,7 +4,8 @@ ALTER TABLE `#__tjvendors_passbook` CHANGE `reference_order_id` `reference_order
 ALTER TABLE `#__tjvendors_passbook` CHANGE `client` `client` VARCHAR(255)  NOT NULL DEFAULT '';
 ALTER TABLE `#__tjvendors_passbook` CHANGE `transaction_id` `transaction_id` VARCHAR(255)  NOT NULL DEFAULT '';
 ALTER TABLE `#__tjvendors_passbook` CHANGE `status` `status` TINYINT(1)  NOT NULL DEFAULT 1;
-ALTER TABLE `#__tjvendors_passbook` CHANGE `params` `params` VARCHAR(255)  NOT NULL DEFAULT '';
+ALTER TABLE `#__tjvendors_passbook` CHANGE `params` `params` text DEFAULT NULL;
+ALTER TABLE `#__tjvendors_passbook` CHANGE `transaction_time` `transaction_time` datetime DEFAULT NULL;
 
 ALTER TABLE `#__tjvendors_fee` CHANGE `vendor_id` `vendor_id` INT(11)  NOT NULL DEFAULT 0;
 ALTER TABLE `#__tjvendors_fee` CHANGE `currency` `currency` VARCHAR(255)  NOT NULL DEFAULT '';
@@ -15,6 +16,7 @@ ALTER TABLE `#__vendor_client_xref` CHANGE `client` `client` VARCHAR(255)  NOT N
 
 ALTER TABLE `#__tjvendors_vendors` CHANGE `user_id` `user_id` int(11) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `vendor_title` `vendor_title` varchar(255) NOT NULL DEFAULT '';
+ALTER TABLE `#__tjvendors_vendors` CHANGE `address` `address` text DEFAULT NULL;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `country` `country` int(3) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `region` `region` int(5) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `city` `city` varchar(50) NOT NULL DEFAULT '';
@@ -28,6 +30,12 @@ ALTER TABLE `#__tjvendors_vendors` CHANGE `vendor_logo` `vendor_logo` varchar(25
 ALTER TABLE `#__tjvendors_vendors` CHANGE `state` `state` tinyint(1) NOT NULL DEFAULT 1;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `ordering` `ordering` int(11) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `checked_out` `checked_out` int(11) NOT NULL DEFAULT 0;
-ALTER TABLE `#__tjvendors_vendors` CHANGE `params` `params` varchar(255) NOT NULL DEFAULT '';
+ALTER TABLE `#__tjvendors_vendors` CHANGE `params` `params` text DEFAULT NULL;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `created_by` `created_by` int(11) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `modified_by` `modified_by` int(11) NOT NULL DEFAULT 0;
+ALTER TABLE `#__tjvendors_vendors` CHANGE `params` `params` text DEFAULT NULL;
+ALTER TABLE `#__tjvendors_vendors` CHANGE `created_by` `created_by` int(11) NOT NULL DEFAULT 0;
+ALTER TABLE `#__tjvendors_vendors` CHANGE `modified_by` `modified_by` int(11) NOT NULL DEFAULT 0;
+ALTER TABLE `#__tjvendors_vendors` CHANGE `checked_out_time` `checked_out_time` datetime DEFAULT NULL,
+ALTER TABLE `#__tjvendors_vendors` CHANGE `created_time` `created_time` datetime DEFAULT NULL,
+ALTER TABLE `#__tjvendors_vendors` CHANGE `modified_time` `modified_time` datetime DEFAULT NULL,

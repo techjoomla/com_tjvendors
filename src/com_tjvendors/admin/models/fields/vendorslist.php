@@ -10,20 +10,26 @@
 
 // No direct access.
 defined('_JEXEC') or die();
+
+use Joomla\CMS\Form\FormField;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\FormHelper;
 
-jimport('joomla.form.helper');
 FormHelper::loadFieldClass('list');
+
+if (JVERSION < '4.0.0')
+{
+	HTMLHelper::_('formbehavior.chosen', 'select');
+}
 
 /**
  * Supports an HTML select list of vendors
  *
  * @since  1.3.2
  */
-class JFormFieldVendorsList extends \JFormFieldList
+class JFormFieldVendorsList extends JFormFieldList
 {
 	/**
 	 * The form field type.
@@ -51,10 +57,10 @@ class JFormFieldVendorsList extends \JFormFieldList
 		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select($db->qn(array('v.vendor_id', 'v.vendor_title')))
-		->from($db->qn('#__tjvendors_vendors', 'v'))
-		->join('LEFT', $db->qn('#__vendor_client_xref', 'x') . 'ON (' . $db->qn('x.vendor_id') . ' = ' . $db->qn('v.vendor_id') . ')')
-		->where($db->qn('x.client') . ' = ' . $db->quote($this->element['client']))
-		->where($db->qn('x.state') . ' = ' . $db->quote('1'));
+			->from($db->qn('#__tjvendors_vendors', 'v'))
+			->join('LEFT', $db->qn('#__vendor_client_xref', 'x') . 'ON (' . $db->qn('x.vendor_id') . ' = ' . $db->qn('v.vendor_id') . ')')
+			->where($db->qn('x.client') . ' = ' . $db->quote($this->element['client']))
+			->where($db->qn('x.state') . ' = ' . $db->quote('1'));
 		$db->setQuery($query);
 		$vendorsList = $db->loadAssocList();
 

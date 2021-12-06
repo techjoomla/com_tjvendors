@@ -10,10 +10,9 @@
 
 // Check to ensure this file is included in Joomla!
 defined('_JEXEC') or die('Restricted access');
-use Joomla\CMS\Form\Form;
-use Joomla\CMS\Language\Text;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 
 /**
  * Class JFormFieldSubmit

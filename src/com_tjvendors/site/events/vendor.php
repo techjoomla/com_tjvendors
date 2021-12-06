@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die('Restricted access');
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 
@@ -59,9 +60,8 @@ class TjvendorsTriggerVendor
 				break;
 		}
 
-		$dispatcher = JDispatcher::getInstance();
 		PluginHelper::importPlugin('tjvendors');
-		$dispatcher->trigger('tjVendorsOnAfterVendorSave', array($vendorDetails, $isNew));
+		Factory::getApplication()->triggerEvent('onAfterTjVendorsVendorSave', array($vendorDetails, $isNew));
 
 		return;
 	}

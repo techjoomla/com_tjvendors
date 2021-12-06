@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Language\Text;
@@ -23,7 +24,6 @@ if (!Factory::getUser()->authorise('core.manage', 'com_tjvendors'))
 }
 
 // Include dependancies
-jimport('joomla.application.component.controller');
 include_once  JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
 $tjStrapperPath = JPATH_SITE . '/media/techjoomla_strapper/tjstrapper.php';

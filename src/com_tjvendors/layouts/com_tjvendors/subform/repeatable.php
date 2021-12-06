@@ -9,6 +9,7 @@
  */
 
 defined('_JEXEC') or die;
+
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 
@@ -37,7 +38,11 @@ extract($displayData);
 // Add script
 if ($multiple)
 {
-	HTMLHelper::_('jquery.ui', array('core', 'sortable'));
+	if (JVERSION < '4.0.0')
+	{
+		HTMLHelper::_('jquery.ui', array('core', 'sortable'));
+	}
+
 	HTMLHelper::_('script', 'system/subform-repeatable.js', array('version' => 'auto', 'relative' => true));
 }
 

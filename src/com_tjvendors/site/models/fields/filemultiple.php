@@ -1,5 +1,3 @@
-use Joomla\CMS\Form\FormField;
-use Joomla\CMS\Form\Form;
 <?php
 /**
  * @package     TJVendors
@@ -12,7 +10,7 @@ use Joomla\CMS\Form\Form;
 
 defined('JPATH_BASE') or die;
 
-jimport('joomla.form.formfield');
+use Joomla\CMS\Form\FormField;
 
 /**
  * Supports an HTML select list of categories

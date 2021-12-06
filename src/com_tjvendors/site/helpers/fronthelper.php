@@ -9,8 +9,9 @@
  */
 
 defined('_JEXEC') or die;
-use Joomla\CMS\Factory;
+
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
@@ -56,8 +57,8 @@ class TjvendorFrontHelper
 	public static function getUniqueClients($user_id)
 	{
 		$vendor_id = self::getvendor();
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
+		$db        = Factory::getDbo();
+		$query     = $db->getQuery(true);
 		$query->select('DISTINCT' . $db->quoteName('client'));
 		$query->from($db->quoteName('#__tjvendors_passbook', 'vendors'));
 
@@ -308,7 +309,7 @@ class TjvendorFrontHelper
 	{
 		if (empty($user_id))
 		{
-			$user_id = jFactory::getuser()->id;
+			$user_id = Factory::getuser()->id;
 		}
 
 		$db = Factory::getDbo();
@@ -377,7 +378,7 @@ class TjvendorFrontHelper
 
 		$params = json_decode($result['params']);
 
-		if (empty($params->payment_email_id))
+		if (empty($params->payment_gateway))
 		{
 			return true;
 		}
@@ -403,7 +404,7 @@ class TjvendorFrontHelper
 		$payout_day_limit = $vendorParams->get('payout_limit_days', '0', 'INT');
 		$date = Factory::getDate();
 		$payout_date_limit = $date->modify("-" . $payout_day_limit . " day");
-		$currency = $com_params->get('currency');
+		$currency = !empty($order_data['currency']) ? $order_data['currency'] : $com_params->get('currency');
 
 		$payoutTable = Table::getInstance('payout', 'TjvendorsTable', array());
 		$payoutTable->load(array('reference_order_id' => $order_data['order_id']));
@@ -435,10 +436,9 @@ class TjvendorFrontHelper
 			}
 
 			$entry_data['debit'] = $order_data['amount'] - $order_data['fee_amount'];
-			$entry_data['credit'] = '0.00';
+			$entry_data['credit'] = 0;
 			$entry_data['total'] = $totalAmount['total'] - $entry_data['debit'];
 		}
-
 		elseif ($order_data['status'] == "C")
 		{
 			$entry_data['credit'] = $order_data['amount'] - $order_data['fee_amount'];
@@ -451,9 +451,10 @@ class TjvendorFrontHelper
 		$entry_data['params'] = json_encode($params);
 		$entry_data['currency'] = $currency;
 		$entry_data['client'] = $order_data['client'];
+
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/models', 'payout');
 		$tjvendorsModelPayout = BaseDatabaseModel::getInstance('Payout', 'TjvendorsModel');
-			$vendorDetail = $tjvendorsModelPayout->addCreditEntry($entry_data);
+		$tjvendorsModelPayout->addCreditEntry($entry_data);
 	}
 
 	/**
@@ -557,12 +558,11 @@ class TjvendorFrontHelper
 	 */
 	public function getItemId($link)
 	{
-		$mainframe = Factory::getApplication();
+		$app = Factory::getApplication();
 
-		if ($mainframe->issite())
+		if ($app->isClient('site'))
 		{
-			$JSite = new JSite;
-			$menu  = $JSite->getMenu();
+  	 		$menu     = $app->getMenu();
 			$menuItem = $menu->getItems('link', $link, true);
 
 			if ($menuItem)
@@ -653,7 +653,6 @@ class TjvendorFrontHelper
 		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
 		$db->setQuery($query);
-
 		$return = $db->loadResult();
 
 		if ($return)

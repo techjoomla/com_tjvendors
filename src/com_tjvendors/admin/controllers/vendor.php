@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -67,11 +68,10 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function checkDuplicateUser()
 	{
-		$input  = Factory::getApplication()->input->post;
-		$user = $input->get('user', '', 'STRING');
-		$model = $this->getModel('vendor');
+		$input   = Factory::getApplication()->input->post;
+		$user    = $input->get('user', '', 'STRING');
+		$model   = $this->getModel('vendor');
 		$results = $model->checkDuplicateUser($user);
-
 		echo json_encode($results);
 		jexit();
 	}
@@ -85,16 +85,15 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function vendorApprove()
 	{
-		$input  = Factory::getApplication()->input;
-		$vendor_id = $input->post->get('vendor_id', '', 'INTEGER');
-		$vendorApprove = $input->post->get('vendorApprove', '', 'INTEGER');
-		$client = $input->get('client', '', 'STRING');
-		$model = $this->getModel('vendor');
-		$data['vendor_id'] = $vendor_id;
+		$input                 = Factory::getApplication()->input;
+		$vendor_id             = $input->post->get('vendor_id', '', 'INTEGER');
+		$vendorApprove         = $input->post->get('vendorApprove', '', 'INTEGER');
+		$client                = $input->get('client', '', 'STRING');
+		$model                 = $this->getModel('vendor', '', array());
+		$data['vendor_id']     = $vendor_id;
 		$data['vendor_client'] = $client;
-		$data['approved'] = $vendorApprove;
-		$result = $model->save($data);
-
+		$data['approved']      = $vendorApprove;
+		$result                = $model->save($data);
 		echo new JsonResponse($result, Text::_('COM_TJVENDORS_VENDOR_APPROVAL_ERROR'), true);
 	}
 
@@ -107,12 +106,12 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function generateGatewayFields()
 	{
-		$input  = Factory::getApplication()->input->post;
+		$input           = Factory::getApplication()->input->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
-		$parentTag = $input->get('parent_tag', '', 'STRING');
-		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
-		$model = $this->getModel('vendor');
-		$results = $model->generateGatewayFields($payment_gateway, $parentTag);
+		$parentTag       = $input->get('parent_tag', '', 'STRING');
+		$vendor_id       = $input->get('vendor_id', '', 'INTEGER');
+		$model           = $this->getModel('vendor', '', array());
+		$results         = $model->generateGatewayFields($payment_gateway, $parentTag);
 		echo json_encode($results);
 		jexit();
 	}
@@ -149,19 +148,19 @@ class TjvendorsControllerVendor extends FormController
 	{
 		// Initialise variables.
 		$app    = Factory::getApplication();
-		$model  = $this->getModel('Vendor', 'TjvendorsModel');
+		$model  = $this->getModel('Vendor', 'TjvendorsModel', array());
 		$input  = $app->input;
 		$client = $input->get('client', '', 'STRING');
 
 		// Get the user data.
-		$data = Factory::getApplication()->input->get('jform', array(), 'array');
+		$data = $app->input->get('jform', array(), 'array');
 
 		// Validate the posted data.
 		$form = $model->getForm();
 
 		if (!$form)
 		{
-			JError::raiseError(500, $model->getError());
+			$app->enqueueMessage($model->getError(), 'error');
 
 			return false;
 		}
@@ -224,13 +223,15 @@ class TjvendorsControllerVendor extends FormController
 		if ($task == 'apply')
 		{
 			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client . '&vendor_id=' . $id, false);
-			$app->redirect($redirect, $msg);
+			$app->enqueueMessage($msg, 'success');
+			$app->redirect($redirect);
 		}
 
 		if ($task == 'save2new')
 		{
 			$redirect = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client, false);
-			$app->redirect($redirect, $msg);
+			$app->enqueueMessage($msg, 'success');
+			$app->redirect($redirect);
 		}
 
 		// Clear the profile id from the session.
@@ -244,7 +245,8 @@ class TjvendorsControllerVendor extends FormController
 
 		// Redirect to the list screen.
 		$redirect = Route::_('index.php?option=com_tjvendors&view=vendors&client=' . $client, false);
-		$app->redirect($redirect, $msg);
+		$app->enqueueMessage($msg, 'success');
+		$app->redirect($redirect);
 
 		// Flush the data from the session.
 		$app->setUserState('com_tjvendors.edit.vendor.data', null);

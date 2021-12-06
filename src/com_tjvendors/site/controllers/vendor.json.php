@@ -51,7 +51,7 @@ class TjvendorsControllerVendor extends TjvendorsController
 			$regions[] = $defaultRegion;
 		}
 
-		echo new JResponseJson($regions);
+		echo new JsonResponse($regions);
 		$app->close();
 	}
 
@@ -87,7 +87,7 @@ class TjvendorsControllerVendor extends TjvendorsController
 			$city[] = $defaultCity;
 		}
 
-		echo new JResponseJson($city);
+		echo new JsonResponse($city);
 		$app->close();
 	}
 }

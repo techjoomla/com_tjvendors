@@ -10,6 +10,7 @@
 
 // No direct access
 defined('_JEXEC') or die;
+
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\FormController;
 
@@ -35,6 +36,8 @@ class TjvendorsControllerPayout extends FormController
 			$this->client = $this->input->get('client', '');
 		}
 
+		$this->text_prefix = 'COM_TJVENDORS_PAYOUTS';
+
 		parent::__construct();
 	}
 
@@ -48,10 +51,10 @@ class TjvendorsControllerPayout extends FormController
 
 	protected function getRedirectToListAppend()
 	{
-		$input = Factory::getApplication()->input;
+		$input     = Factory::getApplication()->input;
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
-		$client = $input->get('client', '', 'STRING');
-		$append = parent::getRedirectToListAppend();
+		$client    = $input->get('client', '', 'STRING');
+		$append    = parent::getRedirectToListAppend();
 		$append .= '&vendor_id=' . $vendor_id;
 		$append .= '&client=' . $client;
 
@@ -68,7 +71,7 @@ class TjvendorsControllerPayout extends FormController
 	public function addCreditEntry()
 	{
 		$model = $this->getModel('payout');
-		$results = $model->addCreditEntry();
+		$model->addCreditEntry();
 	}
 
 	/**
@@ -80,12 +83,11 @@ class TjvendorsControllerPayout extends FormController
 	 */
 	public function changePayoutStatus()
 	{
-		$input  = Factory::getApplication()->input->post;
-		$payout_id = $input->get('payout_id', '', 'STRING');
+		$input      = Factory::getApplication()->input->post;
+		$payout_id  = $input->get('payout_id', '', 'STRING');
 		$paidUnpaid = $input->get('paidUnpaid', '', 'STRING');
-		$model = $this->getModel('Payout');
-		$results = $model->changePayoutStatus($payout_id, $paidUnpaid);
-
+		$model      = $this->getModel('Payout');
+		$results    = $model->changePayoutStatus($payout_id, $paidUnpaid);
 		echo json_encode($results);
 		jexit();
 	}

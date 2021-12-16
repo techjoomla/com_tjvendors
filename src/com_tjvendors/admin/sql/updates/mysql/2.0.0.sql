@@ -36,6 +36,6 @@ ALTER TABLE `#__tjvendors_vendors` CHANGE `modified_by` `modified_by` int(11) NO
 ALTER TABLE `#__tjvendors_vendors` CHANGE `params` `params` text DEFAULT NULL;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `created_by` `created_by` int(11) NOT NULL DEFAULT 0;
 ALTER TABLE `#__tjvendors_vendors` CHANGE `modified_by` `modified_by` int(11) NOT NULL DEFAULT 0;
-ALTER TABLE `#__tjvendors_vendors` CHANGE `checked_out_time` `checked_out_time` datetime DEFAULT NULL,
-ALTER TABLE `#__tjvendors_vendors` CHANGE `created_time` `created_time` datetime DEFAULT NULL,
-ALTER TABLE `#__tjvendors_vendors` CHANGE `modified_time` `modified_time` datetime DEFAULT NULL,
+ALTER TABLE `#__tjvendors_vendors` CHANGE `checked_out_time` `checked_out_time` datetime DEFAULT NULL;
+ALTER TABLE `#__tjvendors_vendors` CHANGE `created_time` `created_time` datetime DEFAULT NULL;
+ALTER TABLE `#__tjvendors_vendors` CHANGE `modified_time` `modified_time` datetime DEFAULT NULL;

@@ -23,7 +23,7 @@ defined('_JEXEC') or die;
  */
 extract($displayData);
 ?>
-
+<br>
 <div class="row subform-repeatable-group subform-repeatable-group-<?php echo $unique_subform_id; ?> bg-faded py-0 px-25 my-20 ml-0 mr-0" data-base-name="<?php echo $basegroup; ?>" data-group="<?php echo $group; ?>">
 	<?php if (!empty($buttons)) : ?>
 	<div class="btn-toolbar text-right">
@@ -35,10 +35,17 @@ extract($displayData);
 
 <?php foreach ($form->getGroup('') as $key => $field) : ?>
 	<?php
-		$form = str_replace('control-group', 'col-xs-12 col-sm-6 form-group form_' . $field->class, $field->renderField(array('hiddenLabel' => false)));
-		$col = str_replace('control-label', 'col-xs-12 col-md-3', $form);
-		$col = str_replace('controls', 'col-xs-12 col-md-8', $col);
-		echo str_replace('form-label', 'col-xs-12', $col);
+		if (JVERSION < '4.0.0')
+		{
+			$form = str_replace('control-group', 'col-xs-12 col-sm-6 form-group form_' . $field->class, $field->renderField(array('hiddenLabel' => false)));
+			$col = str_replace('control-label', 'col-xs-12 col-md-3', $form);
+			$col = str_replace('controls', 'col-xs-12 col-md-8', $col);
+			echo str_replace('form-label', 'col-xs-12', $col);
+		}
+		else
+		{
+			echo $field->renderField(array('hiddenLabel' => false));
+		}
 	?>
 <?php endforeach; ?>
 </div>

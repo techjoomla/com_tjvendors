@@ -15,6 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Session\Session;
 
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/');
 HTMLHelper::_('bootstrap.tooltip');
@@ -33,12 +34,12 @@ $userId    = $user->id;
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
-$saveOrder = $listOrder == 'a.`ordering`';
+$saveOrder = $listOrder == 'v.ordering';
 
 if ($saveOrder)
 {
-	$saveOrderingUrl = 'index.php?option=com_tjvendors&task=vendors.saveOrderAjax&tmpl=component';
-	HTMLHelper::_('sortablelist.sortable', 'vendorList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+	$saveOrderingUrl = 'index.php?option=com_tjvendors&task=vendors.saveOrderAjax&tmpl=component' . Session::getFormToken() . '=1';
+	HTMLHelper::_('draggablelist.draggable');
 }
 ?>
 
@@ -137,7 +138,7 @@ if (!empty($this->extra_sidebar))
 <form
 action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
 	<div id="j-main-container" class="row">
-		<div class="col-md-14">
+		<div class="col-md-12">
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="js-stools-container-selector filter-search btn-group pull-left">
 				<label for="filter_search" class="element-invisible">
@@ -182,7 +183,7 @@ action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=
 					{
 						?>
 						<th width="1%" class="nowrap center hidden-phone">
-							<?php echo HTMLHelper::_('grid.sort', '<i class="icon-menu-2"></i>', 'v.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+							<?php echo HTMLHelper::_('grid.sort', '<span class="icon-menu-2"></span>', 'v.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
 						</th>
 					<?php
 					}
@@ -220,20 +221,21 @@ action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=
 					</th>
 				</tr>
 			</thead>
-			<tbody>
+
+			<tbody <?php if ($saveOrder) : ?> class="js-draggable" data-url="<?php echo $saveOrderingUrl; ?>" data-direction="<?php echo strtolower($listDirn); ?>" data-nested="false"<?php endif; ?>>
 				<?php
 				$options[] = array("type" => Text::_('COM_TJVENDORS_VENDORS_VENDOR_APPROVE'), "value" => "1");
 				$options[] = array("type" => Text::_('COM_TJVENDORS_VENDORS_VENDOR_UNAPPROVED'), "value" => "0");
 
 				foreach ($this->items as $i => $item)
 				{
-					$ordering   = ($listOrder == 'a.ordering');
+					$ordering   = ($listOrder == 'v.ordering');
 					$canCreate  = $user->authorise('core.create', 'com_tjvendors');
 					$canEdit    = $user->authorise('core.edit', 'com_tjvendors');
 					$canCheckin = $user->authorise('core.manage', 'com_tjvendors');
 					$canChange  = $user->authorise('core.edit.state', 'com_tjvendors');
 					?>
-					<tr class="row<?php echo $i % 2; ?>">
+					<tr class="row<?php echo $i % 2; ?>" data-draggable-group="<?php echo $item->vendor_id ?: 'none'; ?>">
 					<?php
 						if (isset($this->items[0]->ordering))
 						{
@@ -252,7 +254,7 @@ action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=
 									}
 								?>
 									<span class="sortable-handler hasTooltip <?php echo $disableClassName ?>" title="<?php echo $disabledLabel ?>">
-										<i class="icon-menu"></i>
+										<i class="icon-ellipsis-v"></i>
 									</span>
 									<input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order "/>
 								<?php
@@ -261,7 +263,7 @@ action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=
 								{
 								?>
 									<span class="sortable-handler inactive">
-										<i class="icon-menu"></i>
+										<i class="icon-ellipsis-v"></i>
 									</span>
 								<?php
 								}?>

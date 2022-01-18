@@ -171,7 +171,7 @@ if (Factory::getUser()->id)
 }
 else
 {
-	$link = Route::_('index.php?option=com_users');
+	$link = Route::_('index.php?option=com_users&view=login');
 	$app = Factory::getApplication();
 	$app->redirect($link);
 }

@@ -77,7 +77,7 @@ $listDirn  = $this->state->get('list.direction');
 
 							<span>
 								<button class="btn btn-primary" id="clear-calendar" type="button" title="<?php echo Text::_('JSEARCH_CALENDAR_CLEAR'); ?>">
-									<i class="fa fa-remove"></i>
+									<i class="icon-remove"></i>
 								</button>
 							</span>
 						</div>

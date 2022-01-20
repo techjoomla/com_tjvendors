@@ -332,7 +332,7 @@ class TjvendorsModelVendor extends AdminModel
 
 			foreach ($fieldSet as $field)
 			{
-				if ($app->isAdmin())
+				if ($app->isClient('administrator'))
 				{
 					$html[] = $field->renderField();
 				}

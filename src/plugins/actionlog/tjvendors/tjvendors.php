@@ -66,7 +66,7 @@ class PlgActionlogTjvendors extends CMSPlugin
 		}
 
 		// If admin create user as vendor from backend
-		if ($app->isAdmin())
+		if ($app->isClient('administrator'))
 		{
 			$vendorInfor    = Factory::getUser($vendorData['user_id']);
 			$vendorID       = $vendorInfor->id;

@@ -61,9 +61,9 @@ if (Factory::getUser()->id)
 		<div class="container">
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
-				<ul class="nav nav-pills vendorForm__nav d-flex mb-15">
-					<li class="nav-item active"><button data-bs-toggle="tab" data-bs-target="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></button> </li>
-					<li class="nav-item"><button data-bs-toggle="tab" data-bs-target="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></button></li>
+				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
+					<li class="nav-item active"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></button> </li>
+					<li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></button></li>
 				</ul>
 				<!----Tab Container Start----->
 				<div class="tab-content">
@@ -146,7 +146,10 @@ if (Factory::getUser()->id)
 					<!----Tab 2 Start----->
 					<div id="tab2" class="tab-pane fade">
 						<div class="row">
-							<?php echo $this->form->getInput('payment_gateway');?>
+							<?php
+								$this->form->setFieldAttribute('payment_gateway', 'layout', '');
+								echo $this->form->getInput('payment_gateway');
+							?>
 						</div>
 					</div>
 					<!----Tab 2 End----->
@@ -154,7 +157,7 @@ if (Factory::getUser()->id)
 				<!----Tab Container End----->
 			</div>
 		</div>
-
+		<br>
 		<div class="mt-10">
 			<button type="button" class="btn btn-default btn-primary"  onclick="Joomla.submitbutton('vendor.save')">
 				<span><?php echo Text::_('JSUBMIT'); ?></span>

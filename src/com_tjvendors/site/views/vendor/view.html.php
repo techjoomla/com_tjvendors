@@ -124,7 +124,9 @@ class TjvendorsViewVendor extends HtmlView
 
 		if (isset($this->vendor->vendor_id) && $this->vendor_id != $this->vendor->vendor_id)
 		{
-			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
+
+			return false;
 		}
 
 		if (!empty($this->vendor_id) && $this->layout == "edit")

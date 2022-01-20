@@ -376,7 +376,10 @@ class TjvendorFrontHelper
 			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
 		}
 
-		$params = json_decode($result['params']);
+		if (isset($result['params']) && !empty($result['params']))
+		{
+			$params = json_decode($result['params']);
+		}
 
 		if (empty($params->payment_gateway))
 		{

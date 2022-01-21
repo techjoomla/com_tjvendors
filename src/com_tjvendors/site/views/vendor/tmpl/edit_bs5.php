@@ -62,8 +62,8 @@ if (Factory::getUser()->id)
 		<div class="row">
 			<div class="col-sm-12 vendorForm" id="tj-edit-form">
 				<ul class="nav nav-tabs vendorForm__nav d-flex mb-15">
-					<li class="nav-item active"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></button> </li>
-					<li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></button></li>
+					<li class="nav-item active"><a class="nav-link" href="javascript:void(0);" data-bs-toggle="tab" data-bs-target="#tab1"><?php echo Text::_('COM_TJVENDORS_TITLE_PERSONAL'); ?></a> </li>
+					<li class="nav-item"><a class="nav-link" href="javascript:void(0);" data-bs-toggle="tab" data-bs-target="#tab2"><?php echo Text::_('COM_TJVENDORS_VENDOR_PAYMENT_GATEWAY_DETAILS'); ?></a></li>
 				</ul>
 				<!----Tab Container Start----->
 				<div class="tab-content">

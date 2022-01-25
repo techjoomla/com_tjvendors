@@ -229,7 +229,7 @@ var tjVSite = {
 				CommonObj.showOtherCity('jform_city', city)
 			});
 
-			jQuery(window).load(function() {
+			jQuery(document).ready(function() {
 				tjCommon.vendorLogoValidation();
 				tjCommon.initVendorFields();
 			});
@@ -338,8 +338,8 @@ var tjCommon = {
 				url: Joomla.getOptions('system.paths').base + "/index.php?option=com_tjvendors&task=vendor.generateGatewayFields",
 				success: function (response) {
 					let $thisId = jQuery('#' + eleId);
-					$thisId.closest('.subform-repeatable-group').find('.payment-gateway-parent').empty();
-					
+					$thisId.closest('.subform-repeatable-group').find('.payment-gateway-parent').remove();
+
 					if (response) {
 						response.forEach(function(data) {
 							$thisId.closest('.subform-repeatable-group').append("<div class='payment-gateway-parent'>" + data + "</div>");

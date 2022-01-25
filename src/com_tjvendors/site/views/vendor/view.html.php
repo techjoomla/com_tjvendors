@@ -124,7 +124,9 @@ class TjvendorsViewVendor extends HtmlView
 
 		if (isset($this->vendor->vendor_id) && $this->vendor_id != $this->vendor->vendor_id)
 		{
-			throw new Exception(Text::_('JERROR_ALERTNOAUTHOR'), 403);
+			$app->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'error');
+
+			return false;
 		}
 
 		if (!empty($this->vendor_id) && $this->layout == "edit")
@@ -173,9 +175,9 @@ class TjvendorsViewVendor extends HtmlView
 				$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'notice');
 				$app->redirect($link);
 			}
-			elseif(!Factory::getUser()->id)
+			elseif (!Factory::getUser()->id)
 			{
-				$link = Route::_('index.php?option=com_users');
+				$link = Route::_('index.php?option=com_users&view=login');
 				$app->redirect($link);
 			}
 		}

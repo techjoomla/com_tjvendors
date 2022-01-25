@@ -46,15 +46,15 @@ if (Factory::getUser()->id)
 	?>
 	<h1>
 		<?php
-			if ($this->vendor_id)
-			{
-				echo Text::_('COM_TJVENDOR_UPDATE_VENDOR');
-				echo ':&nbsp' . htmlspecialchars($this->vendor->vendor_title, ENT_COMPAT, 'UTF-8');
-			}
-			else
-			{
-				echo Text::_('COM_TJVENDOR_CREATE_VENDOR');
-			}
+		if ($this->vendor_id)
+		{
+			echo Text::_('COM_TJVENDOR_UPDATE_VENDOR');
+			echo ':&nbsp' . htmlspecialchars($this->vendor->vendor_title, ENT_COMPAT, 'UTF-8');
+		}
+		else
+		{
+			echo Text::_('COM_TJVENDOR_CREATE_VENDOR');
+		}
 		?>
 	</h1>
 	<form action="<?php echo Route::_('index.php?option=com_tjvendors&layout=edit&vendor_id=' . $this->input->get('vendor_id', '', 'INTEGER') . '&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" enctype="multipart/form-data" name="adminForm" id="adminForm" class="form-validate">

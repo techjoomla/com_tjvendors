@@ -91,7 +91,7 @@ class TjvendorsViewVendor extends HtmlView
 			$this->item->city = '';
 		}
 
-		$this->vendorLogoProfileImg = "/administrator/components/com_tjvendors/assets/images/default.png";
+		$this->vendorLogoProfileImg = "media/com_tjvendor/images/default.png";
 		$this->vendorLogoProfileImgPath = Uri::root() . $this->vendorLogoProfileImg;
 
 		if (empty($this->item->vendor_id))

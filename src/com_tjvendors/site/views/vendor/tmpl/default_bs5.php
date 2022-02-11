@@ -35,7 +35,7 @@ use Joomla\CMS\Uri\Uri;
 		</h3>
 	</div>
 	<?php
-	$profileImage = Uri::root() . "/administrator/components/com_tjvendors/assets/images/default.png";
+	$profileImage = Uri::root() . "media/com_tjvendor/images/default.png";
 
 	if (!empty($this->VendorDetail->vendor_logo))
 	{

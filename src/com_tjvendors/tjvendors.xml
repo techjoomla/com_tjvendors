@@ -46,6 +46,7 @@
 		<folder>css</folder>
 		<folder>vendors</folder>
 		<folder>dist</folder>
+		<folder>images</folder>
 		<filename>package.json</filename>
 		<filename>webpack.common.js</filename>
 		<filename>webpack.dev.js</filename>
@@ -68,7 +69,6 @@
 			<filename>tjvendors.php</filename>
 			<filename>tjvendorsTemplate.json</filename>
 			<folder>controllers</folder>
-			<folder>assets</folder>
 			<folder>helpers</folder>
 			<folder>models</folder>
 			<folder>sql</folder>

@@ -23,7 +23,7 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 
 // Import CSS
 $document = Factory::getDocument();
-HTMLHelper::stylesheet('administrator/components/com_tjvendors/assets/css/tjvendors.css');
+HTMLHelper::stylesheet('media/com_tjvendor/css/admintjvendors.css');
 HTMLHelper::_('script', Uri::root(true) . '/libraries/techjoomla/assets/js/houseKeeping.js');
 $document->addScriptDeclaration("var tjHouseKeepingView='vendors';");
 

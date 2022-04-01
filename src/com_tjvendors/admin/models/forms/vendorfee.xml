@@ -44,8 +44,10 @@
 			label="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION"
 			description="COM_TJVENDORS_FORM_DESC_VENDOR_PERCENT_COMMISSION"
 			hint="COM_TJVENDORS_VENDORS_PERCENT_COMMISSION"
-			min="0" max="100"
-			filter="" />
+			min="0"
+			max="100"
+			filter=""
+			default="0" />
 
 		<field
 			name="flat_commission"

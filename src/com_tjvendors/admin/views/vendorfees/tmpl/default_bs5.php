@@ -129,11 +129,13 @@ method="post" name="adminForm" id="adminForm">
 				<label for="filter_search" class="element-invisible">
 					<?php echo Text::_('JSEARCH_FILTER'); ?>
 				</label>
-				<input type="text" name="filter_search" id="filter_search"
-
+				<input
+					type="text"
+					name="filter_search" id="filter_search"
 					placeholder="<?php echo Text::_('COM_TJVENDOR_SEARCH_BY_VENDOR_FEE'); ?>"
 					value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-					title="<?php echo Text::_('JSEARCH_FILTER'); ?>"/>
+					title="<?php echo Text::_('JSEARCH_FILTER'); ?>"
+					style="width:270px"/>
 					<button class="btn btn-primary hasTooltip" type="submit" title="<?php echo Text::_('JSEARCH_FILTER_SUBMIT'); ?>">
 						<i class="icon-search"></i>
 					</button>

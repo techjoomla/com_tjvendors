@@ -56,7 +56,7 @@ var tjVAdmin = {
 				CommonObj.showOtherCity('jform_city', city);
 			});
 
-			jQuery(window).load(function() {
+			jQuery(window).on('load', function(){
 				tjCommon.vendorLogoValidation();
 				tjCommon.initVendorFields();
 			});

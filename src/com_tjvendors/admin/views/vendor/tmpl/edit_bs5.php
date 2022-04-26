@@ -57,8 +57,7 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 								<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
 								<input type="hidden" name="jform[vendor_client]" value="<?php echo $this->input->get('client', '', 'STRING'); ?>" />
 								<input type="hidden" name="jform[created_by]" value="<?php echo Factory::getUser()->id;?>" />
-								<input type="hidden" name="jform[modified_by]"
-								value="<?php echo (isset($this->item->vendor_id)) ? Factory::getUser()->id : '0';?>" />
+								<input type="hidden" name="jform[modified_by]" value="<?php echo (isset($this->item->vendor_id)) ? Factory::getUser()->id : '0';?>" />
 								<input type="hidden" name="jform[created_time]" value="<?php echo $this->item->created_time; ?>" />
 								<input type="hidden" name="jform[modified_time]" value="<?php echo $this->item->modified_time; ?>" />
 								<?php

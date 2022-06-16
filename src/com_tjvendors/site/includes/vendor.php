@@ -404,7 +404,7 @@ class TjvendorsVendor extends CMSObject
 	{
 		if (empty($this->vendor_logo))
 		{
-			return Uri::root() . "administrator/components/com_tjvendors/assets/images/default.png";
+			return Uri::root() . "media/com_tjvendor/images/default.png";
 		}
 
 		return Uri::root() . $this->vendor_logo;

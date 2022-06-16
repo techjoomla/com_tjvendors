@@ -22,7 +22,7 @@ HTMLHelper::_('formbehavior.chosen', 'select');
 
 // Import CSS
 $document = Factory::getDocument();
-$document->addStyleSheet(Uri::root() . 'administrator/components/com_tjvendors/assets/css/tjvendors.css');
+$document->addStyleSheet(Uri::root() . 'media/com_tjvendor/css/admintjvendors.css');
 
 $user      = Factory::getUser();
 $userId    = $user->get('id');
@@ -147,12 +147,6 @@ else
 
 	<div class="row-fluid btn-group pull-left hidden-phone">
 		<div class="btn-group hidden-phone">
-			<label for="limit" class="element-invisible">
-				<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
-			</label>
-			<?php echo $this->pagination->getLimitBox(); ?>
-		</div>
-		<div class="btn-group hidden-phone">
 			<?php echo HTMLHelper::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
 			echo $filterClient = $this->state->get('filter.vendor_client');?>
 		</div>
@@ -181,6 +175,12 @@ else
 		</div>
 		<div class="btn-group hidden-phone">
 			<?php echo HTMLHelper::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
+		</div>
+		<div class="btn-group hidden-phone">
+			<label for="limit" class="element-invisible">
+				<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+			</label>
+			<?php echo $this->pagination->getLimitBox(); ?>
 		</div>
 	</div>
 	<div class="pull-left alert alert-info">

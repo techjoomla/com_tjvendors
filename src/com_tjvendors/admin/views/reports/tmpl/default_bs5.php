@@ -66,7 +66,15 @@ $client    = $input->get('client', '', 'STRING');
 
 	tjVAdmin.reports.initReportsJs();
 </script>
-
+<?php
+if (empty($this->items))
+{
+	?>
+	<div class="alert alert-no-items alert-warning"><?php echo Text::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?></div>
+	<?php
+	return;
+}
+?>
 <form action="<?php echo Route::_('index.php?option=com_tjvendors&view=reports&vendor_id=' . $this->input->get('vendor_id', '', 'STRING') . '&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="row tjvendor-wrapper">
 		<div class="col-md-12 tjvendor-reports">
@@ -75,7 +83,7 @@ $client    = $input->get('client', '', 'STRING');
 					<div class="js-stools" role="search">
 						<div class="js-stools-container-bar">
 							<div class="btn-toolbar">
-								<div class="js-stools-container-selector filter-search btn-group pull-left">
+								<div class="js-stools-container-selector filter-search btn-group ">
 									<label for="filter_search" class="element-invisible">
 										<?php echo Text::_('JSEARCH_FILTER'); ?>
 									</label>
@@ -100,17 +108,23 @@ $client    = $input->get('client', '', 'STRING');
 										<i class="icon-remove"></i>
 									</button>
 								</div>
-								<div class="js-stools-container-selector btn-group pull-left hidden-phone">
+								<div class="js-stools-container-selector btn-group  hidden-phone">
 									<?php echo JHTML::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));?>
 								</div>
-								<div class="js-stools-container-selector btn-group pull-left hidden-phone">
+								<div class="js-stools-container-selector btn-group  hidden-phone">
 									<?php echo JHTML::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));?>
 								</div>
-								<div class="js-stools-container-selector btn-group pull-left hidden-phone">
+								<div class="js-stools-container-selector btn-group  hidden-phone">
 									<button class="btn btn-primary hasTooltip" id="clear-calendar" type="button" title="<?php echo Text::_('JSEARCH_CALENDAR_CLEAR'); ?>">
 										<i class="icon-remove"></i>
 									</button>
 								</div>
+							</div>
+						</div>
+					</div>
+					<div class="js-stools" role="search">
+						<div class="js-stools-container-bar">
+							<div class="btn-toolbar">
 								<div class="js-stools-container-selector btn-group hidden-phone">
 									<?php echo HTMLHelper::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="form-select" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));?>
 								</div>
@@ -121,209 +135,196 @@ $client    = $input->get('client', '', 'STRING');
 									$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'), "transactionValue" => Text::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
 									echo HTMLHelper::_('select.genericlist', $transactionType, "transactionType", 'class="form-select" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
 								</div>
+								<div class="js-stools-container-selector btn-group hidden-phone">
+									<?php
+										$this->currencies = TjvendorsHelper::getCurrencies($this->state->get('filter.vendor_id'));
+										$currencyList[]   = Text::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
+
+										if ($this->currencies !== false)
+										{
+											foreach ($this->currencies as $currency)
+											{
+												$currencyList[] = $currency;
+											}
+										}
+
+									echo HTMLHelper::_('select.genericlist', $currencyList, "currency", 'class="form-select" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));?>
+								</div>
+								<div class="js-stools-container-selector btn-group hidden-phone">
+									<?php echo HTMLHelper::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="form-select" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
+								</div>
+								<div class="js-stools-container-selector btn-group hidden-phone">
+									<label for="limit" class="element-invisible">
+										<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+									</label>
+									<?php echo $this->pagination->getLimitBox(); ?>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="btn-group pull-left hidden-phone">
-						<div class="js-stools-container-selector btn-group hidden-phone">
-							<?php
-								$this->currencies = TjvendorsHelper::getCurrencies($this->state->get('filter.vendor_id'));
-								$currencyList[]   = Text::_('JFILTER_PAYOUT_CHOOSE_CURRENCY');
-
-								if ($this->currencies !== false)
-								{
-									foreach ($this->currencies as $currency)
-									{
-										$currencyList[] = $currency;
-									}
-								}
-
-							echo HTMLHelper::_('select.genericlist', $currencyList, "currency", 'class="form-select" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));?>
-						</div>
-						<div class="js-stools-container-selector btn-group hidden-phone">
-							<?php echo HTMLHelper::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="form-select" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
-						</div>
-						<div class="js-stools-container-selector btn-group hidden-phone">
-							<label for="limit" class="element-invisible">
-								<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
-							</label>
-							<?php echo $this->pagination->getLimitBox(); ?>
-						</div>
-					</div>
-					<div class="pull-left alert alert-info">
-						<?php echo Text::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE');?>
+					<div class="clearfix"></div>
+					<div class="alert alert-info">
+						<?php echo Text::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE');?></br>
 						<?php echo Text::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE'); ?>
 					</div>
 				</div>
-				<?php
-				if (empty($this->items))
-				{
-				?>
-					<div class="alert alert-no-items alert-warning"><?php echo Text::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?></div>
-				<?php
-				}
-				else
-				{
-				?>
-					<table class="table table-responsive" >
-						<thead>
-							<tr></tr>
-							<tr>
-								<?php if (isset($this->items[0]->ordering)): ?>
-								<th width="1%" class="nowrap center hidden-phone">
-									<?php echo HTMLHelper::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
-								</th>
-								<?php endif; ?>
+				<table class="table table-responsive" >
+					<thead>
+						<tr></tr>
+						<tr>
+							<?php if (isset($this->items[0]->ordering)): ?>
+							<th width="1%" class="nowrap center hidden-phone">
+								<?php echo HTMLHelper::_('grid.sort', '<i class="icon-menu-2"></i>', 'a.`ordering`', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
+							</th>
+							<?php endif; ?>
 
-								<?php if (isset($this->items[0]->state)){} ?>
+							<?php if (isset($this->items[0]->state)){} ?>
+							<th class='left' width="10%">
+								<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder); ?>
+							</th>
+							<th class='left' width="8%">
+								<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
+							</th>
+							<?php
+							$filterClient = $this->state->get('filter.vendor_client');
+							if(empty($filterClient))
+							{?>
+								<th class='left' width="5%">
+									<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder); ?>
+								</th>
+							<?php
+							}
+
+							$filterCurrency = $this->state->get('filter.currency');
+
+							if(empty($filterCurrency))
+							{?>
+								<th class='left' width="5%">
+								<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
+								</th>
+							<?php
+							}
+
+							$transactionType = $this->state->get('filter.transactionType');
+
+							if($transactionType == "credit" || empty($transactionType))
+							{?>
 								<th class='left' width="10%">
-									<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_ID', 'pass.`transaction_id`', $listDirn, $listOrder); ?>
+									<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
 								</th>
-								<th class='left' width="8%">
-									<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYOUT_TITLE', 'vendors.`vendor_title`', $listDirn, $listOrder); ?>
+							<?php
+							}
+
+							if($transactionType == "debit" || empty($transactionType))
+							{?>
+								<th class='left' width="10%">
+									<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
 								</th>
-								<?php
-								$filterClient = $this->state->get('filter.vendor_client');
-								if(empty($filterClient))
-								{?>
-									<th class='left' width="5%">
-										<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_CLIENT', 'vendors.`vendor_client`', $listDirn, $listOrder); ?>
-									</th>
-								<?php
+							<?php
+							}
+							?>
+							<th class='left' width="12%">
+								<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID', 'pass.`reference_order_id`', $listDirn, $listOrder); ?>
+							</th>
+							<th class='left' width="10%">
+								<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
+							</th>
+							<th class='left' width="10%">
+								<?php echo Text::_('COM_TJVENDORS_REPORTS_STATUS'); ?>
+							</th>
+						</tr>
+					</thead>
+					<tfoot>
+						<td colspan="10">
+							<?php
+							if ($filterCurrency != '0')
+							{?>
+								<div class="float-end">
+									<tr>
+										<th colspan="8"></th>
+										<th colspan="10"><?php echo Text::_('COM_TJVENDORS_REPORTS_TOTAL_CREDIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['creditAmount'] . '&nbsp' . $filterCurrency;?></th>
+									</tr>
+									<tr>
+										<th colspan="8"></th>
+										<th colspan="10"><?php echo Text::_('COM_TJVENDORS_REPORTS_TOTAL_DEBIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount'] . '&nbsp' . $filterCurrency;?></th>
+									</tr>
+									<tr>
+										<th colspan="8"></th>
+										<th colspan="10"><?php echo Text::_('COM_TJVENDORS_REPORTS_TOTAL_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount'] . '&nbsp' . $filterCurrency?></th>
+									</tr>
+								</div>
+							<?php 
+							}?>
+						</td>
+					</tfoot>
+					<tbody>
+						<?php
+						$options[]   = array("type" => Text::_('COM_TJVENDORS_STATUS_PAID'), "value" => "1");
+						$options[]   = array("type" => Text::_('COM_TJVENDORS_STATUS_UNPAID'), "value" => "0");
+						$doneOptions = Text::_('COM_TJVENDORS_STATUS_CREDIT_DONE');
+
+						foreach ($this->items as $i => $item)
+						{
+						?>
+							<tr>
+								<td><?php echo $item->transaction_id;?></td>
+								<td><?php echo $this->escape($item->vendor_title);?></td>
+								<?php 
+								if (empty($filterClient))
+								{
+									?>
+									<td><?php echo TjvendorFrontHelper::getClientName($this->client);?>	</td>
+									<?php 
 								}
 
-								$filterCurrency = $this->state->get('filter.currency');
-
-								if(empty($filterCurrency))
-								{?>
-									<th class='left' width="5%">
-									<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_CURRENCY', 'pass.`currency`', $listDirn, $listOrder); ?>
-									</th>
-								<?php
+								if (empty($filterCurrency))
+								{
+									?>
+									<td><?php echo $item->currency; ?></td>
+									<?php 
 								}
 
-								$transactionType = $this->state->get('filter.transactionType');
-
-								if($transactionType == "credit" || empty($transactionType))
-								{?>
-									<th class='left' width="10%">
-										<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_CREDIT_AMOUNT', 'pass.`credit`', $listDirn, $listOrder);?>
-									</th>
+								if ($transactionType == "credit" || empty($transactionType))
+								{
+									?>
+									<td>
+										<?php echo ($item->credit <='0') ? "0" : $item->credit;?>
+									</td>
 								<?php
 								}
-
 								if($transactionType == "debit" || empty($transactionType))
-								{?>
-									<th class='left' width="10%">
-										<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_DEBIT_AMOUNT', 'pass.`debit`', $listDirn, $listOrder);?>
-									</th>
+								{
+								?>
+									<td><?php echo $item->debit;?></td>
 								<?php
 								}
 								?>
-								<th class='left' width="12%">
-									<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_REFERENCE_ORDER_ID', 'pass.`reference_order_id`', $listDirn, $listOrder); ?>
-								</th>
-								<th class='left' width="10%">
-									<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
-								</th>
-								<th class='left' width="10%">
-									<?php echo Text::_('COM_TJVENDORS_REPORTS_STATUS'); ?>
-								</th>
-							</tr>
-						</thead>
-						<tfoot>
-							<td colspan="10">
+								<td><?php echo $item->reference_order_id;?></td>
+								<td><?php echo $item->total;?></td>
 								<?php
-								if ($filterCurrency != '0')
-								{?>
-									<div class="pull-right">
-										<tr>
-											<th colspan="8"></th>
-											<th colspan="10"><?php echo Text::_('COM_TJVENDORS_REPORTS_TOTAL_CREDIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['creditAmount'] . '&nbsp' . $filterCurrency;?></th>
-										</tr>
-										<tr>
-											<th colspan="8"></th>
-											<th colspan="10"><?php echo Text::_('COM_TJVENDORS_REPORTS_TOTAL_DEBIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['debitAmount'] . '&nbsp' . $filterCurrency;?></th>
-										</tr>
-										<tr>
-											<th colspan="8"></th>
-											<th colspan="10"><?php echo Text::_('COM_TJVENDORS_REPORTS_TOTAL_PENDING_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['pendingAmount'] . '&nbsp' . $filterCurrency?></th>
-										</tr>
-									</div>
-								<?php 
-								}?>
-							</td>
-						</tfoot>
-						<tbody>
-							<?php
-							$options[]   = array("type" => Text::_('COM_TJVENDORS_STATUS_PAID'), "value" => "1");
-							$options[]   = array("type" => Text::_('COM_TJVENDORS_STATUS_UNPAID'), "value" => "0");
-							$doneOptions = Text::_('COM_TJVENDORS_STATUS_CREDIT_DONE');
-
-							foreach ($this->items as $i => $item)
-							{
-							?>
-								<tr>
-									<td><?php echo $item->transaction_id;?></td>
-									<td><?php echo $this->escape($item->vendor_title);?></td>
-									<?php 
-									if (empty($filterClient))
+								$status = json_decode($item->params, true);?>
+								<td>
+									<?php
+									if ($status['entry_status'] == "debit_payout")
+									{
+										echo JHTML::_('select.genericlist', $options, "paidUnpaid", 'class="form-select" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
+									}
+									elseif ($status['entry_status'] == "credit_for_ticket_buy")
 									{
 										?>
-										<td><?php echo TjvendorFrontHelper::getClientName($this->client);?>	</td>
-										<?php 
-									}
-
-									if (empty($filterCurrency))
-									{
-										?>
-										<td><?php echo $item->currency; ?></td>
-										<?php 
-									}
-
-									if ($transactionType == "credit" || empty($transactionType))
-									{
-										?>
-										<td>
-											<?php echo ($item->credit <='0') ? "0" : $item->credit;?>
-										</td>
-									<?php
-									}
-									if($transactionType == "debit" || empty($transactionType))
-									{
-									?>
-										<td><?php echo $item->debit;?></td>
-									<?php
-									}
-									?>
-									<td><?php echo $item->reference_order_id;?></td>
-									<td><?php echo $item->total;?></td>
-									<?php
-									$status = json_decode($item->params, true);?>
-									<td>
+										<select disabled>
+											<option value=""><?php echo $doneOptions; ?></option>
+										</select>
 										<?php
-										if ($status['entry_status'] == "debit_payout")
-										{
-											echo JHTML::_('select.genericlist', $options, "paidUnpaid", 'class="form-select" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
-										}
-										elseif ($status['entry_status'] == "credit_for_ticket_buy")
-										{
-											?>
-											<select disabled>
-												<option value=""><?php echo $doneOptions; ?></option>
-											</select>
-											<?php
-										}
-										?>
-									</td>
-								</tr>
-							<?php
-							}?>
-						</tbody>
-					</table>
-					<?php echo $this->pagination->getListFooter();
-				}
-				?>
+									}
+									?>
+								</td>
+							</tr>
+						<?php
+						}?>
+					</tbody>
+				</table>
+				<?php echo $this->pagination->getListFooter();?>
 				<input type="hidden" name="boxchecked" value="0"/>
 				<input type="hidden" name="filter_order" value="<?php echo $listOrder; ?>"/>
 				<input type="hidden" name="filter_order_Dir" value="<?php echo $listDirn; ?>"/>

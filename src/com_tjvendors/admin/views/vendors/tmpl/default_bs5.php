@@ -132,94 +132,49 @@ if (!empty($this->extra_sidebar))
 }
 
 ?>
-<form
-action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
-	<div id="j-main-container" class="row">
-		<div class="col-md-12">
-		<div id="filter-bar" class="btn-toolbar">
-			<div class="js-stools-container-selector filter-search btn-group pull-left">
-				<label for="filter_search" class="element-invisible">
-					<?php echo Text::_('JSEARCH_FILTER'); ?>
-				</label>
-				<input type="text" name="filter_search" id="filter_search"
-					placeholder="<?php echo Text::_('COM_TJVENDOR_SEARCH_BY_USERNAME'); ?>"
-					value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
-					title="<?php echo Text::_('JSEARCH_FILTER'); ?>"/>
-					<button class="btn btn-primary hasTooltip" type="submit" title="<?php echo Text::_('JSEARCH_FILTER_SUBMIT'); ?>">
-						<i class="icon-search"></i>
-					</button>
-					<button class="btn btn-primary hasTooltip" id="clear-search-button" type="button" title="<?php echo Text::_('JSEARCH_FILTER_CLEAR'); ?>">
-						<i class="icon-remove"></i>
-					</button>
-			</div>
-			<div class="js-stools-container-selector btn-group pull-right hidden-phone">
-				<label for="limit" class="element-invisible">
-					<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
-				</label>
-				<?php echo $this->pagination->getLimitBox(); ?>
-			</div>
-		</div>
-		<div>&nbsp;</div>
-		<?php
-		if(empty($this->items))
-		{?>
-			<div class="clearfix">&nbsp;</div>
-				<div class="alert alert-no-items">
-					<?php echo Text::_('COM_TJVENDOR_NO_MATCHING_RESULTS'); ?>
+<form action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=' . $this->input->get('client', '', 'STRING')); ?>" method="post" name="adminForm" id="adminForm">
+	<div class="row tjvendor-wrapper">
+		<div class="col-md-12 tjvendor-vendors">
+			<div id="j-main-container" class="j-main-container">
+				<div class="js-stools" role="search">
+					<div class="js-stools-container-bar">
+						<div class="btn-toolbar">
+							<div class="filter-search-bar btn-group">
+								<label for="filter_search" class="element-invisible">
+									<?php echo Text::_('JSEARCH_FILTER'); ?>
+								</label>
+								<input
+									type="text"
+									name="filter_search"
+									id="filter_search"
+									placeholder="<?php echo Text::_('COM_TJVENDOR_SEARCH_BY_USERNAME'); ?>"
+									value="<?php echo $this->escape($this->state->get('filter.search')); ?>"
+									title="<?php echo Text::_('JSEARCH_FILTER'); ?>"/>
+								<button
+									class="btn btn-primary hasTooltip"
+									type="submit"
+									title="<?php echo Text::_('JSEARCH_FILTER_SUBMIT'); ?>">
+									<i class="icon-search"></i>
+								</button>
+								<button
+									class="btn btn-primary hasTooltip"
+									id="clear-search-button"
+									type="button" title="<?php echo Text::_('JSEARCH_FILTER_CLEAR'); ?>">
+									<i class="icon-remove"></i>
+								</button>
+							</div>
+							<div class="ordering-select">
+								<div class="js-stools-field-list">
+									<label for="limit" class="element-invisible">
+										<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+									</label>
+									<?php echo $this->pagination->getLimitBox(); ?>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
-		<?php
-		}
-		else
-		{
-			?>
-		<table class="table" id="vendorList">
-			<thead>
-				<tr>
-					<?php
-					if (isset($this->items[0]->ordering))
-					{
-						?>
-						<th width="1%" class="nowrap center hidden-phone">
-							<?php echo HTMLHelper::_('grid.sort', '<span class="icon-menu-2"></span>', 'v.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING'); ?>
-						</th>
-					<?php
-					}
-					?>
-					<th width="1%" class="hidden-phone">
-						<input type="checkbox" name="checkall-toggle" value="" title="<?php echo Text::_('JGLOBAL_CHECK_ALL'); ?>" onclick="Joomla.checkAll(this)"/>
-					</th>
-
-					<?php if (isset($this->items[0]->state))
-					{
-					?>
-						<th width="1%" >
-							<?php echo Text::_('JSTATUS');?>
-						</th>
-					<?php
-					}
-					?>
-					<th width="5%">
-						<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_VENDORS_VENDOR_TITLE', 'v.`vendor_title`', $listDirn, $listOrder); ?>
-					</th>
-					<?php
-					if ($this->vendorApproval)
-					{
-					?>
-						<th width="2%">
-							<?php echo Text::_('COM_TJVENDORS_VENDORS_VENDOR_APPROVE'); ?>
-						</th>
-					<?php
-					}?>
-					<th width="5%">
-						<?php echo Text::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?>
-					</th>
-					<th width="5%" >
-						<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_VENDORS_ID', 'v.`vendor_id`', $listDirn, $listOrder); ?>
-					</th>
-				</tr>
-			</thead>
-
-			<tbody <?php if ($saveOrder) : ?> class="js-draggable" data-url="<?php echo $saveOrderingUrl; ?>" data-direction="<?php echo strtolower($listDirn); ?>" data-nested="false"<?php endif; ?>>
+				<div>&nbsp;</div>
 				<?php
 				if(empty($this->items))
 				{?>
@@ -231,18 +186,10 @@ action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=
 				}
 				else
 				{
-					$ordering   = ($listOrder == 'v.ordering');
-					$canCreate  = $user->authorise('core.create', 'com_tjvendors');
-					$canEdit    = $user->authorise('core.edit', 'com_tjvendors');
-					$canCheckin = $user->authorise('core.manage', 'com_tjvendors');
-					$canChange  = $user->authorise('core.edit.state', 'com_tjvendors');
 					?>
-					<tr class="row<?php echo $i % 2; ?>" data-draggable-group="<?php echo $item->vendor_id ?: 'none'; ?>">
-					<?php
-						if (isset($this->items[0]->ordering))
-						{
-						?>
-							<td class="order nowrap center hidden-phone">
+					<table class="table" id="vendorList">
+						<thead>
+							<tr>
 								<?php
 								if (isset($this->items[0]->ordering))
 								{
@@ -261,10 +208,7 @@ action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=
 								if (isset($this->items[0]->state))
 								{
 								?>
-									<span class="sortable-handler hasTooltip <?php echo $disableClassName ?>" title="<?php echo $disabledLabel ?>">
-										<i class="icon-ellipsis-v"></i>
-									</span>
-									<input type="text" style="display:none" name="order[]" size="5" value="<?php echo $item->ordering; ?>" class="width-20 text-area-order "/>
+									<th width="1%" ><?php echo Text::_('JSTATUS');?></th>
 								<?php
 								}
 								?>
@@ -273,9 +217,7 @@ action="<?php echo Route::_('index.php?option=com_tjvendors&view=vendors&client=
 								if ($this->vendorApproval)
 								{
 								?>
-									<span class="sortable-handler inactive">
-										<i class="icon-ellipsis-v"></i>
-									</span>
+									<th width="2%"><?php echo Text::_('COM_TJVENDORS_VENDORS_VENDOR_APPROVE'); ?></th>
 								<?php
 								}?>
 								<th width="5%"><?php echo Text::_('COM_TJVENDORS_VENDORS_ACTION_MENU'); ?></th>

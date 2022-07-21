@@ -130,6 +130,9 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 					</div>
 			<?php echo HTMLHelper::_('bootstrap.endTab');
 			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'name', Text::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS'));
+				?>
+					<div class="clearfix">&nbsp;</div>
+				<?php
 				echo $this->form->getInput('payment_gateway');
 			echo HTMLHelper::_('bootstrap.endTab');
 		echo HTMLHelper::_('bootstrap.endTabSet'); ?>

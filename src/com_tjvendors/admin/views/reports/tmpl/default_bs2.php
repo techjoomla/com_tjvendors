@@ -128,36 +128,34 @@ else
 				<i class="icon-remove"></i>
 			</button>
 		</div>
-		<div class="btn-group pull-left hidden-phone">
-			<?php
-				echo JHTML::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
-			?>
+		<div class="btn-group hidden-phone pull-right">
+			<label for="limit" class="element-invisible">
+				<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
+			</label>
+			<?php echo $this->pagination->getLimitBox(); ?>
 		</div>
-		<div class="btn-group pull-left hidden-phone">
-			<?php
-				echo JHTML::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
-			?>
-		</div>
-		<div class="btn-group pull-left hidden-phone">
+		<div class="btn-group pull-right hidden-phone">
 			<button class="btn hasTooltip" id="clear-calendar" type="button" title="<?php echo Text::_('JSEARCH_CALENDAR_CLEAR'); ?>">
 				<i class="icon-remove"></i>
 			</button>
 		</div>
+		<div class="btn-group pull-right hidden-phone">
+			<?php
+				echo JHTML::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
+			?>
+		</div>
+		<div class="btn-group pull-right hidden-phone">
+			<?php
+				echo JHTML::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
+			?>
+		</div>
 	</div>
 
-	<div class="row-fluid btn-group pull-left hidden-phone">
-		<div class="btn-group hidden-phone">
-			<?php echo HTMLHelper::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
-			echo $filterClient = $this->state->get('filter.vendor_client');?>
+	<div class="row-fluid btn-group hidden-phone">
+		<div class="btn-group hidden-phone pull-right">
+			<?php echo HTMLHelper::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
 		</div>
-		<div class="btn-group hidden-phone">
-			<?php
-			$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'), "transactionValue" => "0");
-			$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'), "transactionValue" => Text::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
-			$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'), "transactionValue" => Text::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
-			echo HTMLHelper::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
-		</div>
-		<div class="btn-group hidden-phone">
+		<div class="btn-group hidden-phone pull-right">
 			<?php
 				// Making custom filter list
 				$this->currencies = TjvendorsHelper::getCurrencies($this->state->get('filter.vendor_id'));
@@ -173,17 +171,19 @@ else
 
 			echo HTMLHelper::_('select.genericlist', $currencyList, "currency", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "currency", "currency", $this->state->get('filter.currency'));?>
 		</div>
-		<div class="btn-group hidden-phone">
-			<?php echo HTMLHelper::_('select.genericlist', $this->vendor_details, "vendor_id", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "vendor_id", "vendor_title", $this->state->get('filter.vendor_id'));?>
+		<div class="btn-group hidden-phone pull-right">
+			<?php
+			$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_ALL_TRANSACTIONS'), "transactionValue" => "0");
+			$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'), "transactionValue" => Text::_('COM_TJVENDORS_REPORTS_FILTER_CREDIT'));
+			$transactionType[] = array("transactionType" => Text::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'), "transactionValue" => Text::_('COM_TJVENDORS_REPORTS_FILTER_DEBIT'));
+			echo HTMLHelper::_('select.genericlist', $transactionType, "transactionType", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "transactionValue", "transactionType", $this->state->get('filter.transactionType'));?>
 		</div>
-		<div class="btn-group hidden-phone">
-			<label for="limit" class="element-invisible">
-				<?php echo Text::_('JFIELD_PLG_SEARCH_SEARCHLIMIT_DESC'); ?>
-			</label>
-			<?php echo $this->pagination->getLimitBox(); ?>
+		<div class="btn-group hidden-phone pull-right">
+			<?php echo HTMLHelper::_('select.genericlist', $this->uniqueClients, "vendor_client", 'class="input-medium" size="1" onchange="document.adminForm.submit();"', "client_value", "vendor_client", $this->state->get('filter.vendor_client'));
+			echo $filterClient = $this->state->get('filter.vendor_client');?>
 		</div>
 	</div>
-	<div class="pull-left alert alert-info">
+	<div class="pull-left alert alert-info tj-mt-1">
 		<?php echo Text::_('COM_TJVENDORS_REPORTS_CREDIT_NOTE');?>
 		<?php echo Text::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE'); ?>
 	</div>

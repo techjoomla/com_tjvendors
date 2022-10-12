@@ -31,3 +31,6 @@
 .tjvendor-wrapper .tjvendor-vendors .filter-search-bar input{
   width: 270px;
 }
+.tj-mt-1 {
+  margin-top: 1rem !important;
+}

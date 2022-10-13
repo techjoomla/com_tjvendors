@@ -168,15 +168,15 @@ class TjvendorsModelReports extends ListModel
 
 		if (empty($toDate) && !empty($fromDate))
 		{
-			$query->where($db ->quoteName('transaction_time') . " >= " . $db->quote($fromDate));
+			$query->where('Date(' . $db ->quoteName('transaction_time') .')' . " >= " . $db->quote($fromDate));
 		}
 		elseif (empty($fromDate) && !empty($toDate))
 		{
-			$query->where($db ->quoteName('transaction_time') . " <= " . $db->quote($toDate));
+			$query->where('Date('.$db->quoteName('transaction_time').')' . " <= " . $db->quote($toDate));
 		}
 		elseif (!empty($fromDate) && !empty($toDate))
 		{
-			$query->where($db ->quoteName('transaction_time') . 'BETWEEN' . "'$fromDate'" . 'AND' . "'$toDate'");
+			$query->where('Date('.$db ->quoteName('transaction_time') .')' . 'BETWEEN' . "'$fromDate'" . 'AND' . "'$toDate'");
 		}
 
 		// Filter by search in title

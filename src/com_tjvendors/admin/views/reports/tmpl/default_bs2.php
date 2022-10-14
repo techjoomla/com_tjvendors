@@ -102,14 +102,6 @@ else
 	<div id="j-main-container">
 <?php
 }?>
-<?php
-	if (empty($this->items))
-	{
-		?>
-			<div class="alert alert-no-items"><?php echo Text::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?></div>
-		<?php
-	}
-	?>
 	<div id="filter-bar" class="btn-toolbar">
 		<div class="filter-search btn-group pull-left">
 			<label for="filter_search" class="element-invisible">
@@ -188,8 +180,16 @@ else
 		<?php echo Text::_('COM_TJVENDORS_REPORTS_DEBIT_NOTE'); ?>
 	</div>
 	</div>
-	<?php
-	if (!empty($this->items))
+<?php
+	if (empty($this->items))
+	{
+		?>
+			<div class="row span11">
+				<div class="alert alert-no-items"><?php echo Text::_('COM_TJVENDOR_NO_MATCHING_RESULTS');?></div>
+			</div>
+		<?php
+	}
+	else
 	{
 		?>
 		<table class="table table-striped table-responsive" >

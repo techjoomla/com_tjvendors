@@ -230,12 +230,18 @@ if (empty($this->items))
 								<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_PAYOUTS_PAYABLE_AMOUNT', 'pass.`total`', $listDirn, $listOrder); ?>
 							</th>
 							<th class='left' width="10%">
+								<?php echo HTMLHelper::_('grid.sort', 'COM_TJVENDORS_REPORTS_TRANSACTION_TIME', 'pass.`transaction_time`', $listDirn, $listOrder); ?>
+							</th>
+							<th class='left' width="10%">
+								<?php echo Text::_('COM_TJVENDORS_REPORTS_CUSTOMER_NOTE'); ?>
+							</th>
+							<th class='left' width="10%">
 								<?php echo Text::_('COM_TJVENDORS_REPORTS_STATUS'); ?>
 							</th>
 						</tr>
 					</thead>
 					<tfoot>
-						<td colspan="10">
+						<td colspan="11">
 							<?php
 							if ($filterCurrency != '0')
 							{?>
@@ -301,8 +307,23 @@ if (empty($this->items))
 								?>
 								<td><?php echo $item->reference_order_id;?></td>
 								<td><?php echo $item->total;?></td>
+								<td>
+									<?php echo HTMLHelper::date($item->transaction_time, 'Y-m-d H:i:s'); ?>
+								</td>
 								<?php
 								$status = json_decode($item->params, true);?>
+								<td class="center">
+									<?php
+										if(!empty($status['customer_note']))
+										{
+											echo $status['customer_note'];
+										}
+										else
+										{
+											echo "-";
+										}
+									?>
+								</td>
 								<td>
 									<?php
 									if ($status['entry_status'] == "debit_payout")

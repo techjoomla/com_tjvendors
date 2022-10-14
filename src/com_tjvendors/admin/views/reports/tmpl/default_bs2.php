@@ -348,7 +348,9 @@ else
 						?>
 						<td><?php echo $item->reference_order_id;?></td>
 						<td><?php echo $item->total;?></td>
-						<td><?php echo $item->transaction_time;?></td>
+						<td>
+							<?php echo HTMLHelper::date($item->transaction_time, 'Y-m-d H:i:s'); ?>
+						</td>
 						<?php
 						$status = json_decode($item->params, true);?>
 						<td class="center">

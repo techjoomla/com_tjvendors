@@ -371,6 +371,8 @@ class TjvendorsModelVendor extends AdminModel
 		$layout   = $input->get('layout', '', 'STRING');
 		$xrefData = array();
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
+		$tjVendorsParams = ComponentHelper::getParams('com_tjvendors');
+		$vendorApprovalEnabled = $tjVendorsParams->get('vendor_approval', 0, 'INT');
 
 		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
 		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
@@ -458,6 +460,12 @@ class TjvendorsModelVendor extends AdminModel
 				$client_entry->client = $data['vendor_client'];
 				$client_entry->vendor_id = $data['vendor_id'];
 				$client_entry->params = $xrefData['params'];
+
+				if ($vendorApprovalEnabled == 0 && $data['approved'] == '')
+				{
+					$data['approved'] = 1;
+				}
+
 				$client_entry->approved = $data['approved'];
 
 				// Insert the object into the user profile table.
@@ -524,6 +532,12 @@ class TjvendorsModelVendor extends AdminModel
 					$client_entry->client = $data['vendor_client'];
 					$client_entry->vendor_id = $data['vendor_id'];
 					$client_entry->params = $xrefData['params'];
+
+					if ($vendorApprovalEnabled == 0 && $data['approved'] == '')
+					{
+						$data['approved'] = 1;
+					}
+
 					$client_entry->approved = !empty( $data['approved']) ? $data['approved'] : '';
 
 					// Insert the object into the vendor_client_xref table.

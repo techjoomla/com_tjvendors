@@ -1,11 +1,11 @@
 <?php
 /**
- * @package     JTicketing
- * @subpackage  com_jticketing
+ * @package     TJVendors
+ * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2023 Techjoomla. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @copyright   Copyright (C) 2023 Techjoomla. All rights reserved.
+ * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 // No direct access.

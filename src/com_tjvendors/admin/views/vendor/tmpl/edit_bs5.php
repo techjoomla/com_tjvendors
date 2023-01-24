@@ -129,8 +129,13 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 						</div>
 					</div>
 			<?php echo HTMLHelper::_('bootstrap.endTab');
-			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'name', Text::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS'));
-				echo $this->form->getInput('payment_gateway');
+			echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'name', Text::_('COM_TJVENDORS_TITLE_PAYMENT_DETAILS')); ?>
+				<div class="mt-3"></div>
+				<?php
+				$paymentGatewayHtml = $this->form->getInput('payment_gateway');
+				$paymentGatewayHtml = str_replace('control-group', 'form-group', $paymentGatewayHtml);
+				$paymentGatewayHtml = str_replace('control-label', 'form-label', $paymentGatewayHtml);
+				echo $paymentGatewayHtml;
 			echo HTMLHelper::_('bootstrap.endTab');
 		echo HTMLHelper::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" value=""/>

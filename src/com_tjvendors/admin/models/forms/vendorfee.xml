@@ -33,7 +33,8 @@
 			label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY"
 			description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY"
 			required="true"
-			hint="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY"
+			default="USD"
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY"
 			filter="" />
 
 		<field

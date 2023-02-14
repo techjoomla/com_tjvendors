@@ -27,10 +27,11 @@
 			hint="COM_TJVENDORS_FORM_LBL_VENDOR_CLIENT"
 			filter="" />
 
-		<field 
-			name="currency" 
-			type="currencylist" 
-			label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY" 
+		<field
+			name="currency"
+			type="currencylist"
+			label="COM_TJVENDORS_FORM_LBL_VENDOR_CURRENCY"
+			description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY"
 			required="true"
 			default="USD"
 			description="COM_TJVENDORS_FORM_DESC_VENDOR_CURRENCY"

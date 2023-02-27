@@ -97,7 +97,27 @@ class TjvendorsControllerVendorFee extends FormController
 		$client   = $input->get('client', '', 'STRING');
 		$feeId    = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
 		$link     = Route::_(
-		'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId . '&client=' . $client, false
+			'index.php?option=com_tjvendors&view=vendorfee&layout=edit&id=' . $feeId . '&vendor_id=' . $vendorId . '&client=' . $client, false
+		);
+		$this->setRedirect($link);
+	}
+
+	/**
+	 * Gets the URL arguments to append to a cancel redirect.
+	 *
+	 * @return  string  The arguments to append to the redirect URL.
+	 *
+	 * @since   1.6
+	 */
+	public function cancel($key = null)
+	{
+		$input     = Factory::getApplication()->input;
+		$client    = $input->get('client', '', 'STRING');
+		$vendor_id = $input->get('vendor_id', '', 'STRING');
+		$append = '&vendor_id=' . $vendor_id . '&client=' . $client;
+
+		$link     = Route::_(
+			'index.php?option=com_tjvendors&view=vendorfees' . $append, false
 		);
 		$this->setRedirect($link);
 	}

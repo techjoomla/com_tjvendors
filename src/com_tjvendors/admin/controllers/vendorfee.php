@@ -93,7 +93,7 @@ class TjvendorsControllerVendorFee extends FormController
 	{
 		$input    = Factory::getApplication()->input;
 		$cid      = $input->post->get('cid', array(), 'array');
-		$vendorId = (int) (count($cid) ? $cid[0] : $input->getInt('vendor_id'));
+		$vendorId = (int) ($input->getInt('vendor_id') ? $input->getInt('vendor_id') : (count($cid) ? $cid[0] : 0));
 		$client   = $input->get('client', '', 'STRING');
 		$feeId    = (int) (count($cid) ? $cid[0] : $input->getInt('fee_id'));
 		$link     = Route::_(

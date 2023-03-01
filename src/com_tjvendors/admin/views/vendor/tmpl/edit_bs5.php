@@ -133,8 +133,9 @@ Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 				<div class="mt-3"></div>
 				<?php
 				$paymentGatewayHtml = $this->form->getInput('payment_gateway');
-				$paymentGatewayHtml = str_replace('control-group', 'form-group', $paymentGatewayHtml);
-				$paymentGatewayHtml = str_replace('control-label', 'form-label', $paymentGatewayHtml);
+				$paymentGatewayHtml = str_replace('control-group', 'form-group row mt-3', $paymentGatewayHtml);
+				$paymentGatewayHtml = str_replace('control-label', 'form-label col-md-3', $paymentGatewayHtml);
+				$paymentGatewayHtml = str_replace('controls', 'col-md-9', $paymentGatewayHtml);
 				echo $paymentGatewayHtml;
 			echo HTMLHelper::_('bootstrap.endTab');
 		echo HTMLHelper::_('bootstrap.endTabSet'); ?>

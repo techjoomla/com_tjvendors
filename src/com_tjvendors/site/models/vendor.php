@@ -424,14 +424,6 @@ class TjvendorsModelVendor extends AdminModel
 
 		if (isset($data['payment_gateway']))
 		{
-			foreach ($data['payment_gateway'] as $key => $value)
-			{
-				if (count($value) <= 1)
-				{
-					unset($data['payment_gateway'][$key]);
-				}
-			}
-
 			$paymentGatway['payment_gateway'] = $data['payment_gateway'];
 			$xrefData['params'] = json_encode($paymentGatway);
 			$data['params'] = '';

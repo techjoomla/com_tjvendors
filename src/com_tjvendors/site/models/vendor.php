@@ -334,7 +334,19 @@ class TjvendorsModelVendor extends AdminModel
 			{
 				if ($app->isClient('administrator'))
 				{
-					$html[] = $field->renderField();
+					if (JVERSION < '4.0.0')
+					{
+						$html[] = $field->renderField();
+					}
+					else
+					{
+						$paymentGatewayHtml = $field->renderField();
+						$paymentGatewayHtml = str_replace('control-group', 'form-group row', $paymentGatewayHtml);
+						$paymentGatewayHtml = str_replace('control-label', 'form-label col-md-3', $paymentGatewayHtml);
+						$paymentGatewayHtml = str_replace('controls', 'col-md-9', $paymentGatewayHtml);
+						$html[] = $paymentGatewayHtml;
+					}
+					
 				}
 				else
 				{

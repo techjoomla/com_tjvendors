@@ -112,7 +112,15 @@ class TjvendorsViewReports extends HtmlView
 		}
 
 		// Set sidebar action - New in 3.0
-		JHtmlSidebar::setAction('index.php?option=com_tjvendors&view=reports');
+		if ($this->client)
+		{
+			JHtmlSidebar::setAction('index.php?option=com_tjvendors&view=reports&&client=' . $this->client);
+		}
+		else 
+		{
+			JHtmlSidebar::setAction('index.php?option=com_tjvendors&view=reports');
+		}
+		
 
 		$this->extra_sidebar = '';
 	}

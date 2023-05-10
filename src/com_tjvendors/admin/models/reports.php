@@ -192,7 +192,8 @@ class TjvendorsModelReports extends ListModel
 			{
 				$search = $db->Quote('%' . $db->escape($search, true) . '%');
 				$query->where('(' . $db->quoteName('vendors.vendor_id') . ' LIKE ' . $search . 'OR' .
-				$db->quoteName('pass.currency') . 'OR' . $db->quoteName('vendors.vendor_title') . ' LIKE ' . $search . ')');
+				$db->quoteName('pass.currency') . 'OR' . $db->quoteName('vendors.vendor_title') . ' LIKE ' . $search .
+				'OR' . $db->quoteName('transaction_id') . ' LIKE ' . $search . ')');
 			}
 		}
 

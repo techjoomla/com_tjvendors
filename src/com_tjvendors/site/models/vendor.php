@@ -707,4 +707,27 @@ class TjvendorsModelVendor extends AdminModel
 
 		return $item;
 	}
+
+	/**
+	 * Method to get a vendor details by vendor Id
+	 *
+	 * @param   integer  $xrefId  The id of the primary key.
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 *
+	 * @since    1.3.3
+	 */
+	public function getDetailsByVendorId($xrefId)
+	{
+		if (empty($xrefId))
+		{
+			return false;
+		}
+
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorXref = Table::getInstance('Vendor', 'TjvendorsTable');
+		$vendorXref->load(array('vendor_id' => $xrefId));
+
+		return $vendorXref;
+	}
 }

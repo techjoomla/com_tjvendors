@@ -719,7 +719,7 @@ class TjvendorsModelVendor extends AdminModel
 	 */
 	public function getDetailsByVendorId($id)
 	{
-		if (empty($xrefId))
+		if (empty($id))
 		{
 			return false;
 		}

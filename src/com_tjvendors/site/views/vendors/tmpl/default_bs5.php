@@ -67,11 +67,11 @@ $listDirn  = $this->state->get('list.direction');
 				<div class="row">
 					<div class="col-xs-12 col-md-6 date">
 						<div class="btn-group input-group">
-							<span class="input-group-btn">
+							<span class="input-group-btn me-2">
 								<?php echo HTMLHelper::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
 							</span>
 
-							<span class="input-group-btn">
+							<span class="input-group-btn me-2">
 								<?php echo HTMLHelper::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
 							</span>
 

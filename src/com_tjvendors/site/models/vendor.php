@@ -707,4 +707,27 @@ class TjvendorsModelVendor extends AdminModel
 
 		return $item;
 	}
+
+	/**
+	 * Method to get a vendor details by vendor Id
+	 *
+	 * @param   integer  $id  The vendor id
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 *
+	 * @since    1.3.3
+	 */
+	public function getDetailsByVendorId($id)
+	{
+		if (empty($id))
+		{
+			return false;
+		}
+
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
+		$vendorDetails = Table::getInstance('Vendor', 'TjvendorsTable');
+		$vendorDetails->load(array('vendor_id' => $id));
+
+		return $vendorDetails;
+	}
 }

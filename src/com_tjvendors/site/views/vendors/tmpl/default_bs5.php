@@ -68,14 +68,14 @@ $listDirn  = $this->state->get('list.direction');
 					<div class="col-xs-12 col-md-6 date">
 						<div class="btn-group input-group">
 							<span class="input-group-btn">
-								<?php echo HTMLHelper::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
+								<?php echo HTMLHelper::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()', 'placeholder' => '%Y-%m-%d')); ?>
 							</span>
 
-							<span class="input-group-btn">
-								<?php echo HTMLHelper::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()')); ?>
+							<span class="input-group-btn ms-3">
+								<?php echo HTMLHelper::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array('class' => 'inputbox date__field', 'onchange' => 'document.adminForm.submit()', 'placeholder' => '%Y-%m-%d')); ?>
 							</span>
 
-							<span>
+							<span class="ms-3">
 								<button class="btn btn-primary" id="clear-calendar" type="button" title="<?php echo Text::_('JSEARCH_CALENDAR_CLEAR'); ?>">
 									<i class="icon-remove"></i>
 								</button>
@@ -84,7 +84,7 @@ $listDirn  = $this->state->get('list.direction');
 					</div>
 
 					<div class="col-xs-12 col-md-6 btn-group">
-						<ul class="input-group list-inline pull-right">
+						<ul class="input-group list-inline justify-content-md-end">
 							<?php
 							if (!empty($this->currencies))
 							{
@@ -241,7 +241,7 @@ $listDirn  = $this->state->get('list.direction');
 										<tfoot>
 											<td colspan="5" class="hidden-xs">
 												<?php if ($currency != '0'): ?>
-													<div class="pull-right">
+													<div class="justify-content-md-end">
 														<tr>
 															<th colspan="12">
 																<?php echo Text::_('COM_TJVENDORS_REPORTS_CREDIT_AMOUNT') . '&nbsp:&nbsp&nbsp ' . $this->totalDetails['creditAmount'] . '&nbsp' . $currency; ?>

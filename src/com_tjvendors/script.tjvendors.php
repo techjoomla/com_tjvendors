@@ -80,6 +80,9 @@ class Com_TjvendorsInstallerScript
 
 		// Install plugins
 		$this->_installPlugins($parent);
+
+		// Remove duplicate menu item 
+		$this->removeDupicatemenus();
 	}
 
 	/**
@@ -562,5 +565,44 @@ class Com_TjvendorsInstallerScript
 		}
 
 		Folder::copy($VendorSubformLayouts, JPATH_SITE . '/layouts/com_tjvendors');
+	}
+
+	/**
+	 * This function is used to remove duplicate menu items
+	 *
+	 * @return  ''.
+	 *
+	 * @since   2.3.0
+	 */
+	public function removeDupicatemenus()
+	{
+		// Remove duplicate menu item
+		// Since 4.0.3
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true);
+
+		if (JVERSION >= '4.0.0')
+		{
+			$table   = new \Joomla\Component\Menus\Administrator\Table\MenuTable($db);
+		} 
+		else 
+		{
+			Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/tables');
+			$table = Table::getInstance('menu', 'MenusTable', array('dbo', $db));
+		}
+
+		$db = Factory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('id');
+		$query->from($db->quoteName('#__menu'));
+		$query->where($db->quoteName('menutype') . ' = ' . $db->quote('main'));
+		$query->where($db->quoteName('path') . ' IN ("com-tjvendors-tjnotifications-menu")');
+		$db->setQuery($query);
+		$data = $db->loadObjectList();
+
+		foreach ($data as $key => $menuItem) 
+		{
+			$table->delete($menuItem->id);
+		}
 	}
 }

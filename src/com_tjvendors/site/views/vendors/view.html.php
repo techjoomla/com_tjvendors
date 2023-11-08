@@ -73,6 +73,12 @@ class TjvendorsViewVendors extends HtmlView
 		$this->totalDetails = $tjvendorFrontHelper->getTotalDetails($this->vendor_id, $client, $currency);
 		$this->vendorClient = $app->getUserStateFromRequest('client', 'client', '');
 
+		JLoader::import('components.com_tjvendors.helpers.fronthelper', JPATH_SITE);
+		$this->tjvendorFrontHelper = new TjvendorFrontHelper;
+		$this->vendorItemID = $this->tjvendorFrontHelper->getItemId(
+			'index.php?option=com_tjvendors&view=vendors'
+			);
+
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{

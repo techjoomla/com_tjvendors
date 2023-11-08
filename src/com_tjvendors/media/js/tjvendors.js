@@ -255,7 +255,7 @@ var tjVSite = {
 		/*Initialize event js*/
 		initVendorsJs: function() {
 			jQuery(document).ready(function() {
-				jQuery("#dates, #date").blur(function() {
+				jQuery("#dates, #date").change(function() {
 					jQuery('#adminForm').submit();
 				});
 			});

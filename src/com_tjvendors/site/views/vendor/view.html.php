@@ -180,12 +180,12 @@ class TjvendorsViewVendor extends HtmlView
 			}
 		}
 
-		if ($this->layout != "edit")
+		if ($this->layout != "editinfo")
 		{
 			if (Factory::getUser()->id && !$this->vendor_id)
 			{
 				$client = $app->input->get('client', '', 'STRING');
-				$link   = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
+				$link   = Route::_('index.php?option=com_tjvendors&view=vendor&layout=editinfo&client=' . $client . '&Itemid=' . $this->vendorFormItemId);
 				$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'notice');
 				$app->redirect($link);
 			}

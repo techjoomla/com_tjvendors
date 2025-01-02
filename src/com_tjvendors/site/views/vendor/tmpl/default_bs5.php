@@ -24,14 +24,26 @@ use Joomla\CMS\Uri\Uri;
 		<h3 class="mt-0">
 			<?php echo htmlspecialchars($this->VendorDetail->vendor_title, ENT_COMPAT, 'UTF-8');?>
 			<span class="pull-right">
-				<small>
-					<a  
-					href="<?php echo Route::_(
-					'index.php?option=com_tjvendors&view=vendor&layout=editinfo&vendor_id='. $this->vendor_id .'&client=' . $this->input->get('client', '', 'STRING') . '&Itemid=' . $this->vendorFormItemId
-					);?>">
-					<i class="fa fa-wrench" aria-hidden="true"></i>  <?php echo Text::_("COM_TJVENDORS_VENDOR_UPDATE"); ?></a>
-				</small>
-			</span>
+            <small>
+                <?php if (empty($this->vendor_id)) : ?>
+                    <!-- Display "Create" link when vendor_id is not present -->
+                    <a  
+                        href="<?php echo Route::_(
+                            'index.php?option=com_tjvendors&view=vendor&layout=create&client=' . $this->input->get('client', '', 'STRING') . '&Itemid=' . $this->vendorFormItemId
+                        ); ?>">
+                        <i class="fa fa-plus" aria-hidden="true"></i> <?php echo Text::_('COM_TJVENDOR_CREATE_VENDOR'); ?>
+                    </a>
+                <?php else : ?>
+                    <!-- Display "Update" link when vendor_id is present -->
+                    <a  
+                        href="<?php echo Route::_(
+                            'index.php?option=com_tjvendors&view=vendor&layout=editinfo&vendor_id=' . $this->vendor_id . '&client=' . $this->input->get('client', '', 'STRING') . '&Itemid=' . $this->vendorFormItemId
+                        ); ?>">
+                        <i class="fa fa-wrench" aria-hidden="true"></i> <?php echo Text::_('COM_TJVENDORS_VENDOR_UPDATE'); ?>
+                    </a>
+                <?php endif; ?>
+            </small>
+        </span>
 		</h3>
 	</div>
 	<?php

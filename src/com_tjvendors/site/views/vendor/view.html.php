@@ -185,9 +185,11 @@ class TjvendorsViewVendor extends HtmlView
 			if (Factory::getUser()->id && !$this->vendor_id)
 			{
 				$client = $app->input->get('client', '', 'STRING');
-				$link   = Route::_('index.php?option=com_tjvendors&view=vendor&layout=edit&client=' . $client);
-				$app->enqueueMessage(Text::_('COM_TJVENDOR_REGISTRATION_VENDOR_ERROR'), 'notice');
-				$app->redirect($link);
+				 // Check if the user is already on the editinfo page to prevent a redirect loop
+				 if ($this->layout != 'editinfo') {
+					$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=editinfo&client=' . $client);
+					$app->redirect($link);
+				}
 			}
 			elseif (!Factory::getUser()->id)
 			{

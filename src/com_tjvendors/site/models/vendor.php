@@ -375,6 +375,25 @@ class TjvendorsModelVendor extends AdminModel
 	 */
 	public function save($data)
 	{
+		$db = Factory::getDbo();
+		$user = Factory::getUser();
+		$app = Factory::getApplication();
+
+		// Check if the user is already associated with a vendor
+		$query = $db->getQuery(true)
+			->select($db->quoteName('vendor_id'))
+			->from($db->quoteName('#__tjvendors_vendors'))
+			->where($db->quoteName('user_id') . ' = ' . (int) $data['user_id']);
+		$db->setQuery($query);
+		$existingVendorId = $db->loadResult();
+
+		if (!empty($existingVendorId) && (empty($data['vendor_id']) || $data['vendor_id'] != $existingVendorId))
+		{
+			// If the user is already associated with a vendor, throw an error
+			$app->enqueueMessage(Text::_('COM_TJVENDORS_ERROR_USER_ALREADY_VENDOR'), 'error');
+			return false;
+		}
+
 		$table    = $this->getTable();
 		$db       = Factory::getDbo();
 		$user     = Factory::getUser();

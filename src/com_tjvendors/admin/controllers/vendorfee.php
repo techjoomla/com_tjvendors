@@ -15,6 +15,8 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Router\Route;
 use Joomla\Registry\Registry;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
 
 /**
  * Vendor controller class.
@@ -120,5 +122,39 @@ class TjvendorsControllerVendorFee extends FormController
 			'index.php?option=com_tjvendors&view=vendorfees' . $append, false
 		);
 		$this->setRedirect($link);
+	}
+
+	/**
+	 * Function to delete field data
+	 *
+	 * @param  void
+	 *
+	 * @return  void
+	 */
+	public function delete()
+	{
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+
+		$app    = Factory::getApplication();
+		$input  = $app->input;
+		$client = $input->get('client', '', 'STRING');
+		$vendor_id    = $app->input->get('vendor_id', "", 'STRING');
+		$cid    = $app->input->get('cid', array(), 'ARRAY');
+
+		$model  = $this->getModel("vendorfee");
+
+		if(!empty($cid))
+		{
+			$res = $model->delete($cid);
+			if($res){
+				$this->setMessage(Text::_('COM_TJVENDORS_FEE_DELETE_SUCCESS_MESSAGE'));
+			}
+			else {
+				$this->setMessage(Text::_('COM_TJVENDORS_FEE_DELETE_FAIL_MESSAGE'), 'error');
+			}
+		}
+
+		$redirect = "index.php?option=com_tjvendors&view=vendorfees&vendor_id=$vendor_id&client=$client";
+		$this->setRedirect($redirect);
 	}
 }

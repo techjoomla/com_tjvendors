@@ -85,7 +85,10 @@ class TjvendorsViewVendorFees extends HtmlView
 		{
 			JToolBarHelper::editList('vendorfee.edit', 'JTOOLBAR_EDIT');
 		}
-
+		if ($canDo->get('core.delete') && isset($this->items[0]))
+		{
+			JToolBarHelper::deleteList(JText::_('COM_TJVENDORS_FEE_CONFIRM_DELETE_PROMPT'),'vendorfee.delete', 'JTOOLBAR_DELETE');
+		}
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
 		ToolbarHelper::title($clientTitle . ' : ' . Text::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'list.png');

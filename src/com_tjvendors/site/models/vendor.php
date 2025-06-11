@@ -555,13 +555,13 @@ class TjvendorsModelVendor extends AdminModel
 					$client_entry->client = $data['vendor_client'];
 					$client_entry->vendor_id = $data['vendor_id'];
 					$client_entry->params = $xrefData['params'];
-					$client_entry->approved = $data['approved'];
 
 					if ($vendorApprovalEnabled == 0 && $data['approved'] == '')
 					{
 						$data['approved'] = 1;
 					}
 
+					$client_entry->approved = $data['approved'];
 					// Insert the object into the vendor_client_xref table.
 					$result = Factory::getDbo()->insertObject('#__vendor_client_xref', $client_entry);
 				}

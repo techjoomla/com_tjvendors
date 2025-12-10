@@ -59,7 +59,7 @@ class TjvendorsViewVendor extends HtmlView
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
 		$this->params = ComponentHelper::getParams('com_tjvendors');
-		$this->input = Factory::getApplication()->input;
+		$this->input = Factory::getApplication()->getInput();
 		Text::script('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR');
 		Text::script('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
 		Text::script('COM_TJVENDOR_USER_ERROR');
@@ -123,12 +123,12 @@ class TjvendorsViewVendor extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		Factory::getApplication()->input->set('hidemainmenu', true);
+		Factory::getApplication()->getInput()->set('hidemainmenu', true);
 
 		$user  = Factory::getUser();
 		$isNew = ($this->item->vendor_id == 0);
 
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$this->full_client = $input->get('client', '', 'STRING');
 
 		if ($isNew)
@@ -156,22 +156,22 @@ class TjvendorsViewVendor extends HtmlView
 		// If not checked out, can save the item.
 		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create'))))
 		{
-			JToolBarHelper::apply('vendor.apply', 'JTOOLBAR_APPLY');
-			JToolBarHelper::save('vendor.save', 'JTOOLBAR_SAVE');
+			ToolbarHelper::apply('vendor.apply', 'JTOOLBAR_APPLY');
+			ToolbarHelper::save('vendor.save', 'JTOOLBAR_SAVE');
 		}
 
 		if (!$checkedOut && ($canDo->get('core.create')))
 		{
-			JToolBarHelper::custom('vendor.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
+			ToolbarHelper::custom('vendor.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
 		}
 
 		if (empty($this->item->vendor_id))
 		{
-			JToolBarHelper::cancel('vendor.cancel', 'JTOOLBAR_CANCEL');
+			ToolbarHelper::cancel('vendor.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{
-			JToolBarHelper::cancel('vendor.cancel', 'JTOOLBAR_CLOSE');
+			ToolbarHelper::cancel('vendor.cancel', 'JTOOLBAR_CLOSE');
 		}
 	}
 }

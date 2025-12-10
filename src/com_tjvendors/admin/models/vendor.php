@@ -16,4 +16,7 @@ defined('_JEXEC') or die;
  *
  * @since  1.6
  */
-JLoader::import('com_tjvendors.models.vendor', JPATH_SITE . '/components');
+$vendorModelPath = JPATH_SITE . '/components/com_tjvendors/models/vendor.php';
+if (file_exists($vendorModelPath)) {
+	require_once $vendorModelPath;
+}

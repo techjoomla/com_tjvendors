@@ -30,7 +30,7 @@ $userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
-$input     = $app->input;
+$input     = $app->getInput();
 $client    = $input->get('client', '', 'STRING');
 ?>
 <script type="text/javascript">
@@ -109,10 +109,10 @@ if (empty($this->items))
 									</button>
 								</div>
 								<div class="js-stools-container-selector btn-group  hidden-phone">
-									<?php echo JHTML::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));?>
+									<?php echo HTMLHELPER::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));?>
 								</div>
 								<div class="js-stools-container-selector btn-group  hidden-phone">
-									<?php echo JHTML::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));?>
+									<?php echo HTMLHELPER::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));?>
 								</div>
 								<div class="js-stools-container-selector btn-group  hidden-phone">
 									<button class="btn btn-primary hasTooltip" id="clear-calendar" type="button" title="<?php echo Text::_('JSEARCH_CALENDAR_CLEAR'); ?>">
@@ -328,7 +328,7 @@ if (empty($this->items))
 									<?php
 									if ($status['entry_status'] == "debit_payout")
 									{
-										echo JHTML::_('select.genericlist', $options, "paidUnpaid", 'class="form-select" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
+										echo HTMLHELPER::_('select.genericlist', $options, "paidUnpaid", 'class="form-select" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
 									}
 									elseif ($status['entry_status'] == "credit_for_ticket_buy")
 									{

@@ -80,7 +80,7 @@ if (Factory::getUser()->id)
 							<input type="hidden" name="jform[created_time]" value="<?php echo $this->vendor->created_time; ?>" />
 							<input type="hidden" name="jform[modified_time]" value="<?php echo $this->vendor->modified_time; ?>" />
 							<?php
-							$input = Factory::getApplication()->input;
+							$input = Factory::getApplication()->getInput();
 
 							if (!empty($this->vendor->vendor_logo))
 							{

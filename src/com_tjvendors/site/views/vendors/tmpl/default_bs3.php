@@ -16,7 +16,8 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
 
-HTMLHelper::_('formbehavior.chosen', 'select');
+HTMLHelper::_('behavior.multiselect'); // only for list tables
+
 HTMLHelper::stylesheet('media/com_tjvendor/css/tjvendors.css');
 
 $listOrder = $this->state->get('list.ordering');

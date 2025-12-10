@@ -12,7 +12,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\Path;
+use Joomla\Filesystem\Path;  
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -35,7 +35,7 @@ class TjvendorsHelper
 	 */
 	public static function addSubmenu($vName = '')
 	{
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$full_client = $input->get('client', '', 'STRING');
 		$full_client = explode('.', $full_client);
 
@@ -71,22 +71,10 @@ class TjvendorsHelper
 
 		if ($currentComponent == 'com_tjvendors')
 		{
-			$notifications  = false;
-
-			switch ($vName)
-			{
-				case 'notifications':
-					$notifications = true;
-					break;
-			}
-
-			JHtmlSidebar::addEntry(
-				Text::_('COM_TJVENDORS_TJNOTIFICATIONS_MENU'), 'index.php?option=com_tjnotifications&extension=com_tjvendors',
-				$notifications
-			);
-
-			// Load bootsraped filter
-
+			// Sidebar functionality removed in Joomla 4+
+			// Submenu items should be handled through component configuration
+			
+			// Load bootstrap tooltip
 			HTMLHelper::_('bootstrap.tooltip');
 		}
 	}

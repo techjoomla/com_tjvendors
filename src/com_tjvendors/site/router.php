@@ -13,7 +13,14 @@ defined('_JEXEC') or die;
 
 use Joomla\CMS\Component\Router\RouterBase;
 
-JLoader::registerPrefix('Tjvendors', JPATH_SITE . '/components/com_tjvendors/');
+spl_autoload_register(function ($class) {
+	if (strpos($class, 'Tjvendors') === 0) {
+		$path = JPATH_SITE . '/components/com_tjvendors/' . strtolower(substr($class, 9)) . '.php';
+		if (file_exists($path)) {
+			require_once $path;
+		}
+	}
+});
 require_once JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
 
 /**

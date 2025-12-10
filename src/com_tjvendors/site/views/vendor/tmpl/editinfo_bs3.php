@@ -20,7 +20,8 @@ use Joomla\CMS\Uri\Uri;
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.formvalidator');
-HTMLHelper::_('formbehavior.chosen', 'select');
+HTMLHelper::_('behavior.multiselect'); // only for list tables
+
 HTMLHelper::_('behavior.keepalive');
 HTMLHelper::script(Uri::root(true) . '/libraries/techjoomla/assets/js/tjvalidator.js');
 
@@ -80,7 +81,7 @@ if (Factory::getUser()->id)
 							<input type="hidden" name="jform[created_time]" value="<?php echo $this->vendor->created_time; ?>" />
 							<input type="hidden" name="jform[modified_time]" value="<?php echo $this->vendor->modified_time; ?>" />
 							<?php
-							$input = Factory::getApplication()->input;
+							$input = Factory::getApplication()->getInput();
 
 							if (!empty($this->vendor->vendor_logo))
 							{

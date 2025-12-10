@@ -19,7 +19,10 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 
-JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
+$fronthelperPath = JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
+if (file_exists($fronthelperPath)) {
+	require_once $fronthelperPath;
+}
 
 /**
  * Tjvendors model.

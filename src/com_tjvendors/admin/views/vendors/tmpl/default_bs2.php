@@ -19,7 +19,8 @@ use Joomla\CMS\Uri\Uri;
 HTMLHelper::addIncludePath(JPATH_COMPONENT . '/helpers/');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
-HTMLHelper::_('formbehavior.chosen', 'select');
+HTMLHelper::_('behavior.multiselect'); // only for list tables
+
 
 // Import CSS
 $document = Factory::getDocument();
@@ -316,7 +317,7 @@ else
 							?>
 								<td>
 									<?php
-									echo JHTML::_(
+									echo HTMLHELPER::_(
 									'select.genericlist', $options, "vendorApprove", 'class="input-medium" size="1" onChange="tjVAdmin.vendors.vendorApprove(' .
 									$item->vendor_id . ',this);"', 'value', 'type', $item->approved
 									);

@@ -11,8 +11,8 @@ var tjVAdmin = {
 		readMore: function() {
 			var showChar = 300;
 			var ellipsestext = "";
-			var moretext = Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_MORE');
-			var lesstext = Joomla.JText._('COM_TJVENDOR_DESCRIPTION_READ_LESS');
+			var moretext = Joomla.Text._('COM_TJVENDOR_DESCRIPTION_READ_MORE');
+			var lesstext = Joomla.Text._('COM_TJVENDOR_DESCRIPTION_READ_LESS');
 
 			jQuery('.profile__content').each(function() {
 				var content = jQuery(this).html();
@@ -67,7 +67,7 @@ var tjVAdmin = {
 					var username = document.getElementById("jform_user_id").value;
 
 					if (username == '') {
-						var jmsgs = [Joomla.JText._('COM_TJVENDOR_USER_ERROR')];
+						var jmsgs = [Joomla.Text._('COM_TJVENDOR_USER_ERROR')];
 						Joomla.renderMessages({
 							'warning': jmsgs
 						});
@@ -120,7 +120,7 @@ var tjVAdmin = {
 
 					if (data) {
 						if (layout === "update") {
-							var jmsgs = [Joomla.JText._('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR')];
+							var jmsgs = [Joomla.Text._('COM_TJVENDOR_DUPLICARE_VENDOR_ERROR')];
 							Joomla.renderMessages({
 								'warning': jmsgs
 							});
@@ -154,13 +154,13 @@ var tjVAdmin = {
 					alert(data);
 					jQuery('#system-message-container').empty();
 					if (vendorApprove == '1') {
-						var jmsgs = [Joomla.JText._('COM_TJVENDOR_VENDOR_APPROVAL')];
+						var jmsgs = [Joomla.Text._('COM_TJVENDOR_VENDOR_APPROVAL')];
 						Joomla.renderMessages({
 							'success': jmsgs
 						});
 					}
 					else {
-						jmsgs = [Joomla.JText._('COM_TJVENDOR_VENDOR_DENIAL')];
+						jmsgs = [Joomla.Text._('COM_TJVENDOR_VENDOR_DENIAL')];
 						Joomla.renderMessages({
 							'success': jmsgs
 						});
@@ -179,13 +179,13 @@ var tjVAdmin = {
 					var flat_commission = document.getElementById("jform_flat_commission").value;
 
 					if (percent_commission > 100) {
-						var jmsgs = [Joomla.JText._('COM_TJVENDORS_FEES_PERCENT_ERROR')];
+						var jmsgs = [Joomla.Text._('COM_TJVENDORS_FEES_PERCENT_ERROR')];
 						Joomla.renderMessages({
 							'error': jmsgs
 						});
 					}
 					else if (percent_commission < 0 || flat_commission < 0) {
-						var jmsgs = [Joomla.JText._('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR')];
+						var jmsgs = [Joomla.Text._('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR')];
 						Joomla.renderMessages({
 							'error': jmsgs
 						});
@@ -360,7 +360,7 @@ var tjCommon = {
 						});
 					} 
 					else if (!response && userObject.payment_gateway != "") {
-						var error_html = Joomla.JText._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
+						var error_html = Joomla.Text._('COM_TJVENDOR_PAYMENTGATEWAY_NO_FIELD_MESSAGE');
 						$thisId.closest('.subform-repeatable-group').append("<div class='alert alert-warning payment-gateway-parent'>" + error_html + "</div>");
 					}
 				}

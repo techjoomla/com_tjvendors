@@ -29,7 +29,7 @@ class TjvendorsControllerPayout extends FormController
 	public function __construct()
 	{
 		$this->view_list = 'payouts';
-		$this->input = Factory::getApplication()->input;
+		$this->input = Factory::getApplication()->getInput();
 
 		if (empty($this->client))
 		{
@@ -51,7 +51,7 @@ class TjvendorsControllerPayout extends FormController
 
 	protected function getRedirectToListAppend()
 	{
-		$input     = Factory::getApplication()->input;
+		$input     = Factory::getApplication()->getInput();
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$client    = $input->get('client', '', 'STRING');
 		$append    = parent::getRedirectToListAppend();
@@ -83,12 +83,12 @@ class TjvendorsControllerPayout extends FormController
 	 */
 	public function changePayoutStatus()
 	{
-		$input      = Factory::getApplication()->input->post;
+		$input      = Factory::getApplication()->getInput()->post;
 		$payout_id  = $input->get('payout_id', '', 'STRING');
 		$paidUnpaid = $input->get('paidUnpaid', '', 'STRING');
 		$model      = $this->getModel('Payout');
 		$results    = $model->changePayoutStatus($payout_id, $paidUnpaid);
 		echo json_encode($results);
-		jexit();
+		Factory::getApplication()->close();
 	}
 }

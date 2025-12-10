@@ -33,8 +33,8 @@ class TjvendorsController extends BaseController
 	 */
 	public function display($cachable = false, $urlparams = false)
 	{
-		$view = Factory::getApplication()->input->getCmd('view', 'vendors');
-		Factory::getApplication()->input->set('view', $view);
+		$view = Factory::getApplication()->getInput()->getCmd('view', 'vendors');
+		Factory::getApplication()->getInput()->set('view', $view);
 
 		parent::display($cachable, $urlparams);
 

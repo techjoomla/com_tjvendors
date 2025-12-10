@@ -51,7 +51,7 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'vendor_id')
 	{
-		$input  = Factory::getApplication()->input;
+		$input  = Factory::getApplication()->getInput();
 		$client = $input->get('client', '', 'STRING');
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
 		$append .= '&client=' . $client;
@@ -68,12 +68,12 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function checkDuplicateUser()
 	{
-		$input   = Factory::getApplication()->input->post;
+		$input   = Factory::getApplication()->getInput()->post;
 		$user    = $input->get('user', '', 'STRING');
 		$model   = $this->getModel('vendor');
 		$results = $model->checkDuplicateUser($user);
 		echo json_encode($results);
-		jexit();
+		Factory::getApplication()->close();
 	}
 
 	/**
@@ -85,7 +85,7 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function vendorApprove()
 	{
-		$input                 = Factory::getApplication()->input;
+		$input                 = Factory::getApplication()->getInput();
 		$vendor_id             = $input->post->get('vendor_id', '', 'INTEGER');
 		$vendorApprove         = $input->post->get('vendorApprove', '', 'INTEGER');
 		$client                = $input->get('client', '', 'STRING');
@@ -106,14 +106,14 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	public function generateGatewayFields()
 	{
-		$input           = Factory::getApplication()->input->post;
+		$input           = Factory::getApplication()->getInput()->post;
 		$payment_gateway = $input->get('payment_gateway', '', 'STRING');
 		$parentTag       = $input->get('parent_tag', '', 'STRING');
 		$vendor_id       = $input->get('vendor_id', '', 'INTEGER');
 		$model           = $this->getModel('vendor', '', array());
 		$results         = $model->generateGatewayFields($payment_gateway, $parentTag);
 		echo json_encode($results);
-		jexit();
+		Factory::getApplication()->close();
 	}
 
 	/**
@@ -125,7 +125,7 @@ class TjvendorsControllerVendor extends FormController
 	 */
 	protected function getRedirectToListAppend()
 	{
-		$input  = Factory::getApplication()->input->post;
+		$input  = Factory::getApplication()->getInput()->post;
 		$client = $input->get('client', '', 'STRING');
 		$append = parent::getRedirectToListAppend();
 		$append .= '&client=' . $client;
@@ -149,11 +149,11 @@ class TjvendorsControllerVendor extends FormController
 		// Initialise variables.
 		$app    = Factory::getApplication();
 		$model  = $this->getModel('Vendor', 'TjvendorsModel', array());
-		$input  = $app->input;
+		$input  = $app->getInput();
 		$client = $input->get('client', '', 'STRING');
 
 		// Get the user data.
-		$data = $app->input->get('jform', array(), 'array');
+		$data = $app->getInput()->get('jform', array(), 'array');
 
 		// Validate the posted data.
 		$form = $model->getForm();

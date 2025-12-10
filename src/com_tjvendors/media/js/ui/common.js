@@ -74,7 +74,7 @@ export class CommonUI{
 					jQuery(regionField).trigger("chosen:updated");
 				}else{
 					Joomla.renderMessages({
-						'error': [Joomla.JText._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
+						'error': [Joomla.Text._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
 					});
 					jQuery("html, body").animate({
 						scrollTop: 0
@@ -84,7 +84,7 @@ export class CommonUI{
 		}
 		catch(err){
 			Joomla.renderMessages({
-				'error': [Joomla.JText._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
+				'error': [Joomla.Text._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
 			});
 			jQuery("html, body").animate({
 				scrollTop: 0
@@ -125,7 +125,7 @@ export class CommonUI{
 					jQuery(cityField).trigger("chosen:updated");
 				}else{
 					Joomla.renderMessages({
-						'error': [Joomla.JText._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
+						'error': [Joomla.Text._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
 					});
 					jQuery("html, body").animate({
 						scrollTop: 0
@@ -135,7 +135,7 @@ export class CommonUI{
 		}
 		catch(err){
 			Joomla.renderMessages({
-				'error': [Joomla.JText._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
+				'error': [Joomla.Text._('COM_TJVENDOR_VENDOR_FORM_AJAX_FAIL_ERROR_MESSAGE')]
 			});
 			jQuery("html, body").animate({
 				scrollTop: 0

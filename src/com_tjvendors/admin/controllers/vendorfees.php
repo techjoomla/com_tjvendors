@@ -48,7 +48,7 @@ class TjvendorsControllerVendorFees extends AdminController
 	public function back()
 	{
 		// Get the input
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$pks = $input->post->get('cid', array(), 'array');
 
 		// Redirect to the list screen.

@@ -16,12 +16,12 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Form\FormHelper;
-
-FormHelper::loadFieldClass('list');
+use Joomla\CMS\Form\Field\ListField;
 
 if (JVERSION < '4.0.0')
 {
-	HTMLHelper::_('formbehavior.chosen', 'select');
+	HTMLHelper::_('behavior.multiselect'); // only for list tables
+
 }
 
 /**
@@ -29,7 +29,7 @@ if (JVERSION < '4.0.0')
  *
  * @since  1.3.2
  */
-class JFormFieldVendorsList extends JFormFieldList
+class JFormFieldVendorsList extends ListField
 {
 	/**
 	 * The form field type.

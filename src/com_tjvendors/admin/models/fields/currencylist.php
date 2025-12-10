@@ -14,9 +14,8 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 
-jimport('techjoomla.tjmoney.tjmoney');
-
-FormHelper::loadFieldClass('list');
+require_once JPATH_LIBRARIES . '/techjoomla/tjmoney/tjmoney.php';
+use Joomla\CMS\Form\Field\ListField;
 
 /**
  * JFormFieldCurrencyList class
@@ -26,7 +25,7 @@ FormHelper::loadFieldClass('list');
  * @since       1.0
  */
 
-class JFormFieldCurrencyList extends JFormFieldList
+class JFormFieldCurrencyList extends ListField
 {
 	/**
 	 * The form field type.
@@ -47,7 +46,7 @@ class JFormFieldCurrencyList extends JFormFieldList
 	/**
 	 * Method to get a list of options for a list input.
 	 *
-	 * @return array An array of JHtml options.
+	 * @return array An array of HTMLHelper options.
 	 *
 	 * @since   11.4
 	 */

@@ -16,8 +16,15 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 
-JLoader::import('payout', JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables');
-JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
+$payoutPath = JPATH_ADMINISTRATOR . '/components/com_tjvendors/tables/payout.php';
+if (file_exists($payoutPath)) {
+	require_once $payoutPath;
+}
+
+$tjvendorsPath = JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
+if (file_exists($tjvendorsPath)) {
+	require_once $tjvendorsPath;
+}
 
 /**
  * Class TjvendorsFrontendHelper
@@ -324,7 +331,7 @@ class TjvendorFrontHelper
 
 		try
 		{
-			$vendor = $db->loadResult();
+			$vendor = $db->loadColumn()[0] ?? null;
 		}
 		catch (Exception $e)
 		{
@@ -473,7 +480,7 @@ class TjvendorFrontHelper
 	 */
 	public static function getPaidAmount($vendor_id, $currency, $filterClient)
 	{
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$urlClient = $input->get('client', '', 'STRING');
 		$com_params = ComponentHelper::getParams('com_tjvendors');
 		$bulkPayoutStatus = $com_params->get('bulk_payout');
@@ -627,7 +634,7 @@ class TjvendorFrontHelper
 			}
 
 			$db->setQuery($queryCustom);
-			$result = $db->loadResult();
+			$result = $db->loadColumn()[0] ?? null;
 
 			return json_decode($result);
 		}
@@ -656,7 +663,7 @@ class TjvendorFrontHelper
 		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
 		$query->where($db->quoteName('vendor_id') . ' = ' . (int) $vendorId);
 		$db->setQuery($query);
-		$return = $db->loadResult();
+		$return = $db->loadColumn()[0] ?? null;
 
 		if ($return)
 		{

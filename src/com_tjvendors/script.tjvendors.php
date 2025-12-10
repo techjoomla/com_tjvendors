@@ -4,24 +4,26 @@
  * @subpackage  com_tjvendors
  *
  * @author      Techjoomla <extensions@techjoomla.com>
- * @copyright   Copyright (C) 2009 - 2019 Techjoomla. All rights reserved.
+ * @copyright   Copyright (C) 2009 - 2025 Techjoomla. All rights reserved.
  * @license     http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
 
-use Joomla\Data\DataObject;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Factory;
+use Joomla\Filesystem\Folder;
 use Joomla\CMS\Installer\Installer;
+use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
-use Joomla\CMS\Object\CMSObject;
 use Joomla\CMS\Table\Table;
+use Joomla\Database\DatabaseInterface;
+use Joomla\Component\Menus\Administrator\Table\MenuTable;
 
 /**
- * script for migration
+ * Script for migration
  *
  * @package  TJvendor
  *
@@ -29,30 +31,53 @@ use Joomla\CMS\Table\Table;
  */
 class Com_TjvendorsInstallerScript
 {
-	// Used to identify new install or update
-	private $componentStatus = "install";
-
-	/** @var array The list of extra modules and plugins to install */
-	private $queue = array(
-
-	// plugins => { (folder) => { (element) => (published) }* }*
-	'plugins' => array(
-						'actionlog' => array('tjvendors' => 1),
-						'privacy'   => array('tjvendors' => 1),
-						'tjvendors'   => array('tjvendors' => 1)
-					),
-				);
+	/**
+	 * Database driver
+	 *
+	 * @var DatabaseInterface
+	 */
+	private $db;
 
 	/**
-	 * method to run before an install/update/uninstall method
+	 * Used to identify new install or update
 	 *
-	 * @param   array  $type    data
-	 *
-	 * @param   array  $parent  data
-	 *
-	 * @return void
+	 * @var string
 	 */
-	public function preflight($type, $parent)
+	private $componentStatus = "install";
+
+	/**
+	 * The list of extra modules and plugins to install
+	 *
+	 * @var array
+	 */
+	private $queue = array(
+		// plugins => { (folder) => { (element) => (published) }* }*
+		'plugins' => array(
+			'actionlog' => array('tjvendors' => 1),
+			'privacy'   => array('tjvendors' => 1),
+			'tjvendors' => array('tjvendors' => 1)
+		),
+	);
+
+	/**
+	 * Constructor
+	 */
+	public function __construct()
+	{
+		$this->db = Factory::getContainer()->get(DatabaseInterface::class);
+	}
+
+	/**
+	 * Method to run before an install/update/uninstall method
+	 *
+	 * @param   string            $type    The type of change (install, update or discover_install)
+	 * @param   InstallerAdapter  $parent  The class calling this method
+	 *
+	 * @return  void
+	 *
+	 * @since   1.0
+	 */
+	public function preflight(string $type, InstallerAdapter $parent): void
 	{
 		// Payment gateway migration
 		$this->updatePaymentGatewayConfig();
@@ -61,13 +86,14 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * Runs after install, update or discover_update
 	 *
-	 * @param   array   $type    data
+	 * @param   string            $type    The type of change (install, update or discover_install)
+	 * @param   InstallerAdapter  $parent  The class calling this method
 	 *
-	 * @param   object  $parent  data
+	 * @return  void
 	 *
-	 * @return void
+	 * @since   1.0
 	 */
-	public function postflight($type, $parent)
+	public function postflight(string $type, InstallerAdapter $parent): void
 	{
 		// Write template file for email template
 		$this->_insertTjNotificationTemplates();
@@ -81,18 +107,20 @@ class Com_TjvendorsInstallerScript
 		// Install plugins
 		$this->_installPlugins($parent);
 
-		// Remove duplicate menu item 
-		$this->removeDupicatemenus();
+		// Remove duplicate menu item
+		$this->removeDuplicateMenus();
 	}
 
 	/**
-	 * method to install the component
+	 * Method to install the component
 	 *
-	 * @param   array  $parent  data
+	 * @param   InstallerAdapter  $parent  The class calling this method
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
-	public function install($parent)
+	public function install(InstallerAdapter $parent): void
 	{
 		$this->installSqlFiles($parent);
 	}
@@ -100,15 +128,15 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * This method is called after a component is uninstalled.
 	 *
-	 * @param   \stdClass  $parent  Parent object calling this method.
+	 * @param   InstallerAdapter  $parent  Parent object calling this method
 	 *
-	 * @return void
+	 * @return  object  Status object
+	 *
+	 * @since   1.0
 	 */
-	public function uninstall($parent)
+	public function uninstall(InstallerAdapter $parent)
 	{
-		$db = Factory::getDBO();
-
-		$status          = new CMSObject;
+		$status          = new \stdClass;
 		$status->plugins = array();
 
 		$src = $parent->getParent()->getPath('source');
@@ -122,22 +150,32 @@ class Com_TjvendorsInstallerScript
 				{
 					foreach ($plugins as $plugin => $published)
 					{
-						$sql = $db->getQuery(true)->select($db->qn('extension_id'))
-						->from($db->qn('#__extensions'))
-						->where($db->qn('type') . ' = ' . $db->q('plugin'))
-						->where($db->qn('element') . ' = ' . $db->q($plugin))
-						->where($db->qn('folder') . ' = ' . $db->q($folder));
-						$db->setQuery($sql);
+						$query = $this->db->getQuery(true)
+							->select($this->db->quoteName('extension_id'))
+							->from($this->db->quoteName('#__extensions'))
+							->where($this->db->quoteName('type') . ' = ' . $this->db->quote('plugin'))
+							->where($this->db->quoteName('element') . ' = ' . $this->db->quote($plugin))
+							->where($this->db->quoteName('folder') . ' = ' . $this->db->quote($folder));
+						
+						$this->db->setQuery($query);
 
-						$id = $db->loadResult();
+						try
+						{
+							$id = (int) ($this->db->loadResult() ?? 0);
+						}
+						catch (\RuntimeException $e)
+						{
+							$id = 0;
+						}
 
 						if ($id)
 						{
-							$installer         = new Installer;
+							$installer         = new Installer();
+							$installer->setDatabase($this->db);
 							$result            = $installer->uninstall('plugin', $id);
 							$status->plugins[] = array(
-								'name' => 'plg_' . $plugin,
-								'group' => $folder,
+								'name'   => 'plg_' . $plugin,
+								'group'  => $folder,
 								'result' => $result,
 							);
 						}
@@ -150,19 +188,19 @@ class Com_TjvendorsInstallerScript
 	}
 
 	/**
-	 * This method is called after a component is install to install plugins.
+	 * This method is called after a component is installed to install plugins.
 	 *
-	 * @param   \stdClass  $parent  Parent object calling this method.
+	 * @param   InstallerAdapter  $parent  Parent object calling this method
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
-	public function _installPlugins($parent)
+	public function _installPlugins(InstallerAdapter $parent): void
 	{
 		$src = $parent->getParent()->getPath('source');
 
-		$db = Factory::getDbo();
-
-		$status = new CMSObject;
+		$status          = new \stdClass;
 		$status->plugins = array();
 
 		// Plugins installation
@@ -197,28 +235,55 @@ class Com_TjvendorsInstallerScript
 						}
 
 						// Was the plugin already installed?
-						$query = $db->getQuery(true)
+						$query = $this->db->getQuery(true)
 							->select('COUNT(*)')
-							->from($db->qn('#__extensions'))
-							->where($db->qn('element') . ' = ' . $db->q($plugin))
-							->where($db->qn('folder') . ' = ' . $db->q($folder));
-						$db->setQuery($query);
-						$count = $db->loadResult();
+							->from($this->db->quoteName('#__extensions'))
+							->where($this->db->quoteName('element') . ' = ' . $this->db->quote($plugin))
+							->where($this->db->quoteName('folder') . ' = ' . $this->db->quote($folder));
+						
+						$this->db->setQuery($query);
 
-						$installer = new Installer;
-						$result = $installer->install($path);
+						try
+						{
+							$count = (int) ($this->db->loadResult() ?? 0);
+						}
+						catch (\RuntimeException $e)
+						{
+							$count = 0;
+						}
 
-						$status->plugins[] = array('name' => 'plg_' . $plugin, 'group' => $folder, 'result' => $result);
+						$installer = new Installer();
+						$installer->setDatabase($this->db);
+						$result    = $installer->install($path);
+
+						$status->plugins[] = array(
+							'name'   => 'plg_' . $plugin,
+							'group'  => $folder,
+							'result' => $result
+						);
 
 						if ($published && !$count)
 						{
-							$query = $db->getQuery(true)
-								->update($db->qn('#__extensions'))
-								->set($db->qn('enabled') . ' = ' . $db->q('1'))
-								->where($db->qn('element') . ' = ' . $db->q($plugin))
-								->where($db->qn('folder') . ' = ' . $db->q($folder));
-							$db->setQuery($query);
-							$db->execute();
+							$query = $this->db->getQuery(true)
+								->update($this->db->quoteName('#__extensions'))
+								->set($this->db->quoteName('enabled') . ' = 1')
+								->where($this->db->quoteName('element') . ' = ' . $this->db->quote($plugin))
+								->where($this->db->quoteName('folder') . ' = ' . $this->db->quote($folder));
+							
+							$this->db->setQuery($query);
+
+							try
+							{
+								$this->db->execute();
+							}
+							catch (\RuntimeException $e)
+							{
+								Log::add(
+									Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()),
+									Log::WARNING,
+									'jerror'
+								);
+							}
 						}
 					}
 				}
@@ -227,16 +292,19 @@ class Com_TjvendorsInstallerScript
 	}
 
 	/**
-	 * method to update the component
+	 * Method to update the component
 	 *
-	 * @param   array  $parent  data
+	 * @param   InstallerAdapter  $parent  The class calling this method
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
-	public function update($parent)
+	public function update(InstallerAdapter $parent): void
 	{
 		$this->componentStatus = "update";
 		$this->installSqlFiles($parent);
+
 		$check = $this->checkTableExists('tj_vendors');
 
 		if ($check)
@@ -251,78 +319,104 @@ class Com_TjvendorsInstallerScript
 	}
 
 	/**
-	 * method to install the sql files
+	 * Method to install the SQL files
 	 *
-	 * @param   array  $parent  data
+	 * @param   InstallerAdapter  $parent  The class calling this method
 	 *
-	 * @return void
+	 * @return  void
+	 *
+	 * @since   1.0
 	 */
-	public function installSqlFiles($parent)
+	public function installSqlFiles(InstallerAdapter $parent)
 	{
-		$db = Factory::getDBO();
-
-		// Lets create the table
+		// Create the tables
 		$this->runSQL($parent, 'install.mysql.utf8.sql');
 	}
 
 	/**
-	 * method to run the sql
+	 * Method to run SQL queries from a file
 	 *
-	 * @param   array  $parent   data
+	 * @param   InstallerAdapter  $parent   The class calling this method
+	 * @param   string            $sqlfile  The SQL file to execute
 	 *
-	 * @param   array  $sqlfile  data
+	 * @return  boolean  True on success, false on failure
 	 *
-	 * @return void
+	 * @since   1.0
 	 */
-	public function runSQL($parent, $sqlfile)
+	public function runSQL(InstallerAdapter $parent, string $sqlfile): bool
 	{
-		$db = Factory::getDBO();
+		// Get the SQL file path from the source directory
+		$src = $parent->getParent()->getPath('source');
+		$sqlfilePath = $src . '/admin/sql/' . $sqlfile;
 
-		// Obviously you may have to change the path and name if your installation SQL file ;)
-		if (method_exists($parent, 'extension_root'))
+		// Check if file exists
+		if (!file_exists($sqlfilePath))
 		{
-			$sqlfile = $parent->getPath('extension_root') . '/administrator/sql/' . $sqlfile;
+			Log::add(
+				Text::sprintf('JLIB_INSTALLER_ERROR_SQL_FILENOTFOUND', $sqlfilePath),
+				Log::WARNING,
+				'jerror'
+			);
+
+			return false;
 		}
-		else
+
+		// Read the file
+		$buffer = file_get_contents($sqlfilePath);
+
+		if ($buffer === false)
 		{
-			$sqlfile = $parent->getParent()->getPath('extension_root') . '/sql/' . $sqlfile;
+			Log::add(
+				Text::sprintf('JLIB_INSTALLER_ERROR_SQL_READBUFFER'),
+				Log::WARNING,
+				'jerror'
+			);
+
+			return false;
 		}
 
-		// Don't modify below this line
-		$buffer = file_get_contents($sqlfile);
+		// Split the SQL file into individual queries - Joomla 6 way
+		$queries = $this->db->splitSql($buffer);
 
-		if ($buffer !== false)
+		if (count($queries) != 0)
 		{
-			$queries = \JDatabaseDriver::splitSql($buffer);
-
-			if (count($queries) != 0)
+			foreach ($queries as $query)
 			{
-				foreach ($queries as $query)
+				$query = trim($query);
+
+				if ($query != '' && $query[0] != '#')
 				{
-					$query = trim($query);
+					$this->db->setQuery($query);
 
-					if ($query != '' && $query[0] != '#')
+					try
 					{
-						$db->setQuery($query);
+						$this->db->execute();
+					}
+					catch (\RuntimeException $e)
+					{
+						Log::add(
+							Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()),
+							Log::WARNING,
+							'jerror'
+						);
 
-						if (!$db->execute())
-						{
-							JError::raiseWarning(1, Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $db->stderr(true)));
-
-							return false;
-						}
+						return false;
 					}
 				}
 			}
 		}
+
+		return true;
 	}
 
 	/**
-	 * method to migrate the old data
+	 * Method to migrate the old data
 	 *
-	 * @return boolean
+	 * @return  boolean
+	 *
+	 * @since   1.0
 	 */
-	public function updateData()
+	public function updateData(): bool
 	{
 		$oldVendorsData = $this->getOldData();
 
@@ -331,123 +425,195 @@ class Com_TjvendorsInstallerScript
 			foreach ($oldVendorsData as $oldData)
 			{
 				$com_params = ComponentHelper::getParams('com_jticketing');
-				$currency = $com_params->get('currency');
-				$newVendorData = new stdClass;
-				$newVendorData->user_id = $oldData->user_id;
-				$newVendorData->vendor_id = $oldData->id;
-				$newVendorData->state = 1;
-				$newVendorData->vendor_title = Factory::getUser($oldData->user_id)->name;
-				$result = Factory::getDbo()->insertObject('#__tjvendors_vendors', $newVendorData);
+				$currency   = $com_params->get('currency');
 
-				$newXrefData = new stdClass;
+				$newVendorData                = new \stdClass;
+				$newVendorData->user_id       = $oldData->user_id;
+				$newVendorData->vendor_id     = $oldData->id;
+				$newVendorData->state         = 1;
+				$newVendorData->vendor_title  = Factory::getUser($oldData->user_id)->name;
+
+				try
+				{
+					$this->db->insertObject('#__tjvendors_vendors', $newVendorData);
+				}
+				catch (\RuntimeException $e)
+				{
+					Log::add(
+						Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()),
+						Log::WARNING,
+						'jerror'
+					);
+					continue;
+				}
+
+				$newXrefData            = new \stdClass;
 				$newXrefData->vendor_id = $oldData->id;
-				$newXrefData->id = $oldData->id;
-				$newXrefData->client = 'com_jticketing';
-				$result = Factory::getDbo()->insertObject('#__vendor_client_xref', $newXrefData);
+				$newXrefData->id        = $oldData->id;
+				$newXrefData->client    = 'com_jticketing';
 
-				$newFeeData = new stdClass;
-				$newFeeData->vendor_id = $oldData->id;
-				$newFeeData->id = $oldData->id;
-				$newFeeData->client = 'com_jticketing';
-				$newFeeData->currency = $currency;
-				$newFeeData->percent_commission = $oldData->percent_commission;
-				$newFeeData->flat_commission = $oldData->flat_commission;
-				$result = Factory::getDbo()->insertObject('#__tjvendors_fee', $newFeeData);
+				try
+				{
+					$this->db->insertObject('#__vendor_client_xref', $newXrefData);
+				}
+				catch (\RuntimeException $e)
+				{
+					Log::add(
+						Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()),
+						Log::WARNING,
+						'jerror'
+					);
+					continue;
+				}
+
+				$newFeeData                      = new \stdClass;
+				$newFeeData->vendor_id           = $oldData->id;
+				$newFeeData->id                  = $oldData->id;
+				$newFeeData->client              = 'com_jticketing';
+				$newFeeData->currency            = $currency;
+				$newFeeData->percent_commission  = $oldData->percent_commission;
+				$newFeeData->flat_commission     = $oldData->flat_commission;
+
+				try
+				{
+					$this->db->insertObject('#__tjvendors_fee', $newFeeData);
+				}
+				catch (\RuntimeException $e)
+				{
+					Log::add(
+						Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()),
+						Log::WARNING,
+						'jerror'
+					);
+					continue;
+				}
 			}
 
 			return true;
 		}
+
+		return false;
 	}
 
 	/**
-	 * method to check if the old table exists
+	 * Method to check if a table exists
 	 *
-	 * @param   string  $table  table name
+	 * @param   string  $table  Table name without prefix
 	 *
-	 * @return boolean
+	 * @return  boolean
+	 *
+	 * @since   1.0
 	 */
-	public function checkTableExists($table)
+	public function checkTableExists(string $table): bool
 	{
-		$db = Factory::getDBO();
-		$config = Factory::getConfig();
-
-		$dbname = $config->get('db');
+		$config   = Factory::getConfig();
+		$dbname   = $config->get('db');
 		$dbprefix = $config->get('dbprefix');
 
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('table_name'));
-		$query->from($db->quoteName('information_schema.tables'));
-		$query->where($db->quoteName('table_schema') . ' = ' . $db->quote($dbname));
-		$query->where($db->quoteName('table_name') . ' = ' . $db->quote($dbprefix . $table));
-		$db->setQuery($query);
-		$check = $db->loadResult();
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('table_name'))
+			->from($this->db->quoteName('information_schema.tables'))
+			->where($this->db->quoteName('table_schema') . ' = ' . $this->db->quote($dbname))
+			->where($this->db->quoteName('table_name') . ' = ' . $this->db->quote($dbprefix . $table));
 
-		if ($check)
+		$this->db->setQuery($query);
+
+		try
 		{
-			return true;
+			$check = $this->db->loadResult();
+			return !empty($check);
 		}
-		else
+		catch (\RuntimeException $e)
 		{
 			return false;
 		}
 	}
 
 	/**
-	 * method to get old data
+	 * Method to get old data
 	 *
-	 * @return object
+	 * @return  array|null
+	 *
+	 * @since   1.0
 	 */
-	public function getOldData()
+	public function getOldData(): ?array
 	{
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('*');
-		$query->from($db->quoteName('#__tj_vendors'));
-		$db->setQuery($query);
+		$query = $this->db->getQuery(true)
+			->select('*')
+			->from($this->db->quoteName('#__tj_vendors'));
 
-		return $db->loadObjectList();
+		$this->db->setQuery($query);
+
+		try
+		{
+			return $this->db->loadObjectList();
+		}
+		catch (\RuntimeException $e)
+		{
+			Log::add(
+				Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()),
+				Log::WARNING,
+				'jerror'
+			);
+			return null;
+		}
 	}
 
 	/**
-	 * Installed Notifications
-	 * method to install default email templates
+	 * Method to install default email templates
 	 *
 	 * @return  void
+	 *
+	 * @since   1.0
 	 */
-	public function _insertTjNotificationTemplates()
+	public function _insertTjNotificationTemplates(): void
 	{
 		$client = 'com_tjvendors';
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/tables');
 
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select($db->quoteName('key'));
-		$query->from($db->quoteName('#__tj_notification_templates'));
-		$query->where($db->quoteName('client') . ' = ' . $db->quote($client));
-		$db->setQuery($query);
-		$existingKeys = $db->loadColumn();
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('key'))
+			->from($this->db->quoteName('#__tj_notification_templates'))
+			->where($this->db->quoteName('client') . ' = ' . $this->db->quote($client));
+
+		$this->db->setQuery($query);
+
+		try
+		{
+			$existingKeys = $this->db->loadColumn();
+		}
+		catch (\RuntimeException $e)
+		{
+			$existingKeys = array();
+		}
 
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_tjnotifications/models');
 		$notificationsModel = BaseDatabaseModel::getInstance('Notification', 'TJNotificationsModel');
 
 		$filePath = JPATH_ADMINISTRATOR . '/components/com_tjvendors/tjvendorsTemplate.json';
-		$str = file_get_contents($filePath);
+
+		if (!file_exists($filePath))
+		{
+			return;
+		}
+
+		$str  = file_get_contents($filePath);
 		$json = json_decode($str, true);
 
-		$app   = Factory::getApplication();
-
-		if (count($json) != 0)
+		if (!is_array($json) || count($json) == 0)
 		{
-			foreach ($json as $template => $array)
+			return;
+		}
+
+		foreach ($json as $template => $array)
+		{
+			if (!in_array($array['key'], $existingKeys))
 			{
-				if (!in_array($array['key'], $existingKeys))
-				{
-					$notificationsModel->createTemplates($array);
-				}
-				else
-				{
-					$notificationsModel->updateTemplates($array, $client);
-				}
+				$notificationsModel->createTemplates($array);
+			}
+			else
+			{
+				$notificationsModel->updateTemplates($array, $client);
 			}
 		}
 	}
@@ -456,48 +622,65 @@ class Com_TjvendorsInstallerScript
 	 * Add default ACL permissions
 	 *
 	 * @return  void
+	 *
+	 * @since   1.0
 	 */
-	public function defaultPermissionsFix()
+	public function defaultPermissionsFix(): void
 	{
-		$db = Factory::getDbo();
 		$columnArray = array('id', 'rules');
-		$query = $db->getQuery(true);
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName($columnArray))
+			->from($this->db->quoteName('#__assets'))
+			->where($this->db->quoteName('name') . ' = ' . $this->db->quote('com_tjvendors'));
 
-		$query->select($db->quoteName($columnArray));
-		$query->from($db->quoteName('#__assets'));
-		$query->where($db->quoteName('name') . ' = ' . $db->quote('com_tjvendors'));
-		$db->setQuery($query);
+		$this->db->setQuery($query);
 
 		try
 		{
-			$result = $db->loadobject();
-			$obj = new Stdclass;
-			$obj->id = $result->id;
-			$obj->rules = '{"core.edit.own":{"1":1,"2":1,"7":1},"core.edit":{"7":0},"core.create":{"7":1,"2":1},"core.delete":{"7":1},"core.edit.state":{"7":1}}';
+			$result = $this->db->loadObject();
 
-			$db->updateObject('#__assets', $obj, 'id');
+			if ($result)
+			{
+				$obj        = new \stdClass;
+				$obj->id    = $result->id;
+				$obj->rules = '{"core.edit.own":{"1":1,"2":1,"7":1},"core.edit":{"7":0},"core.create":{"7":1,"2":1},"core.delete":{"7":1},"core.edit.state":{"7":1}}';
+
+				$this->db->updateObject('#__assets', $obj, 'id');
+			}
 		}
-		catch (Exception $e)
+		catch (\Exception $e)
 		{
-			Factory::getApplication()->enqueueMessage(Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'), 'error');
+			Log::add(
+				Text::_('COM_TJVENDORS_DB_EXCEPTION_WARNING_MESSAGE'),
+				Log::WARNING,
+				'jerror'
+			);
 		}
 	}
 
 	/**
-	 * Override the Modules
+	 * Update payment gateway configuration
 	 *
 	 * @return  boolean
 	 *
 	 * @since   1.3.0
 	 */
-	public function updatePaymentGatewayConfig()
+	public function updatePaymentGatewayConfig(): bool
 	{
-		$db = Factory::getDBO();
 		$config   = Factory::getConfig();
 		$dbprefix = $config->get('dbprefix');
-		$query = "SHOW TABLES LIKE '" . $dbprefix . "vendor_client_xref';";
-		$db->setQuery($query);
-		$tableExists = $db->loadResult();
+
+		$query = "SHOW TABLES LIKE '" . $dbprefix . "vendor_client_xref'";
+		$this->db->setQuery($query);
+
+		try
+		{
+			$tableExists = $this->db->loadResult();
+		}
+		catch (\RuntimeException $e)
+		{
+			return false;
+		}
 
 		if (empty($tableExists))
 		{
@@ -505,43 +688,72 @@ class Com_TjvendorsInstallerScript
 		}
 
 		$query = "SHOW COLUMNS FROM `#__vendor_client_xref` LIKE 'payment_gateway'";
-		$db->setQuery($query);
-		$result = $db->loadResult();
+		$this->db->setQuery($query);
+
+		try
+		{
+			$result = $this->db->loadResult();
+		}
+		catch (\RuntimeException $e)
+		{
+			return false;
+		}
 
 		if (!isset($result))
 		{
 			return false;
 		}
 
-		$query = $db->getQuery(true);
-		$query->select(array('*'));
-		$query->from($db->quoteName('#__vendor_client_xref'));
-		$query->where($db->quoteName('payment_gateway') . "=" . "'paypal'", 'OR');
-		$query->where($db->quoteName('payment_gateway') . "=" . "'adaptive_paypal'");
-		$db->setQuery($query);
-		$vendorList = $db->loadObjectList();
+		$query = $this->db->getQuery(true)
+			->select('*')
+			->from($this->db->quoteName('#__vendor_client_xref'))
+			->where($this->db->quoteName('payment_gateway') . ' = ' . $this->db->quote('paypal'), 'OR')
+			->where($this->db->quoteName('payment_gateway') . ' = ' . $this->db->quote('adaptive_paypal'));
+
+		$this->db->setQuery($query);
+
+		try
+		{
+			$vendorList = $this->db->loadObjectList();
+		}
+		catch (\RuntimeException $e)
+		{
+			return false;
+		}
 
 		foreach ($vendorList as $key => $value)
 		{
-			$param1 = new stdClass;
-			$param1->payment_gateways = $value->payment_gateway;
+			$param1                    = new \stdClass;
+			$param1->payment_gateways  = $value->payment_gateway;
 
 			$param2 = json_decode($value->params);
 
 			$params = (object) array_merge((array) $param1, (array) $param2);
 
-			$paymentArray = array();
+			$paymentArray                     = array();
 			$paymentArray['payment_gateway0'] = $params;
+			$paymentArrayList                 = array();
 			$paymentArrayList['payment_gateway'] = $paymentArray;
 
 			$vendorParams = json_encode($paymentArrayList);
 
-			$vendorData = new stdClass;
+			$vendorData            = new \stdClass;
 			$vendorData->id        = $value->id;
 			$vendorData->vendor_id = $value->vendor_id;
 			$vendorData->params    = $vendorParams;
 
-			Factory::getDbo()->updateObject('#__vendor_client_xref', $vendorData, 'id');
+			try
+			{
+				$this->db->updateObject('#__vendor_client_xref', $vendorData, 'id');
+			}
+			catch (\RuntimeException $e)
+			{
+				Log::add(
+					Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()),
+					Log::WARNING,
+					'jerror'
+				);
+			}
 		}
 
 		return true;
@@ -550,59 +762,63 @@ class Com_TjvendorsInstallerScript
 	/**
 	 * Add subform layout for payment form
 	 *
-	 * @param   object  $parent  table name
+	 * @param   InstallerAdapter  $parent  The class calling this method
 	 *
 	 * @return  void
+	 *
+	 * @since   1.0
 	 */
-	private function _addLayout($parent)
+	private function _addLayout(InstallerAdapter $parent): void
 	{
 		$src = $parent->getParent()->getPath('source');
-		$VendorSubformLayouts = $src . "/layouts/com_tjvendors";
+		$vendorSubformLayouts = $src . "/layouts/com_tjvendors";
 
 		if (Folder::exists(JPATH_SITE . '/layouts/com_tjvendors'))
 		{
 			Folder::delete(JPATH_SITE . '/layouts/com_tjvendors');
 		}
 
-		Folder::copy($VendorSubformLayouts, JPATH_SITE . '/layouts/com_tjvendors');
+		if (is_dir($vendorSubformLayouts))
+		{
+			Folder::copy($vendorSubformLayouts, JPATH_SITE . '/layouts/com_tjvendors');
+		}
 	}
 
 	/**
-	 * This function is used to remove duplicate menu items
+	 * Remove duplicate menu items
 	 *
-	 * @return  ''.
+	 * @return  void
 	 *
 	 * @since   2.3.0
 	 */
-	public function removeDupicatemenus()
+	public function removeDuplicateMenus(): void
 	{
-		// Remove duplicate menu item
-		// Since 4.0.3
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
+		$table = new MenuTable($this->db);
 
-		if (JVERSION >= '4.0.0')
+		$query = $this->db->getQuery(true)
+			->select($this->db->quoteName('id'))
+			->from($this->db->quoteName('#__menu'))
+			->where($this->db->quoteName('menutype') . ' = ' . $this->db->quote('main'))
+			->where($this->db->quoteName('path') . ' IN (' . $this->db->quote('com-tjvendors-tjnotifications-menu') . ', ' . $this->db->quote('com_tjvendors_tjnotifications_menu') . ')');
+
+		$this->db->setQuery($query);
+
+		try
 		{
-			$table   = new \Joomla\Component\Menus\Administrator\Table\MenuTable($db);
-		} 
-		else 
-		{
-			Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/tables');
-			$table = Table::getInstance('menu', 'MenusTable', array('dbo', $db));
+			$data = $this->db->loadObjectList();
+
+			foreach ($data as $key => $menuItem)
+			{
+				$table->delete($menuItem->id);
+			}
 		}
-
-		$db = Factory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('id');
-		$query->from($db->quoteName('#__menu'));
-		$query->where($db->quoteName('menutype') . ' = ' . $db->quote('main'));
-		$query->where($db->quoteName('path') . ' IN ("com-tjvendors-tjnotifications-menu", "com_tjvendors_tjnotifications_menu")');
-		$db->setQuery($query);
-		$data = $db->loadObjectList();
-
-		foreach ($data as $key => $menuItem) 
+		catch (\RuntimeException $e)
 		{
-			$table->delete($menuItem->id);
+			Log::add(
+				Text::sprintf('JLIB_INSTALLER_ERROR_SQL_ERROR', $e->getMessage()),
+				Log::WARNING,
+				'jerror'
+			);
 		}
 	}
 }

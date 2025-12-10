@@ -15,20 +15,32 @@ use Joomla\CMS\MVC\Controller\BaseController;
 
 include_once JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
-JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT);
+spl_autoload_register(function ($class) {
+	if (strpos($class, 'Tjvendors') === 0) {
+		$path = JPATH_COMPONENT . '/' . strtolower(substr($class, 9)) . '.php';
+		if (file_exists($path)) {
+			require_once $path;
+		}
+	}
+});
 
-JLoader::register('TjvendorsController', JPATH_COMPONENT . '/controller.php');
+$controllerPath = JPATH_COMPONENT . '/controller.php';
+if (file_exists($controllerPath)) {
+	require_once $controllerPath;
+}
+
 $TjvendorFrontHelper = JPATH_ROOT . '/components/com_tjvendors/helpers/fronthelper.php';
 
 if (!class_exists('TjvendorFrontHelper'))
 {
-	JLoader::register('TjvendorFrontHelper', $TjvendorFrontHelper);
-	JLoader::load('TjvendorFrontHelper');
+	if (file_exists($TjvendorFrontHelper)) {
+		require_once $TjvendorFrontHelper;
+	}
 }
 
 TJVendors::init();
 
 // Execute the task.
 $controller = BaseController::getInstance('Tjvendors');
-$controller->execute(Factory::getApplication()->input->get('task'));
+$controller->execute(Factory::getApplication()->getInput()->get('task'));
 $controller->redirect();

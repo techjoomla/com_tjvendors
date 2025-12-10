@@ -19,15 +19,14 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Form\FormHelper;
-
-FormHelper::loadFieldClass('list');
+use Joomla\CMS\Form\Field\ListField;
 
 /**
  * Supports an HTML select list of courses
  *
  * @since  1.0.0
  */
-class JFormFieldPaymentGateway extends JFormFieldList
+class JFormFieldPaymentGateway extends ListField
 {
 	/**
 	 * The form field type.
@@ -55,7 +54,7 @@ class JFormFieldPaymentGateway extends JFormFieldList
 	protected function getOptions()
 	{
 		$type = "payment";
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$client = $input->get('client', '', 'STRING');
 		$options = array();
 		$options[] = HTMLHelper::_('select.option', '', Text::_('COM_TJVENDOR_PAYMENT_DETAILS_DEFAULT'));

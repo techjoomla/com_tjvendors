@@ -85,7 +85,7 @@ class TjvendorsModelVendors extends ListModel
 		$toDate = $app->getUserStateFromRequest($this->context . '.filter.toDate', 'toDates', '0', 'string');
 		$this->setState('filter.toDate', $toDate);
 
-		$urlClient = $app->input->get('client', '', 'STRING');
+		$urlClient = $app->getInput()->get('client', '', 'STRING');
 		$client = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '0', 'string');
 
 		if (empty($client))

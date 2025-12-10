@@ -14,7 +14,7 @@ defined('_JEXEC') or die;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 use Joomla\CMS\MVC\Controller\BaseController;
 
 // Access check.
@@ -34,10 +34,17 @@ if (File::exists($tjStrapperPath))
 	TjStrapper::loadTjAssets('com_tjvendors');
 }
 
-JLoader::registerPrefix('Tjvendors', JPATH_COMPONENT_ADMINISTRATOR);
+spl_autoload_register(function ($class) {
+	if (strpos($class, 'Tjvendors') === 0) {
+		$path = JPATH_COMPONENT_ADMINISTRATOR . '/' . strtolower(substr($class, 9)) . '.php';
+		if (file_exists($path)) {
+			require_once $path;
+		}
+	}
+});
 
 $controller = BaseController::getInstance('Tjvendors');
-$controller->execute(Factory::getApplication()->input->get('task'));
+$controller->execute(Factory::getApplication()->getInput()->get('task'));
 $controller->redirect();
 $document = Factory::getDocument();
 $document->addScript(Uri::root(true) . '/media/com_tjvendor/js/tjvendors.js');
@@ -46,16 +53,18 @@ $tjvendorFrontHelper = JPATH_ROOT . '/components/com_tjvendors/helpers/fronthelp
 
 if (!class_exists('TjvendorFrontHelper'))
 {
-	JLoader::register('TjvendorFrontHelper', $tjvendorFrontHelper);
-	JLoader::load('TjvendorFrontHelper');
+	if (file_exists($tjvendorFrontHelper)) {
+		require_once $tjvendorFrontHelper;
+	}
 }
 
 $tjvendorsHelper = JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
 
 if (!class_exists('TjvendorsHelper'))
 {
-	JLoader::register('TjvendorsHelper', $tjvendorsHelper);
-	JLoader::load('TjvendorsHelper');
+	if (file_exists($tjvendorsHelper)) {
+		require_once $tjvendorsHelper;
+	}
 }
 
 TJVendors::init();

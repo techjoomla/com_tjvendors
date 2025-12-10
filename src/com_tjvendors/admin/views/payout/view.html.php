@@ -44,7 +44,7 @@ class TjvendorsViewPayout extends HtmlView
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
-		$this->input = Factory::getApplication()->input;
+		$this->input = Factory::getApplication()->getInput();
 		$com_params = ComponentHelper::getParams('com_tjvendors');
 		$this->bulkPayoutStatus = $com_params->get('bulk_payout');
 
@@ -67,11 +67,11 @@ class TjvendorsViewPayout extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		Factory::getApplication()->input->set('hidemainmenu', true);
+		Factory::getApplication()->getInput()->set('hidemainmenu', true);
 
 		$user  = Factory::getUser();
 
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 
 		// Let's get the extension name
 		$client = $input->get('client', '', 'STRING');
@@ -92,11 +92,11 @@ class TjvendorsViewPayout extends HtmlView
 
 		if (empty($this->item->id))
 		{
-			JToolBarHelper::cancel('payout.cancel', 'JTOOLBAR_CANCEL');
+			ToolbarHelper::cancel('payout.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{
-			JToolBarHelper::cancel('payout.cancel', 'JTOOLBAR_CLOSE');
+			ToolbarHelper::cancel('payout.cancel', 'JTOOLBAR_CLOSE');
 		}
 	}
 }

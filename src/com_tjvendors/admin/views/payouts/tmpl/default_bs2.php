@@ -18,9 +18,13 @@ use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
-HTMLHelper::_('formbehavior.chosen', 'select');
+HTMLHelper::_('behavior.multiselect'); // only for list tables
 
-JLoader::import('vendor', JPATH_SITE . '/components/com_tjvendors/models');
+
+$vendorModelPath = JPATH_SITE . '/components/com_tjvendors/models/vendor.php';
+if (file_exists($vendorModelPath)) {
+	require_once $vendorModelPath;
+}
 $tjvendorsModelVendor = new TjvendorsModelVendor;
 
 // Import CSS
@@ -33,7 +37,7 @@ $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
 $saveOrder = $listOrder == 'a.`ordering`';
-$input = Factory::getApplication()->input;
+$input = Factory::getApplication()->getInput();
 $client = $input->get('client', '', 'STRING');
 
 if ($saveOrder)

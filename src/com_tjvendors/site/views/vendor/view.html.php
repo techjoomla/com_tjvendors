@@ -79,7 +79,7 @@ class TjvendorsViewVendor extends HtmlView
 		$this->vendor = $this->get('Item');
 		$this->form   = $this->get('Form');
 		$app          = Factory::getApplication();
-		$this->input  = $app->input;
+		$this->input  = $app->getInput();
 		$this->client = $this->input->get('client', '', 'STRING');
 
 		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_tjvendors/models', 'vendor');
@@ -184,7 +184,7 @@ class TjvendorsViewVendor extends HtmlView
 		{
 			if (Factory::getUser()->id && !$this->vendor_id)
 			{
-				$client = $app->input->get('client', '', 'STRING');
+				$client = $app->getInput()->get('client', '', 'STRING');
 				 // Check if the user is already on the editinfo page to prevent a redirect loop
 				 if ($this->layout != 'editinfo') {
 					$link = Route::_('index.php?option=com_tjvendors&view=vendor&layout=editinfo&client=' . $client);

@@ -19,8 +19,15 @@ use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 
-JLoader::import('fronthelper', JPATH_SITE . '/components/com_tjvendors/helpers');
-JLoader::import('tjvendors', JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers');
+$fronthelperPath = JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
+if (file_exists($fronthelperPath)) {
+	require_once $fronthelperPath;
+}
+
+$tjvendorsPath = JPATH_ADMINISTRATOR . '/components/com_tjvendors/helpers/tjvendors.php';
+if (file_exists($tjvendorsPath)) {
+	require_once $tjvendorsPath;
+}
 include_once JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
 /**
@@ -115,7 +122,7 @@ class TjvendorsModelVendor extends AdminModel
 	protected function loadFormData()
 	{
 		$app = Factory::getApplication();
-		$input = $app->input;
+		$input = $app->getInput();
 		$client = $input->get('client', '', 'STRING');
 
 		$data = Factory::getApplication()->getUserState('com_tjvendors.edit.vendor.data', array());
@@ -144,7 +151,8 @@ class TjvendorsModelVendor extends AdminModel
 			$data = $this->item;
 		}
 
-		return $this->item;
+		// Joomla 6 requires non-null data for preprocessForm
+		return $this->item ?? new \stdClass();
 	}
 
 	/**
@@ -208,7 +216,7 @@ class TjvendorsModelVendor extends AdminModel
 		$query->select('max(' . $db->quoteName('id') . ')');
 		$query->from($db->quoteName('#__vendor_client_xref'));
 		$db->setQuery($query);
-		$res = $db->loadResult();
+		$res = $db->loadColumn()[0] ?? null;
 		$fields = array($db->quoteName('vendor_id') . ' = ' . $db->quote($vendor_id),
 		$db->quoteName('payment_gateway') . ' = ' . $db->quote($payment_gateway),
 		$db->quoteName('params') . ' = ' . $db->quote($paymentDetails),
@@ -385,7 +393,7 @@ class TjvendorsModelVendor extends AdminModel
 			->from($db->quoteName('#__tjvendors_vendors'))
 			->where($db->quoteName('user_id') . ' = ' . (int) $data['user_id']);
 		$db->setQuery($query);
-		$existingVendorId = $db->loadResult();
+		$existingVendorId = (int) ($db->loadColumn()[0] ?? null);
 
 		if (!empty($existingVendorId) && (empty($data['vendor_id']) || $data['vendor_id'] != $existingVendorId))
 		{
@@ -398,14 +406,17 @@ class TjvendorsModelVendor extends AdminModel
 		$db       = Factory::getDbo();
 		$user     = Factory::getUser();
 		$app      = Factory::getApplication();
-		$input    = $app->input;
+		$input    = $app->getInput();
 		$layout   = $input->get('layout', '', 'STRING');
 		$xrefData = array();
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$tjVendorsParams = ComponentHelper::getParams('com_tjvendors');
 		$vendorApprovalEnabled = $tjVendorsParams->get('vendor_approval', 0, 'INT');
 
-		JLoader::import('components.com_tjvendors.events.vendor', JPATH_SITE);
+		$vendorEventPath = JPATH_SITE . '/components/com_tjvendors/events/vendor.php';
+		if (file_exists($vendorEventPath)) {
+			require_once $vendorEventPath;
+		}
 		$tjvendorsTriggerVendor = new TjvendorsTriggerVendor;
 
 		if (!$user->authorise('core.admin'))

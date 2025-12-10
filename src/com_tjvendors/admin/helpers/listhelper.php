@@ -18,7 +18,7 @@ use Joomla\CMS\Language\Text;
  *
  * @since  1.6
  */
-abstract class JHtmlListhelper
+abstract class HTMLHelperListhelper
 {
 	// Change by Deepa
 	/* public static function toggle($value = 0, $view, $field, $i)*/

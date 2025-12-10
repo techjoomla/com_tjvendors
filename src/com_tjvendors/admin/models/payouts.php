@@ -76,7 +76,7 @@ class TjvendorsModelPayouts extends ListModel
 		$this->setState('filter.vendor_id', $vendorId);
 
 		$filterClient = $app->getUserStateFromRequest($this->context . '.filter.vendor_client', 'vendor_client', '', 'string');
-		$urlClient = $app->input->get('client', '', 'STRING');
+		$urlClient = $app->getInput()->get('client', '', 'STRING');
 
 		if (empty($filterClient))
 		{
@@ -109,7 +109,7 @@ class TjvendorsModelPayouts extends ListModel
 
 	public function getListQuery()
 	{
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$urlClient = $input->get('client', '', 'STRING');
 		$filterClient = $this->getState('filter.vendor_client');

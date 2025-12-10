@@ -15,8 +15,6 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Router\Route;
 use Joomla\Registry\Registry;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Session\Session;
 
 /**
  * Vendor controller class.
@@ -33,7 +31,7 @@ class TjvendorsControllerVendorFee extends FormController
 	public function __construct()
 	{
 			$this->view_list = 'vendorfees';
-		$this->input = Factory::getApplication()->input;
+		$this->input = Factory::getApplication()->getInput();
 
 		if (empty($this->client))
 		{
@@ -55,7 +53,7 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'id')
 	{
-		$input     = Factory::getApplication()->input;
+		$input     = Factory::getApplication()->getInput();
 		$client    = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'INTEGER');
 		$append    = parent::getRedirectToItemAppend($recordId);
@@ -73,7 +71,7 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	protected function getRedirectToListAppend()
 	{
-		$input     = Factory::getApplication()->input;
+		$input     = Factory::getApplication()->getInput();
 		$client    = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'STRING');
 		$append    = parent::getRedirectToItemAppend();
@@ -93,7 +91,7 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	public function edit($key = null, $urlVar = null)
 	{
-		$input    = Factory::getApplication()->input;
+		$input    = Factory::getApplication()->getInput();
 		$cid      = $input->post->get('cid', array(), 'array');
 		$vendorId = (int) ($input->getInt('vendor_id') ? $input->getInt('vendor_id') : (count($cid) ? $cid[0] : 0));
 		$client   = $input->get('client', '', 'STRING');
@@ -113,7 +111,7 @@ class TjvendorsControllerVendorFee extends FormController
 	 */
 	public function cancel($key = null)
 	{
-		$input     = Factory::getApplication()->input;
+		$input     = Factory::getApplication()->getInput();
 		$client    = $input->get('client', '', 'STRING');
 		$vendor_id = $input->get('vendor_id', '', 'STRING');
 		$append = '&vendor_id=' . $vendor_id . '&client=' . $client;
@@ -122,39 +120,5 @@ class TjvendorsControllerVendorFee extends FormController
 			'index.php?option=com_tjvendors&view=vendorfees' . $append, false
 		);
 		$this->setRedirect($link);
-	}
-
-	/**
-	 * Function to delete field data
-	 *
-	 * @param  void
-	 *
-	 * @return  void
-	 */
-	public function delete()
-	{
-		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
-
-		$app    = Factory::getApplication();
-		$input  = $app->input;
-		$client = $input->get('client', '', 'STRING');
-		$vendor_id    = $app->input->get('vendor_id', "", 'STRING');
-		$cid    = $app->input->get('cid', array(), 'ARRAY');
-
-		$model  = $this->getModel("vendorfee");
-
-		if(!empty($cid))
-		{
-			$res = $model->delete($cid);
-			if($res){
-				$this->setMessage(Text::_('COM_TJVENDORS_FEE_DELETE_SUCCESS_MESSAGE'));
-			}
-			else {
-				$this->setMessage(Text::_('COM_TJVENDORS_FEE_DELETE_FAIL_MESSAGE'), 'error');
-			}
-		}
-
-		$redirect = "index.php?option=com_tjvendors&view=vendorfees&vendor_id=$vendor_id&client=$client";
-		$this->setRedirect($redirect);
 	}
 }

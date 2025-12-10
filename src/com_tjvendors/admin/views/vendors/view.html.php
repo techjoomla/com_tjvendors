@@ -19,7 +19,10 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
+$fronthelperPath = JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
+if (file_exists($fronthelperPath)) {
+	require_once $fronthelperPath;
+}
 
 /**
  * View class for a list of Tjvendors.
@@ -48,7 +51,7 @@ class TjvendorsViewVendors extends HtmlView
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
-		$this->input = Factory::getApplication()->input;
+		$this->input = Factory::getApplication()->getInput();
 		$this->params = ComponentHelper::getParams('com_tjvendors');
 		Text::script('COM_TJVENDOR_VENDOR_APPROVAL');
 		Text::script('COM_TJVENDOR_VENDOR_DENIAL');
@@ -66,11 +69,6 @@ class TjvendorsViewVendors extends HtmlView
 
 		$this->addToolbar();
 
-		if (!empty($client))
-		{
-			$this->sidebar = JHtmlSidebar::render();
-		}
-
 		parent::display($tpl);
 	}
 
@@ -83,7 +81,7 @@ class TjvendorsViewVendors extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$this->client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
@@ -93,7 +91,7 @@ class TjvendorsViewVendors extends HtmlView
 		$toolbar->appendButton(
 		'Custom', '<a id="tjHouseKeepingFixDatabasebutton" class="btn btn-default hidden"><span class="icon-refresh"></span>'
 		. Text::_('COM_TJVENDORS_FIX_DATABASE') . '</a>');
-		JToolBarHelper::addNew('vendor.add');
+		ToolbarHelper::addNew('vendor.add');
 		
 		if (JVERSION >= '4.0.0')
 		{
@@ -119,14 +117,14 @@ class TjvendorsViewVendors extends HtmlView
 			{
 				if (isset($this->items[0]->state))
 				{
-					JToolBarHelper::divider();
-					JToolBarHelper::custom('vendors.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
-					JToolBarHelper::custom('vendors.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
+					ToolbarHelper::divider();
+					ToolbarHelper::custom('vendors.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
+					ToolbarHelper::custom('vendors.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
 				}
 
 				if (isset($this->items[0]))
 				{
-					JToolBarHelper::deleteList('', 'vendors.delete', 'JTOOLBAR_DELETE');
+					ToolbarHelper::deleteList('', 'vendors.delete', 'JTOOLBAR_DELETE');
 				}
 			}
 			else
@@ -148,11 +146,8 @@ class TjvendorsViewVendors extends HtmlView
 
 		if ($canDo->get('core.admin'))
 		{
-			JToolBarHelper::preferences('com_tjvendors');
+			ToolbarHelper::preferences('com_tjvendors');
 		}
-
-		// Set sidebar action - New in 3.0
-		JHtmlSidebar::setAction('index.php?option=com_tjvendors&view=vendors');
 
 		$this->extra_sidebar = '';
 	}

@@ -13,7 +13,7 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Access\Access;
-use Joomla\CMS\Filesystem\File;
+use Joomla\Filesystem\File;
 use Joomla\CMS\Filter\OutputFilter;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
@@ -34,8 +34,8 @@ class TjvendorsTablevendor extends Table
 	 */
 	public function __construct(&$db)
 	{
-				array('typeAlias' => 'com_tjvendors.vendor')
-				);
+		// array('typeAlias' => 'com_tjvendors.vendor')
+		// 		// );
 
 		parent::__construct('#__tjvendors_vendors', 'vendor_id', $db);
 	}
@@ -165,8 +165,8 @@ class TjvendorsTablevendor extends Table
 		}
 
 		$app = Factory::getApplication();
-		$files = $app->input->files->get('jform', array(), 'raw');
-		$array = $app->input->get('jform', array(), 'ARRAY');
+		$files = $app->getInput()->files->get('jform', array(), 'raw');
+		$array = $app->getInput()->get('jform', array(), 'ARRAY');
 
 		if (! empty($files['vendor_logo']))
 		{

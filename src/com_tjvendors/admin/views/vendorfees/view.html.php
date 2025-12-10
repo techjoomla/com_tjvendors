@@ -17,7 +17,10 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
+$fronthelperPath = JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
+if (file_exists($fronthelperPath)) {
+	require_once $fronthelperPath;
+}
 
 /**
  * View class for a list of Tjvendors.
@@ -43,12 +46,12 @@ class TjvendorsViewVendorFees extends HtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$this->state = $this->get('State');
 		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
-		$this->input = Factory::getApplication()->input;
+		$this->input = Factory::getApplication()->getInput();
 		$this->client = $this->input->get('client', '', 'STRING');
 
 		// Check for errors.
@@ -60,7 +63,6 @@ class TjvendorsViewVendorFees extends HtmlView
 		TjvendorsHelper::addSubmenu('vendorfees');
 		$this->addToolbar();
 
-		$this->sidebar = JHtmlSidebar::render();
 		parent::display($tpl);
 	}
 
@@ -73,22 +75,19 @@ class TjvendorsViewVendorFees extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 
 		$state = $this->get('State');
 		$canDo = TjvendorsHelper::getActions();
 
-		JToolBarHelper::custom('vendorfees.back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
-		JToolBarHelper::addNew('vendorfee.add');
+		ToolbarHelper::custom('vendorfees.back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
+		ToolbarHelper::addNew('vendorfee.add');
 
 		if ($canDo->get('core.edit') && isset($this->items[0]))
 		{
-			JToolBarHelper::editList('vendorfee.edit', 'JTOOLBAR_EDIT');
+			ToolbarHelper::editList('vendorfee.edit', 'JTOOLBAR_EDIT');
 		}
-		if ($canDo->get('core.delete') && isset($this->items[0]))
-		{
-			JToolBarHelper::deleteList(JText::_('COM_TJVENDORS_FEE_CONFIRM_DELETE_PROMPT'),'vendorfee.delete', 'JTOOLBAR_DELETE');
-		}
+
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
 		ToolbarHelper::title($clientTitle . ' : ' . Text::_('COM_TJVENDORS_TITLE_VENDORS_FEES'), 'list.png');
@@ -97,19 +96,16 @@ class TjvendorsViewVendorFees extends HtmlView
 		{
 			if (isset($this->items[0]->state))
 			{
-				JToolBarHelper::divider();
-				JToolBarHelper::custom('vendorfees.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
-				JToolBarHelper::custom('vendorfees.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
+				ToolbarHelper::divider();
+				ToolbarHelper::custom('vendorfees.publish', 'publish.png', 'publish_f2.png', 'JTOOLBAR_PUBLISH', true);
+				ToolbarHelper::custom('vendorfees.unpublish', 'unpublish.png', 'unpublish_f2.png', 'JTOOLBAR_UNPUBLISH', true);
 			}
 		}
 
 		if ($canDo->get('core.admin'))
 		{
-			JToolBarHelper::preferences('com_tjvendors');
+			ToolbarHelper::preferences('com_tjvendors');
 		}
-
-		// Set sidebar action - New in 3.0
-		JHtmlSidebar::setAction('index.php?option=com_tjvendors&view=vendorfees');
 
 		$this->extra_sidebar = '';
 	}

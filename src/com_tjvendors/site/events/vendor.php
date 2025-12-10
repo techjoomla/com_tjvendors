@@ -14,7 +14,10 @@ defined('_JEXEC') or die('Restricted access');
 use Joomla\CMS\Factory;
 use Joomla\CMS\Plugin\PluginHelper;
 
-JLoader::import('components.com_tjvendors.helpers.mails', JPATH_SITE);
+$mailsPath = JPATH_SITE . '/components/com_tjvendors/helpers/mails.php';
+if (file_exists($mailsPath)) {
+	require_once $mailsPath;
+}
 
 /**
  * TJ-vendors triggers class for vendors.

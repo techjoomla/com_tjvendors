@@ -22,7 +22,10 @@ HTMLHelper::_('behavior.multiselect');
 $app = Factory::getApplication();
 $app->getDocument()->getWebAssetManager()->useStyle('searchtools')->useScript('searchtools');
 
-JLoader::import('vendor', JPATH_SITE . '/components/com_tjvendors/models');
+$vendorModelPath = JPATH_SITE . '/components/com_tjvendors/models/vendor.php';
+if (file_exists($vendorModelPath)) {
+	require_once $vendorModelPath;
+}
 $tjvendorsModelVendor = new TjvendorsModelVendor;
 
 // Import CSS
@@ -34,7 +37,7 @@ $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
 $saveOrder = $listOrder == 'a.`ordering`';
-$input     = $app->input;
+$input     = $app->getInput();
 $client    = $input->get('client', '', 'STRING');
 
 if ($saveOrder)

@@ -92,7 +92,7 @@ class TjvendorsModelVendorFees extends ListModel
 	 */
 	protected function getListQuery()
 	{
-		$input           = Factory::getApplication()->input;
+		$input           = Factory::getApplication()->getInput();
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$vendor_id       = $this->vendor_id ? $this->vendor_id : $this->getState('vendor_id');
 		$client          = $input->get('client', '', 'STRING');

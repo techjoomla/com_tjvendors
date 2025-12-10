@@ -18,7 +18,7 @@ use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
-jimport('techjoomla.tjnotifications.tjnotifications');
+require_once JPATH_LIBRARIES . '/techjoomla/tjnotifications/tjnotifications.php';
 include_once JPATH_SITE . '/components/com_tjvendors/includes/tjvendors.php';
 
 /**
@@ -46,7 +46,10 @@ class TjvendorsMailsHelper
 		$this->siteinfo->sitename	= $this->sitename;
 		$this->siteinfo->adminname = Text::_('COM_TJVENDORS_SITEADMIN');
 
-		JLoader::import('components.com_tjvendors.helpers.fronthelper', JPATH_SITE);
+		$fronthelperPath = JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
+		if (file_exists($fronthelperPath)) {
+			require_once $fronthelperPath;
+		}
 		$this->tjvendorFrontHelper = new TjvendorFrontHelper;
 
 		if (ComponentHelper::getComponent('com_tjnotifications', true)->enabled && class_exists('Tjnotifications'))
@@ -267,7 +270,7 @@ class TjvendorsMailsHelper
 					->from($db->quoteName('#__users'))
 					->where($db->quoteName('email') . ' = ' . $db->quote($adminRecipient));
 				$db->setQuery($query);
-				$userId = $db->loadResult();
+				$userId = $db->loadColumn()[0] ?? null;
 
 				$finalUserIdRecipient[] = $userId;
 			}

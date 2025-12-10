@@ -18,7 +18,10 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
-JLoader::import('com_tjvendors.helpers.fronthelper', JPATH_SITE . '/components');
+$fronthelperPath = JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
+if (file_exists($fronthelperPath)) {
+	require_once $fronthelperPath;
+}
 
 /**
  * View class for a list of Tjvendors.
@@ -53,7 +56,7 @@ class TjvendorsViewReports extends HtmlView
 		$this->items = $this->get('Items');
 		$this->model = $this->getModel('reports');
 		$this->pagination = $this->get('Pagination');
-		$this->input = Factory::getApplication()->input;
+		$this->input = Factory::getApplication()->getInput();
 
 		// Getting vendor id from url
 		$vendor_id = $this->input->get('vendor_id', '', 'INT');
@@ -79,7 +82,6 @@ class TjvendorsViewReports extends HtmlView
 
 		$this->addToolbar();
 
-		$this->sidebar = JHtmlSidebar::render();
 		parent::display($tpl);
 	}
 
@@ -92,12 +94,12 @@ class TjvendorsViewReports extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$this->client = $input->get('client', '', 'STRING');
 
 		$state = $this->get('State');
 		$canDo = TjvendorsHelper::getActions();
-		JToolBarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
+		ToolbarHelper::custom('back', 'chevron-left.png', '', 'COM_TJVENDORS_BACK', false);
 
 		$tjvendorFrontHelper = new TjvendorFrontHelper;
 		$clientTitle = $tjvendorFrontHelper->getClientName($this->client);
@@ -108,19 +110,8 @@ class TjvendorsViewReports extends HtmlView
 
 		if ($canDo->get('core.admin'))
 		{
-			JToolBarHelper::preferences('com_tjvendors');
+			ToolbarHelper::preferences('com_tjvendors');
 		}
-
-		// Set sidebar action - New in 3.0
-		if ($this->client)
-		{
-			JHtmlSidebar::setAction('index.php?option=com_tjvendors&view=reports&&client=' . $this->client);
-		}
-		else 
-		{
-			JHtmlSidebar::setAction('index.php?option=com_tjvendors&view=reports');
-		}
-		
 
 		$this->extra_sidebar = '';
 	}

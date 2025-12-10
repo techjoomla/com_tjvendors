@@ -18,7 +18,8 @@ use Joomla\CMS\Uri\Uri;
 
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
-HTMLHelper::_('formbehavior.chosen', 'select');
+HTMLHelper::_('behavior.multiselect'); // only for list tables
+
 
 // Import CSS
 $document = Factory::getDocument();
@@ -29,7 +30,7 @@ $userId    = $user->get('id');
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
 $canOrder  = $user->authorise('core.edit.state', 'com_tjvendors');
-$input     = Factory::getApplication()->input;
+$input     = Factory::getApplication()->getInput();
 $client    = $input->get('client', '', 'STRING');
 ?>
 <script type="text/javascript">
@@ -133,12 +134,12 @@ else
 		</div>
 		<div class="btn-group pull-right hidden-phone">
 			<?php
-				echo JHTML::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
+				echo HTMLHELPER::_('calendar', $this->state->get('filter.toDate'), 'toDates', 'date', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
 			?>
 		</div>
 		<div class="btn-group pull-right hidden-phone">
 			<?php
-				echo JHTML::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
+				echo HTMLHELPER::_('calendar', $this->state->get('filter.fromDate'), 'fromDates', 'dates', '%Y-%m-%d', array( 'class' => 'inputbox', 'onchange' => 'document.adminForm.submit()'));
 			?>
 		</div>
 	</div>
@@ -369,7 +370,7 @@ else
 					<?php
 						if ($status['entry_status'] == "debit_payout")
 						{
-							echo JHTML::_('select.genericlist', $options, "paidUnpaid", 'class="input-medium" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
+							echo HTMLHELPER::_('select.genericlist', $options, "paidUnpaid", 'class="input-medium" size="1" onChange="tjVAdmin.vendor.changePayoutStatus(' . $item->id . ',this);"', 'value', 'type', $item->status);
 						}
 						elseif ($status['entry_status'] == "credit_for_ticket_buy")
 						{

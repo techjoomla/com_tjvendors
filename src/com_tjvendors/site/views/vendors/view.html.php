@@ -55,7 +55,7 @@ class TjvendorsViewVendors extends HtmlView
 	{
 		$app = Factory::getApplication();
 		$this->user_id = Factory::getUser()->id;
-		$this->input = $app->input;
+		$this->input = $app->getInput();
 
 		// Get data from the model
 		$items_model = BaseDatabaseModel::getInstance('vendors', 'TjvendorsModel');
@@ -73,7 +73,10 @@ class TjvendorsViewVendors extends HtmlView
 		$this->totalDetails = $tjvendorFrontHelper->getTotalDetails($this->vendor_id, $client, $currency);
 		$this->vendorClient = $app->getUserStateFromRequest('client', 'client', '');
 
-		JLoader::import('components.com_tjvendors.helpers.fronthelper', JPATH_SITE);
+		$fronthelperPath = JPATH_SITE . '/components/com_tjvendors/helpers/fronthelper.php';
+		if (file_exists($fronthelperPath)) {
+			require_once $fronthelperPath;
+		}
 		$this->tjvendorFrontHelper = new TjvendorFrontHelper;
 		$this->vendorItemID = $this->tjvendorFrontHelper->getItemId(
 			'index.php?option=com_tjvendors&view=vendors'
@@ -82,7 +85,7 @@ class TjvendorsViewVendors extends HtmlView
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseError(500, implode('<br />', $errors));
+			throw new \Exception(implode('<br />', $errors), 500);
 
 			return false;
 		}

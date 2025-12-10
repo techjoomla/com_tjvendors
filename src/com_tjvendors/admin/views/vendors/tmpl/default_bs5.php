@@ -293,7 +293,7 @@ if (!empty($this->extra_sidebar))
 									{
 									?>
 										<td>
-											<?php echo JHTML::_('select.genericlist', $options, "vendorApprove", 'class="input-medium" size="1" onChange="tjVAdmin.vendors.vendorApprove(' .
+											<?php echo HTMLHELPER::_('select.genericlist', $options, "vendorApprove", 'class="input-medium" size="1" onChange="tjVAdmin.vendors.vendorApprove(' .
 												$item->vendor_id . ',this);"', 'value', 'type', $item->approved);
 											?>
 										</td>

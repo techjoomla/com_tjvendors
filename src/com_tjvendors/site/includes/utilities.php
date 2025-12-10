@@ -34,8 +34,9 @@ class TjvendorsUtilities
 
 		if (!class_exists('TjGeoHelper'))
 		{
-			JLoader::register('TjGeoHelper', $TjGeoHelper);
-			JLoader::load('TjGeoHelper');
+			if (file_exists($TjGeoHelper)) {
+				require_once $TjGeoHelper;
+			}
 		}
 
 		$this->tjGeoHelperObj = new TjGeoHelper;

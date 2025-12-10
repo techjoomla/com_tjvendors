@@ -40,13 +40,13 @@ class TjvendorsViewVendorFee extends HtmlView
 	 */
 	public function display($tpl = null)
 	{
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$this->vendor_id = $input->get('vendor_id', '', 'INT');
 		$this->id = $input->get('id', '', 'INT');
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
-		$this->input = Factory::getApplication()->input;
+		$this->input = Factory::getApplication()->getInput();
 		Text::script('COM_TJVENDORS_FEES_NEGATIVE_NUMBER_ERROR');
 		Text::script('COM_TJVENDORS_FEES_PERCENT_ERROR');
 
@@ -69,12 +69,12 @@ class TjvendorsViewVendorFee extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		Factory::getApplication()->input->set('hidemainmenu', true);
+		Factory::getApplication()->getInput()->set('hidemainmenu', true);
 
 		$user  = Factory::getUser();
 		$isNew = ($this->item->vendor_id == 0);
 
-		$input = Factory::getApplication()->input;
+		$input = Factory::getApplication()->getInput();
 		$client = $input->get('client', '', 'STRING');
 
 		if ($isNew)
@@ -89,16 +89,16 @@ class TjvendorsViewVendorFee extends HtmlView
 		$clientTitle = TjvendorFrontHelper::getClientName($client);
 		ToolbarHelper::title($clientTitle . '  ' . $viewTitle, 'pencil.png');
 
-		JToolBarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');
-		JToolBarHelper::save('vendorfee.save', 'JTOOLBAR_SAVE');
+		ToolbarHelper::apply('vendorfee.apply', 'JTOOLBAR_APPLY');
+		ToolbarHelper::save('vendorfee.save', 'JTOOLBAR_SAVE');
 
 		if (empty($this->item->id))
 		{
-			JToolBarHelper::cancel('vendorfee.cancel', 'JTOOLBAR_CANCEL');
+			ToolbarHelper::cancel('vendorfee.cancel', 'JTOOLBAR_CANCEL');
 		}
 		else
 		{
-			JToolBarHelper::cancel('vendorfee.cancel', 'JTOOLBAR_CLOSE');
+			ToolbarHelper::cancel('vendorfee.cancel', 'JTOOLBAR_CLOSE');
 		}
 	}
 }

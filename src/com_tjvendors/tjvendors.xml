@@ -8,7 +8,6 @@
 	<author>Techjoomla</author>
 	<authorEmail>extensions@techjoomla.com</authorEmail>
 	<authorUrl>https://techjoomla.com</authorUrl>
-	<version>2.0.0</version>
 	<description>COM_TJVENDORS_PRODUCT_DESC</description>
 	<install>
 		<!-- Runs on install -->
